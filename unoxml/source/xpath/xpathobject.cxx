@@ -25,51 +25,54 @@
  *
  ************************************************************************/
 
+#include <xpathobject.hxx>
+
 #include <string.h>
-#include "xpathobject.hxx"
-#include "nodelist.hxx"
+
+#include "../dom/document.hxx"
+#include <nodelist.hxx>
+
 
 namespace XPath
 {
-    CXPathObject::CXPathObject(xmlXPathObjectPtr xpathObj, const Reference< XNode >& contextNode)
-        : m_pXPathObj(xpathObj, xmlXPathFreeObject), m_xContextNode(contextNode)
+    static XPathObjectType lcl_GetType(xmlXPathObjectPtr const pXPathObj)
     {
-        switch (m_pXPathObj->type)
+        switch (pXPathObj->type)
         {
-        case XPATH_UNDEFINED:
-            m_xPathObjectType = XPathObjectType_XPATH_UNDEFINED;
-            break;
-        case XPATH_NODESET:
-            m_xPathObjectType = XPathObjectType_XPATH_NODESET;
-            break;
-        case XPATH_BOOLEAN:
-            m_xPathObjectType = XPathObjectType_XPATH_BOOLEAN;
-            break;
-        case XPATH_NUMBER:
-            m_xPathObjectType = XPathObjectType_XPATH_NUMBER;
-            break;
-        case XPATH_STRING:
-            m_xPathObjectType = XPathObjectType_XPATH_STRING;
-            break;
-        case XPATH_POINT:
-            m_xPathObjectType = XPathObjectType_XPATH_POINT;
-            break;
-        case XPATH_RANGE:
-            m_xPathObjectType = XPathObjectType_XPATH_RANGE;
-            break;
-        case XPATH_LOCATIONSET:
-            m_xPathObjectType = XPathObjectType_XPATH_LOCATIONSET;
-            break;
-        case XPATH_USERS:
-            m_xPathObjectType = XPathObjectType_XPATH_USERS;
-            break;
-        case XPATH_XSLT_TREE:
-            m_xPathObjectType = XPathObjectType_XPATH_XSLT_TREE;
-            break;
-        default:
-            m_xPathObjectType = XPathObjectType_XPATH_UNDEFINED;
-            break;
+            case XPATH_UNDEFINED:
+                return XPathObjectType_XPATH_UNDEFINED;
+            case XPATH_NODESET:
+                return XPathObjectType_XPATH_NODESET;
+            case XPATH_BOOLEAN:
+                return XPathObjectType_XPATH_BOOLEAN;
+            case XPATH_NUMBER:
+                return XPathObjectType_XPATH_NUMBER;
+            case XPATH_STRING:
+                return XPathObjectType_XPATH_STRING;
+            case XPATH_POINT:
+                return XPathObjectType_XPATH_POINT;
+            case XPATH_RANGE:
+                return XPathObjectType_XPATH_RANGE;
+            case XPATH_LOCATIONSET:
+                return XPathObjectType_XPATH_LOCATIONSET;
+            case XPATH_USERS:
+                return XPathObjectType_XPATH_USERS;
+            case XPATH_XSLT_TREE:
+                return XPathObjectType_XPATH_XSLT_TREE;
+            default:
+                return XPathObjectType_XPATH_UNDEFINED;
         }
+    }
+
+    CXPathObject::CXPathObject(
+            ::rtl::Reference<DOM::CDocument> const& pDocument,
+            ::osl::Mutex & rMutex,
+            ::boost::shared_ptr<xmlXPathObject> const& pXPathObj)
+        : m_pDocument(pDocument)
+        , m_rMutex(rMutex)
+        , m_pXPathObj(pXPathObj)
+        , m_XPathObjectType(lcl_GetType(pXPathObj.get()))
+    {
     }
 
     /**
@@ -77,15 +80,20 @@ namespace XPath
     */
     XPathObjectType CXPathObject::getObjectType() throw (RuntimeException)
     {
-        return m_xPathObjectType;
+        return m_XPathObjectType;
     }
 
     /**
         get the nodes from a nodelist type object
     */
-    Reference< XNodeList > SAL_CALL CXPathObject::getNodeList() throw (RuntimeException)
+    Reference< XNodeList > SAL_CALL
+    CXPathObject::getNodeList() throw (RuntimeException)
     {
-        return Reference< XNodeList >(new CNodeList(m_pXPathObj));
+        ::osl::MutexGuard const g(m_rMutex);
+
+        Reference< XNodeList > const xRet(
+            new CNodeList(m_pDocument, m_rMutex, m_pXPathObj));
+        return xRet;
     }
 
      /**
@@ -93,6 +101,8 @@ namespace XPath
      */
     sal_Bool SAL_CALL CXPathObject::getBoolean() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return (sal_Bool) xmlXPathCastToBoolean(m_pXPathObj.get());
     }
 
@@ -101,6 +111,8 @@ namespace XPath
     */
     sal_Int8 SAL_CALL CXPathObject::getByte() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return (sal_Int8) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
@@ -109,6 +121,8 @@ namespace XPath
     */
     sal_Int16 SAL_CALL CXPathObject::getShort() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return (sal_Int16) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
@@ -117,6 +131,8 @@ namespace XPath
     */
     sal_Int32 SAL_CALL CXPathObject::getLong() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return (sal_Int32) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
@@ -125,6 +141,8 @@ namespace XPath
     */
     sal_Int64 SAL_CALL CXPathObject::getHyper() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return (sal_Int64) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
@@ -133,6 +151,8 @@ namespace XPath
     */
     float SAL_CALL CXPathObject::getFloat() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return (float) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
@@ -141,6 +161,8 @@ namespace XPath
     */
     double SAL_CALL CXPathObject::getDouble() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return  xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
@@ -149,8 +171,12 @@ namespace XPath
     */
     OUString SAL_CALL CXPathObject::getString() throw (RuntimeException)
     {
-        const sal_Char* x1 = (sal_Char*) xmlXPathCastToString(m_pXPathObj.get());
-        return OUString(x1, strlen(x1), RTL_TEXTENCODING_UTF8);
+        ::osl::MutexGuard const g(m_rMutex);
+
+        ::boost::shared_ptr<xmlChar const> str(
+            xmlXPathCastToString(m_pXPathObj.get()), xmlFree);
+        sal_Char const*const pS(reinterpret_cast<sal_Char const*>(str.get()));
+        return OUString(pS, strlen(pS), RTL_TEXTENCODING_UTF8);
     }
 
 }

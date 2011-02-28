@@ -25,18 +25,18 @@
  *
  ************************************************************************/
 
-#ifndef _DOMIMPLEMENTATION_HXX
-#define _DOMIMPLEMENTATION_HXX
+#ifndef DOM_DOMIMPLEMENTATION_HXX
+#define DOM_DOMIMPLEMENTATION_HXX
 
-#include <map>
 #include <sal/types.h>
-#include <cppuhelper/implbase1.hxx>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XDocumentType.hpp>
 #include <com/sun/star/xml/dom/XDOMImplementation.hpp>
-#include <com/sun/star/xml/dom/XDOMImplementation.hpp>
+
+#include <cppuhelper/implbase1.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -44,12 +44,16 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CDOMImplementation : public cppu::WeakImplHelper1< XDOMImplementation >
+    class CDOMImplementation
+        : public cppu::WeakImplHelper1< XDOMImplementation >
     {
 
     public:
-        static CDOMImplementation* aDOMImplementation;
         static CDOMImplementation* get();
+
+        // there is just 1 static instance, so these must not delete it!
+        virtual void SAL_CALL acquire() throw ();
+        virtual void SAL_CALL release() throw ();
 
         /**
         Creates a DOM Document object of the specified type with its document element.

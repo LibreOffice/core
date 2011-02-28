@@ -25,14 +25,14 @@
  *
  ************************************************************************/
 
-#ifndef _DOCUMENTFRAGMENT_HXX
-#define _DOCUMENTFRAGMENT_HXX
+#ifndef DOM_DOCUMENTFRAGMENT_HXX
+#define DOM_DOCUMENTFRAGMENT_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 
-#include "node.hxx"
+#include <node.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -40,13 +40,23 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CDocumentFragment : public cppu::ImplInheritanceHelper1< CNode, XDocumentFragment >
+    typedef ::cppu::ImplInheritanceHelper1< CNode, XDocumentFragment >
+        CDocumentFragment_Base;
+
+    class CDocumentFragment
+        : public CDocumentFragment_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
+
     protected:
-        CDocumentFragment(const xmlNodePtr aNodePtr);
+        CDocumentFragment(
+                CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlNodePtr const pNode);
 
     public:
+        virtual bool IsChildTypeAllowed(NodeType const nodeType);
+
         // ---- resolve uno inheritance problems...
         // overrides for XNode base
         virtual OUString SAL_CALL getNodeName()
