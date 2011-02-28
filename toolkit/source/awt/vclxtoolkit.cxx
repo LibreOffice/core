@@ -786,7 +786,14 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 if ( (pParent == NULL ) && ( rDescriptor.ParentIndex == -1 ) )
                     pParent = DIALOG_NO_PARENT;
                 pNewWindow = new Dialog( pParent, nWinBits );
-                *ppNewComp = new VCLXDialog;
+                // #i70217# Don't always create a new component object. It's possible that VCL has called
+                // GetComponentInterface( sal_True ) in the Dialog ctor itself (see Window::IsTopWindow() )
+                // which creates a component object.
+                css::uno::Reference< css::awt::XWindowPeer > xWinPeer = pNewWindow->GetComponentInterface( sal_False );
+                if ( xWinPeer.is() )
+                    *ppNewComp = dynamic_cast< VCLXDialog* >( xWinPeer.get() );
+                else
+                    *ppNewComp = new VCLXDialog;
             }
             break;
             case WINDOW_MOREBUTTON:
