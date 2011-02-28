@@ -34,6 +34,7 @@
 #include <vcl/salgdi.hxx>
 #include <vcl/outfont.hxx>
 #include <vcl/impfont.hxx>
+#include <vcl/fontcapabilities.hxx>
 
 #include "boost/scoped_ptr.hpp"
 #include <boost/unordered_set.hpp>

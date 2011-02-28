@@ -36,6 +36,7 @@
 #include "vcl/sv.h"
 #include "vcl/outfont.hxx"
 #include "vcl/salgdi.hxx"
+#include <vcl/fontcapabilities.hxx>
 #include "aquavcltypes.h"
 
 #include "basegfx/polygon/b2dpolypolygon.hxx"
