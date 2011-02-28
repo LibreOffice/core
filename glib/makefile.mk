@@ -73,6 +73,7 @@ OUT2LIB+=gthread/.libs/libgthread-2.0.0.dylib
 
 OUT2INC+=glib/glib.h
 OUT2INC+=glib/glib-object.h
+OUT2INC+=glib/glibconfig.h
 OUT2INC+=gmodule/gmodule.h
 
 OUT2INC+=gio/gdesktopappinfo.h

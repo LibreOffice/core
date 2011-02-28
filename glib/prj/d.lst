@@ -27,6 +27,7 @@ mkdir: %_DEST%\inc%_EXT%\external\gio-unix-2.0\gio
 mkdir: %_DEST%\inc%_EXT%\external\glib-2.0
 ..\%__SRC%\inc\glib-object.h %_DEST%\inc%_EXT%\external\glib-2.0\glib-object.h
 ..\%__SRC%\inc\glib.h %_DEST%\inc%_EXT%\external\glib-2.0\glib.h
+..\%__SRC%\inc\glibconfig.h %_DEST%\inc%_EXT%\external\glib-2.0\glibconfig.h
 ..\%__SRC%\inc\gmodule.h %_DEST%\inc%_EXT%\external\glib-2.0\gmodule.h
 
 mkdir: %_DEST%\inc%_EXT%\external\glib-2.0\gio
