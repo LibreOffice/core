@@ -115,7 +115,8 @@ SAL_IMPLEMENT_MAIN() {
         }
         rtl::OUString lib(getArgument(index + 1));
         rtl::OUString sym(getArgument(index + 2));
-        oslGenericFunction fn = (new osl::Module(lib))->getFunctionSymbol(sym);
+        oslGenericFunction fn = (new osl::Module(lib, SAL_LOADMODULE_GLOBAL))
+            ->getFunctionSymbol(sym);
         CppUnit::Protector * p = fn == 0
             ? 0
             : (*reinterpret_cast< cppunittester::ProtectorFactory * >(fn))();
