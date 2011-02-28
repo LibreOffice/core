@@ -265,16 +265,25 @@ void Test::testNumberFormat()
     short nType = NUMBERFORMAT_DEFINED;
     sal_uInt32 nKey;
     OUString aCode;
-    aCode = OUString(RTL_CONSTASCII_USTRINGPARAM("[$-1070000]d/mm/yyyy;@")); // Thai date format (implicit locale).
+    // Thai date format (implicit locale).
+    aCode = OUString(RTL_CONSTASCII_USTRINGPARAM("[$-1070000]d/mm/yyyy;@"));
     if (!aFormatter.PutEntry(aCode, nPos, nType, nKey))
     {
         CPPUNIT_ASSERT_MESSAGE("failed to insert format code '[$-1070000]d/mm/yyyy;@'", false);
     }
 
-    aCode = OUString(RTL_CONSTASCII_USTRINGPARAM("[$-107041E]d/mm/yyyy;@")); // Thai date format (explicit locale)
+    // Thai date format (explicit locale)
+    aCode = OUString(RTL_CONSTASCII_USTRINGPARAM("[$-107041E]d/mm/yyyy;@"));
     if (!aFormatter.PutEntry(aCode, nPos, nType, nKey))
     {
         CPPUNIT_ASSERT_MESSAGE("failed to insert format code '[$-107041E]d/mm/yyyy;@'", false);
+    }
+
+    // Thai date format (using buddhist calendar type).
+    aCode = OUString(RTL_CONSTASCII_USTRINGPARAM("[~buddhist]D MMMM YYYY"));
+    if (!aFormatter.PutEntry(aCode, nPos, nType, nKey))
+    {
+        CPPUNIT_ASSERT_MESSAGE("failed to insert format code '[~buddhist]D MMMM YYYY'", false);
     }
 }
 
