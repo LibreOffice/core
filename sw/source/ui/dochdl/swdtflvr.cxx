@@ -277,14 +277,13 @@ SwTransferable::~SwTransferable()
 
     pWrtShell = 0;
 
-    // dvo 2002-05-30, #99239#: release reference to the document so that
-    // aDocShellRef will delete it (if aDocShellRef is set). Otherwise, the OLE
-    // nodes keep references to their sub-storage when the storage is already
-    // dead.
+    // release reference to the document so that aDocShellRef will delete
+    // it (if aDocShellRef is set). Otherwise, the OLE nodes keep references
+    // to their sub-storage when the storage is already dead.
     delete pClpDocFac;
 
-    //JP 22.04.95: first close, then the Ref. can be cleared as well, so that
-    //              the DocShell really gets deleted!
+    // first close, then the Ref. can be cleared as well, so that
+    // the DocShell really gets deleted!
     if( aDocShellRef.Is() )
     {
         SfxObjectShell * pObj = aDocShellRef;
@@ -553,7 +552,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
                 bOK = SetGDIMetaFile( pClpGraphic->GetGDIMetaFile(), rFlavor );
             break;
         case SOT_FORMAT_BITMAP:
-            // #126398#  Neither pClpBitmap nor pClpGraphic are necessarily set
+            // Neither pClpBitmap nor pClpGraphic are necessarily set
             if( (eBufferType & TRNSFR_GRAPHIC) && (pClpBitmap != 0 || pClpGraphic != 0))
                 bOK = SetBitmap( (pClpBitmap ? pClpBitmap
                                              : pClpGraphic)->GetBitmap(),
@@ -609,11 +608,10 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
     {
     case SWTRANSFER_OBJECTTYPE_DRAWMODEL:
         {
-            //JP 28.02.2001: dont change the sequence of commands - Bug 8
+            // dont change the sequence of commands
             SdrModel *pModel = (SdrModel*)pObject;
             xStream->SetBufferSize( 16348 );
 
-            // #108584#
             // for the changed pool defaults from drawing layer pool set those
             // attributes as hard attributes to preserve them for saving
             const SfxItemPool& rItemPool = pModel->GetItemPool();
@@ -720,7 +718,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
             aAOpt.SetCharSet( RTL_TEXTENCODING_UTF8 );
             xWrt->SetAsciiOptions( aAOpt );
 
-            // #102841# no start char for clipboard
+            // no start char for clipboard
             xWrt->bUCS2_WithStartChar = FALSE;
         }
         break;
@@ -792,10 +790,8 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         PrepareOLE( aObjDesc );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
-        // --> OD 2005-02-09 #119353# - robust
         const Graphic* pGrf = pWrtShell->GetGraphic();
         if( pGrf && pGrf->IsSupportedGraphic() )
-        // <--
         {
             AddFormat( FORMAT_GDIMETAFILE );
             AddFormat( FORMAT_BITMAP );
@@ -819,7 +815,7 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         AddFormat( FORMAT_GDIMETAFILE );
         eBufferType = TRNSFR_OLE;
     }
-    //Is there anything to provide anyway?
+    // Is there anything to provide anyway?
     else if ( pWrtShell->IsSelection() || pWrtShell->IsFrmSelected() ||
               pWrtShell->IsObjSelected() )
     {
@@ -884,7 +880,7 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         //When someone needs it, we 'OLE' him something
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
 
-        //put RTF infront of  the OLE's Metafile to have less loss
+        //put RTF ahead of  the OLE's Metafile to have less loss
         if( !pWrtShell->IsObjSelected() )
         {
             AddFormat( FORMAT_RTF );
@@ -1058,7 +1054,7 @@ BOOL SwTransferable::IsPaste( const SwWrtShell& rSh,
                               const TransferableDataHelper& rData )
 {
     // Check the common case first: We can always paste our own data!
-    // #106503#: If _only_ the internal format can be pasted, this check will
+    // If _only_ the internal format can be pasted, this check will
     // yield 'true', while the one below would give a (wrong) result 'false'.
 
     bool bIsPaste = ( GetSwTransferable( rData ) != NULL );
@@ -1201,10 +1197,9 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
         }
 
         if( bDelSel )
-            // --> FME 2004-10-19 #i34830#
+            // #i34830#
             pAction = new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD, NULL,
                                                  TRUE );
-            // <--
     }
 
     SwTransferable *pTrans=0, *pTunneledTrans=GetSwTransferable( rData );
@@ -1226,7 +1221,6 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
     {
         if( !pAction )
         {
-            // #111827#
             pAction = new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD);
         }
 
@@ -2219,7 +2213,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                             aGrf, pFlt );
         if( !nRet && SW_PASTESDR_SETATTR == nAction &&
             SOT_FORMAT_FILE == nFmt &&
-            // Bug 63031 - only at frame selection
+            // only at frame selection
             rSh.IsFrmSelected() )
         {
             // then set as hyperlink after the graphic
@@ -2353,7 +2347,7 @@ int SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
         String sDesc;
         SwTransferable::_CheckForURLOrLNKFile( rData, sFile, &sDesc );
 
-        //#41801# at first, make the URL absolute
+        // first, make the URL absolute
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetSmartURL( sFile );
@@ -2440,7 +2434,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                 {
                     //we can insert foreign files as links after all
 
-                    //#41801# at first, make the URL absolute
+                    // first, make the URL absolute
                     INetURLObject aURL;
                     aURL.SetSmartProtocol( INET_PROT_FILE );
                     aURL.SetSmartURL( sFile );
@@ -2873,10 +2867,8 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
     if( nsSelectionType::SEL_GRF == nSelection)
     {
         AddFormat( SOT_FORMATSTR_ID_SVXB );
-        // --> OD 2005-02-09 #119353# - robust
         const Graphic* pGrf = pWrtShell->GetGraphic();
         if ( pGrf && pGrf->IsSupportedGraphic() )
-        // <--
         {
             AddFormat( FORMAT_GDIMETAFILE );
             AddFormat( FORMAT_BITMAP );
@@ -3078,7 +3070,6 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
 
     const int nSelection = rShell.GetSelectionType();
 
-    // #111827#
     SwRewriter aRewriter;
 
     SwTrnsfrActionAndUndo aAction( &rShell, UNDO_PASTE_CLIPBOARD);
@@ -3108,10 +3099,9 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
          bSmart = 0 != (TRNSFR_DOCUMENT_WORD & eBufferType);
     if( bSmart )
     {
-// #108491# Why not for other Scripts? If TRNSFR_DOCUMENT_WORD is set, we have
-// a word in the buffer, word in this context means 'something with spaces at
-// beginning and end'. In this case we definitely want these spaces to be inserted
-// here.
+// Why not for other Scripts? If TRNSFR_DOCUMENT_WORD is set, we have a word
+// in the buffer, word in this context means 'something with spaces at beginning
+// and end'. In this case we definitely want these spaces to be inserted here.
             bInWrd = rShell.IsInWrd();
              bEndWrd = rShell.IsEndWrd();
             bSmart = bInWrd || bEndWrd;
@@ -3220,7 +3210,6 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
     SwUndoId eUndoId = bMove ? UNDO_UI_DRAG_AND_MOVE : UNDO_UI_DRAG_AND_COPY;
 
-    // #111827#
     SwRewriter aRewriter;
 
     aRewriter.AddRule(UNDO_ARG1, rSrcSh.GetSelDescr());
@@ -3242,13 +3231,13 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     {
         if( !rSh.IsAddMode() )
         {
-            // --> OD 2008-03-19 #i87233#
+            // #i87233#
             if ( rSh.IsBlockMode() )
             {
                 // preserve order of cursors for block mode
                 rSh.GoPrevCrsr();
             }
-            // <--
+
             rSh.SwCrsrShell::CreateCrsr();
         }
         rSh.SwCrsrShell::SetCrsr( rDragPt, TRUE, false );
@@ -3264,7 +3253,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
     Point aSttPt( SwEditWin::GetDDStartPosX(), SwEditWin::GetDDStartPosY() );
 
-    //JP 05.03.96: at first, select INetFelder!
+    // at first, select INetFelder!
     if( TRNSFR_INETFLD == eBufferType )
     {
         if( &rSrcSh == &rSh )
@@ -3311,7 +3300,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         {
             if ( bTblSel )
             {
-                /* #109590# delete table contents not cells */
+                /* delete table contents not cells */
                 rSrcSh.Delete();
             }
             else
@@ -3328,7 +3317,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         rSrcSh.KillPams();
         rSrcSh.Pop( FALSE );
 
-        /* #109590# after dragging a table selection inside one shell
+        /* after dragging a table selection inside one shell
             set cursor to the drop position. */
         if( &rSh == &rSrcSh && ( bTblSel || rSh.IsBlockMode() ) )
         {
@@ -3403,7 +3392,6 @@ void SwTransferable::CreateSelection( SwWrtShell& rSh,
     SwModule *pMod = SW_MOD();
     SwTransferable* pNew = new SwTransferable( rSh );
 
-    /* #96392#*/
      pNew->pCreatorView = _pCreatorView;
 
     uno::Reference<
@@ -3418,7 +3406,6 @@ void SwTransferable::ClearSelection( SwWrtShell& rSh,
     SwModule *pMod = SW_MOD();
     if( pMod->pXSelection &&
         ((!pMod->pXSelection->pWrtShell) || (pMod->pXSelection->pWrtShell == &rSh)) &&
-        /* #96392# */
         (!_pCreatorView || (pMod->pXSelection->pCreatorView == _pCreatorView)) )
     {
         TransferableHelper::ClearSelection( rSh.GetWin() );
@@ -3604,10 +3591,8 @@ BOOL SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
 
 void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
 {
-    //JP 29.01.96 Bug 24432:
-    //      don't accept DataChanged anymore, when already
-    //      located in Disconnect!
-    //      (DTOR from Bookmark sends a DataChanged!)
+    //  don't accept DataChanged anymore, when already in Disconnect!
+    //  (DTOR from Bookmark sends a DataChanged!)
     BOOL bOldDisconnect = bInDisconnect;
     bInDisconnect = TRUE;
 
@@ -3618,10 +3603,10 @@ void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
         BOOL bUndo = pDoc->DoesUndo();
         pDoc->DoUndo( FALSE );
 
-        // --> OD, CD, OS 2005-11-25 #i58448#
+        // #i58448#
         Link aSavedOle2Link( pDoc->GetOle2Link() );
         pDoc->SetOle2Link( Link() );
-        // <--
+
         BOOL bIsModified = pDoc->IsModified();
 
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
@@ -3629,9 +3614,8 @@ void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
 
         if( !bIsModified )
             pDoc->ResetModified();
-        // --> OD, CD, OS 2005-11-25 #i58448#
+        // #i58448#
         pDoc->SetOle2Link( aSavedOle2Link );
-        // <--
 
         pDoc->DoUndo( bUndo );
         bDelBookmrk = FALSE;
