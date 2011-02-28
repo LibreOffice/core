@@ -758,7 +758,7 @@ void SwSidebarWin::SetColor(Color aColorDark,Color aColorLight, Color aColorAnch
         AllSettings aSettings2 = mpVScrollbar->GetSettings();
         StyleSettings aStyleSettings2 = aSettings2.GetStyleSettings();
         aStyleSettings2.SetButtonTextColor(Color(0,0,0));
-        aStyleSettings2.SetCheckedColor(mColorLight); //hintergund
+        aStyleSettings2.SetCheckedColor(mColorLight); // backgound
         aStyleSettings2.SetShadowColor(mColorAnchor);
         aStyleSettings2.SetFaceColor(mColorDark);
         aSettings2.SetStyleSettings(aStyleSettings2);

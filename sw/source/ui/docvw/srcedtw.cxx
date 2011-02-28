@@ -82,10 +82,10 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
 
 
     const USHORT nStrLen = rSource.Len();
-    USHORT nInsert = 0;         // Anzahl der eingefuegten Portions
-    USHORT nActPos = 0;         //Position, an der '<' gefunden wurde
-    USHORT nOffset = 0;         //Offset von nActPos zur '<'
-    USHORT nPortStart = USHRT_MAX;  // fuer die TextPortion
+    USHORT nInsert = 0;         // number of inserted portions
+    USHORT nActPos = 0;         // position, where '<' was found
+    USHORT nOffset = 0;         // Offset of nActPos to '<'
+    USHORT nPortStart = USHRT_MAX;  // for the TextPortion
     USHORT nPortEnd  =  0;  //
     SwTextPortion aText;
     while(nActPos < nStrLen)
@@ -93,11 +93,11 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
         svtools::ColorConfigEntry eFoundType = svtools::HTMLUNKNOWN;
         if(rSource.GetChar(nActPos) == cOpenBracket && nActPos < nStrLen - 2 )
         {
-            // 'leere' Portion einfuegen
+            // insert 'empty' portion
             if(nPortEnd < nActPos - 1 )
             {
                 aText.nLine = 0;
-                // am Anfang nicht verschieben
+                // don't move at the beginning
                 aText.nStart = nPortEnd;
                 if(nInsert)
                     aText.nStart += 1;
@@ -109,7 +109,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
             sal_Unicode cFollowNext = rSource.GetChar((xub_StrLen)(nActPos + 2));
             if(cExclamation == cFollowFirst)
             {
-                // "<!" SGML oder Kommentar
+                // "<!" SGML or comment
                 if(cMinus == cFollowNext &&
                     nActPos < nStrLen - 3 && cMinus == rSource.GetChar((xub_StrLen)(nActPos + 3)))
                 {
@@ -122,14 +122,14 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
             }
             else if(cSlash == cFollowFirst)
             {
-                // "</" Slash ignorieren
+                // "</" ignore slash
                 nPortStart = nActPos;
                 nActPos++;
                 nOffset++;
             }
             if(svtools::HTMLUNKNOWN == eFoundType)
             {
-                //jetzt koennte hier ein keyword folgen
+                // now here a keyword could follow
                 USHORT nSrchPos = nActPos;
                 while(++nSrchPos < nStrLen - 1)
                 {
@@ -146,20 +146,20 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                 }
                 if(nSrchPos > nActPos + 1)
                 {
-                    //irgend ein String wurde gefunden
+                    // some string was found
                     String sToken = rSource.Copy(nActPos + 1, nSrchPos - nActPos - 1 );
                     sToken.ToUpperAscii();
                     int nToken = ::GetHTMLToken(sToken);
                     if(nToken)
                     {
-                        //Token gefunden
+                        // Token was found
                         eFoundType = svtools::HTMLKEYWORD;
                         nPortEnd = nSrchPos;
                         nPortStart = nActPos;
                     }
                     else
                     {
-                        //was war das denn?
+                        // what was that?
 #if OSL_DEBUG_LEVEL > 1
                         OSL_ENSURE(false, "Token not recognised!");
                         OSL_ENSURE(false, ByteString(sToken, gsl_getSystemTextEncoding()).GetBuffer());
@@ -168,7 +168,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
 
                 }
             }
-            // jetzt muss noch '>' gesucht werden
+            // now we still have to look for '>'
             if(svtools::HTMLUNKNOWN != eFoundType)
             {
                 BOOL bFound = FALSE;
@@ -181,7 +181,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     }
                 if(!bFound && (eFoundType == svtools::HTMLCOMMENT))
                 {
-                    // Kommentar ohne Ende in dieser Zeile
+                    // comment without ending in this line
                     bFound  = TRUE;
                     nPortEnd = nStrLen - 1;
                 }
@@ -260,10 +260,10 @@ void SwSrcEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
     switch ( rDCEvt.GetType() )
     {
     case DATACHANGED_SETTINGS:
-        // ScrollBars neu anordnen bzw. Resize ausloesen, da sich
-        // ScrollBar-Groesse geaendert haben kann. Dazu muss dann im
-        // Resize-Handler aber auch die Groesse der ScrollBars aus
-        // den Settings abgefragt werden.
+        // newly rearrange ScrollBars or trigger Resize, because
+        // ScrollBar size could have changed. For this, in the
+        // Resize handler the size of ScrollBars has to be queried
+        // from the settings as well.
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
             Resize();
         break;
@@ -272,7 +272,7 @@ void SwSrcEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void  SwSrcEditWindow::Resize()
 {
-    // ScrollBars, etc. passiert in Adjust...
+    // ScrollBars, etc. happens in Adjust...
     if ( pTextView )
     {
         long nVisY = pTextView->GetStartDocPos().Y();
@@ -304,7 +304,7 @@ void  SwSrcEditWindow::Resize()
         pOutWin->SetOutputSizePixel(aOutSz);
         InitScrollBars();
 
-        // Zeile im ersten Resize setzen
+        // set line in first Resize
         if(USHRT_MAX != nStartLine)
         {
             if(nStartLine < pTextEngine->GetParagraphCount())
@@ -329,7 +329,7 @@ void TextViewOutWin::DataChanged( const DataChangedEvent& rDCEvt )
     switch( rDCEvt.GetType() )
     {
     case DATACHANGED_SETTINGS:
-        // den Settings abgefragt werden.
+        // query settings
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
         {
             const Color &rCol = GetSettings().GetStyleSettings().GetWindowColor();
@@ -446,7 +446,7 @@ void SwSrcEditWindow::CreateTextEngine()
     pOutWin->SetPointer(Pointer(POINTER_TEXT));
     pOutWin->Show();
 
-    //Scrollbars anlegen
+    // create Scrollbars
     pHScrollbar = new ScrollBar(this, WB_3DLOOK |WB_HSCROLL|WB_DRAG);
         pHScrollbar->EnableRTL( false ); // --- RTL --- no mirroring for scrollbars
     pHScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
@@ -491,7 +491,7 @@ void SwSrcEditWindow::CreateTextEngine()
 
 void SwSrcEditWindow::SetScrollBarRanges()
 {
-    // Extra-Methode, nicht InitScrollBars, da auch fuer TextEngine-Events.
+    // Extra method, not InitScrollBars, because also for TextEngine events.
 
     pHScrollbar->SetRange( Range( 0, nCurTextWidth-1 ) );
     pVScrollbar->SetRange( Range(0, pTextEngine->GetTextHeight()-1) );
@@ -541,7 +541,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
     bHighlighting = TRUE;
     USHORT nLine;
     USHORT nCount  = 0;
-    // zuerst wird der Bereich um dem Cursor bearbeitet
+    // at first the region around the cursor is processed
     TextSelection aSel = pTextView->GetSelection();
     USHORT nCur = (USHORT)aSel.GetStart().GetPara();
     if(nCur > 40)
@@ -567,7 +567,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
             }
         }
 
-    // wenn dann noch etwas frei ist, wird von Beginn an weitergearbeitet
+    // when there is still anything left by then, go on from the beginning
     void* p = aSyntaxLineTable.First();
     while ( p && nCount < MAX_SYNTAX_HIGHLIGHT)
     {
@@ -586,8 +586,8 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 
     if(aSyntaxLineTable.Count() && !pTimer->IsActive())
         pTimer->Start();
-    // SyntaxTimerHdl wird gerufen, wenn Text-Aenderung
-    // => gute Gelegenheit, Textbreite zu ermitteln!
+    // SyntaxTimerHdl is called when text changed
+    // => good opportunity to determine text width!
     long nPrevTextWidth = nCurTextWidth;
     nCurTextWidth = pTextEngine->CalcTextWidth() + 25;  // kleine Toleranz
     if ( nCurTextWidth != nPrevTextWidth )
@@ -599,8 +599,8 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 
 void SwSrcEditWindow::DoSyntaxHighlight( USHORT nPara )
 {
-    // Durch das DelayedSyntaxHighlight kann es passieren,
-    // dass die Zeile nicht mehr existiert!
+    // Because of DelayedSyntaxHighlight it could happen,
+    // that the line doesn't exist anymore!
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
         BOOL bTempModified = IsModified();
@@ -640,7 +640,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         return;
 
     SwTextPortion& rLast = aPortionList[nCount-1];
-    if ( rLast.nStart > rLast.nEnd )    // Nur bis Bug von MD behoeben
+    if ( rLast.nStart > rLast.nEnd )    // Only until Bug from MD is resolved
     {
         nCount--;
         aPortionList.Remove( nCount);
@@ -648,16 +648,15 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
             return;
     }
 
-    // Evtl. Optimieren:
-    // Wenn haufig gleiche Farbe, dazwischen Blank ohne Farbe,
-    // ggf. zusammenfassen, oder zumindest das Blank,
-    // damit weniger Attribute
+    // maybe optimize:
+    // If frequently the same color, blank without color in between,
+    // maybe summarize or at least the blank; for less attributes
     BOOL bOptimizeHighlight = TRUE; // war in der BasicIDE static
     if ( bOptimizeHighlight )
     {
-        // Es muessen nur die Blanks und Tabs mit attributiert werden.
-        // Wenn zwei gleiche Attribute hintereinander eingestellt werden,
-        // optimiert das die TextEngine.
+        // Only blanks and tabs have to be attributed along.
+        // When two identical attributes are placed consecutively,
+        // it optimises the TextEngine.
         USHORT nLastEnd = 0;
 
         for ( USHORT i = 0; i < nCount; i++ )
@@ -667,13 +666,13 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
             USHORT nLine = aPortionList[0].nLine;
             OSL_ENSURE( r.nLine == nLine, "doch mehrere Zeilen ?" );
 #endif
-            if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
+            if ( r.nStart > r.nEnd )    // only until Bug from MD is resolved
                 continue;
 
             if ( r.nStart > nLastEnd )
             {
-                // Kann ich mich drauf verlassen, dass alle ausser
-                // Blank und Tab gehighlightet wird ?!
+                // Can I rely on the fact that all except blank and tab
+                // are being highlighted?!
                 r.nStart = nLastEnd;
             }
             nLastEnd = r.nEnd+1;
@@ -685,7 +684,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
     for ( USHORT i = 0; i < aPortionList.Count(); i++ )
     {
         SwTextPortion& r = aPortionList[i];
-        if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
+        if ( r.nStart > r.nEnd )    // only until Bug from MD is resolved
             continue;
         if(r.eType !=  svtools::HTMLSGML    &&
             r.eType != svtools::HTMLCOMMENT &&

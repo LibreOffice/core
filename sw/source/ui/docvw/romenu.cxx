@@ -78,8 +78,7 @@ using namespace ::sfx2;
 
 void GetPreferedExtension( String &rExt, const Graphic &rGrf )
 {
-    // dann ggfs. ueber die native-Info der Grafik den "besten"
-    // Filter vorschlagen
+    // then propose the "best" filter using the native-info, if applicable
     const sal_Char* pExt = "png";
     switch( const_cast<Graphic&>(rGrf).GetLink().GetType() )
     {
@@ -390,7 +389,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
 String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 {
 
-    //Namen der Grafik herausfischen.
+    // fish out the graphic's name
     String aName;
     if ( MN_READONLY_SAVEBACKGROUND == nId )
     {
@@ -421,7 +420,7 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
     INetURLObject aPath;
     aPath.SetSmartURL( sGrfPath );
 
-    //Namen der Grafik herausfischen.
+    // fish out the graphic's name
     String aName = rGrfName;
 
     aDlgHelper.SetTitle( SW_RESSTR(STR_EXPORT_GRAFIK_TITLE));
@@ -450,7 +449,7 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
     }
     if ( USHRT_MAX == nDfltFilter )
     {
-        //"falsche" Extension?
+        // "wrong" extension?
         GetPreferedExtension( aExt, rGraphic );
         for ( USHORT i = 0; i < nCount; ++i )
             if ( aExt == rGF.GetExportFormatShortName( i ).ToLowerAscii() )
@@ -467,14 +466,14 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
         if( aDlgHelper.Execute() == ERRCODE_NONE )
         {
             String sPath( xFP->getFiles().getConstArray()[0] );
-            //verwendeten Pfad merken - bitte nicht wieder wegoptimieren!
+            // remember used path - please don't optimize away!
             aPath.SetSmartURL( sPath);
             sGrfPath = aPath.GetPath();
 
             if( rGrfName.Len() &&
                  nDfltFilter == rGF.GetExportFormatNumber( xFltMgr->getCurrentFilter()))
             {
-                //Versuchen die Originalgrafik zu speichern.
+                // try to save the original graphic
                 SfxMedium aIn( rGrfName, STREAM_READ | STREAM_NOCREATE,
                                 TRUE );
                 if( aIn.GetInStream() && !aIn.GetInStream()->GetError() )
