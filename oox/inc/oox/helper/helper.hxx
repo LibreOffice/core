@@ -251,8 +251,8 @@ public:
     template< typename Type >
     inline static void  convertLittleEndianArray( Type* pnArray, size_t nElemCount );
 
-    template<> inline static void convertLittleEndianArray( sal_Int8*, size_t ) {}
-    template<> inline static void convertLittleEndianArray( sal_uInt8*, size_t ) {}
+    inline static void  convertLittleEndianArray( sal_Int8*, size_t ) {}
+    inline static void  convertLittleEndianArray( sal_uInt8*, size_t ) {}
 
 #else
     template< typename Type >
