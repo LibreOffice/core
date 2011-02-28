@@ -472,7 +472,7 @@ USHORT SvMetaClass::WriteSlots( const ByteString & rShellName,
     return nSCount;
 }
 
-void SvMetaClass::InsertSlots( SvSlotElementList& rList, SvULongs& rSuperList,
+void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<ULONG>& rSuperList,
                             SvMetaClassList &rClassList,
                             const ByteString & rPrefix, SvIdlDataBase& rBase)
 {
@@ -490,18 +490,15 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, SvULongs& rSuperList,
         SvMetaAttribute * pAttr = aAttrList.GetObject( n );
 
         ULONG nId = pAttr->GetSlotId().GetValue();
-        USHORT nPos;
-        for ( nPos=0; nPos < rSuperList.Count(); nPos++ )
-        {
-            if ( rSuperList.GetObject(nPos) == nId )
-                break;
-        }
 
-        if( nPos == rSuperList.Count() )
+        std::vector<ULONG>::iterator iter = std::find(rSuperList.begin(),
+                                                      rSuperList.end(),nId);
+
+        if( iter == rSuperList.end() )
         {
             // Write only if not already written by subclass or
             // imported interface.
-            rSuperList.Insert( nId, nPos );
+            rSuperList.push_back(nId);
             pAttr->Insert(rList, rPrefix, rBase);
         }
     }
@@ -591,7 +588,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm << "SFX_ARGUMENTMAP(" << GetName().GetBuffer() << ')' << endl
         << '{' << endl;
 
-    SvULongs aSuperList;
+    std::vector<ULONG> aSuperList;
     SvMetaClassList classList;
     SvSlotElementList aSlotList;
     InsertSlots(aSlotList, aSuperList, classList, ByteString(), rBase);
