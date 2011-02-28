@@ -104,13 +104,12 @@ namespace awt {
 
 typedef std::vector< Rectangle > MetricVector;
 
-typedef std::vector< sal_uInt32 > FontLayoutCapabilities;
-
 namespace vcl
 {
     class PDFWriterImpl;
     class ExtOutDevData;
     class ITextLayout;
+    struct FontCapabilities;
 }
 
 #define OUTDEV_BUFFER_SIZE  128
@@ -1074,7 +1073,7 @@ public:
     FontMetric          GetFontMetric() const;
     FontMetric          GetFontMetric( const Font& rFont ) const;
     BOOL                GetFontCharMap( FontCharMap& rFontCharMap ) const;
-    bool                GetFontLayoutCapabilities( FontLayoutCapabilities& rFontLayoutCapabilities ) const;
+    bool                GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
     xub_StrLen          HasGlyphs( const Font& rFont, const String& rStr,
                             xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN ) const;

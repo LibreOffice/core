@@ -282,12 +282,12 @@ ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
     return new ImplFontCharMap( aCmapResult );
 }
 
-bool SvpSalGraphics::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rGetImplFontLayoutCapabilities) const
+bool SvpSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     if (!m_pServerFont[0])
-        return NULL;
+        return false;
 
-    return !m_pServerFont[0]->GetFontLayoutCapabilities( rGetImplFontLayoutCapabilities);
+    return m_pServerFont[0]->GetFontCapabilities(rFontCapabilities);
 }
 
 // ---------------------------------------------------------------------------

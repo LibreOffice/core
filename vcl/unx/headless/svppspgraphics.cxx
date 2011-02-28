@@ -696,11 +696,11 @@ ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
     return new ImplFontCharMap( aCmapResult );
 }
 
-bool PspGraphics::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rGetImplFontLayoutCapabilities) const
+bool PspGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     if (!m_pServerFont[0])
-        return NULL;
-    return !m_pServerFont[0]->GetFontLayoutCapabilities(rGetImplFontLayoutCapabilities);
+        return false;
+    return m_pServerFont[0]->GetFontCapabilities(rFontCapabilities);
 }
 
 USHORT PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )

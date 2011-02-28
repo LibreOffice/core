@@ -84,7 +84,7 @@ public:
 #endif
 
     ImplFontCharMap*        GetImplFontCharMap() const;
-    bool GetImplFontLayoutCapabilities(FontLayoutCapabilities &rGetImplFontLayoutCapabilities) const;
+    bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
     void SetEncodingVector( const Ucs2SIntMap* pNewVec ) const
     {
@@ -103,10 +103,10 @@ private:
     mutable bool                    mbHasGraphiteSupport;
 #endif
     mutable bool                    mbHasArabicSupport;
-    mutable bool                    mbFontLayoutCapabilitiesRead;
+    mutable bool                    mbFontCapabilitiesRead;
     mutable ImplFontCharMap*        mpUnicodeMap;
     mutable const Ucs2SIntMap*      mpEncodingVector;
-    mutable FontLayoutCapabilities  maFontLayoutCapabilities;
+    mutable vcl::FontCapabilities   maFontCapabilities;
 
     // TODO: get rid of the members below needed to work with the Win9x non-unicode API
     BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)
@@ -117,7 +117,7 @@ private:
     bool                    mbAliasSymbolsLow;
 private:
     void                    ReadCmapTable( HDC ) const;
-    void                    GetFontLayoutCapabilities( HDC hDC ) const;
+    void                    GetFontCapabilities( HDC hDC ) const;
     void                    ReadOs2Table( HDC ) const;
 
 #ifdef GNG_VERT_HACK
@@ -294,7 +294,7 @@ public:
     // get the repertoire of the current font
     virtual ImplFontCharMap* GetImplFontCharMap() const;
     // get the layout capabilities of the current font
-    virtual bool GetImplFontLayoutCapabilities(FontLayoutCapabilities &rGetImplFontLayoutCapabilities) const;
+    virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rGetFontCapabilities) const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* );
     // graphics should call ImplAddDevFontSubstitute on supplied

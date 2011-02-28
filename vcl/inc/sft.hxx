@@ -71,7 +71,7 @@
 
 #include <vector>
 
-typedef std::vector< sal_uInt32 > FontLayoutCapabilities;
+#include "vcl/fontcapabilities.hxx"
 
 namespace vcl
 {
@@ -303,7 +303,11 @@ namespace vcl
     int OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
 #endif
 
-    void getTTFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities, const unsigned char* pTable);
+    void getTTScripts(std::vector< sal_uInt32 > &rScriptTags, const unsigned char* pTable, size_t nLength);
+    bool getTTCoverage(
+        boost::dynamic_bitset<sal_uInt32> &rUnicodeCoverage,
+        boost::dynamic_bitset<sal_uInt32> &rCodePageCoverage,
+        const unsigned char* pTable, size_t nLength);
 
 /**
  * TrueTypeFont destructor. Deallocates the memory.

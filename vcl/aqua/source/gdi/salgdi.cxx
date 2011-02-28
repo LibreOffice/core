@@ -73,7 +73,7 @@ ImplMacFontData::ImplMacFontData( const ImplDevFontAttributes& rDFA, ATSUFontID 
 ,   mbHasOs2Table( false )
 ,   mbCmapEncodingRead( false )
 ,   mbHasCJKSupport( false )
-,   mbFontLayoutCapabilitiesRead( false )
+,   mbFontCapabilitiesRead( false )
 {}
 
 // -----------------------------------------------------------------------
@@ -158,37 +158,53 @@ ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
     return mpCharMap;
 }
 
-bool ImplMacFontData::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities) const
+bool ImplMacFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     // read this only once per font
-    if( mbFontLayoutCapabilitiesRead )
+    if( mbFontCapabilitiesRead )
     {
-        rFontLayoutCapabilities = maFontLayoutCapabilities;
-        return !rFontLayoutCapabilities.empty();
+        rFontCapabilities = maFontCapabilities;
+        return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
     }
-    mbFontLayoutCapabilitiesRead = true;
+    mbFontCapabilitiesRead = true;
 
     // prepare to get the GSUB table raw data
     ATSFontRef rFont = FMGetATSFontRefFromFont( mnFontId );
     ByteCount nBufSize = 0;
-    OSStatus eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, 0, NULL, &nBufSize );
-    if( eStatus != noErr )
-        return false;
-
-    // allocate a buffer for the GSUB raw data
-    ByteVector aBuffer( nBufSize );
-
-    // get the GSUB raw data
-    ByteCount nRawLength = 0;
-    eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
-    if( eStatus != noErr )
-        return false;
-
-    const unsigned char* pGSUBTable = &aBuffer[0];
-    vcl::getTTFontLayoutCapabilities(maFontLayoutCapabilities, pGSUBTable);
-    rFontLayoutCapabilities = maFontLayoutCapabilities;
-
-    return !rFontLayoutCapabilities.empty();
+    OSStatus eStatus;
+    eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, 0, NULL, &nBufSize );
+    if( eStatus == noErr )
+    {
+        // allocate a buffer for the GSUB raw data
+        ByteVector aBuffer( nBufSize );
+        // get the GSUB raw data
+        ByteCount nRawLength = 0;
+        eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
+        if( eStatus == noErr )
+        {
+            const unsigned char* pGSUBTable = &aBuffer[0];
+            vcl::getTTScripts(maFontCapabilities.maGSUBScriptTags, pGSUBTable, nRawLength);
+        }
+    }
+    eStatus = ATSFontGetTable( rFont, GetTag("OS/2"), 0, 0, NULL, &nBufSize );
+    if( eStatus == noErr )
+    {
+        // allocate a buffer for the GSUB raw data
+        ByteVector aBuffer( nBufSize );
+        // get the OS/2 raw data
+        ByteCount nRawLength = 0;
+        eStatus = ATSFontGetTable( rFont, GetTag("OS/2"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
+        if( eStatus == noErr )
+        {
+            const unsigned char* pOS2Table = &aBuffer[0];
+            vcl::getTTCoverage(
+                maFontCapabilities.maUnicodeRange,
+                maFontCapabilities.maCodePageRange,
+                pOS2Table, nRawLength);
+        }
+    }
+    rFontCapabilities = maFontCapabilities;
+    return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
 }
 
 // -----------------------------------------------------------------------
@@ -2018,12 +2034,12 @@ ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
     return mpMacFontData->GetImplFontCharMap();
 }
 
-bool AquaSalGraphics::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities) const
+bool AquaSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     if( !mpMacFontData )
         return false;
 
-    return mpMacFontData->GetImplFontLayoutCapabilities(rFontLayoutCapabilities);
+    return mpMacFontData->GetImplFontCapabilities(rFontCapabilities);
 }
 
 // -----------------------------------------------------------------------

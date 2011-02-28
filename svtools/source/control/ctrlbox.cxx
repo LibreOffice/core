@@ -44,6 +44,7 @@
 #include <borderhelper.hxx>
 
 #include <vcl/i18nhelp.hxx>
+#include <vcl/fontcapabilities.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
@@ -892,230 +893,721 @@ void FontNameBox::ImplCalcUserItemSize()
 }
 
 #define MKTAG(s) sal_uInt32((((((s[0]<<8)+s[1])<<8)+s[2])<<8)+s[3])
+#define TRADITIONAL_CHINESE 0x01000000
+#define SIMPLIFIED_CHINESE  0x02000000
+#define JAPANESE            0x04000000
+#define KOREAN              0x08000000
+#define HEBREW_MINIMAL      0x10000000
 
 namespace
 {
-    rtl::OUString getRepresentativeText(sal_uInt32 nScript)
+    rtl::OUString getRepresentativeText(size_t nScript)
     {
         rtl::OUString sSampleText;
-        if (nScript == MKTAG("arab"))
+        switch (nScript)
         {
-            const sal_Unicode aArab[] = {
-                0x0623, 0x0628, 0x062C, 0x062F, 0x064A, 0x0629, 0x0020, 0x0639,
-                0x0631, 0x0628, 0x064A, 0x0629
-            };
-            sSampleText = rtl::OUString(aArab, SAL_N_ELEMENTS(aArab));
+            case vcl::UnicodeCoverage::HEBREW:
+            {
+                const sal_Unicode aHebr[] = {
+                    0x05D0, 0x05B8, 0x05DC, 0x05B6, 0x05E3, 0x05D1, 0x05B5, 0x05BC,
+                    0x05D9, 0x05EA, 0x0020, 0x05E2, 0x05B4, 0x05D1, 0x05B0, 0x05E8,
+                    0x05B4, 0x05D9
+                };
+                sSampleText = rtl::OUString(aHebr, SAL_N_ELEMENTS(aHebr));
+                break;
+            }
+            case HEBREW_MINIMAL:
+            {
+                const sal_Unicode aHebr[] = {
+                    0x05D0, 0x05D1
+                };
+                sSampleText = rtl::OUString(aHebr, SAL_N_ELEMENTS(aHebr));
+                break;
+            }
+            case vcl::UnicodeCoverage::ARABIC:
+            {
+                const sal_Unicode aArab[] = {
+                    0x0623, 0x0628, 0x062C, 0x062F, 0x064A, 0x0629, 0x0020, 0x0639,
+                    0x0631, 0x0628, 0x064A, 0x0629
+                };
+                sSampleText = rtl::OUString(aArab, SAL_N_ELEMENTS(aArab));
+                break;
+            }
+            case vcl::UnicodeCoverage::DEVANAGARI:
+            {
+                const sal_Unicode aDeva[] = {
+                    0x0926, 0x0947, 0x0935, 0x0928, 0x093E, 0x0917, 0x0930, 0x0940
+                };
+                sSampleText = rtl::OUString(aDeva, SAL_N_ELEMENTS(aDeva));
+                break;
+            }
+            case vcl::UnicodeCoverage::BENGALI:
+            {
+                const sal_Unicode aBeng[] = {
+                    0x09AC, 0x09BE, 0x0982, 0x09B2, 0x09BE, 0x0020, 0x09B2, 0x09BF,
+                    0x09AA, 0x09BF
+                };
+                sSampleText = rtl::OUString(aBeng, SAL_N_ELEMENTS(aBeng));
+                break;
+            }
+            case vcl::UnicodeCoverage::GURMUKHI:
+            {
+                const sal_Unicode aGuru[] = {
+                    0x0A17, 0x0A41, 0x0A30, 0x0A2E, 0x0A41, 0x0A16, 0x0A40
+                };
+                sSampleText = rtl::OUString(aGuru, SAL_N_ELEMENTS(aGuru));
+                break;
+            }
+            case vcl::UnicodeCoverage::GUJARATI:
+            {
+                const sal_Unicode aGujr[] = {
+                    0x0A97, 0x0AC1, 0x0A9C, 0x0AB0, 0x0ABE, 0x0AA4, 0x0aC0, 0x0020,
+                    0x0AB2, 0x0ABF, 0x0AAA, 0x0ABF
+                };
+                sSampleText = rtl::OUString(aGujr, SAL_N_ELEMENTS(aGujr));
+                break;
+            }
+            case vcl::UnicodeCoverage::ORIYA:
+            {
+                const sal_Unicode aOrya[] = {
+                    0x0B09, 0x0B24, 0x0B4D, 0x0B15, 0x0B33, 0x0020, 0x0B32, 0x0B3F,
+                    0x0B2A, 0x0B3F
+                };
+                sSampleText = rtl::OUString(aOrya, SAL_N_ELEMENTS(aOrya));
+                break;
+            }
+            case vcl::UnicodeCoverage::TAMIL:
+            {
+                const sal_Unicode aTaml[] = {
+                    0x0B85, 0x0BB0, 0x0BBF, 0x0B9A, 0x0BCD, 0x0B9A, 0x0BC1, 0x0BB5,
+                    0x0B9F, 0x0BBF
+                };
+                sSampleText = rtl::OUString(aTaml, SAL_N_ELEMENTS(aTaml));
+                break;
+            }
+            case vcl::UnicodeCoverage::TELUGU:
+            {
+                const sal_Unicode aTelu[] = {
+                    0x0C24, 0x0C46, 0x0C32, 0x0C41, 0x0C17, 0x0C41
+                };
+                sSampleText = rtl::OUString(aTelu, SAL_N_ELEMENTS(aTelu));
+                break;
+            }
+            case vcl::UnicodeCoverage::KANNADA:
+            {
+                const sal_Unicode aKnda[] = {
+                    0x0C95, 0x0CA8, 0x0CCD, 0x0CA8, 0x0CA1, 0x0020, 0x0CB2, 0x0CBF,
+                    0x0CAA, 0x0CBF
+                };
+                sSampleText = rtl::OUString(aKnda, SAL_N_ELEMENTS(aKnda));
+                break;
+            }
+            case vcl::UnicodeCoverage::MALAYALAM:
+            {
+                const sal_Unicode aMlym[] = {
+                    0x0D2E, 0x0D32, 0x0D2F, 0x0D3E, 0x0D33, 0x0D32, 0x0D3F, 0x0D2A,
+                    0x0D3F
+                };
+                sSampleText = rtl::OUString(aMlym, SAL_N_ELEMENTS(aMlym));
+                break;
+            }
+            case vcl::UnicodeCoverage::THAI:
+            {
+                const sal_Unicode aThai[] = {
+                    0x0E2D, 0x0E31, 0x0E01, 0x0E29, 0x0E23, 0x0E44, 0x0E17, 0x0E22
+                };
+                sSampleText = rtl::OUString(aThai, SAL_N_ELEMENTS(aThai));
+                break;
+            }
+            case vcl::UnicodeCoverage::LAO:
+            {
+                const sal_Unicode aLao[] = {
+                    0x0EAD, 0x0EB1, 0x0E81, 0x0EAA, 0x0EAD, 0x0E99, 0x0EA5, 0x0EB2,
+                    0x0EA7
+                };
+                sSampleText = rtl::OUString(aLao, SAL_N_ELEMENTS(aLao));
+                break;
+            }
+            case vcl::UnicodeCoverage::GEORGIAN:
+            {
+                const sal_Unicode aGeorgian[] = {
+                    0x10D3, 0x10D0, 0x10DB, 0x10EC, 0x10D4, 0x10E0, 0x10DA, 0x10DD,
+                    0x10D1, 0x10D0
+                };
+                sSampleText = rtl::OUString(aGeorgian, SAL_N_ELEMENTS(aGeorgian));
+                break;
+            }
+            case vcl::UnicodeCoverage::HANGUL_JAMO:
+            case KOREAN:
+            {
+                const sal_Unicode aHang[] = {
+                    0xD55C, 0xAE00
+                };
+                sSampleText = rtl::OUString(aHang, SAL_N_ELEMENTS(aHang));
+                break;
+            }
+            case vcl::UnicodeCoverage::TIBETAN:
+            {
+                const sal_Unicode aTibt[] = {
+                    0x0F51, 0x0F56, 0x0F74, 0x0F0B, 0x0F45, 0x0F53, 0x0F0B
+                };
+                sSampleText = rtl::OUString(aTibt, SAL_N_ELEMENTS(aTibt));
+                break;
+            }
+            case vcl::UnicodeCoverage::SYRIAC:
+            {
+                const sal_Unicode aSyri[] = {
+                    0x0723, 0x071B, 0x072A, 0x0722, 0x0713, 0x0720, 0x0710
+                };
+                sSampleText = rtl::OUString(aSyri, SAL_N_ELEMENTS(aSyri));
+                break;
+            }
+            case vcl::UnicodeCoverage::THAANA:
+            {
+                const sal_Unicode aThaa[] = {
+                    0x078C, 0x07A7, 0x0782, 0x07A6
+                };
+                sSampleText = rtl::OUString(aThaa, SAL_N_ELEMENTS(aThaa));
+                break;
+            }
+            case vcl::UnicodeCoverage::SINHALA:
+            {
+                const sal_Unicode aSinh[] = {
+                    0x0DC1, 0x0DD4, 0x0DAF, 0x0DCA, 0x0DB0, 0x0020, 0x0DC3, 0x0DD2,
+                    0x0D82, 0x0DC4, 0x0DBD
+                };
+                sSampleText = rtl::OUString(aSinh, SAL_N_ELEMENTS(aSinh));
+                break;
+            }
+            case vcl::UnicodeCoverage::MYANMAR:
+            {
+                const sal_Unicode aMymr[] = {
+                    0x1019, 0x103C, 0x1014, 0x103A, 0x1019, 0x102C, 0x1021, 0x1000,
+                    0x1039, 0x1001, 0x101B, 0x102C
+                };
+                sSampleText = rtl::OUString(aMymr, SAL_N_ELEMENTS(aMymr));
+                break;
+            }
+            case vcl::UnicodeCoverage::ETHIOPIC:
+            {
+                const sal_Unicode aEthi[] = {
+                    0x130D, 0x12D5, 0x12DD
+                };
+                sSampleText = rtl::OUString(aEthi, SAL_N_ELEMENTS(aEthi));
+                break;
+            }
+            case vcl::UnicodeCoverage::KHMER:
+            {
+                const sal_Unicode aKhmr[] = {
+                    0x17A2, 0x1780, 0x17D2, 0x1781, 0x179A, 0x1780, 0x17D2, 0x179A,
+                    0x1798, 0x1781, 0x17C1, 0x1798, 0x179A, 0x1797, 0x17B6, 0x179F,
+                    0x17B6
+                };
+                sSampleText = rtl::OUString(aKhmr, SAL_N_ELEMENTS(aKhmr));
+                break;
+            }
+            case vcl::UnicodeCoverage::MONGOLIAN:
+            {
+                const sal_Unicode aMongolian[] = {
+                    0x182A, 0x1822, 0x1834, 0x1822, 0x182D, 0x180C
+                };
+                sSampleText = rtl::OUString(aMongolian, SAL_N_ELEMENTS(aMongolian));
+                break;
+            }
+            case vcl::UnicodeCoverage::TAGALOG:
+            {
+                const sal_Unicode aTagalog[] = {
+                    0x170A, 0x170A, 0x170C, 0x1712
+                };
+                sSampleText = rtl::OUString(aTagalog, SAL_N_ELEMENTS(aTagalog));
+                break;
+            }
+            case TRADITIONAL_CHINESE:
+            {
+                const sal_Unicode aTraditionalChinese[] = {
+                    0x7E41
+                };
+                sSampleText = rtl::OUString(aTraditionalChinese, SAL_N_ELEMENTS(aTraditionalChinese));
+                break;
+            }
+            case SIMPLIFIED_CHINESE:
+            {
+                const sal_Unicode aSimplifiedChinese[] = {
+                    0x7B80
+                };
+                sSampleText = rtl::OUString(aSimplifiedChinese, SAL_N_ELEMENTS(aSimplifiedChinese));
+                break;
+            }
+            case TRADITIONAL_CHINESE|SIMPLIFIED_CHINESE:
+            {
+                const sal_Unicode aSimplifiedAndTraditionalChinese[] = {
+                    0x7B80, 0x7E41
+                };
+                sSampleText = rtl::OUString(aSimplifiedAndTraditionalChinese, SAL_N_ELEMENTS(aSimplifiedAndTraditionalChinese));
+                break;
+            }
+            case JAPANESE:
+            {
+                const sal_Unicode aJapanese[] = {
+                    0x65E5, 0x672C, 0x8A9E
+                };
+                sSampleText = rtl::OUString(aJapanese, SAL_N_ELEMENTS(aJapanese));
+                break;
+            }
+            default:
+                break;
         }
-        else if (nScript == MKTAG("cyrl"))
-        {
-            const sal_Unicode aCyrl[] = {
-                0x041A, 0x0438, 0x0440, 0x0438, 0x043B, 0x043B, 0x0438, 0x0446,
-                0x0430
-            };
-            sSampleText = rtl::OUString(aCyrl, SAL_N_ELEMENTS(aCyrl));
-        }
-        else if (nScript == MKTAG("beng"))
-        {
-            const sal_Unicode aBeng[] = {
-                0x09AC, 0x09BE, 0x0982, 0x09B2, 0x09BE, 0x0020, 0x09B2, 0x09BF,
-                0x09AA, 0x09BF
-            };
-            sSampleText = rtl::OUString(aBeng, SAL_N_ELEMENTS(aBeng));
-        }
-        else if (nScript == MKTAG("deva"))
-        {
-            const sal_Unicode aDeva[] = {
-                0x0926, 0x0947, 0x0935, 0x0928, 0x093E, 0x0917, 0x0930, 0x0940
-            };
-            sSampleText = rtl::OUString(aDeva, SAL_N_ELEMENTS(aDeva));
-        }
-        else if (nScript == MKTAG("ethi"))
-        {
-            const sal_Unicode aEthi[] = {
-                0x130D, 0x12D5, 0x12DD
-            };
-            sSampleText = rtl::OUString(aEthi, SAL_N_ELEMENTS(aEthi));
-        }
-        else if (nScript == MKTAG("grek"))
-        {
-            const sal_Unicode aGrek[] = {
-                0x0391, 0x03BB, 0x03C6, 0x03AC, 0x03B2, 0x03B7, 0x03C4, 0x03BF
-            };
-            sSampleText = rtl::OUString(aGrek, SAL_N_ELEMENTS(aGrek));
-        }
-        else if (nScript == MKTAG("gujr"))
-        {
-            const sal_Unicode aGujr[] = {
-                0x0A97, 0x0AC1, 0x0A9C, 0x0AB0, 0x0ABE, 0x0AA4, 0x0aC0, 0x0020,
-                0x0AB2, 0x0ABF, 0x0AAA, 0x0ABF
-            };
-            sSampleText = rtl::OUString(aGujr, SAL_N_ELEMENTS(aGujr));
-        }
-        else if (nScript == MKTAG("guru"))
-        {
-            const sal_Unicode aGuru[] = {
-                0x0A17, 0x0A41, 0x0A30, 0x0A2E, 0x0A41, 0x0A16, 0x0A40
-            };
-            sSampleText = rtl::OUString(aGuru, SAL_N_ELEMENTS(aGuru));
-        }
-        else if (nScript == MKTAG("hani"))
-        {
-            const sal_Unicode aHani[] = {
-                0x6C49, 0x5B57
-            };
-            sSampleText = rtl::OUString(aHani, SAL_N_ELEMENTS(aHani));
-        }
-        else if (nScript == MKTAG("hang"))
-        {
-            const sal_Unicode aHang[] = {
-                0xD55C, 0xAE00
-            };
-            sSampleText = rtl::OUString(aHang, SAL_N_ELEMENTS(aHang));
-        }
-        else if (nScript == MKTAG("hebr"))
-        {
-            const sal_Unicode aHebr[] = {
-                0x05D0, 0x05B8, 0x05DC, 0x05B6, 0x05E3, 0x05D1, 0x05B5, 0x05BC,
-                0x05D9, 0x05EA, 0x0020, 0x05E2, 0x05B4, 0x05D1, 0x05B0, 0x05E8,
-                0x05B4, 0x05D9
-            };
-            sSampleText = rtl::OUString(aHebr, SAL_N_ELEMENTS(aHebr));
-        }
-        else if (nScript == MKTAG("kana"))
-        {
-            const sal_Unicode aKana[] = {
-                0x7247, 0x4EEE, 0x540D
-            };
-            sSampleText = rtl::OUString(aKana, SAL_N_ELEMENTS(aKana));
-        }
-        else if (nScript == MKTAG("khmr"))
-        {
-            const sal_Unicode aKhmr[] = {
-                0x17A2, 0x1780, 0x17D2, 0x1781, 0x179A, 0x1780, 0x17D2, 0x179A,
-                0x1798, 0x1781, 0x17C1, 0x1798, 0x179A, 0x1797, 0x17B6, 0x179F,
-                0x17B6
-            };
-            sSampleText = rtl::OUString(aKhmr, SAL_N_ELEMENTS(aKhmr));
-        }
-        else if (nScript == MKTAG("knda"))
-        {
-            const sal_Unicode aKnda[] = {
-                0x0C95, 0x0CA8, 0x0CCD, 0x0CA8, 0x0CA1, 0x0020, 0x0CB2, 0x0CBF,
-                0x0CAA, 0x0CBF
-            };
-            sSampleText = rtl::OUString(aKnda, SAL_N_ELEMENTS(aKnda));
-        }
-        else if (nScript == MKTAG("latf"))
-            sSampleText = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fraktur"));
-        else if (nScript == MKTAG("latn"))
-            sSampleText = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Latin"));
-        else if (nScript == MKTAG("latg"))
-        {
-            const sal_Unicode aLatg[] = {
-              0x0063, 0x006C, 0x00F3, 0x0020, 0x0047, 0x0061, 0x0065, 0x006C,
-              0x0061, 0x0063, 0x0068
-            };
-            sSampleText = rtl::OUString(aLatg, SAL_N_ELEMENTS(aLatg));
-        }
-        else if (nScript == MKTAG("mlym"))
-        {
-            const sal_Unicode aMlym[] = {
-                0x0D2E, 0x0D32, 0x0D2F, 0x0D3E, 0x0D33, 0x0D32, 0x0D3F, 0x0D2A,
-                0x0D3F
-            };
-            sSampleText = rtl::OUString(aMlym, SAL_N_ELEMENTS(aMlym));
-        }
-        else if (nScript == MKTAG("mymr"))
-        {
-            const sal_Unicode aMymr[] = {
-                0x1019, 0x103C, 0x1014, 0x103A, 0x1019, 0x102C, 0x1021, 0x1000,
-                0x1039, 0x1001, 0x101B, 0x102C
-            };
-            sSampleText = rtl::OUString(aMymr, SAL_N_ELEMENTS(aMymr));
-        }
-        else if (nScript == MKTAG("orya"))
-        {
-            const sal_Unicode aOrya[] = {
-                0x0B09, 0x0B24, 0x0B4D, 0x0B15, 0x0B33, 0x0020, 0x0B32, 0x0B3F,
-                0x0B2A, 0x0B3F
-            };
-            sSampleText = rtl::OUString(aOrya, SAL_N_ELEMENTS(aOrya));
-        }
-        else if (nScript == MKTAG("thai"))
-        {
-            const sal_Unicode aThai[] = {
-                0x0E2D, 0x0E31, 0x0E01, 0x0E29, 0x0E23, 0x0E44, 0x0E17, 0x0E22
-            };
-            sSampleText = rtl::OUString(aThai, SAL_N_ELEMENTS(aThai));
-        }
-        else if (nScript == MKTAG("taml"))
-        {
-            const sal_Unicode aTaml[] = {
-                0x0B85, 0x0BB0, 0x0BBF, 0x0B9A, 0x0BCD, 0x0B9A, 0x0BC1, 0x0BB5,
-                0x0B9F, 0x0BBF
-            };
-            sSampleText = rtl::OUString(aTaml, SAL_N_ELEMENTS(aTaml));
-        }
-        else if (nScript == MKTAG("telu"))
-        {
-            const sal_Unicode aTelu[] = {
-                0x0C24, 0x0C46, 0x0C32, 0x0C41, 0x0C17, 0x0C41
-            };
-            sSampleText = rtl::OUString(aTelu, SAL_N_ELEMENTS(aTelu));
-        }
-        else if (nScript == MKTAG("tibt"))
-        {
-            const sal_Unicode aTibt[] = {
-                0x0F51, 0x0F56, 0x0F74, 0x0F0B, 0x0F45, 0x0F53, 0x0F0B
-            };
-            sSampleText = rtl::OUString(aTibt, SAL_N_ELEMENTS(aTibt));
-        }
-        else if (nScript == MKTAG("sinh"))
-        {
-            const sal_Unicode aSinh[] = {
-                0x0DC1, 0x0DD4, 0x0DAF, 0x0DCA, 0x0DB0, 0x0020, 0x0DC3, 0x0DD2,
-                0x0D82, 0x0DC4, 0x0DBD
-            };
-            sSampleText = rtl::OUString(aSinh, SAL_N_ELEMENTS(aSinh));
-        }
-        else if (nScript == (MKTAG("hani") | MKTAG("kana")))
-        {
-            const sal_Unicode aKana[] = {
-                0x7247, 0x4EEE, 0x540D, ' ', 0x6C49, 0x5B57
-            };
-            sSampleText = rtl::OUString(aKana, SAL_N_ELEMENTS(aKana));
-        }
-
         return sSampleText;
     }
 
-    sal_uInt32 getSingleNonLatnTag(const FontLayoutCapabilities &rFontLayoutCapabilities)
+#if OSL_DEBUG_LEVEL > 2
+    void lcl_dump_unicode_coverage(const boost::dynamic_bitset<sal_uInt32> &rIn)
     {
-        FontLayoutCapabilities aTmp(rFontLayoutCapabilities);
+        if (rIn[vcl::UnicodeCoverage::BASIC_LATIN])
+            fprintf(stderr, "BASIC_LATIN\n");
+        if (rIn[vcl::UnicodeCoverage::LATIN_1_SUPPLEMENT])
+            fprintf(stderr, "LATIN_1_SUPPLEMENT\n");
+        if (rIn[vcl::UnicodeCoverage::LATIN_EXTENDED_A])
+            fprintf(stderr, "LATIN_EXTENDED_A\n");
+        if (rIn[vcl::UnicodeCoverage::LATIN_EXTENDED_B])
+            fprintf(stderr, "LATIN_EXTENDED_B\n");
+        if (rIn[vcl::UnicodeCoverage::IPA_EXTENSIONS])
+            fprintf(stderr, "IPA_EXTENSIONS\n");
+        if (rIn[vcl::UnicodeCoverage::SPACING_MODIFIER_LETTERS])
+            fprintf(stderr, "SPACING_MODIFIER_LETTERS\n");
+        if (rIn[vcl::UnicodeCoverage::COMBINING_DIACRITICAL_MARKS])
+            fprintf(stderr, "COMBINING_DIACRITICAL_MARKS\n");
+        if (rIn[vcl::UnicodeCoverage::GREEK_AND_COPTIC])
+            fprintf(stderr, "GREEK_AND_COPTIC\n");
+        if (rIn[vcl::UnicodeCoverage::COPTIC])
+            fprintf(stderr, "COPTIC\n");
+        if (rIn[vcl::UnicodeCoverage::CYRILLIC])
+            fprintf(stderr, "CYRILLIC\n");
+        if (rIn[vcl::UnicodeCoverage::ARMENIAN])
+            fprintf(stderr, "ARMENIAN\n");
+        if (rIn[vcl::UnicodeCoverage::HEBREW])
+            fprintf(stderr, "HEBREW\n");
+        if (rIn[vcl::UnicodeCoverage::VAI])
+            fprintf(stderr, "VAI\n");
+        if (rIn[vcl::UnicodeCoverage::ARABIC])
+            fprintf(stderr, "ARABIC\n");
+        if (rIn[vcl::UnicodeCoverage::NKO])
+            fprintf(stderr, "NKO\n");
+        if (rIn[vcl::UnicodeCoverage::DEVANAGARI])
+            fprintf(stderr, "DEVANAGARI\n");
+        if (rIn[vcl::UnicodeCoverage::BENGALI])
+            fprintf(stderr, "BENGALI\n");
+        if (rIn[vcl::UnicodeCoverage::GURMUKHI])
+            fprintf(stderr, "GURMUKHI\n");
+        if (rIn[vcl::UnicodeCoverage::GUJARATI])
+            fprintf(stderr, "GUJARATI\n");
+        if (rIn[vcl::UnicodeCoverage::ORIYA])
+            fprintf(stderr, "ORIYA\n");
+        if (rIn[vcl::UnicodeCoverage::TAMIL])
+            fprintf(stderr, "TAMIL\n");
+        if (rIn[vcl::UnicodeCoverage::TELUGU])
+            fprintf(stderr, "TELUGU\n");
+        if (rIn[vcl::UnicodeCoverage::KANNADA])
+            fprintf(stderr, "KANNADA\n");
+        if (rIn[vcl::UnicodeCoverage::MALAYALAM])
+            fprintf(stderr, "MALAYALAM\n");
+        if (rIn[vcl::UnicodeCoverage::THAI])
+            fprintf(stderr, "THAI\n");
+        if (rIn[vcl::UnicodeCoverage::LAO])
+            fprintf(stderr, "LAO\n");
+        if (rIn[vcl::UnicodeCoverage::GEORGIAN])
+            fprintf(stderr, "GEORGIAN\n");
+        if (rIn[vcl::UnicodeCoverage::BALINESE])
+            fprintf(stderr, "BALINESE\n");
+        if (rIn[vcl::UnicodeCoverage::HANGUL_JAMO])
+            fprintf(stderr, "HANGUL_JAMO\n");
+        if (rIn[vcl::UnicodeCoverage::LATIN_EXTENDED_ADDITIONAL])
+            fprintf(stderr, "LATIN_EXTENDED_ADDITIONAL\n");
+        if (rIn[vcl::UnicodeCoverage::GREEK_EXTENDED])
+            fprintf(stderr, "GREEK_EXTENDED\n");
+        if (rIn[vcl::UnicodeCoverage::GENERAL_PUNCTUATION])
+            fprintf(stderr, "GENERAL_PUNCTUATION\n");
+        if (rIn[vcl::UnicodeCoverage::SUPERSCRIPTS_AND_SUBSCRIPTS])
+            fprintf(stderr, "SUPERSCRIPTS_AND_SUBSCRIPTS\n");
+        if (rIn[vcl::UnicodeCoverage::CURRENCY_SYMBOLS])
+            fprintf(stderr, "CURRENCY_SYMBOLS\n");
+        if (rIn[vcl::UnicodeCoverage::COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS])
+            fprintf(stderr, "COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS\n");
+        if (rIn[vcl::UnicodeCoverage::LETTERLIKE_SYMBOLS])
+            fprintf(stderr, "LETTERLIKE_SYMBOLS\n");
+        if (rIn[vcl::UnicodeCoverage::NUMBER_FORMS])
+            fprintf(stderr, "NUMBER_FORMS\n");
+        if (rIn[vcl::UnicodeCoverage::ARROWS])
+            fprintf(stderr, "ARROWS\n");
+        if (rIn[vcl::UnicodeCoverage::MATHEMATICAL_OPERATORS])
+            fprintf(stderr, "MATHEMATICAL_OPERATORS\n");
+        if (rIn[vcl::UnicodeCoverage::MISCELLANEOUS_TECHNICAL])
+            fprintf(stderr, "MISCELLANEOUS_TECHNICAL\n");
+        if (rIn[vcl::UnicodeCoverage::CONTROL_PICTURES])
+            fprintf(stderr, "CONTROL_PICTURES\n");
+        if (rIn[vcl::UnicodeCoverage::OPTICAL_CHARACTER_RECOGNITION])
+            fprintf(stderr, "OPTICAL_CHARACTER_RECOGNITION\n");
+        if (rIn[vcl::UnicodeCoverage::ENCLOSED_ALPHANUMERICS])
+            fprintf(stderr, "ENCLOSED_ALPHANUMERICS\n");
+        if (rIn[vcl::UnicodeCoverage::BOX_DRAWING])
+            fprintf(stderr, "BOX_DRAWING\n");
+        if (rIn[vcl::UnicodeCoverage::BLOCK_ELEMENTS])
+            fprintf(stderr, "BLOCK_ELEMENTS\n");
+        if (rIn[vcl::UnicodeCoverage::GEOMETRIC_SHAPES])
+            fprintf(stderr, "GEOMETRIC_SHAPES\n");
+        if (rIn[vcl::UnicodeCoverage::MISCELLANEOUS_SYMBOLS])
+            fprintf(stderr, "MISCELLANEOUS_SYMBOLS\n");
+        if (rIn[vcl::UnicodeCoverage::DINGBATS])
+            fprintf(stderr, "DINGBATS\n");
+        if (rIn[vcl::UnicodeCoverage::CJK_SYMBOLS_AND_PUNCTUATION])
+            fprintf(stderr, "CJK_SYMBOLS_AND_PUNCTUATION\n");
+        if (rIn[vcl::UnicodeCoverage::HIRAGANA])
+            fprintf(stderr, "HIRAGANA\n");
+        if (rIn[vcl::UnicodeCoverage::KATAKANA])
+            fprintf(stderr, "KATAKANA\n");
+        if (rIn[vcl::UnicodeCoverage::BOPOMOFO])
+            fprintf(stderr, "BOPOMOFO\n");
+        if (rIn[vcl::UnicodeCoverage::HANGUL_COMPATIBILITY_JAMO])
+            fprintf(stderr, "HANGUL_COMPATIBILITY_JAMO\n");
+        if (rIn[vcl::UnicodeCoverage::PHAGS_PA])
+            fprintf(stderr, "PHAGS_PA\n");
+        if (rIn[vcl::UnicodeCoverage::ENCLOSED_CJK_LETTERS_AND_MONTHS])
+            fprintf(stderr, "ENCLOSED_CJK_LETTERS_AND_MONTHS\n");
+        if (rIn[vcl::UnicodeCoverage::CJK_COMPATIBILITY])
+            fprintf(stderr, "CJK_COMPATIBILITY\n");
+        if (rIn[vcl::UnicodeCoverage::HANGUL_SYLLABLES])
+            fprintf(stderr, "HANGUL_SYLLABLES\n");
+        if (rIn[vcl::UnicodeCoverage::NONPLANE_0])
+            fprintf(stderr, "NONPLANE_0\n");
+        if (rIn[vcl::UnicodeCoverage::PHOENICIAN])
+            fprintf(stderr, "PHOENICIAN\n");
+        if (rIn[vcl::UnicodeCoverage::CJK_UNIFIED_IDEOGRAPHS])
+            fprintf(stderr, "CJK_UNIFIED_IDEOGRAPHS\n");
+        if (rIn[vcl::UnicodeCoverage::PRIVATE_USE_AREA_PLANE_0])
+            fprintf(stderr, "PRIVATE_USE_AREA_PLANE_0\n");
+        if (rIn[vcl::UnicodeCoverage::CJK_STROKES])
+            fprintf(stderr, "CJK_STROKES\n");
+        if (rIn[vcl::UnicodeCoverage::ALPHABETIC_PRESENTATION_FORMS])
+            fprintf(stderr, "ALPHABETIC_PRESENTATION_FORMS\n");
+        if (rIn[vcl::UnicodeCoverage::ARABIC_PRESENTATION_FORMS_A])
+            fprintf(stderr, "ARABIC_PRESENTATION_FORMS_A\n");
+        if (rIn[vcl::UnicodeCoverage::COMBINING_HALF_MARKS])
+            fprintf(stderr, "COMBINING_HALF_MARKS\n");
+        if (rIn[vcl::UnicodeCoverage::VERTICAL_FORMS])
+            fprintf(stderr, "VERTICAL_FORMS\n");
+        if (rIn[vcl::UnicodeCoverage::SMALL_FORM_VARIANTS])
+            fprintf(stderr, "SMALL_FORM_VARIANTS\n");
+        if (rIn[vcl::UnicodeCoverage::ARABIC_PRESENTATION_FORMS_B])
+            fprintf(stderr, "ARABIC_PRESENTATION_FORMS_B\n");
+        if (rIn[vcl::UnicodeCoverage::HALFWIDTH_AND_FULLWIDTH_FORMS])
+            fprintf(stderr, "HALFWIDTH_AND_FULLWIDTH_FORMS\n");
+        if (rIn[vcl::UnicodeCoverage::SPECIALS])
+            fprintf(stderr, "SPECIALS\n");
+        if (rIn[vcl::UnicodeCoverage::TIBETAN])
+            fprintf(stderr, "TIBETAN\n");
+        if (rIn[vcl::UnicodeCoverage::SYRIAC])
+            fprintf(stderr, "SYRIAC\n");
+        if (rIn[vcl::UnicodeCoverage::THAANA])
+            fprintf(stderr, "THAANA\n");
+        if (rIn[vcl::UnicodeCoverage::SINHALA])
+            fprintf(stderr, "SINHALA\n");
+        if (rIn[vcl::UnicodeCoverage::MYANMAR])
+            fprintf(stderr, "MYANMAR\n");
+        if (rIn[vcl::UnicodeCoverage::ETHIOPIC])
+            fprintf(stderr, "ETHIOPIC\n");
+        if (rIn[vcl::UnicodeCoverage::CHEROKEE])
+            fprintf(stderr, "CHEROKEE\n");
+        if (rIn[vcl::UnicodeCoverage::UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS])
+            fprintf(stderr, "UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS\n");
+        if (rIn[vcl::UnicodeCoverage::OGHAM])
+            fprintf(stderr, "OGHAM\n");
+        if (rIn[vcl::UnicodeCoverage::RUNIC])
+            fprintf(stderr, "RUNIC\n");
+        if (rIn[vcl::UnicodeCoverage::KHMER])
+            fprintf(stderr, "KHMER\n");
+        if (rIn[vcl::UnicodeCoverage::MONGOLIAN])
+            fprintf(stderr, "MONGOLIAN\n");
+        if (rIn[vcl::UnicodeCoverage::BRAILLE_PATTERNS])
+            fprintf(stderr, "BRAILLE_PATTERNS\n");
+        if (rIn[vcl::UnicodeCoverage::YI_SYLLABLES])
+            fprintf(stderr, "YI_SYLLABLES\n");
+        if (rIn[vcl::UnicodeCoverage::TAGALOG])
+            fprintf(stderr, "TAGALOG\n");
+        if (rIn[vcl::UnicodeCoverage::OLD_ITALIC])
+            fprintf(stderr, "OLD_ITALIC\n");
+        if (rIn[vcl::UnicodeCoverage::GOTHIC])
+            fprintf(stderr, "GOTHIC\n");
+        if (rIn[vcl::UnicodeCoverage::DESERET])
+            fprintf(stderr, "DESERET\n");
+        if (rIn[vcl::UnicodeCoverage::BYZANTINE_MUSICAL_SYMBOLS])
+            fprintf(stderr, "BYZANTINE_MUSICAL_SYMBOLS\n");
+        if (rIn[vcl::UnicodeCoverage::MATHEMATICAL_ALPHANUMERIC_SYMBOLS])
+            fprintf(stderr, "MATHEMATICAL_ALPHANUMERIC_SYMBOLS\n");
+        if (rIn[vcl::UnicodeCoverage::PRIVATE_USE_PLANE_15])
+            fprintf(stderr, "PRIVATE_USE_PLANE_15\n");
+        if (rIn[vcl::UnicodeCoverage::VARIATION_SELECTORS])
+            fprintf(stderr, "VARIATION_SELECTORS\n");
+        if (rIn[vcl::UnicodeCoverage::TAGS])
+            fprintf(stderr, "TAGS\n");
+        if (rIn[vcl::UnicodeCoverage::LIMBU])
+            fprintf(stderr, "LIMBU\n");
+        if (rIn[vcl::UnicodeCoverage::TAI_LE])
+            fprintf(stderr, "TAI_LE\n");
+        if (rIn[vcl::UnicodeCoverage::NEW_TAI_LUE])
+            fprintf(stderr, "NEW_TAI_LUE\n");
+        if (rIn[vcl::UnicodeCoverage::BUGINESE])
+            fprintf(stderr, "BUGINESE\n");
+        if (rIn[vcl::UnicodeCoverage::GLAGOLITIC])
+            fprintf(stderr, "GLAGOLITIC\n");
+        if (rIn[vcl::UnicodeCoverage::TIFINAGH])
+            fprintf(stderr, "TIFINAGH\n");
+        if (rIn[vcl::UnicodeCoverage::YIJING_HEXAGRAM_SYMBOLS])
+            fprintf(stderr, "YIJING_HEXAGRAM_SYMBOLS\n");
+        if (rIn[vcl::UnicodeCoverage::SYLOTI_NAGRI])
+            fprintf(stderr, "SYLOTI_NAGRI\n");
+        if (rIn[vcl::UnicodeCoverage::LINEAR_B_SYLLABARY])
+            fprintf(stderr, "LINEAR_B_SYLLABARY\n");
+        if (rIn[vcl::UnicodeCoverage::ANCIENT_GREEK_NUMBERS])
+            fprintf(stderr, "ANCIENT_GREEK_NUMBERS\n");
+        if (rIn[vcl::UnicodeCoverage::UGARITIC])
+            fprintf(stderr, "UGARITIC\n");
+        if (rIn[vcl::UnicodeCoverage::OLD_PERSIAN])
+            fprintf(stderr, "OLD_PERSIAN\n");
+        if (rIn[vcl::UnicodeCoverage::SHAVIAN])
+            fprintf(stderr, "SHAVIAN\n");
+        if (rIn[vcl::UnicodeCoverage::OSMANYA])
+            fprintf(stderr, "OSMANYA\n");
+        if (rIn[vcl::UnicodeCoverage::CYPRIOT_SYLLABARY])
+            fprintf(stderr, "CYPRIOT_SYLLABARY\n");
+        if (rIn[vcl::UnicodeCoverage::KHAROSHTHI])
+            fprintf(stderr, "KHAROSHTHI\n");
+        if (rIn[vcl::UnicodeCoverage::TAI_XUAN_JING_SYMBOLS])
+            fprintf(stderr, "TAI_XUAN_JING_SYMBOLS\n");
+        if (rIn[vcl::UnicodeCoverage::CUNEIFORM])
+            fprintf(stderr, "CUNEIFORM\n");
+        if (rIn[vcl::UnicodeCoverage::COUNTING_ROD_NUMERALS])
+            fprintf(stderr, "COUNTING_ROD_NUMERALS\n");
+        if (rIn[vcl::UnicodeCoverage::SUNDANESE])
+            fprintf(stderr, "SUNDANESE\n");
+        if (rIn[vcl::UnicodeCoverage::LEPCHA])
+            fprintf(stderr, "LEPCHA\n");
+        if (rIn[vcl::UnicodeCoverage::OL_CHIKI])
+            fprintf(stderr, "OL_CHIKI\n");
+        if (rIn[vcl::UnicodeCoverage::SAURASHTRA])
+            fprintf(stderr, "SAURASHTRA\n");
+        if (rIn[vcl::UnicodeCoverage::KAYAH_LI])
+            fprintf(stderr, "KAYAH_LI\n");
+        if (rIn[vcl::UnicodeCoverage::REJANG])
+            fprintf(stderr, "REJANG\n");
+        if (rIn[vcl::UnicodeCoverage::CHAM])
+            fprintf(stderr, "CHAM\n");
+        if (rIn[vcl::UnicodeCoverage::ANCIENT_SYMBOLS])
+            fprintf(stderr, "ANCIENT_SYMBOLS\n");
+        if (rIn[vcl::UnicodeCoverage::PHAISTOS_DISC])
+            fprintf(stderr, "PHAISTOS_DISC\n");
+        if (rIn[vcl::UnicodeCoverage::CARIAN])
+            fprintf(stderr, "CARIAN\n");
+        if (rIn[vcl::UnicodeCoverage::DOMINO_TILES])
+            fprintf(stderr, "DOMINO_TILES\n");
+        if (rIn[vcl::UnicodeCoverage::RESERVED1])
+            fprintf(stderr, "RESERVED1\n");
+        if (rIn[vcl::UnicodeCoverage::RESERVED2])
+            fprintf(stderr, "RESERVED2\n");
+        if (rIn[vcl::UnicodeCoverage::RESERVED3])
+            fprintf(stderr, "RESERVED3\n");
+        if (rIn[vcl::UnicodeCoverage::RESERVED4])
+            fprintf(stderr, "RESERVED4\n");
+        if (rIn[vcl::UnicodeCoverage::RESERVED5])
+            fprintf(stderr, "RESERVED5\n");
+    }
 
-        aTmp.erase(std::remove(aTmp.begin(), aTmp.end(), MKTAG("DFLT")), aTmp.end());
-        aTmp.erase(std::remove(aTmp.begin(), aTmp.end(), MKTAG("dflt")), aTmp.end());
-        aTmp.erase(std::remove(aTmp.begin(), aTmp.end(), MKTAG("latn")), aTmp.end());
+    void lcl_dump_codepage_coverage(const boost::dynamic_bitset<sal_uInt32> &rIn)
+    {
+        if (rIn[vcl::CodePageCoverage::CP1252])
+            fprintf(stderr, "CP1252\n");
+        if (rIn[vcl::CodePageCoverage::CP1250])
+            fprintf(stderr, "CP1250\n");
+        if (rIn[vcl::CodePageCoverage::CP1251])
+            fprintf(stderr, "CP1251\n");
+        if (rIn[vcl::CodePageCoverage::CP1253])
+            fprintf(stderr, "CP1253\n");
+        if (rIn[vcl::CodePageCoverage::CP1254])
+            fprintf(stderr, "CP1254\n");
+        if (rIn[vcl::CodePageCoverage::CP1255])
+            fprintf(stderr, "CP1255\n");
+        if (rIn[vcl::CodePageCoverage::CP1256])
+            fprintf(stderr, "CP1256\n");
+        if (rIn[vcl::CodePageCoverage::CP1257])
+            fprintf(stderr, "CP1257\n");
+        if (rIn[vcl::CodePageCoverage::CP1258])
+            fprintf(stderr, "CP1258\n");
+        if (rIn[vcl::CodePageCoverage::CP874])
+            fprintf(stderr, "CP874\n");
+        if (rIn[vcl::CodePageCoverage::CP932])
+            fprintf(stderr, "CP932\n");
+        if (rIn[vcl::CodePageCoverage::CP936])
+            fprintf(stderr, "CP936\n");
+        if (rIn[vcl::CodePageCoverage::CP949])
+            fprintf(stderr, "CP949\n");
+        if (rIn[vcl::CodePageCoverage::CP950])
+            fprintf(stderr, "CP950\n");
+        if (rIn[vcl::CodePageCoverage::CP1361])
+            fprintf(stderr, "CP1361\n");
+        if (rIn[vcl::CodePageCoverage::CP869])
+            fprintf(stderr, "CP869\n");
+        if (rIn[vcl::CodePageCoverage::CP866])
+            fprintf(stderr, "CP866\n");
+        if (rIn[vcl::CodePageCoverage::CP865])
+            fprintf(stderr, "CP865\n");
+        if (rIn[vcl::CodePageCoverage::CP864])
+            fprintf(stderr, "CP864\n");
+        if (rIn[vcl::CodePageCoverage::CP863])
+            fprintf(stderr, "CP863\n");
+        if (rIn[vcl::CodePageCoverage::CP862])
+            fprintf(stderr, "CP862\n");
+        if (rIn[vcl::CodePageCoverage::CP861])
+            fprintf(stderr, "CP861\n");
+        if (rIn[vcl::CodePageCoverage::CP860])
+            fprintf(stderr, "CP860\n");
+        if (rIn[vcl::CodePageCoverage::CP857])
+            fprintf(stderr, "CP857\n");
+        if (rIn[vcl::CodePageCoverage::CP855])
+            fprintf(stderr, "CP855\n");
+        if (rIn[vcl::CodePageCoverage::CP852])
+            fprintf(stderr, "CP852\n");
+        if (rIn[vcl::CodePageCoverage::CP775])
+            fprintf(stderr, "CP775\n");
+        if (rIn[vcl::CodePageCoverage::CP737])
+            fprintf(stderr, "CP737\n");
+        if (rIn[vcl::CodePageCoverage::CP780])
+            fprintf(stderr, "CP780\n");
+        if (rIn[vcl::CodePageCoverage::CP850])
+            fprintf(stderr, "CP850\n");
+        if (rIn[vcl::CodePageCoverage::CP437])
+            fprintf(stderr, "CP437\n");
+    }
+#endif
 
-        //Tuned for a single non-latin script
-        if (aTmp.size() == 1)
-            return aTmp[0];
+    size_t getScript(const vcl::FontCapabilities &rFontCapabilities)
+    {
+        boost::dynamic_bitset<sal_uInt32> aGenericMask(vcl::UnicodeCoverage::MAX_UC_ENUM);
+        aGenericMask.set();
+        aGenericMask.set(vcl::UnicodeCoverage::BASIC_LATIN, false);
+        aGenericMask.set(vcl::UnicodeCoverage::LATIN_1_SUPPLEMENT, false);
+        aGenericMask.set(vcl::UnicodeCoverage::LATIN_EXTENDED_A, false);
+        aGenericMask.set(vcl::UnicodeCoverage::LATIN_EXTENDED_B, false);
+        aGenericMask.set(vcl::UnicodeCoverage::IPA_EXTENSIONS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::SPACING_MODIFIER_LETTERS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::COMBINING_DIACRITICAL_MARKS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::LATIN_EXTENDED_ADDITIONAL, false);
+        aGenericMask.set(vcl::UnicodeCoverage::GENERAL_PUNCTUATION, false);
+        aGenericMask.set(vcl::UnicodeCoverage::GEOMETRIC_SHAPES, false);
+        aGenericMask.set(vcl::UnicodeCoverage::SUPERSCRIPTS_AND_SUBSCRIPTS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::CURRENCY_SYMBOLS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::LETTERLIKE_SYMBOLS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::DINGBATS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::PRIVATE_USE_AREA_PLANE_0, false);
+        aGenericMask.set(vcl::UnicodeCoverage::ALPHABETIC_PRESENTATION_FORMS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::NUMBER_FORMS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::ARROWS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::MATHEMATICAL_OPERATORS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::MATHEMATICAL_ALPHANUMERIC_SYMBOLS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::MISCELLANEOUS_TECHNICAL, false);
+        aGenericMask.set(vcl::UnicodeCoverage::CONTROL_PICTURES, false);
+        aGenericMask.set(vcl::UnicodeCoverage::ENCLOSED_ALPHANUMERICS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::BOX_DRAWING, false);
+        aGenericMask.set(vcl::UnicodeCoverage::BLOCK_ELEMENTS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::MISCELLANEOUS_SYMBOLS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::SPECIALS, false);
+        aGenericMask.set(vcl::UnicodeCoverage::NONPLANE_0, false);
+        aGenericMask.set(vcl::UnicodeCoverage::PRIVATE_USE_PLANE_15, false);
 
-        aTmp.erase(std::remove(aTmp.begin(), aTmp.end(), MKTAG("deva")), aTmp.end());
-        //Probably strongly tuned for a single Indic script
-        if (aTmp.size() == 1)
-            return aTmp[0];
+        boost::dynamic_bitset<sal_uInt32> aMasked = rFontCapabilities.maUnicodeRange & aGenericMask;
 
-        aTmp.erase(std::remove(aTmp.begin(), aTmp.end(), MKTAG("jamo")), aTmp.end());
-        //Probably strongly tuned for a single CJK script (Korean)
-        if (aTmp.size() == 1)
-            return aTmp[0];
+        if (aMasked.count() == 1)
+            return aMasked.find_first();
 
-        if (aTmp.size() == 2)
+        if (aMasked[vcl::UnicodeCoverage::ARABIC])
         {
-            const sal_uInt32 nHaniKaniTag = MKTAG("hani") | MKTAG("kana");
-            if ((aTmp[0] | aTmp[1]) == nHaniKaniTag)
-                return nHaniKaniTag;
+            aMasked.set(vcl::UnicodeCoverage::ARABIC_PRESENTATION_FORMS_A, false);
+            aMasked.set(vcl::UnicodeCoverage::ARABIC_PRESENTATION_FORMS_B, false);
+            aMasked.set(vcl::UnicodeCoverage::NKO, false);
+            //Probably strongly tuned for Arabic
+            if (aMasked.count() == 1)
+                return vcl::UnicodeCoverage::ARABIC;
+            if (aMasked.count() == 2 && aMasked[vcl::UnicodeCoverage::SYRIAC])
+                return vcl::UnicodeCoverage::SYRIAC;
+        }
+
+        if (aMasked[vcl::UnicodeCoverage::DEVANAGARI])
+        {
+            aMasked.set(vcl::UnicodeCoverage::DEVANAGARI, false);
+            //Probably strongly tuned for a single Indic script
+            if (aMasked.count() == 1)
+                return aMasked.find_first();
+        }
+
+        aMasked.set(vcl::UnicodeCoverage::GREEK_EXTENDED, false);
+        if (aMasked.count() == 1)
+            return aMasked.find_first();
+
+        aMasked.set(vcl::UnicodeCoverage::GREEK_AND_COPTIC, false);
+        if (aMasked.count() == 1)
+            return aMasked.find_first();
+
+        boost::dynamic_bitset<sal_uInt32> aCJKMask(vcl::UnicodeCoverage::MAX_UC_ENUM);
+        aCJKMask.set();
+        aCJKMask.set(vcl::UnicodeCoverage::CJK_SYMBOLS_AND_PUNCTUATION, false);
+        aCJKMask.set(vcl::UnicodeCoverage::HIRAGANA, false);
+        aCJKMask.set(vcl::UnicodeCoverage::KATAKANA, false);
+        aCJKMask.set(vcl::UnicodeCoverage::HANGUL_JAMO, false);
+        aCJKMask.set(vcl::UnicodeCoverage::HANGUL_SYLLABLES, false);
+        aCJKMask.set(vcl::UnicodeCoverage::HANGUL_COMPATIBILITY_JAMO, false);
+        aCJKMask.set(vcl::UnicodeCoverage::ENCLOSED_CJK_LETTERS_AND_MONTHS, false);
+        aCJKMask.set(vcl::UnicodeCoverage::CJK_COMPATIBILITY, false);
+        aCJKMask.set(vcl::UnicodeCoverage::CJK_UNIFIED_IDEOGRAPHS, false);
+        aCJKMask.set(vcl::UnicodeCoverage::CJK_STROKES, false);
+        aCJKMask.set(vcl::UnicodeCoverage::HALFWIDTH_AND_FULLWIDTH_FORMS, false);
+        aCJKMask.set(vcl::UnicodeCoverage::VERTICAL_FORMS, false);
+        aCJKMask.set(vcl::UnicodeCoverage::BOPOMOFO, false);
+        aCJKMask.set(vcl::UnicodeCoverage::SMALL_FORM_VARIANTS, false);
+        aCJKMask.set(vcl::UnicodeCoverage::PHAGS_PA, false);
+        aCJKMask.set(vcl::UnicodeCoverage::GREEK_AND_COPTIC, false);
+        aCJKMask.set(vcl::UnicodeCoverage::CYRILLIC, false);
+        aCJKMask.set(vcl::UnicodeCoverage::THAI, false);
+        aCJKMask.set(vcl::UnicodeCoverage::DESERET, false);
+
+        aMasked = aMasked & aCJKMask;
+
+        //So, apparently a CJK font
+        if (!aMasked.count())
+        {
+            boost::dynamic_bitset<sal_uInt32> aCJKCodePageMask(vcl::CodePageCoverage::MAX_CP_ENUM);
+            aCJKCodePageMask.set(vcl::CodePageCoverage::CP932);
+            aCJKCodePageMask.set(vcl::CodePageCoverage::CP936);
+            aCJKCodePageMask.set(vcl::CodePageCoverage::CP949);
+            aCJKCodePageMask.set(vcl::CodePageCoverage::CP950);
+            aCJKCodePageMask.set(vcl::CodePageCoverage::CP1361);
+            boost::dynamic_bitset<sal_uInt32> aMaskedCodePage =
+                rFontCapabilities.maCodePageRange & aCJKCodePageMask;
+            //fold Korean
+            if (aMaskedCodePage[vcl::CodePageCoverage::CP1361])
+            {
+                aMaskedCodePage.set(vcl::CodePageCoverage::CP949);
+                aMaskedCodePage.set(vcl::CodePageCoverage::CP1361, false);
+            }
+
+            sal_uInt32 nRet = 0;
+            if (aMaskedCodePage[vcl::CodePageCoverage::CP936])
+                nRet |= SIMPLIFIED_CHINESE;
+            if (aMaskedCodePage[vcl::CodePageCoverage::CP950])
+                nRet |= TRADITIONAL_CHINESE;
+            if (aMaskedCodePage[vcl::CodePageCoverage::CP932])
+                nRet |= JAPANESE;
+            if (aMaskedCodePage[vcl::CodePageCoverage::CP949])
+                nRet |= KOREAN;
+            return nRet;
         }
 
         return 0;
@@ -1309,28 +1801,43 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         if (!bSymbolFont)
         {
             const bool bNameBeginsWithLatinText = rInfo.GetName().GetChar(0) <= 'z';
-            if (bNameBeginsWithLatinText)
+            vcl::FontCapabilities aFontCapabilities;
+            if (bNameBeginsWithLatinText && rUDEvt.GetDevice()->GetFontCapabilities(aFontCapabilities))
             {
                 //If this font is probably tuned to display a single non-Latin
                 //script and the font name is itself in Latin, then show a small
                 //chunk of representative text for that script
-                FontLayoutCapabilities aFontLayoutCapabilities;
-                rUDEvt.GetDevice()->GetFontLayoutCapabilities( aFontLayoutCapabilities );
-                sal_uInt32 nLangTag = getSingleNonLatnTag(aFontLayoutCapabilities);
-                if (nLangTag)
+                size_t nScript = getScript(aFontCapabilities);
+                if (nScript)
                 {
-                    sSampleText = getRepresentativeText(nLangTag);
-                    bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sSampleText));
-                    if (!bHasSampleTextGlyphs && (nLangTag == (MKTAG("hani")|MKTAG("kana"))))
+                    //If we're a CJK font, see if we seem to be tuned
+                    //for C, J or K
+                    if (nScript & JAPANESE && nScript ^ JAPANESE)
                     {
-                        sSampleText = getRepresentativeText(MKTAG("kana"));
-                        bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sSampleText));
-                        if (!bHasSampleTextGlyphs)
-                        {
-                            sSampleText = getRepresentativeText(MKTAG("hani"));
-                            bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sSampleText));
-                        }
+                        const sal_Unicode aJapanese[] = { 0x3007, 0x9F9D };
+                        rtl::OUString sJapanese(aJapanese, SAL_N_ELEMENTS(aJapanese));
+                        if (STRING_LEN != rUDEvt.GetDevice()->HasGlyphs(aFont, sJapanese))
+                            nScript ^= JAPANESE;
                     }
+
+                    if (nScript & TRADITIONAL_CHINESE && nScript ^ TRADITIONAL_CHINESE)
+                    {
+                        const sal_Unicode aTraditionalChinese[] = { 0xFA0D };
+                        rtl::OUString sTraditionalChinese(aTraditionalChinese, SAL_N_ELEMENTS(aTraditionalChinese));
+                        if (STRING_LEN != rUDEvt.GetDevice()->HasGlyphs(aFont, sTraditionalChinese))
+                            nScript ^= TRADITIONAL_CHINESE;
+                    }
+
+                    if (nScript & SIMPLIFIED_CHINESE && nScript ^ SIMPLIFIED_CHINESE)
+                    {
+                        const sal_Unicode aSimplifiedChinese[] = { 0x9FA0 };
+                        rtl::OUString sSimplifiedChinese(aSimplifiedChinese, SAL_N_ELEMENTS(aSimplifiedChinese));
+                        if (STRING_LEN != rUDEvt.GetDevice()->HasGlyphs(aFont, sSimplifiedChinese))
+                            nScript ^= SIMPLIFIED_CHINESE;
+                    }
+
+                    sSampleText = getRepresentativeText(nScript);
+                    bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sSampleText));
                 }
             }
         }
@@ -1340,27 +1847,42 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         //few well known scripts
         if (!sSampleText.getLength() && !bUsingCorrectFont)
         {
-            static const sal_Int32 tags[] =
+            static const sal_Int32 aScripts[] =
             {
-                MKTAG("arab"), MKTAG("hebr"),
+                vcl::UnicodeCoverage::ARABIC,
+                vcl::UnicodeCoverage::HEBREW,
 
-                (MKTAG("hani")|MKTAG("kana")), MKTAG("hani"), MKTAG("kana"),
-                MKTAG("hang"),
+                vcl::UnicodeCoverage::BENGALI,
+                vcl::UnicodeCoverage::GURMUKHI,
+                vcl::UnicodeCoverage::GUJARATI,
+                vcl::UnicodeCoverage::ORIYA,
+                vcl::UnicodeCoverage::TAMIL,
+                vcl::UnicodeCoverage::TELUGU,
+                vcl::UnicodeCoverage::KANNADA,
+                vcl::UnicodeCoverage::MALAYALAM,
+                vcl::UnicodeCoverage::SINHALA,
+                vcl::UnicodeCoverage::DEVANAGARI,
 
-                MKTAG("beng"), MKTAG("gujr"), MKTAG("guru"), MKTAG("knda"),
-                MKTAG("mlym"), MKTAG("mymr"), MKTAG("orya"), MKTAG("taml"),
-                MKTAG("telu"), MKTAG("sinh"),
+                vcl::UnicodeCoverage::THAI,
+                vcl::UnicodeCoverage::LAO,
+                vcl::UnicodeCoverage::GEORGIAN,
+                vcl::UnicodeCoverage::TIBETAN,
+                vcl::UnicodeCoverage::SYRIAC,
+                vcl::UnicodeCoverage::MYANMAR,
+                vcl::UnicodeCoverage::ETHIOPIC,
+                vcl::UnicodeCoverage::KHMER,
+                vcl::UnicodeCoverage::MONGOLIAN,
 
-                MKTAG("tibt"), MKTAG("thai"), MKTAG("khmr"), MKTAG("ethi"),
+                KOREAN,
+                JAPANESE,
+                TRADITIONAL_CHINESE|SIMPLIFIED_CHINESE,
 
-                MKTAG("deva"),
-
-                MKTAG("grek"), MKTAG("cyrl")
+                HEBREW_MINIMAL
             };
 
-            for (size_t i = 0; i < SAL_N_ELEMENTS(tags); ++i)
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aScripts); ++i)
             {
-                sSampleText = getRepresentativeText(tags[i]);
+                sSampleText = getRepresentativeText(aScripts[i]);
                 if (sSampleText.getLength())
                 {
                     bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sSampleText));

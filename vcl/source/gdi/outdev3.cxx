@@ -7911,10 +7911,8 @@ BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     return TRUE;
 }
 
-bool OutputDevice::GetFontLayoutCapabilities( FontLayoutCapabilities& rFontLayoutCapabilities ) const
+bool OutputDevice::GetFontCapabilities( FontCapabilities& rFontCapabilities ) const
 {
-    rFontLayoutCapabilities.clear();
-
     // we need a graphics
     if( !mpGraphics && !ImplGetGraphics() )
         return false;
@@ -7926,7 +7924,7 @@ bool OutputDevice::GetFontLayoutCapabilities( FontLayoutCapabilities& rFontLayou
     if( !mpFontEntry )
         return false;
 
-    return mpGraphics->GetImplFontLayoutCapabilities(rFontLayoutCapabilities);
+    return mpGraphics->GetImplFontCapabilities(rFontCapabilities);
 }
 
 // -----------------------------------------------------------------------

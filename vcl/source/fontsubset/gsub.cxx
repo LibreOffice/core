@@ -358,24 +358,6 @@ int HasVerticalGSUB( struct _TrueTypeFont* pTTFile )
     return pGlyphSubstitution ? +1 : 0;
 }
 
-void getTTFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities, const unsigned char* pBase)
-{
-    // parse GSUB/GPOS header
-    const FT_Byte* pGsubHeader = pBase;
-    pGsubHeader+=4;
-    const USHORT nOfsScriptList = NEXT_UShort(pGsubHeader);
-
-    // parse Script Table
-    const FT_Byte* pScriptHeader = pBase + nOfsScriptList;
-    const USHORT nCntScript = NEXT_UShort(pScriptHeader);
-    for( USHORT nScriptIndex = 0; nScriptIndex < nCntScript; ++nScriptIndex )
-    {
-        sal_uInt32 nTag = NEXT_Long(pScriptHeader);
-        pScriptHeader += 2;
-        rFontLayoutCapabilities.push_back(nTag); // e.g. hani/arab/kana/hang
-    }
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

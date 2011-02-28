@@ -242,7 +242,7 @@ public:
     // get the repertoire of the current font
     virtual ImplFontCharMap* GetImplFontCharMap() const = 0;
     // get the layout capabilities of the current font
-    virtual bool GetImplFontLayoutCapabilities(FontLayoutCapabilities &rGetImplFontLayoutCapabilities) const = 0;
+    virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* ) = 0;
     // graphics should call ImplAddDevFontSubstitute on supplied

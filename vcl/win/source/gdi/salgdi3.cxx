@@ -1107,7 +1107,7 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     mbHasGraphiteSupport( false ),
 #endif
     mbHasArabicSupport ( false ),
-    mbFontLayoutCapabilitiesRead( false ),
+    mbFontCapabilitiesRead( false ),
     mbAliasSymbolsLow( false ),
     mbAliasSymbolsHigh( false ),
     mnId( 0 ),
@@ -1209,10 +1209,10 @@ ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
     return mpUnicodeMap;
 }
 
-bool ImplWinFontData::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities) const
+bool ImplWinFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
-    rFontLayoutCapabilities = maFontLayoutCapabilities;
-    return !rFontLayoutCapabilities.empty();
+    rFontCapabilities = maFontCapabilities;
+    return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
 }
 
 // -----------------------------------------------------------------------
@@ -1319,25 +1319,36 @@ void ImplWinFontData::ReadCmapTable( HDC hDC ) const
         mpUnicodeMap = ImplFontCharMap::GetDefaultMap( bIsSymbolFont );
 }
 
-void ImplWinFontData::GetFontLayoutCapabilities( HDC hDC ) const
+void ImplWinFontData::GetFontCapabilities( HDC hDC ) const
 {
     // read this only once per font
-    if( mbFontLayoutCapabilitiesRead )
+    if( mbFontCapabilitiesRead )
         return;
 
-    mbFontLayoutCapabilitiesRead = true;
+    mbFontCapabilitiesRead = true;
 
-    // check the existence of a GSUB table
+    // GSUB table
+    DWORD nLength;
     const DWORD GsubTag = CalcTag( "GSUB" );
-    DWORD nLength = ::GetFontData( hDC, GsubTag, 0, NULL, 0 );
-    if( (nLength == GDI_ERROR) || !nLength )
-        return;
+    nLength = ::GetFontData( hDC, GsubTag, 0, NULL, 0 );
+    if( (nLength != GDI_ERROR) & nLength )
+    {
+        std::vector<unsigned char> aTable( nLength );
+        unsigned char* pTable = &aTable[0];
+        ::GetFontData( hDC, GsubTag, 0, pTable, nLength );
+        vcl::getTTScripts(maFontCapabilities.maGSUBScriptTags, pTable, nLength);
+    }
 
-    std::vector<unsigned char> aTable( nLength );
-    unsigned char* pTable = &aTable[0];
-    ::GetFontData( hDC, GsubTag, 0, pTable, nLength );
-
-    vcl::getTTFontLayoutCapabilities(maFontLayoutCapabilities, pTable);
+    // OS/2 table
+    const DWORD OS2Tag = CalcTag( "OS/2" );
+    nLength = ::GetFontData( hDC, OS2Tag, 0, NULL, 0 );
+    if( (nLength != GDI_ERROR) & nLength )
+    {
+        std::vector<unsigned char> aTable( nLength );
+        unsigned char* pTable = &aTable[0];
+        ::GetFontData( hDC, OS2Tag, 0, pTable, nLength );
+        vcl::getTTCoverage(maFontCapabilities.maUnicodeRange, maFontCapabilities.maCodePageRange, pTable, nLength);
+    }
 }
 
 // =======================================================================
@@ -1882,11 +1893,11 @@ ImplFontCharMap* WinSalGraphics::GetImplFontCharMap() const
     return mpWinFontData[0]->GetImplFontCharMap();
 }
 
-bool WinSalGraphics::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities) const
+bool WinSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     if( !mpWinFontData[0] )
         return false;
-    return mpWinFontData[0]->GetImplFontLayoutCapabilities(rFontLayoutCapabilities);
+    return mpWinFontData[0]->GetImplFontCapabilities(rFontCapabilities);
 }
 
 // -----------------------------------------------------------------------

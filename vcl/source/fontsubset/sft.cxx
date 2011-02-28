@@ -2727,6 +2727,54 @@ void DisposeNameRecords(NameRecord* nr, int n)
     free(nr);
 }
 
+bool getTTCoverage(
+    boost::dynamic_bitset<sal_uInt32> &rUnicodeRange,
+    boost::dynamic_bitset<sal_uInt32> &rCodePageRange,
+    const unsigned char* pTable, size_t nLength)
+{
+    bool bRet = false;
+    sal_uInt16 nVersion = GetUInt16(pTable, 0, 1);
+    // parse OS/2 header
+    if ( nVersion >= 0x0001 && nLength >= 58 )
+    {
+        rUnicodeRange.append(GetUInt32(pTable, 42, 1));
+        rUnicodeRange.append(GetUInt32(pTable, 46, 1));
+        rUnicodeRange.append(GetUInt32(pTable, 50, 1));
+        rUnicodeRange.append(GetUInt32(pTable, 54, 1));
+        bRet = true;
+        if (nLength >= 86)
+        {
+            rCodePageRange.append(GetUInt32(pTable, 78, 1));
+            rCodePageRange.append(GetUInt32(pTable, 82, 1));
+        }
+    }
+    return bRet;
+}
+
+void getTTScripts(std::vector< sal_uInt32 > &rScriptTags, const unsigned char* pTable, size_t nLength)
+{
+    if (nLength < 6)
+        return;
+
+    // parse GSUB/GPOS header
+    const sal_uInt16 nOfsScriptList = GetUInt16(pTable, 4, 1);
+
+    // parse Script Table
+    const sal_uInt16 nCntScript = GetUInt16(pTable, nOfsScriptList, 1);
+    sal_uInt32 nCurrentPos = nOfsScriptList+2;
+    for( sal_uInt16 nScriptIndex = 0;
+         nScriptIndex < nCntScript && nLength >= 6; ++nScriptIndex,
+         nLength-=6 )
+    {
+        sal_uInt32 nTag = GetUInt32(pTable, nCurrentPos, 1);
+        nCurrentPos+=6;
+        rScriptTags.push_back(nTag); // e.g. hani/arab/kana/hang
+    }
+
+    std::sort(rScriptTags.begin(), rScriptTags.end());
+    rScriptTags.erase(std::unique(rScriptTags.begin(), rScriptTags.end()), rScriptTags.end());
+}
+
 } // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

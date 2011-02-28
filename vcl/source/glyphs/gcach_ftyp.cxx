@@ -1764,29 +1764,27 @@ bool FreetypeServerFont::GetFontCodeRanges( CmapResult& rResult ) const
     return true;
 }
 
-bool FreetypeServerFont::GetFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities) const
+bool FreetypeServerFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
-    rFontLayoutCapabilities.clear();
+    bool bRet = false;
 
     ULONG nLength = 0;
-    const FT_Byte* pBase;
     // load GSUB table
-    pBase = mpFontInfo->GetTable("GSUB", &nLength);
-    if( pBase )
-        vcl::getTTFontLayoutCapabilities(rFontLayoutCapabilities, pBase);
-#if 0
-    //If there's any need for it, we could check the GPOS as well
-    // load GPOS table
-    pBase = mpFontInfo->GetTable("GPOS", &nLength);
-    if( pBase )
-        vcl::getTTFontLayoutCapabilities(rFontLayoutCapabilities, pBase);
-#endif
+    const FT_Byte* pGSUB = mpFontInfo->GetTable("GSUB", &nLength);
+    if (pGSUB)
+        vcl::getTTScripts(rFontCapabilities.maGSUBScriptTags, pGSUB, nLength);
 
-    std::sort(rFontLayoutCapabilities.begin(), rFontLayoutCapabilities.end());
-    rFontLayoutCapabilities.erase(std::unique(rFontLayoutCapabilities.begin(), rFontLayoutCapabilities.end()),
-        rFontLayoutCapabilities.end());
+    // load OS/2 table
+    const FT_Byte* pOS2 = mpFontInfo->GetTable("OS/2", &nLength);
+    if (pOS2)
+    {
+        bRet = vcl::getTTCoverage(
+            rFontCapabilities.maUnicodeRange,
+            rFontCapabilities.maCodePageRange,
+            pOS2, nLength);
+    }
 
-    return !rFontLayoutCapabilities.empty();
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
