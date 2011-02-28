@@ -48,8 +48,8 @@ public:
                             XLineAttrSetItem(const XLineAttrSetItem& rAttr,
                                              SfxItemPool* pItemPool);
     virtual SfxPoolItem*    Clone( SfxItemPool* pToPool ) const;
-    virtual SfxPoolItem*    Create( SvStream& rStream, USHORT nVersion ) const;
-    virtual SvStream&       Store( SvStream& rStream, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVersion ) const;
+    virtual SvStream&       Store( SvStream& rStream, sal_uInt16 nItemVersion ) const;
 };
 
 #endif

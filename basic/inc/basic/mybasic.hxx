@@ -36,10 +36,10 @@ class ErrorEntry;
 
 class BasicError {
     AppBasEd* pWin;
-    USHORT  nLine, nCol1, nCol2;
+    sal_uInt16  nLine, nCol1, nCol2;
     String aText;
 public:
-    BasicError( AppBasEd*, USHORT, const String&, USHORT, USHORT, USHORT );
+    BasicError( AppBasEd*, sal_uInt16, const String&, sal_uInt16, sal_uInt16, sal_uInt16 );
     void Show();
 };
 
@@ -51,8 +51,8 @@ DECLARE_LIST( ErrorList, BasicError* )
 class MyBasic : public StarBASIC
 {
     SbError nError;
-    virtual BOOL ErrorHdl();
-    virtual USHORT BreakHdl();
+    virtual sal_Bool ErrorHdl();
+    virtual sal_uInt16 BreakHdl();
 
 protected:
     Link GenLogHdl();
@@ -70,7 +70,7 @@ public:
     ErrorList aErrors;
     MyBasic();
     virtual ~MyBasic();
-    virtual BOOL Compile( SbModule* );
+    virtual sal_Bool Compile( SbModule* );
     void Reset();
     SbError GetErrors() { return nError; }
 
@@ -80,10 +80,10 @@ public:
     virtual void LoadIniFile();
 
     // Determines the extended symbol type for syntax highlighting
-    virtual SbTextType GetSymbolType( const String &Symbol, BOOL bWasTTControl );
+    virtual SbTextType GetSymbolType( const String &Symbol, sal_Bool bWasTTControl );
     virtual const String GetSpechialErrorText();
     virtual void ReportRuntimeError( AppBasEd *pEditWin );
-    virtual void DebugFindNoErrors( BOOL bDebugFindNoErrors );
+    virtual void DebugFindNoErrors( sal_Bool bDebugFindNoErrors );
 
     static void SetCompileModule( SbModule *pMod );
     static SbModule *GetCompileModule();

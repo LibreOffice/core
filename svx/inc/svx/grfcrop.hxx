@@ -38,25 +38,25 @@ class SVX_DLLPUBLIC SvxGrfCrop : public SfxPoolItem
 {
     sal_Int32   nLeft, nRight, nTop, nBottom;
 public:
-    SvxGrfCrop( USHORT  );
+    SvxGrfCrop( sal_uInt16  );
     SvxGrfCrop( sal_Int32 nLeft,    sal_Int32 nRight,
                 sal_Int32 nTop,     sal_Int32 nBottom,
-                USHORT  );
+                sal_uInt16  );
     virtual ~SvxGrfCrop();
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int                 operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*        Create(SvStream &, USHORT nVer) const;
-    virtual SvStream&           Store(SvStream &, USHORT nIVer) const;
+    virtual SfxPoolItem*        Create(SvStream &, sal_uInt16 nVer) const;
+    virtual SvStream&           Store(SvStream &, sal_uInt16 nIVer) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal,
+                                        sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal,
+                                        sal_uInt8 nMemberId = 0 );
 
     void SetLeft( sal_Int32 nVal )      { nLeft = nVal; }
     void SetRight( sal_Int32 nVal )     { nRight = nVal; }

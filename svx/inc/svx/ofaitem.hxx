@@ -40,7 +40,7 @@ private:
     void* pPtr;
 
 public:
-                             OfaPtrItem( USHORT nWhich, void *pPtr );
+                             OfaPtrItem( sal_uInt16 nWhich, void *pPtr );
                              OfaPtrItem( const OfaPtrItem& );
 
     virtual int              operator==( const SfxPoolItem& ) const;

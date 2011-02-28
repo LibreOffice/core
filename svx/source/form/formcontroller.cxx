@@ -81,7 +81,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/scopeguard.hxx>
+#include <comphelper/flagguard.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/controls/unocontrol.hxx>
@@ -479,7 +479,10 @@ class FmXAutoControl: public UnoControl
     friend Reference< XInterface > SAL_CALL FmXAutoControl_NewInstance_Impl();
 
 public:
-    FmXAutoControl(){}
+    FmXAutoControl( const ::comphelper::ComponentContext& i_context )
+        :UnoControl( i_context.getLegacyServiceFactory() )
+    {
+    }
 
     virtual ::rtl::OUString GetComponentServiceName() {return ::rtl::OUString::createFromAscii("Edit");}
     virtual void SAL_CALL createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw( RuntimeException );
@@ -1451,7 +1454,7 @@ void FormController::toggleAutoFields(sal_Bool bAutoFields)
                         &&  ::comphelper::getBOOL( xField->getPropertyValue( FM_PROP_AUTOINCREMENT ) )
                         )
                     {
-                        replaceControl( xControl, new FmXAutoControl );
+                        replaceControl( xControl, new FmXAutoControl( m_aContext ) );
                     }
                 }
             }

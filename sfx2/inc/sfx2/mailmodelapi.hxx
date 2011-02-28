@@ -136,6 +136,6 @@ public:
     sal_Bool            IsEmpty() const;
 };
 
-BOOL CreateFromAddress_Impl( String& rFrom );
+sal_Bool CreateFromAddress_Impl( String& rFrom );
 
 #endif // INCLUDED_SFX_MAILMODEL_HXX

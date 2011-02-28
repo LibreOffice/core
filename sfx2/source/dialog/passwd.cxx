@@ -125,6 +125,7 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
     mbAsciiOnly     ( false )
 
 {
+    maPasswordED.SetAccessibleName(String(SfxResId(TEXT_PASSWD)));
     FreeResource();
 
     // setup layout
@@ -190,7 +191,7 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
 
 // -----------------------------------------------------------------------
 
-void SfxPasswordDialog::SetMinLen( USHORT nLen )
+void SfxPasswordDialog::SetMinLen( sal_uInt16 nLen )
 {
     mnMinLen = nLen;
     EditModifyHdl( NULL );
@@ -198,7 +199,7 @@ void SfxPasswordDialog::SetMinLen( USHORT nLen )
 
 // -----------------------------------------------------------------------
 
-void SfxPasswordDialog::SetMaxLen( USHORT nLen )
+void SfxPasswordDialog::SetMaxLen( sal_uInt16 nLen )
 {
     maPasswordED.SetMaxTextLen( nLen );
     maConfirmED.SetMaxTextLen( nLen );

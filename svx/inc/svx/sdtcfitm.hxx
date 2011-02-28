@@ -35,7 +35,7 @@
 //------------------------------------
 class SdrTextContourFrameItem: public SdrOnOffItem {
 public:
-    SdrTextContourFrameItem(BOOL bOn=FALSE): SdrOnOffItem(SDRATTR_TEXT_CONTOURFRAME,bOn) {}
+    SdrTextContourFrameItem(sal_Bool bOn=sal_False): SdrOnOffItem(SDRATTR_TEXT_CONTOURFRAME,bOn) {}
     SdrTextContourFrameItem(SvStream& rIn) : SdrOnOffItem(SDRATTR_TEXT_CONTOURFRAME,rIn) {}
 };
 

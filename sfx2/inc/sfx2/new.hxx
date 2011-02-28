@@ -93,20 +93,20 @@ private:
 
 public:
 
-    SfxNewFileDialog(Window *pParent, USHORT nFlags = 0);
+    SfxNewFileDialog(Window *pParent, sal_uInt16 nFlags = 0);
     ~SfxNewFileDialog();
 
-        // Liefert FALSE, wenn '- Keine -' als Vorlage eingestellt ist
-        // Nur wenn IsTemplate() TRUE liefert, koennen Vorlagennamen
+        // Liefert sal_False, wenn '- Keine -' als Vorlage eingestellt ist
+        // Nur wenn IsTemplate() sal_True liefert, koennen Vorlagennamen
         // erfragt werden
-    BOOL IsTemplate() const;
+    sal_Bool IsTemplate() const;
     String GetTemplateRegion() const;
     String GetTemplateName() const;
     String GetTemplateFileName() const;
 
     // load template methods
-    USHORT  GetTemplateFlags()const;
-    void    SetTemplateFlags(USHORT nSet);
+    sal_uInt16  GetTemplateFlags()const;
+    void    SetTemplateFlags(sal_uInt16 nSet);
 };
 
 #endif

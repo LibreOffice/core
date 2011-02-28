@@ -41,6 +41,7 @@ DLLPRE =
 
 SLOFILES= \
         $(SLO)$/dlgprov.obj \
+        $(SLO)$/DialogModelProvider.obj \
         $(SLO)$/dlgevtatt.obj
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX).uno
@@ -58,6 +59,7 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB) \
         $(COMPHELPERLIB) \
         $(UCBHELPERLIB) \
+        $(VBAHELPERLIB)	\
         $(CPPULIB) \
         $(BASICLIB) \
         $(SALLIB)

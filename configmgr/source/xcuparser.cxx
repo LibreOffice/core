@@ -1099,17 +1099,25 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
         }
         break;
     case OPERATION_REMOVE:
-        // Ignore removal of unknown members, members finalized in a lower
-        // layer, and members made mandatory in this or a lower layer:
-        if (i != set->getMembers().end() && !state_.top().locked &&
-            finalizedLayer >= valueParser_.getLayer() &&
-            mandatoryLayer > valueParser_.getLayer())
         {
-            set->getMembers().erase(i);
+            // Ignore removal of unknown members, members finalized in a lower
+            // layer, and members made mandatory in this or a lower layer;
+            // forget about user-layer removals that no longer remove anything
+            // (so that paired additions/removals in the user layer do not grow
+            // registrymodifications.xcu unbounded):
+            bool known = i != set->getMembers().end();
+            if (known && !state_.top().locked &&
+                finalizedLayer >= valueParser_.getLayer() &&
+                mandatoryLayer > valueParser_.getLayer())
+            {
+                set->getMembers().erase(i);
+            }
+            state_.push(State(true));
+            if (known) {
+                recordModification(false);
+            }
+            break;
         }
-        state_.push(State(true));
-        recordModification(false);
-        break;
     }
 }
 

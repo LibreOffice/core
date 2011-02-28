@@ -63,10 +63,10 @@ class SVX_DLLPUBLIC FontWorkShapeTypeControl : public SfxToolBoxControl
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    FontWorkShapeTypeControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    FontWorkShapeTypeControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~FontWorkShapeTypeControl();
 
-    virtual void                Select( BOOL bMod1 = FALSE );
+    virtual void                Select( sal_Bool bMod1 = sal_False );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
 };
@@ -91,8 +91,8 @@ public:
 
 class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
 {
-    ValueSet            maCtlFavorites;
     FixedLine           maFLFavorites;
+    ValueSet            maCtlFavorites;
     OKButton            maOKButton;
     CancelButton        maCancelButton;
     HelpButton          maHelpButton;

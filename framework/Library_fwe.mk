@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,12 +14,12 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
@@ -55,6 +55,7 @@ $(eval $(call gb_Library_add_linked_libs,fwe,\
     utl \
     vcl \
     vos3 \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fwe,\
@@ -77,8 +78,8 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/helper/imageproducer \
     framework/source/fwe/helper/propertysetcontainer \
     framework/source/fwe/helper/titlehelper \
-    framework/source/fwe/helper/uiconfigelementwrapperbase \
-    framework/source/fwe/helper/uielementwrapperbase \
+    framework/source/fwe/helper/documentundoguard \
+    framework/source/fwe/helper/undomanagerhelper \
     framework/source/fwe/interaction/preventduplicateinteraction \
     framework/source/fwe/xml/eventsconfiguration \
     framework/source/fwe/xml/eventsdocumenthandler \
@@ -94,22 +95,9 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/xml/xmlnamespaces \
 ))
 
+#todo: ImageListDescriptor can't be exported completely without exporting everything
 ifeq ($(OS),LINUX)
-
 $(eval $(call gb_Library_set_cxxflags,fwe,$$(filter-out -fvisibility=hidden,$$(CXXFLAGS))))
+endif
 
-$(eval $(call gb_Library_add_linked_libs,fwe,\
-    dl \
-    m \
-    pthread \
-))
-endif
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,fwe,\
-    kernel32 \
-    msvcrt \
-    uwinapi \
-))
-endif
-# TODO: visibility
 # vim: set noet sw=4 ts=4:

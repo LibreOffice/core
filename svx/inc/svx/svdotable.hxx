@@ -201,8 +201,8 @@ public:
 
     // Gleichzeitig wird der Text in den Outliner gesetzt (ggf.
     // der des EditOutliners) und die PaperSize gesetzt.
-    virtual void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, FASTBOOL bNoEditText=FALSE, ::Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=FALSE, Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
+    virtual void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, FASTBOOL bNoEditText=sal_False, ::Rectangle* pAnchorRect=NULL, sal_Bool bLineWidth=sal_True ) const;
+    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=sal_False, Rectangle* pAnchorRect=NULL, sal_Bool bLineWidth=sal_True ) const;
     virtual void TakeTextAnchorRect(const sdr::table::CellPos& rPos, ::Rectangle& rAnchorRect ) const;
     virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const;
 
@@ -218,11 +218,11 @@ public:
     virtual void SetPage(SdrPage* pNewPage);
     virtual void SetModel(SdrModel* pNewModel);
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void SetChanged();
 
-    virtual FASTBOOL AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE) const;
-    virtual FASTBOOL AdjustTextFrameWidthAndHeight(FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE);
+    virtual FASTBOOL AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt=sal_True, FASTBOOL bWdt=sal_True) const;
+    virtual FASTBOOL AdjustTextFrameWidthAndHeight(FASTBOOL bHgt=sal_True, FASTBOOL bWdt=sal_True);
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
     virtual void operator=(const SdrObject& rObj);
@@ -265,7 +265,7 @@ public:
     virtual void EndTextEdit(SdrOutliner& rOutl);
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
     virtual void TakeTextEditArea(const sdr::table::CellPos& rPos, Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
-    virtual USHORT GetOutlinerViewAnchorMode() const;
+    virtual sal_uInt16 GetOutlinerViewAnchorMode() const;
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
 

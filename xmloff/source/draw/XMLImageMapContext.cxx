@@ -160,7 +160,7 @@ public:
     void EndElement();
 
     SvXMLImportContext *CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
@@ -258,7 +258,7 @@ void XMLImageMapObjectContext::EndElement()
 }
 
 SvXMLImportContext* XMLImageMapObjectContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
@@ -682,7 +682,7 @@ XMLImageMapContext::~XMLImageMapContext()
 }
 
 SvXMLImportContext *XMLImageMapContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
