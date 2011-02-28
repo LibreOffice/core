@@ -38,6 +38,9 @@
 #elif defined ( SOLARIS) && defined ( X86 )
 #error please use asm/interlck_x86.s
 #elif defined ( ARM ) && (( __GNUC__ < 4 ) || (( __GNUC__ == 4) && ( __GNUC_MINOR__ < 6 ))) && ( __ARM_ARCH__ >= 6)
+// assembler implementation for gcc <4.6 on arm
+// originally contributed by Eric Bachard / OOo4Kids
+// #i117017# and lp#726529
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
     register oslInterlockedCount nCount __asm__ ("r1");
