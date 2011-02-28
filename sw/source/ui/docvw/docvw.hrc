@@ -52,7 +52,7 @@
 #define MN_READONLY_RELOAD              (RC_DOCVW_BEGIN + 22)
 #define MN_READONLY_COPY                (RC_DOCVW_BEGIN + 23)
 
-//Bei den folgenden brauchen wir Luft fuer die Gallery-Themen
+//For the following we need space for the gallery-themes
 #define MN_READONLY_GRAPHICTOGALLERY    (RC_DOCVW_BEGIN + 24)
 #define MN_READONLY_BACKGROUNDTOGALLERY (RC_DOCVW_BEGIN + 60)
 

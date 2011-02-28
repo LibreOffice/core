@@ -162,9 +162,9 @@ Menu MN_READONLY_POPUP
         {
             Identifier = MN_READONLY_COPYGRAPHIC ;
             HelpID = HID_MN_READONLY_COPYGRAPHIC ;
-            /* ### ACHTUNG: Neuer Text in Resource? Grafik ~kopieren : ~Grafik kopieren */
-            /* ### ACHTUNG: Neuer Text in Resource? Grafik ~kopieren : ~Grafik kopieren */
-            /* ### ACHTUNG: Neuer Text in Resource? Grafik ~kopieren : ~Grafik kopieren */
+            /* ### ATTENTION: new text in resource? copy graphic : copy graphic */
+            /* ### ATTENTION: new text in resource? copy graphic : copy graphic */
+            /* ### ATTENTION: new text in resource? copy graphic : copy graphic */
             Text [ en-US ] = "Copy ~Graphics" ;
         };
         SEPARATOR
