@@ -645,16 +645,7 @@ File gid_File_Lib_I18npool
   #endif
 End
 
-File gid_File_Lib_I18nregexp
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT3(libi18nregexp,COMID,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(i18nregexp,COMID,.dll));
-  #endif
-End
+STD_LIB_FILE( gid_File_I18nregexp, i18nregexp )
 
 File gid_File_Lib_I18nsearch
     TXT_FILE_BODY;

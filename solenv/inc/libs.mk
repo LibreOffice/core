@@ -53,6 +53,7 @@ I18NUTILLIB=-li18nutil$(COMID)
 .INCLUDE .IGNORE : i18npool/version.mk
 I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
 I18NPAPERLIB=-li18npaper$(DLLPOSTFIX)
+I18NREGEXPLIB=-li18nregexp$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
@@ -368,6 +369,7 @@ ICUDATALIB=icudata.lib
 I18NUTILLIB=ii18nutil.lib
 I18NISOLANGLIB=ii18nisolang.lib
 I18NPAPERLIB=ii18npaper.lib
+I18NREGEXPLIB=ii18nregexp.lib
 SALHELPERLIB=isalhelper.lib
 XMLSCRIPTLIB=ixcr.lib
 COMPHELPERLIB=icomphelp.lib

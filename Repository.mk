@@ -62,6 +62,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwl \
     fwm \
     i18npaper \
+    i18nregexp \
     lng \
     msfilter \
     msword \
