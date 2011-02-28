@@ -1684,7 +1684,7 @@ sal_Bool OCX_OptionButton::Import(com::sun::star::uno::Reference<
 
     if (pValue && !bSetInDialog)
     {
-        INT16 nTmp = pValue[0]-0x30;
+        sal_Int16 nTmp = pValue[0]-0x30;
         aTmp <<= nTmp;
         rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultState"), aTmp);
     }
@@ -2322,7 +2322,7 @@ sal_Bool OCX_ToggleButton::Import(com::sun::star::uno::Reference<
 
     if (pValue)
     {
-        INT16 nTmp=pValue[0]-0x30;
+        sal_Int16 nTmp=pValue[0]-0x30;
         aTmp <<= nTmp == 1;
         rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultState"), aTmp);
     }
@@ -3615,7 +3615,7 @@ void OCX_ContainerControl::ProcessControl(OCX_Control* pControl,SvStorageStream*
         // #117490# DR: container records provide size of substream, use it here...
 
         // remember initial position to set correct stream position
-        ULONG nStrmPos = oStream->Tell();
+        sal_uLong nStrmPos = oStream->Tell();
         // import control, may return with invalid stream position
         pControl->FullRead(oStream);
         // set stream to position behind substream of this control
@@ -3668,7 +3668,7 @@ OCX_MultiPage::OCX_MultiPage( SotStorageRef& parent,
         nVertPos(1), nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012),
         nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
         nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
-        bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
+        bPictureTiling(sal_False), nAccelerator(0), nIcon(0), pCaption(0),
         nScrollWidth(0), nScrollHeight(0), nIconLen(0), pIcon(0), nPictureLen(0),
         pPicture(0)
 {
@@ -3676,7 +3676,7 @@ OCX_MultiPage::OCX_MultiPage( SotStorageRef& parent,
     mnForeColor = 0x80000012L,
     mnBackColor = 0x8000000FL;
     bSetInDialog = true;// UserForm control only
-    aFontData.SetHasAlign(TRUE);
+    aFontData.SetHasAlign(sal_True);
     containerType = MULTIPAGE;
     mnCurrentPageStep = 0;
 }
@@ -3778,7 +3778,7 @@ OCX_Page::OCX_Page( SotStorageRef& parent,
         nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012),
         nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
         nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
-        bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
+        bPictureTiling(sal_False), nAccelerator(0), nIcon(0), pCaption(0),
         nScrollWidth(0), nScrollHeight(0), nIconLen(0), pIcon(0), nPictureLen(0),
         pPicture(0)
 {
@@ -3786,7 +3786,7 @@ OCX_Page::OCX_Page( SotStorageRef& parent,
     mnForeColor = 0x80000012,
     mnBackColor = 0x8000000F,
     bSetInDialog = true;// UserForm control only
-    aFontData.SetHasAlign(TRUE);
+    aFontData.SetHasAlign(sal_True);
 }
 
 
@@ -3846,7 +3846,7 @@ OCX_Frame::OCX_Frame( SotStorageRef& parent,
         nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012),
         nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
         nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
-        bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
+        bPictureTiling(sal_False), nAccelerator(0), nIcon(0), pCaption(0),
         nScrollWidth(0), nScrollHeight(0), nScrollLeft(0), nScrollTop(0), nIconLen(0), pIcon(0), nPictureLen(0),
         pPicture(0)
 {
@@ -3854,7 +3854,7 @@ OCX_Frame::OCX_Frame( SotStorageRef& parent,
     mnForeColor = 0x80000012;
     mnBackColor = 0x8000000F;
     bSetInDialog = true;// UserForm control only
-    aFontData.SetHasAlign(TRUE);
+    aFontData.SetHasAlign(sal_True);
 }
 
 
@@ -4042,7 +4042,7 @@ OCX_UserForm::OCX_UserForm( SotStorageRef& parent,
         nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012), nChildrenB(0),
         nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
         nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
-        bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
+        bPictureTiling(sal_False), nAccelerator(0), nIcon(0), pCaption(0),
         nScrollWidth(0), nScrollHeight(0), nScrollLeft(0), nScrollTop(0), nIconLen(0), pIcon(0), nPictureLen(0),
         pPicture(0)
     {
@@ -4053,7 +4053,7 @@ OCX_UserForm::OCX_UserForm( SotStorageRef& parent,
             {
                 xProps->getPropertyValue(C2S("DefaultContext"))  >>= mxCtx;
             }
-            aFontData.SetHasAlign(TRUE);
+            aFontData.SetHasAlign(sal_True);
         }
 sal_Bool OCX_UserForm::Read(SvStorageStream *pS)
 {
@@ -4547,7 +4547,7 @@ OCX_Control * SvxMSConvertOCXControls::OCX_Factory(
 
 
 sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
-        uno::Reference < drawing::XShape > *pShapeRef,BOOL bFloatingCtrl)
+        uno::Reference < drawing::XShape > *pShapeRef,sal_Bool bFloatingCtrl)
 {
 
     SvStorageStreamRef xCrash = rSrc1->OpenSotStream( WW8_ASCII2STR("contents") );
@@ -4599,7 +4599,7 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
 
 sal_Bool SvxMSConvertOCXControls::ReadOCXExcelKludgeStream(
     SvStorageStreamRef& rSrc1, uno::Reference < drawing::XShape > *
-    pShapeRef,BOOL bFloatingCtrl)
+    pShapeRef,sal_Bool bFloatingCtrl)
 {
     sal_Bool bRet=sal_False;
     /*Get Class Id of this object, see if it is one of the types
@@ -4763,7 +4763,7 @@ sal_Bool OCX_CheckBox::Import(com::sun::star::uno::Reference<
 
     if (pValue && !bSetInDialog)
     {
-        INT16 nTmp=pValue[0]-0x30;
+        sal_Int16 nTmp=pValue[0]-0x30;
         aTmp <<= nTmp;
         rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultState"), aTmp);
     }
@@ -5013,7 +5013,7 @@ sal_Bool OCX_FontData::Read(SvStorageStream *pS)
         lclReadCharArray( *pS, pFontName, nFontNameLen, pS->Tell() - nStart);
 
     ReadAlign(pS, pS->Tell() - nStart, 4);
-    return(TRUE);
+    return(sal_True);
 }
 
 void OCX_FontData::Import(uno::Reference< beans::XPropertySet > &rPropSet)
@@ -5181,7 +5181,7 @@ sal_Bool OCX_Image::Read(SotStorageStream *pS)
         // only import image control for UserForms
         return sal_False;
     }
-    ULONG nStart = pS->Tell();
+    sal_uLong nStart = pS->Tell();
     *pS >> nIdentifier;
     DBG_ASSERT(nStandardId==nIdentifier,
         "A control that has a different identifier");
@@ -5697,7 +5697,7 @@ void OCX_SpinButton::GetBoolProperty(
 sal_Bool OCX_SpinButton::WriteData( SvStream& rStrm ) const
 {
     sal_Bool bRet = sal_True;
-    ULONG nStartPos = rStrm.Tell();
+    sal_uLong nStartPos = rStrm.Tell();
 
     rStrm << sal_Int32( 0 ) << mnBlockFlags;
 

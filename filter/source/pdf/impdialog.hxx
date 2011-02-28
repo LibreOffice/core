@@ -165,7 +165,7 @@ public:
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& getServiceFactory() const { return mxMSF; }
 
 protected:
-    virtual void                PageCreated( USHORT _nId,
+    virtual void                PageCreated( sal_uInt16 _nId,
                                              SfxTabPage& _rPage );
     virtual short               Ok();
 };
@@ -321,11 +321,13 @@ class ImpPDFTabSecurityPage : public SfxTabPage
     FixedText                   maFtUserPwd;
     String                      maUserPwdSet;
     String                      maUserPwdUnset;
+    String                      maUserPwdPdfa;
     String                      maStrSetPwd;
 
     FixedText                   maFtOwnerPwd;
     String                      maOwnerPwdSet;
     String                      maOwnerPwdUnset;
+    String                      maOwnerPwdPdfa;
 
     FixedLine                   maFlPrintPermissions;
     RadioButton                 maRbPrintNone;
@@ -370,6 +372,7 @@ public:
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void    SetFilterConfigItem( const ImpPDFTabDialog* paParent );
     void    ImplPDFASecurityControl( sal_Bool bEnableSecurity );
+    bool    hasPassword() const { return mbHaveOwnerPassword || mbHaveUserPassword; }
 };
 
 //class to implement the relative link stuff

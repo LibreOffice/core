@@ -49,14 +49,17 @@ NOOPTFILES= \
     $(SLO)$/qnametostr.obj
 
 SLOFILES= \
-    $(SLO)$/qnametostr.obj \
-    $(SLO)$/sprmcodetostr.obj \
-    $(SLO)$/resourcemodel.obj \
-    $(SLO)$/util.obj \
-    $(SLO)$/TagLogger.obj \
+    $(SLO)$/Fraction.obj \
+    $(SLO)$/LoggedResources.obj \
+    $(SLO)$/Protocol.obj \
     $(SLO)$/ResourceModelHelper.obj \
+    $(SLO)$/TagLogger.obj \
     $(SLO)$/WW8Analyzer.obj \
-    $(SLO)$/Protocol.obj
+    $(SLO)$/XPathLogger.obj \
+    $(SLO)$/qnametostr.obj \
+    $(SLO)$/resourcemodel.obj \
+    $(SLO)$/sprmcodetostr.obj \
+    $(SLO)$/util.obj \
 
 # linux 64 bit: compiler (gcc 4.2.3) fails with 'out of memory'
 .IF "$(OUTPATH)"=="unxlngx6"

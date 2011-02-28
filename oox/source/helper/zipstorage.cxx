@@ -62,15 +62,18 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
             cannot be used here as it will open a storage with format type
             'PackageFormat' that will not work with OOXML packages.
 
-            #161971# The MS-document storages should always be opened in Repair-Mode to
-            ignore the format errors and get so much info as possible. I hate this
-            solution, but it seems to be the only consistent way to handle the MS-documents.
+            #161971# The MS-document storages should always be opened in repair
+            mode to ignore the format errors and get so much info as possible.
+            I hate this solution, but it seems to be the only consistent way to
+            handle the MS documents.
 
             TODO: #i105410# switch to 'OFOPXMLFormat' and use its
-            implementation of relations handling. */
+            implementation of relations handling.
+         */
         Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
-            ZIP_STORAGE_FORMAT_STRING, rxInStream, xFactory, sal_True );
+            ZIP_STORAGE_FORMAT_STRING, rxInStream, xFactory,
+            sal_False );    // DEV300_m80: Was sal_True, but DOCX and others did not load
     }
     catch( Exception& )
     {

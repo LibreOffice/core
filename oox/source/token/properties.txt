@@ -120,6 +120,8 @@ DefaultValue
 DiagonalBLTR
 DiagonalTLBR
 DialogLibraries
+DisableComplexChartTypes
+DisableDataTableDialog
 DisplayLabels
 DrillDownOnDoubleClick
 Dropdown
@@ -351,6 +353,7 @@ RegularExpressions
 RelId
 RelativeHorizontalTabbarWidth
 RelativePosition
+RelativeSize
 Repeat
 RepeatDelay
 Representation
