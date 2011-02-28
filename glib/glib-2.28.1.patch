@@ -1,0 +1,41 @@
+--- misc/glib-2.28.1/gio/gzlibcompressor.c	2011-02-11 16:23:12.000000000 +0100
++++ misc/build/glib-2.28.1/gio/gzlibcompressor.c	2011-02-25 15:59:17.000000000 +0100
+@@ -73,7 +73,7 @@
+ g_zlib_compressor_set_gzheader (GZlibCompressor *compressor)
+ {
+   /* On win32, these functions were not exported before 1.2.4 */
+-#if !defined (G_OS_WIN32) || ZLIB_VERNUM >= 0x1240
++#if (!defined (G_OS_WIN32) && ! defined(BUILD_OS_APPLEOSX)) || ZLIB_VERNUM >= 0x1240
+   const gchar *filename;
+ 
+   if (compressor->format != G_ZLIB_COMPRESSOR_FORMAT_GZIP ||
+--- misc/glib-2.28.1/gio/gzlibdecompressor.c	2011-02-11 16:23:12.000000000 +0100
++++ misc/build/glib-2.28.1/gio/gzlibdecompressor.c	2011-02-25 16:00:43.000000000 +0100
+@@ -76,7 +76,7 @@
+ g_zlib_decompressor_set_gzheader (GZlibDecompressor *decompressor)
+ {
+   /* On win32, these functions were not exported before 1.2.4 */
+-#if !defined (G_OS_WIN32) || ZLIB_VERNUM >= 0x1240
++#if (!defined (G_OS_WIN32) && !defined(BUILD_OS_APPLEOSX)) || ZLIB_VERNUM >= 0x1240
+   if (decompressor->format != G_ZLIB_COMPRESSOR_FORMAT_GZIP)
+     return;
+ 
+@@ -376,7 +376,7 @@
+   *bytes_read = inbuf_size - decompressor->zstream.avail_in;
+   *bytes_written = outbuf_size - decompressor->zstream.avail_out;
+ 
+-#if !defined (G_OS_WIN32) || ZLIB_VERNUM >= 0x1240
++#if (!defined (G_OS_WIN32) && !defined(BUILD_OS_APPLEOSX)) || ZLIB_VERNUM >= 0x1240
+   if (decompressor->header_data != NULL &&
+       decompressor->header_data->gzheader.done == 1)
+     {
+--- misc/glib-2.28.1/glib/gatomic.c	2011-02-11 16:23:12.000000000 +0100
++++ misc/build/glib-2.28.1/glib/gatomic.c	2011-02-25 15:51:45.000000000 +0100
+@@ -28,6 +28,7 @@
+ #endif
+ 
+ #include "gatomic.h"
++#include "gthread.h"
+ #include "gthreadprivate.h"
+ 
+ /**
