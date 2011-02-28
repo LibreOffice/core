@@ -28,8 +28,9 @@
 #ifndef _CLONELIST_HXX_
 #define _CLONELIST_HXX_
 
+#include <vector>
+
 #include <sal/types.h>
-#include <tools/list.hxx>
 
 // predeclarations
 class SdrObject;
@@ -39,12 +40,10 @@ class SdrObject;
 // re-creating the connections for contained connectors
 class CloneList
 {
-    List                        maOriginalList;
-    List                        maCloneList;
+    std::vector<const SdrObject*> maOriginalList;
+    std::vector<SdrObject*> maCloneList;
 
 public:
-    CloneList();
-    ~CloneList();
 
     void AddPair(const SdrObject* pOriginal, SdrObject* pClone);
     sal_uInt32 Count() const;
