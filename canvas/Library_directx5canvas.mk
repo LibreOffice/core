@@ -33,6 +33,7 @@ $(eval $(call gb_Library_set_include,directx5canvas,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/canvas/inc \
 	-I$(SRCDIR)/canvas/inc/pch \
+	-I$(SRCDIR)/canvas/source/directx \
 	-I$(OUTDIR)/inc/offuh \
 ))
 
@@ -82,29 +83,33 @@ $(eval $(call gb_Library_add_linked_libs,directx5canvas,\
 endif
 endif
 
-$(eval $(call gb_Library_add_exception_objects,directx5canvas,\
-	canvas/source/directx/dx_5rm \
-	canvas/source/directx/dx_bitmap \
-	canvas/source/directx/dx_bitmapcanvashelper \
-	canvas/source/directx/dx_canvasbitmap \
-	canvas/source/directx/dx_canvascustomsprite \
-	canvas/source/directx/dx_canvasfont \
-	canvas/source/directx/dx_canvashelper \
-	canvas/source/directx/dx_canvashelper_texturefill \
-	canvas/source/directx/dx_config \
-	canvas/source/directx/dx_devicehelper \
-	canvas/source/directx/dx_gdiplususer \
-	canvas/source/directx/dx_impltools \
-	canvas/source/directx/dx_linepolypolygon \
-	canvas/source/directx/dx_spritecanvas \
-	canvas/source/directx/dx_spritecanvashelper \
-	canvas/source/directx/dx_spritedevicehelper \
-	canvas/source/directx/dx_spritehelper \
-	canvas/source/directx/dx_surfacebitmap \
-	canvas/source/directx/dx_surfacegraphics \
-	canvas/source/directx/dx_textlayout \
-	canvas/source/directx/dx_textlayout_drawhelper \
-	canvas/source/directx/dx_vcltools \
+$(WORKDIR)/CustomTarget/canvas/source/directx/%.cxx : $(SRCDIR)/canvas/source/directx/%.cxx
+	mkdir -p $(dir $@) && \
+	cp $< $@
+
+$(eval $(call gb_Library_add_generated_exception_objects,directx5canvas,\
+	CustomTarget/canvas/source/directx/dx_5rm \
+	CustomTarget/canvas/source/directx/dx_bitmap \
+	CustomTarget/canvas/source/directx/dx_bitmapcanvashelper \
+	CustomTarget/canvas/source/directx/dx_canvasbitmap \
+	CustomTarget/canvas/source/directx/dx_canvascustomsprite \
+	CustomTarget/canvas/source/directx/dx_canvasfont \
+	CustomTarget/canvas/source/directx/dx_canvashelper \
+	CustomTarget/canvas/source/directx/dx_canvashelper_texturefill \
+	CustomTarget/canvas/source/directx/dx_config \
+	CustomTarget/canvas/source/directx/dx_devicehelper \
+	CustomTarget/canvas/source/directx/dx_gdiplususer \
+	CustomTarget/canvas/source/directx/dx_impltools \
+	CustomTarget/canvas/source/directx/dx_linepolypolygon \
+	CustomTarget/canvas/source/directx/dx_spritecanvas \
+	CustomTarget/canvas/source/directx/dx_spritecanvashelper \
+	CustomTarget/canvas/source/directx/dx_spritedevicehelper \
+	CustomTarget/canvas/source/directx/dx_spritehelper \
+	CustomTarget/canvas/source/directx/dx_surfacebitmap \
+	CustomTarget/canvas/source/directx/dx_surfacegraphics \
+	CustomTarget/canvas/source/directx/dx_textlayout \
+	CustomTarget/canvas/source/directx/dx_textlayout_drawhelper \
+	CustomTarget/canvas/source/directx/dx_vcltools \
 ))
 
 # vim: set noet sw=4 ts=4:
