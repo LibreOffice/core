@@ -123,36 +123,47 @@ void ParagraphList::Clear( BOOL bDestroyParagraphs )
 {
     if ( bDestroyParagraphs )
     {
-        for ( ULONG n = GetParagraphCount(); n; )
-        {
-            Paragraph* pPara = GetParagraph( --n );
-            delete pPara;
-        }
+        std::vector<Paragraph*>::iterator iter;
+        for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
+            delete *iter;
     }
-    List::Clear();
+
+    maEntries.clear();
+}
+
+void ParagraphList::Append( Paragraph* pPara)
+{
+    maEntries.push_back(pPara);
+}
+
+void ParagraphList::Insert( Paragraph* pPara, ULONG nAbsPos)
+{
+    maEntries.insert(maEntries.begin()+nAbsPos,pPara);
+}
+
+void ParagraphList::Remove( ULONG nPara )
+{
+    maEntries.erase(maEntries.begin() + nPara );
 }
 
 void ParagraphList::MoveParagraphs( ULONG nStart, ULONG nDest, ULONG _nCount )
 {
     if ( ( nDest < nStart ) || ( nDest >= ( nStart + _nCount ) ) )
     {
-        ULONG n;
-        ParagraphList aParas;
-        for ( n = 0; n < _nCount; n++ )
-        {
-            Paragraph* pPara = GetParagraph( nStart );
-            aParas.Insert( pPara, LIST_APPEND );
-            Remove( nStart );
-        }
+        std::vector<Paragraph*> aParas;
+        std::vector<Paragraph*>::iterator iterBeg = maEntries.begin() + nStart;
+        std::vector<Paragraph*>::iterator iterEnd = iterBeg + _nCount + 1;
+
+        std::copy(iterBeg,iterEnd,std::back_inserter(aParas));
+
+        maEntries.erase(iterBeg,iterEnd);
 
         if ( nDest > nStart )
             nDest -= _nCount;
 
-        for ( n = 0; n < _nCount; n++ )
-        {
-            Paragraph* pPara = aParas.GetParagraph( n );
-            Insert( pPara, nDest++ );
-        }
+        std::vector<Paragraph*>::iterator iterIns = maEntries.begin() + nDest;
+
+        std::copy(aParas.begin(),aParas.end(),std::inserter(maEntries,iterIns));
     }
     else
     {
@@ -162,35 +173,44 @@ void ParagraphList::MoveParagraphs( ULONG nStart, ULONG nDest, ULONG _nCount )
 
 Paragraph* ParagraphList::NextVisible( Paragraph* pPara ) const
 {
-    ULONG n = GetAbsPos( pPara );
+    std::vector<Paragraph*>::const_iterator iter = std::find(maEntries.begin(),
+                                                             maEntries.end(),
+                                                             pPara);
 
-    Paragraph* p = GetParagraph( ++n );
-    while ( p && !p->IsVisible() )
-        p = GetParagraph( ++n );
+    for (; iter != maEntries.end(); ++iter)
+    {
+        if ((*iter)->IsVisible())
+            break;
+    }
 
-    return p;
+    return iter != maEntries.end() ? *iter : NULL;
 }
 
 Paragraph* ParagraphList::PrevVisible( Paragraph* pPara ) const
 {
-    ULONG n = GetAbsPos( pPara );
+    std::vector<Paragraph*>::const_reverse_iterator iter = std::find(maEntries.rbegin(),
+                                                                     maEntries.rend(),
+                                                                     pPara);
 
-    Paragraph* p = n ? GetParagraph( --n ) : NULL;
-    while ( p && !p->IsVisible() )
-        p = n ? GetParagraph( --n ) : NULL;
+    for (; iter != maEntries.rend(); ++iter)
+    {
+        if ((*iter)->IsVisible())
+            break;
+    }
 
-    return p;
+    return iter != maEntries.rend() ? *iter : NULL;
 }
 
 Paragraph* ParagraphList::LastVisible() const
 {
-    ULONG n = GetParagraphCount();
+    std::vector<Paragraph*>::const_reverse_iterator iter;
+    for (iter = maEntries.rbegin(); iter != maEntries.rend(); ++iter)
+    {
+        if ((*iter)->IsVisible())
+            break;
+    }
 
-    Paragraph* p = n ? GetParagraph( --n ) : NULL;
-    while ( p && !p->IsVisible() )
-        p = n ? GetParagraph( --n ) : NULL;
-
-    return p;
+    return iter != maEntries.rend() ? *iter : NULL;
 }
 
 BOOL ParagraphList::HasChilds( Paragraph* pParagraph ) const
@@ -274,16 +294,32 @@ void ParagraphList::Collapse( Paragraph* pParent )
     }
 }
 
-ULONG ParagraphList::GetVisPos( Paragraph* pPara )
+ULONG ParagraphList::GetAbsPos( Paragraph* pParent ) const
+{
+    ULONG pos = 0;
+    std::vector<Paragraph*>::const_iterator iter;
+    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++pos)
+    {
+        if (*iter == pParent)
+            return pos;
+    }
+
+    return ~0;
+}
+
+ULONG ParagraphList::GetVisPos( Paragraph* pPara ) const
 {
     ULONG nVisPos = 0;
-    ULONG nPos = GetAbsPos( pPara );
-    for ( ULONG n = 0; n < nPos; n++ )
+    std::vector<Paragraph*>::const_iterator iter;
+    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++nVisPos)
     {
-        Paragraph* _pPara = GetParagraph( n );
-        if ( _pPara->IsVisible() )
-            nVisPos++;
+        if (*iter == pPara)
+            break;
+
+        if ((*iter)->IsVisible())
+            ++nVisPos;
     }
+
     return nVisPos;
 }
 

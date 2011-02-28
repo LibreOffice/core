@@ -603,7 +603,7 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
         Paragraph* pPara = new Paragraph( rPObj.GetParagraphData(nCurPara));
         ImplCheckDepth( pPara->nDepth );
 
-        pParaList->Insert( pPara, LIST_APPEND );
+        pParaList->Append(pPara);
         ImplCheckNumBulletItem( nCurPara );
     }
 

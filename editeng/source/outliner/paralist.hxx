@@ -29,27 +29,33 @@
 #ifndef _PARALIST_HXX
 #define _PARALIST_HXX
 
-class Paragraph;
+#include <vector>
 
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 
-class ParagraphList : private List
-{
-private:
-    Link            aVisibleStateChangedHdl;
+class Paragraph;
 
+class ParagraphList
+{
 public:
     void            Clear( BOOL bDestroyParagraphs );
 
-    ULONG           GetParagraphCount() const           { return List::Count(); }
-    Paragraph*      GetParagraph( ULONG nPos ) const    { return (Paragraph*)List::GetObject( nPos ); }
+    sal_uInt32      GetParagraphCount() const
+    {
+        return maEntries.size();
+    }
 
-    ULONG           GetAbsPos( Paragraph* pParent ) const { return List::GetPos( pParent ); }
-    ULONG           GetVisPos( Paragraph* pParagraph );
+    Paragraph*      GetParagraph( ULONG nPos ) const
+    {
+        return nPos < maEntries.size() ? maEntries[nPos] : NULL;
+    }
 
-    void            Insert( Paragraph* pPara, ULONG nAbsPos = LIST_APPEND ) { List::Insert( pPara, nAbsPos ); }
-    void            Remove( ULONG nPara ) { List::Remove( nPara ); }
+    ULONG           GetAbsPos( Paragraph* pParent ) const;
+    ULONG           GetVisPos( Paragraph* pParagraph ) const;
+
+    void            Append( Paragraph *pPara);
+    void            Insert( Paragraph* pPara, ULONG nAbsPos);
+    void            Remove( ULONG nPara );
     void            MoveParagraphs( ULONG nStart, ULONG nDest, ULONG nCount );
 
     Paragraph*      NextVisible( Paragraph* ) const;
@@ -67,6 +73,11 @@ public:
 
     void            SetVisibleStateChangedHdl( const Link& rLink ) { aVisibleStateChangedHdl = rLink; }
     Link            GetVisibleStateChangedHdl() const { return aVisibleStateChangedHdl; }
+
+private:
+
+    Link aVisibleStateChangedHdl;
+    std::vector<Paragraph*> maEntries;
 };
 
 #endif
