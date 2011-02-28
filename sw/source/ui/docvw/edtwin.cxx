@@ -143,18 +143,17 @@ using namespace sw::mark;
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Globals
+    Description:   Globals
  --------------------------------------------------------------------*/
 
 static bool bInputLanguageSwitched = false;
 extern BOOL bNoInterrupt;       // in mainwn.cxx
 
-//Normalerweise wird im MouseButtonUp eine Selektion aufgehoben wenn die
-//Selektion nicht gerade aufgezogen wird. Leider wird im MouseButtonDown
-//bei doppel-/dreifach-Klick Selektiert, diese Selektion wird in dem Handler
-//komplett abgeschlossen und kann deshalb im Up nicht mehr unterschieden
-//werden. Um dies Aufzuloese wird bHoldSelection im Down gesetzt und im
-//Up ausgewertet.
+// Usually in MouseButtonUp a selection is revoked when the selection is
+// not currently being pulled open. Unfortunately in MouseButtonDown there
+// is being selected at double/triple click. That selection is completely
+// finished in the Handler and thus can't be distinguished in the Up.
+// To resolve this bHoldSelection is set in Down at evaluated in Up.
 static BOOL bHoldSelection      = FALSE;
 
 BOOL bFrmDrag                   = FALSE;
@@ -172,7 +171,7 @@ long    SwEditWin::nDDStartPosY = 0;
 long    SwEditWin::nDDStartPosX = 0;
 Color   SwEditWin::aTextBackColor(COL_YELLOW);
 Color   SwEditWin::aTextColor(COL_RED);
-BOOL    SwEditWin::bTransparentBackColor = FALSE; // Hintergrund nicht transparent
+BOOL    SwEditWin::bTransparentBackColor = FALSE; // background not transparent
 
 extern BOOL     bExecuteDrag;
 
@@ -256,10 +255,10 @@ struct QuickHelpData
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Minimale Bewegung Zittern vermeiden
+    Description:   avoid minimal movement shiver
  --------------------------------------------------------------------*/
 
-#define HIT_PIX  2 /* Hit-Toleranz in Pixel */
+#define HIT_PIX  2 /* hit tolerance in pixel  */
 #define MIN_MOVE 4
 
 inline BOOL IsMinMove(const Point &rStartPos, const Point &rLPt)
@@ -269,10 +268,10 @@ inline BOOL IsMinMove(const Point &rStartPos, const Point &rLPt)
 }
 
 /*--------------------------------------------------------------------
-                fuer MouseButtonDown - feststellen, ob ein DrawObject
-                und KEIN SwgFrame getroffen wurde! Shift/Ctrl sollen
-                nur bei DrawObjecte zum Selektieren fuehren, bei SwgFlys
-                ggfs zum ausloesen von Hyperlinks (DownLoad/NewWindow!)
+                for MouseButtonDown - determine whether a DrawObject
+                an NO SwgFrame was hit! Shift/Ctrl should only result
+                in selecting, with DrawObjects; at SwgFlys to trigger
+                hyperlinks if applicable (DownLoad/NewWindow!)
  --------------------------------------------------------------------*/
 inline BOOL IsDrawObjSelectable( const SwWrtShell& rSh, const Point& rPt )
 {
@@ -292,7 +291,7 @@ inline BOOL IsDrawObjSelectable( const SwWrtShell& rSh, const Point& rPt )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Pointer umschalten
+    Description:   switch pointer
  --------------------------------------------------------------------*/
 
 void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
@@ -326,7 +325,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
                         0 !=(pFmt = rSh.GetFmtFromObj( rLPt, &pRect )) &&
                         PTR_CAST(SwFlyFrmFmt, pFmt))
             {
-                //Highlight fuer Rahmen anwerfen
+                //turn on highlight for frame
                 Rectangle aTmp( pRect->SVRect() );
 
                 if ( !pUserMarker )
@@ -543,7 +542,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Timer fuer Selektion vergroessern
+    Description: increase timer for selection
  --------------------------------------------------------------------*/
 
 IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
@@ -581,9 +580,8 @@ IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
         else
             (rSh.*rSh.fnSetCrsr)( &aModPt, FALSE );
 
-        // Es kann sein, dass der "Sprung" ueber eine Tabelle so
-        //nicht geschafft wird. Deshalb wir hier eben per Up/Down ueber die
-        //Tabelle gesprungen.
+        // It can be that a "jump" over a table cannot be accomplished like
+        // that. So we jump over the table by Up/Down here.
         const SwRect& rVisArea = rSh.VisArea();
         if( aOldVis == rVisArea && !rSh.IsStartOfDoc() && !rSh.IsEndOfDoc() )
         {
@@ -633,7 +631,7 @@ inline void SwEditWin::EnterArea()
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Modus fuer Rahmen einfuegen
+ Description:  insert mode for frames
 ------------------------------------------------------------------------*/
 
 void SwEditWin::InsFrm(USHORT nCols)
@@ -669,7 +667,7 @@ void SwEditWin::StopInsFrm()
         rView.GetDrawFuncPtr()->Deactivate();
         rView.SetDrawFuncPtr(NULL);
     }
-    rView.LeaveDrawCreate();    // Konstruktionsmode verlassen
+    rView.LeaveDrawCreate();    // leave construction mode
     bInsFrm = FALSE;
     nInsFrmColCount = 1;
 }
@@ -704,7 +702,7 @@ BOOL SwEditWin::IsInputSequenceCheckingRequired( const String &rText, const SwPa
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Der Character Buffer wird in das Dokument eingefuegt
+     Description:  character buffer is inserted into the document
  --------------------------------------------------------------------*/
 
 void SwEditWin::FlushInBuffer()
@@ -820,9 +818,9 @@ void SwEditWin::FlushInBuffer()
                 rView.GetViewFrame()->GetBindings().GetRecorder();
         if ( xRecorder.is() )
         {
-            //Shell ermitteln
+            // determine shell
             SfxShell *pSfxShell = lcl_GetShellFromDispatcher( rView, TYPE(SwTextShell) );
-            // Request generieren und recorden
+            // generate request and record
             if (pSfxShell)
             {
                 SfxRequest aReq( rView.GetViewFrame(), FN_INSERT_STRING );
@@ -1222,7 +1220,7 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   KeyEvents
+    Description:   KeyEvents
  --------------------------------------------------------------------*/
 
 void SwEditWin::KeyInput(const KeyEvent &rKEvt)
@@ -1237,9 +1235,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
     SfxObjectShell *pObjSh = (SfxObjectShell*)rView.GetViewFrame()->GetObjectShell();
     if ( bLockInput || (pObjSh && pObjSh->GetProgress()) )
-        // Wenn die Rechenleiste aktiv ist oder
-        // auf dem Document ein Progress laeuft wird keine
-        // Bestellungen angenommen.
+        // When the progress bar is active or a progress is
+        // running on a document, no order is being taken
         return;
 
     if( pShadCrsr )
@@ -1265,12 +1262,12 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         pQuickHlpData->Stop( rSh );
     }
 
-    // OS:auch die DrawView braucht noch ein readonly-Flag
+    // OS:the DrawView also needs a readonly-Flag as well
     if ( !bIsDocReadOnly && rSh.GetDrawView() && rSh.GetDrawView()->KeyInput( rKEvt, this ) )
     {
         rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll( FALSE );
         rSh.SetModified();
-        return; // Event von der SdrView ausgewertet
+        return; // Event evaluated by SdrView
     }
 
     if ( rView.GetDrawFuncPtr() && bInsFrm )
@@ -1482,12 +1479,11 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         switch( eKeyState )
         {
         case KS_CheckKey:
-            eKeyState = KS_KeyToView;       // default weiter zur View
+            eKeyState = KS_KeyToView;       // default forward to View
 
 #if OSL_DEBUG_LEVEL > 1
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // zum Umschalten des Cursor Verhaltens in ReadOnly
-            //  Bereichen
+            // for switching curor behaviour in ReadOnly regions
             if( 0x7210 == rKeyCode.GetFullCode() )
                 rSh.SetReadOnlyAvailable( !rSh.IsReadOnlyAvailable() );
             else
@@ -1499,13 +1495,13 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 rSh.IsSttPara() &&
                 !rSh.HasReadonlySel() )
             {
-                // in der Tabelle am Anfang der Zelle ein '=' ->
-                //  EditZeile aufrufen (F2-Funktionalitaet)
+                // at the beginning of the table's cell a '=' ->
+                // call EditRow (F2-functionality)
                 rSh.Push();
                 if( !rSh.MoveSection( fnSectionCurr, fnSectionStart) &&
                     !rSh.IsTableBoxTextFormat() )
                 {
-                    // steht also am Anfang der Box
+                    // is at the beginning of the box
                     eKeyState = KS_EditFormula;
                     if( rSh.HasMark() )
                         rSh.SwapPam();
@@ -1665,7 +1661,7 @@ KEYINPUT_CHECKTABLE:
 KEYINPUT_CHECKTABLE_INSDEL:
                     if( rSh.IsTableMode() || !rSh.GetTableFmt() ||
                         !bTblInsDelMode ||
-                        FALSE /* Tabelle geschuetzt */
+                        FALSE /* table protected */
                             )
                     {
                         const int nSelectionType = rSh.GetSelectionType();
@@ -1741,7 +1737,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             aTmpQHD.bIsAutoText )
                             eKeyState = KS_GlossaryExpand;
 
-                        //RETURN und leerer Absatz in Numerierung -> Num. beenden
+                        //RETURN and empty paragraph in numbering -> end numbering
                         else if( !aInBuffer.Len() &&
                                  rSh.GetCurNumRule() &&
                                  !rSh.GetCurNumRule()->IsOutlineRule() &&
@@ -1749,7 +1745,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 rSh.IsSttPara() && rSh.IsEndPara() )
                             eKeyState = KS_NumOff, eNextKeyState = KS_OutlineLvOff;
 
-                        //RETURN fuer neuen Absatz mit AutoFormatierung
+                        //RETURN for new paragraph with AutoFormating
                         else if( pACfg && pACfg->IsAutoFmtByInput() &&
                                 !(nSelectionType & (nsSelectionType::SEL_GRF |
                                     nsSelectionType::SEL_OLE | nsSelectionType::SEL_FRM |
@@ -2112,9 +2108,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     bFlushBuffer = TRUE, bNormalChar = FALSE;
                 else
                 {
-                    // Da der Sfx Acceleratoren nur aufruft, wenn sie beim letzten
-                    // Statusupdate enabled wurden, muss copy ggf. von uns
-                    // 'gewaltsam' gerufen werden.
+                    // Because Sfx accelerators are only called when they were
+                    // enabled at the last status update, copy has to called
+                    // 'forcefully' by us if necessary.
                     if( rKeyCode.GetFunction() == KEYFUNC_COPY )
                         GetView().GetViewFrame()->GetBindings().Execute(SID_COPY);
 
@@ -2186,7 +2182,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
         case KS_InsTab:
             if( rView.ISA( SwWebView ))     // no Tab for WebView
             {
-                // dann sollte der weiter gereicht werden.
+                // then it should be passed along
                 Window::KeyInput( aKeyEvent );
                 eKeyState = KS_Ende;
                 break;
@@ -2232,9 +2228,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 if( bChkInsBlank && bIsNormalChar &&
                     (aInBuffer.Len() || !rSh.IsSttPara() || !rSh.IsEndPara() ))
                 {
-                    // vor dem Zeichen noch ein Blank einfuegen. Dieses
-                    // kommt zwischen den Expandierten Text und dem neuen
-                    // "nicht Worttrenner".
+                    // insert a blank ahead of the character. this ends up
+                    // between the expanded text and the new "non-word-seperator".
                     aInBuffer.Expand( aInBuffer.Len() + 1, ' ' );
                 }
 
@@ -2249,7 +2244,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 {
                     FlushInBuffer();
                     rSh.AutoCorrect( *pACorr, aCh );
-                    if( '\"' != aCh && '\'' != aCh )        // nur bei "*_" rufen!
+                    if( '\"' != aCh && '\'' != aCh )        // only call when "*_"!
                         rSh.UpdateAttr();
                 }
                 else if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
@@ -2312,7 +2307,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
 
             case KS_NumOff:
-                // Shellwechsel - also vorher aufzeichnen
+                // shell change - so record in advance
                 rSh.DelNumRules();
                 eKeyState = eNextKeyState;
                 break;
@@ -2388,7 +2383,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             break;
             case KS_GlossaryExpand:
             {
-                // ersetze das Wort oder Kuerzel durch den den Textbaustein
+                // replace the word or abbreviation with the auto text
                 rSh.StartUndo( UNDO_START );
 
                 String sFnd( *aTmpQHD.aArr[ aTmpQHD.nCurArrPos ] );
@@ -2502,16 +2497,16 @@ KEYINPUT_CHECKTABLE_INSDEL:
         bTblInsDelMode = FALSE;
     }
 
-    // falls die gepufferten Zeichen eingefuegt werden sollen
+    // in case the buffered characters are inserted
     if( bFlushBuffer && aInBuffer.Len() )
     {
-        // bFlushCharBuffer wurde hier nicht zurueckgesetzt
-        // warum nicht?
+        // bFlushCharBuffer was not resetted here
+        // why not?
         BOOL bSave = bFlushCharBuffer;
         FlushInBuffer();
         bFlushCharBuffer = bSave;
 
-        // evt. Tip-Hilfe anzeigen
+        // maybe show Tip-Help
         String sWord;
         if( bNormalChar && pACfg && pACorr &&
             ( pACfg->IsAutoTextTip() ||
@@ -2524,15 +2519,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  MouseEvents
+     Description:  MouseEvents
  --------------------------------------------------------------------*/
 
 void SwEditWin::RstMBDownFlags()
 {
-    //Nicht auf allen Systemen kommt vor dem modalen
-    //Dialog noch ein MouseButton Up (wie unter WINDOWS).
-    //Daher hier die Stati zuruecksetzen und die Maus
-    //fuer den Dialog freigeben.
+    // Not on all systems a MouseButtonUp is used ahead
+    // of the modal dialog (like on WINDOWS).
+    // So reset the statuses here and release the mouse
+    // for the dialog.
     bMBPressed = bNoInterrupt = FALSE;
     EnterArea();
     ReleaseMouse();
@@ -2589,8 +2584,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         return;
     }
 
-    //Nach GrabFocus sollte eine Shell gepusht sein. Das muss eigentlich
-    //klappen aber in der Praxis ...
+    // After GrabFocus a shell should be pushed. That should actually
+    // work but in practice ...
     lcl_SelectShellForDrop( rView );
 
     BOOL bIsDocReadOnly = rView.GetDocShell()->IsReadOnly();
@@ -2601,7 +2596,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     pQuickHlpData->bChkInsBlank = FALSE;
 
     if( rSh.FinishOLEObj() )
-        return; //InPlace beenden und der Klick zaehlt nicht mehr
+        return; // end InPlace and the click doesn't count anymore
 
     SET_CURR_SHELL( &rSh );
 
@@ -2611,7 +2606,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         if (pSdrView->MouseButtonDown( rMEvt, this ) )
         {
             rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(FALSE);
-            return; // Event von der SdrView ausgewertet
+            return; // SdrView's event evaluated
         }
     }
 
@@ -2644,7 +2639,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
         if ( !rSh.IsTableMode() )
         {
-            //Zuppeln von Tabellenspalten aus dem Dokument heraus.
+            // comes from table columns out of the document.
             if(SW_TABCOL_VERT == nMouseTabCol || SW_TABCOL_HORI == nMouseTabCol)
                 rView.SetTabColFromDoc( TRUE );
             else
@@ -2696,17 +2691,16 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
     }
 
-    //Man kann sich in einem Selektionszustand befinden, wenn zuletzt
-    //mit dem Keyboard selektiert wurde, aber noch kein CURSOR_KEY
-    //anschliessend bewegt worden ist. In diesem Fall muss die vorher-
-    //gehende Selektion zuerst beendet werden.
-    //MA 07. Oct. 95: Und zwar nicht nur bei Linker Maustaste sondern immer.
-    //siehe auch Bug: 19263
+    // One can be in a selection state when recently the keyboard was
+    // used to select but no CURSOR_KEY was moved yet after that. In
+    // that case the previous selction has to be finished first.
+    // MA 07. Oct. 95: Not only with left mouse button but always.
+    // also see Bug: 19263
     if ( rSh.IsInSelect() )
         rSh.EndSelect();
 
-    //Abfrage auf LEFT, da sonst auch bei einem Click mit der rechten Taste
-    //beispielsweise die Selektion aufgehoben wird.
+    // query against LEFT because otherwise for example also a right
+    // click releases the selection.
     if ( MOUSE_LEFT == rMEvt.GetButtons() )
     {
         BOOL bOnlyText = FALSE;
@@ -2715,7 +2709,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
         CaptureMouse();
 
-        //ggf. Cursorpositionen zuruecksetzen
+        // reset curor position if applicable
         rSh.ResetCursorStack();
 
         switch ( rMEvt.GetModifier() + rMEvt.GetButtons() )
@@ -2748,7 +2742,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     rSh.Edit();
                 }
 
-                // Ohne SHIFT, da sonst Toggle bei Selektion nicht funktioniert
+                // Without SHIFT because otherwise Toggle doesn't work at selection
                 if (rMEvt.GetClicks() == 1)
                 {
                     if ( rSh.IsSelFrmMode())
@@ -2763,7 +2757,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             rSh.EnterSelFrmMode( &aDocPos );
                             if ( !pApplyTempl )
                             {
-                                //nur, wenn keine Position zum Sizen getroffen ist.
+                                // only if no position to size was hit.
                                 if (!bHitHandle)
                                 {
                                     StartDDTimer();
@@ -2808,7 +2802,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         SwEditWin::nDDStartPosY = aDocPos.Y();
                         SwEditWin::nDDStartPosX = aDocPos.X();
 
-                        // URL in DrawText-Objekt getroffen?
+                        // hit an URL in DrawText object?
                         if (bExecHyperlinks && pSdrView)
                         {
                             SdrViewEvent aVEvt;
@@ -2818,8 +2812,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 bExecDrawTextLink = TRUE;
                         }
 
-                        //Rahmen nur zu selektieren versuchen, wenn
-                        //der Pointer bereits entsprechend geschaltet wurde
+                        // only try to select frame, if pointer already was
+                        // switched accordingly
                         if ( aActHitType != SDRHIT_NONE && !rSh.IsSelFrmMode() &&
                             !GetView().GetViewFrame()->GetDispatcher()->IsLocked() &&
                             !bExecDrawTextLink)
@@ -2841,9 +2835,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                                 if( bSelObj )
                                 {
-                                    // falls im Macro der Rahmen deselektiert
-                                    // wurde, muss nur noch der Cursor
-                                    // wieder angezeigt werden.
+                                    // if the frame was deselected in the macro
+                                    // the cursor just has to be displayed again
                                     if( FRMTYPE_NONE == rSh.GetSelFrmType() )
                                         rSh.ShowCrsr();
                                     else
@@ -2907,9 +2900,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                                 if( !bSelObj )
                                 {
-                                    // Cursor hier umsetzen, damit er nicht zuerst
-                                    // im Rahmen gezeichnet wird; ShowCrsr() geschieht
-                                    // in LeaveSelFrmMode()
+                                    // move cursor here so that it is not drawn in the
+                                    // frame first; ShowCrsr() happens in LeaveSelFrmMode()
                                     bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,FALSE));
                                     rSh.LeaveSelFrmMode();
                                     rView.AttrChangedNotify( &rSh );
@@ -2956,7 +2948,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     SFX_CALLMODE_RECORD|SFX_CALLMODE_SLOT);
                                 return;
 
-                                // Doppelklick auf OLE-Objekt --> OLE-InPlace
+                                // double click on OLE object --> OLE-InPlace
                             case nsSelectionType::SEL_OLE:
                                 if (!rSh.IsSelObjProtected(FLYPROTECT_CONTENT))
                                 {
@@ -2979,9 +2971,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 return;
                         }
 
-                        //falls die Cursorposition korrigiert wurde oder
-                        // ein Fly im ReadOnlyModus selektiert ist,
-                        //keine Wortselektion.
+                        // if the cursor position was corrected or if a Fly
+                        // was selected in ReadOnlyMode, no word selection.
                         if ( !bValidCrsrPos ||
                             (rSh.IsFrmSelected() && rSh.IsFrmSelected() ))
                             return;
@@ -3005,8 +2996,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 case TYP_POSTITFLD:
                                 case TYP_SCRIPTFLD:
                                 {
-                                    //falls es ein Readonly-Bereich ist, dann muss der Status
-                                    //enabled werden
+                                    // if it's a Readonly region, status has to be enabled
                                     USHORT nSlot = TYP_POSTITFLD == nTypeId ? FN_POSTIT : FN_JAVAEDIT;
                                     SfxBoolItem aItem(nSlot, TRUE);
                                     pVFrame->GetBindings().SetState(aItem);
@@ -3022,12 +3012,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             }
                             return;
                         }
-                        //im Extended Mode hat Doppel- und
-                        //Dreifachklick keine Auswirkungen.
+                        // in extended mode double and triple
+                        // click has no effect.
                         if ( rSh.IsExtMode() || rSh.IsBlockMode() )
                             return;
 
-                        //Wort selektieren, gfs. Additional Mode
+                        // select work, AdditionalMode if applicable
                         if ( KEY_MOD1 == rMEvt.GetModifier() && !rSh.IsAddMode() )
                         {
                             rSh.EnterAddMode();
@@ -3043,18 +3033,17 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     case 4:
                     {
                         bFrmDrag = FALSE;
-                        //im Extended Mode hat Doppel- und
-                        //Dreifachklick keine Auswirkungen.
+                        // in extended mode double and triple
+                        // click has no effect.
                         if ( rSh.IsExtMode() )
                             return;
 
-                        //falls die Cursorposition korrigiert wurde oder
-                        // ein Fly im ReadOnlyModus selektiert ist,
-                        //keine Wortselektion.
+                        // if the cursor position was corrected or if a Fly
+                        // was selected in ReadOnlyMode, no word selection.
                         if ( !bValidCrsrPos || rSh.IsFrmSelected() )
                             return;
 
-                        //Zeile selektieren, gfs. Additional Mode
+                        // select line, AdditionalMode if applicable
                         const bool bMod = KEY_MOD1 == rMEvt.GetModifier() &&
                                          !rSh.IsAddMode();
 
@@ -3220,8 +3209,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             }
                             if ( !rSh.IsExtMode() )
                             {
-                                // keine Selection anfangen, wenn in ein URL-
-                                // Feld oder eine -Grafik geklickt wird
+                                // don't start a selection when an
+                                // URL field or a graphic is clicked
                                 BOOL bSttSelect = rSh.HasSelection() ||
                                                 Pointer(POINTER_REFHAND) != GetPointer();
 
@@ -3289,8 +3278,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                     int nTmpSetCrsr = 0;
 
-                    {   // nur temp. Move-Kontext aufspannen, da sonst die
-                        // Abfrage auf die Inhaltsform nicht funktioniert!!!
+                    {   // only temporary generate Move-Kontext because otherwise
+                        // the query to the content form doesn't work!!!
                         MV_KONTEXT( &rSh );
                         nTmpSetCrsr = (rSh.*rSh.fnSetCrsr)(&aDocPos,bOnlyText);
                         bValidCrsrPos = !(CRSR_POSCHG & nTmpSetCrsr);
@@ -3322,9 +3311,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         bCallBase = FALSE;
                     }
                 }
-                // nicht mehr hier zuruecksetzen, damit -- falls durch MouseMove
-                // bei gedrueckter Ctrl-Taste eine Mehrfachselektion erfolgen soll,
-                // im Drag nicht die vorherige Selektion aufgehoben wird.
+                // don't reset here any longer so that, in case through MouseMove
+                // with pressed Ctrl key a multiple-selection should happen,
+                // the previous selection is not released in Drag.
                 break;
             }
         }
@@ -3334,7 +3323,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   MouseMove
+    Description:   MouseMove
  --------------------------------------------------------------------*/
 
 void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
@@ -3350,8 +3339,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                                     _rMEvt.GetMode(), _rMEvt.GetButtons() );
     }
 
-    // solange eine Action laeuft sollte das MouseMove abgeklemmt sein
-    // Ansonsten gibt es den Bug 40102
+    // as long as an action is running the MouseMove should be disconnected
+    // otherwise bug 40102 occurs
     SwWrtShell &rSh = rView.GetWrtShell();
     if( rSh.ActionPend() )
         return ;
@@ -3384,7 +3373,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     if ( !bIsDocReadOnly && pSdrView && pSdrView->MouseMove(rMEvt,this) )
     {
         SetPointer( POINTER_TEXT );
-        return; // Event von der SdrView ausgewertet
+        return; // evaluate SdrView's event
     }
 
     const Point aOldPt( rSh.VisArea().Pos() );
@@ -3401,8 +3390,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             return;
     }
 
-    // Position ist noetig fuer OS/2, da dort nach einem MB-Down
-    // offensichtlich sofort ein MB-Move gerufen wird.
+    // position is necessary for OS/2 because obviously after a MB-Down
+    // a MB-Move is called immediately.
     if( bDDTimerStarted )
     {
         Point aDD( SwEditWin::nDDStartPosX, SwEditWin::nDDStartPosY );
@@ -3581,7 +3570,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
                 if ( bIsInMove || IsMinMove( aStartPos, aPixPt ) )
                 {
-                    // Event-Verarbeitung fuers Resizen
+                    // event processing for resizing
                     if( pSdrView->AreObjectsMarked() )
                     {
                         const SwFrmFmt* pFlyFmt;
@@ -3589,7 +3578,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
                         const Point aSttPt( PixelToLogic( aStartPos ) );
 
-                        // geht es los?
+                        // can we start?
                         if( HDL_USER == eSdrMoveHdl )
                         {
                             SdrHdl* pHdl = pSdrView->PickHandle( aSttPt );
@@ -3603,7 +3592,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                         if( 0 != ( pFlyFmt = rSh.GetFlyFrmFmt() ) &&
                             0 != ( pMacro = pFlyFmt->GetMacro().GetMacroTable().
                             Get( nEvent )) &&
-// oder nur z.B. alle 20 Twip bescheid sagen?
+// or notify only e.g. every 20 Twip?
                             aRszMvHdlPt != aDocPt )
                         {
                             aRszMvHdlPt = aDocPt;
@@ -3638,7 +3627,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                                 return ;
                         }
                     }
-                    // Event-Verarbeitung fuers Resizen
+                    // event processing for resizing
 
                     if( bIsDocReadOnly )
                         break;
@@ -3707,7 +3696,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         {
             if ( pApplyTempl )
                         {
-                UpdatePointer(aDocPt, 0); // evtl. muss hier ein Rahmen markiert werden
+                UpdatePointer(aDocPt, 0); // maybe a frame has to be marked here
                                 break;
                         }
             // change ui if mouse is over SwPostItField
@@ -3760,14 +3749,14 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             aSaveCallEvent.Set( EVENT_OBJECT_URLITEM, pFmt );
                     }
 
-                    // sollte wir ueber einem InternetFeld mit einem
-                    // gebundenen Macro stehen?
+                    // should be be over a InternetField with an
+                    // embedded macro?
                     if( aSaveCallEvent != aLastCallEvent )
                     {
                         if( aLastCallEvent.HasEvent() )
                             rSh.CallEvent( SFX_EVENT_MOUSEOUT_OBJECT,
                                             aLastCallEvent, TRUE );
-                        // 0 besagt, das das Object gar keine Tabelle hat
+                        // 0 says that the object doesn't have any table
                         if( !rSh.CallEvent( SFX_EVENT_MOUSEOVER_OBJECT,
                                         aSaveCallEvent ))
                             aSaveCallEvent.Clear();
@@ -3775,7 +3764,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 }
                 else if( aLastCallEvent.HasEvent() )
                 {
-                    // Cursor stand auf einem Object
+                    // cursor was on an object
                     rSh.CallEvent( SFX_EVENT_MOUSEOUT_OBJECT,
                                     aLastCallEvent, TRUE );
                 }
@@ -3819,7 +3808,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Button Up
+    Description:   Button Up
  --------------------------------------------------------------------*/
 
 void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
@@ -3835,9 +3824,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         DELETEZ( pRowColumnSelectionStart );
 
     SdrHdlKind eOldSdrMoveHdl = eSdrMoveHdl;
-    eSdrMoveHdl = HDL_USER;     // fuer die MoveEvents - wieder zuruecksetzen
+    eSdrMoveHdl = HDL_USER;     // for MoveEvents - reset again
 
-    // sicherheitshalber zuruecksetzen
+    // preventively reset
     rView.SetTabColFromDoc( FALSE );
     rView.SetNumRuleNodeFromDoc(NULL);
 
@@ -3851,14 +3840,14 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         if ( pSdrView->MouseButtonUp( rMEvt,this ) )
         {
             rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(FALSE);
-            return; // Event von der SdrView ausgewertet
+            return; // SdrView's event evaluated
         }
     }
-    //MouseButtonUp nur bearbeiten, wenn auch das Down an dieses Fenster ging.
+    // only process MouseButtonUp when the Down went to that windows as well.
     if ( !bMBPressed )
     {
-// Undo fuer die Giesskann ist bereits im CommandHdl
-//so sollte es sein!!!
+// Undo for the watering can is already in CommandHdl
+// that's the way it should be!
 
         return;
     }
@@ -3890,7 +3879,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     {
         if ( rView.GetDrawFuncPtr()->MouseButtonUp( rMEvt ) )
         {
-            if (rView.GetDrawFuncPtr()) // Koennte im MouseButtonUp zerstoert worden sein
+            if (rView.GetDrawFuncPtr()) // could have been destroyed in MouseButtonUp
             {
                 rView.GetDrawFuncPtr()->Deactivate();
 
@@ -3924,7 +3913,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             rView.AttrChangedNotify( &rSh );
         }
         else if (rMEvt.GetButtons() == MOUSE_RIGHT && rSh.IsDrawCreate())
-            rView.GetDrawFuncPtr()->BreakCreate();   // Zeichnen abbrechen
+            rView.GetDrawFuncPtr()->BreakCreate();   // abort drawing
 
         bNoInterrupt = FALSE;
         ReleaseMouse();
@@ -3953,9 +3942,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         case MOUSE_LEFT + KEY_SHIFT + KEY_MOD1:
             if ( bFrmDrag && rSh.IsSelFrmMode() )
             {
-                if ( rMEvt.IsMod1() ) //Kopieren und nicht moven.
+                if ( rMEvt.IsMod1() ) // copy and don't move.
                 {
-                    //Drag abbrechen, statt dessen internes Copy verwenden
+                    // abort drag, use internal Copy instead
                     Rectangle aRect;
                     rSh.GetDrawView()->TakeActionRect( aRect );
                     if (!aRect.IsEmpty())
@@ -4049,8 +4038,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
             if( bHoldSelection )
             {
-                // das EndDrag sollte auf jedenfall
-                //              gerufen werden.
+                // the EndDrag should be called in any case
                 bHoldSelection = FALSE;
                 (rSh.*rSh.fnEndDrag)( &aDocPt, FALSE );
             }
@@ -4060,8 +4048,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     const BOOL bTmpNoInterrupt = bNoInterrupt;
                     bNoInterrupt = FALSE;
-                    {   // nur temp. Move-Kontext aufspannen, da sonst die
-                        // Abfrage auf die Inhaltsform nicht funktioniert!!!
+                    {   // create only temporary move context because otherwise
+                        // the query to the content form doesn't work!!!
                         MV_KONTEXT( &rSh );
                         const Point aDocPos( PixelToLogic( aStartPos ) );
                         bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,FALSE));
@@ -4074,7 +4062,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     BOOL bInSel = rSh.IsInSelect();
                     (rSh.*rSh.fnEndDrag)( &aDocPt, FALSE );
 
-                    // Internetfield? --> Link-Callen (DocLaden!!)
+                    // Internetfield? --> call link (load doc!!)
                     if( !bInSel )
                     {
                         USHORT nFilter = URLLOAD_NOFILTER;
@@ -4161,7 +4149,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
                                 if (pSdrView && aVEvt.eEvent == SDREVENT_EXECUTEURL)
                                 {
-                                    // URL-Feld getroffen
+                                    // hit URL field
                                     const SvxURLField *pField = aVEvt.pURLField;
                                     if (pField)
                                     {
@@ -4173,7 +4161,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 }
                                 else
                                 {
-                                    // Grafik getroffen
+                                    // hit graphic
                                     ReleaseMouse();
                                     if( rSh.ClickToINetGrf( aDocPt, nFilter ))
                                         bCallShadowCrsr = FALSE;
@@ -4199,7 +4187,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
             }
 
-            // gfs. im Down gepushten Mode wieder zuruecksetzen
+            // reset pushed mode in Down again if applicable
             if ( bPopMode && bModePushed )
             {
                 rSh.PopMode();
@@ -4275,7 +4263,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 }
                 else if(rMEvt.GetClicks() == 1)
                 {
-                    // keine Selektion -> also Giesskanne abschalten
+                    // no selection -> so turn off watering can
                     aTemplateTimer.Start();
                 }
             }
@@ -4324,7 +4312,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     break;
                 }
                 case SFX_STYLE_FAMILY_PAGE:
-                            // Kein Undo bei Seitenvorlagen
+                            // no Undo with page templates
                     rSh.ChgCurPageDesc( *pApplyTempl->aColl.pPageDesc );
                     if ( pApplyTempl->aColl.pPageDesc )
                         aStyleName = pApplyTempl->aColl.pPageDesc->GetName();
@@ -4361,8 +4349,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
     }
     ReleaseMouse();
-    // Hier kommen nur verarbeitete MouseEvents an; nur bei diesen duerfen
-    // die Modi zurueckgesetzt werden.
+    // Only processed MouseEvents arrive here; only at these the moduses can
+    // be resetted.
     bMBPressed = FALSE;
 
     //sicherheitshalber aufrufen, da jetzt das Selektieren bestimmt zu Ende ist.
@@ -4375,7 +4363,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Vorlage anwenden
+    Description:   apply template
  --------------------------------------------------------------------*/
 
 void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
@@ -4429,7 +4417,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   ctor
+    Description:   ctor
  --------------------------------------------------------------------*/
 
 SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
@@ -4481,13 +4469,13 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     aKeyInputFlushTimer.SetTimeout( 200 );
     aKeyInputFlushTimer.SetTimeoutHdl(LINK(this, SwEditWin, KeyInputFlushHandler));
 
-    // TemplatePointer fuer Farben soll nach Einfachclick
-    // ohne Selektion zurueckgesetzt werden
+    // TemplatePointer for colors should be resetted without
+    // selection after single click
     aTemplateTimer.SetTimeout(400);
     aTemplateTimer.SetTimeoutHdl(LINK(this, SwEditWin, TemplateTimerHdl));
 
-    // temporaere Loesung!!! Sollte bei jeder Cursorbewegung
-    //          den Font von der akt. einfuege Position setzen!
+    // temporary solution!!! Should set the font of the current
+    //          insert position at every curor movement!
     if( !rMyView.GetDocShell()->IsReadOnly() )
     {
         Font aFont;
@@ -4516,7 +4504,7 @@ SwEditWin::~SwEditWin()
 }
 
 /******************************************************************************
- *  Beschreibung: DrawTextEditMode einschalten
+ *  Description: turn on DrawTextEditMode
  ******************************************************************************/
 
 void SwEditWin::EnterDrawTextMode( const Point& aDocPos )
@@ -4535,7 +4523,7 @@ void SwEditWin::EnterDrawTextMode( const Point& aDocPos )
 }
 
 /******************************************************************************
- *  Beschreibung: DrawMode einschalten
+ *  Description: turn on DrawMode
  ******************************************************************************/
 
 BOOL SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
@@ -4558,7 +4546,7 @@ BOOL SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
         BOOL bUnLockView = !rSh.IsViewLocked();
         rSh.LockView( TRUE );
 
-        rSh.EndTextEdit(); // Danebengeklickt, Ende mit Edit
+        rSh.EndTextEdit(); // clicked aside, end Edit
         rSh.SelectObj( aDocPos );
         if ( !rSh.IsObjSelected() && !rSh.IsFrmSelected() )
             rSh.LeaveSelFrmMode();
@@ -4610,7 +4598,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
     if ( !rView.GetViewFrame() )
     {
-        //Wenn der ViewFrame in Kuerze stirbt kein Popup mehr!
+        // If ViewFrame dies shortly, no popup anymore!
         Window::Command(rCEvt);
         return;
     }
@@ -4706,7 +4694,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
         case COMMAND_VOICE:
             {
-                //ggf. an Outliner weiterleiten
+                // forward to Outliner if applicable
                 if ( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
                 {
                     bCallBase = FALSE;
@@ -4852,9 +4840,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
                     if ( xRecorder.is() )
                     {
-                        //Shell ermitteln
+                        // determine Shell
                         SfxShell *pSfxShell = lcl_GetShellFromDispatcher( rView, TYPE(SwTextShell) );
-                        // Request generieren und recorden
+                        // generate request and record
                         if (pSfxShell)
                         {
                             SfxRequest aReq( rView.GetViewFrame(), FN_INSERT_STRING );
@@ -5150,9 +5138,8 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             if( bSelObj )
             {
                 bRet = TRUE;
-                // falls im Macro der Rahmen deselektiert
-                // wurde, muss nur noch der Cursor
-                // wieder angezeigt werden.
+                // in case the frame was deselected in the macro
+                // just the cursor has to be displayed again.
                 if( FRMTYPE_NONE == rSh.GetSelFrmType() )
                     rSh.ShowCrsr();
                 else
@@ -5199,9 +5186,8 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 
         if( !bSelObj )
         {
-            // Cursor hier umsetzen, damit er nicht zuerst
-            // im Rahmen gezeichnet wird; ShowCrsr() geschieht
-            // in LeaveSelFrmMode()
+            // move cursor here so that it is not drawn in the
+            // frame at first; ShowCrsr() happens in LeaveSelFrmMode()
             bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,FALSE));
             rSh.LeaveSelFrmMode();
             rView.LeaveDrawCreate();
@@ -5245,8 +5231,8 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 
     if ( !bOverSelect )
     {
-        {   // nur temp. Move-Kontext aufspannen, da sonst die
-            // Abfrage auf die Inhaltsform nicht funktioniert!!!
+        {   // create only temporary move context because otherwise
+            // the query against the content form doesn't work!!!
             MV_KONTEXT( &rSh );
             (rSh.*rSh.fnSetCrsr)(&aDocPos, FALSE);
             bRet = TRUE;
@@ -5270,7 +5256,7 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 
 SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType )
 {
-    //Shell ermitteln
+    // determine Shell
     SfxShell* pShell;
     SfxDispatcher* pDispatcher = rView.GetViewFrame()->GetDispatcher();
     for(USHORT  i = 0; TRUE; ++i )
@@ -5360,7 +5346,7 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible > SwEditWin::Create
 
 void QuickHelpData::Move( QuickHelpData& rCpy )
 {
-    // Pointer verschieben
+    // move pointer
     aArr.Insert( &rCpy.aArr );
     rCpy.aArr.Remove( (USHORT)0, rCpy.aArr.Count() );
     bClear = rCpy.bClear;
@@ -5454,7 +5440,7 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
                 String sStr( aNames[ nPos ].FullName );
                 if( rWord.Len() + 1 < sStr.Len() &&
 
-//!!! UNICODE: fehlendes interface
+//!!! UNICODE: missing interface
                     COMPARE_EQUAL == rWord.CompareIgnoreCaseToAscii(
                                         sStr, rWord.Len() ))
                 {
