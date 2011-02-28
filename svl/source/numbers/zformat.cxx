@@ -1114,6 +1114,8 @@ sal_Unicode toUniChar(sal_uInt8 n)
 OUString SvNumberformat::LocaleType::generateCode() const
 {
     OUStringBuffer aBuf;
+#if 0
+    // TODO: We may re-enable this later. Don't remove it! --Kohei
     if (mnNumeralShape)
     {
         sal_uInt8 nVal = mnNumeralShape;
@@ -1135,6 +1137,7 @@ OUString SvNumberformat::LocaleType::generateCode() const
             nVal = nVal << 4;
         }
     }
+#endif
 
     sal_uInt16 n16 = static_cast<sal_uInt16>(meLanguage);
     for (sal_uInt8 i = 0; i < 4; ++i)
