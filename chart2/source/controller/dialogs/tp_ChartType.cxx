@@ -189,6 +189,8 @@ Dim3DLookResourceGroup::Dim3DLookResourceGroup( Window* pWindow )
     m_aLB_Scheme.SetDropDownLineCount(2);
 
     m_aLB_Scheme.SetSelectHdl( LINK( this, Dim3DLookResourceGroup, SelectSchemeHdl ) );
+    m_aLB_Scheme.SetAccessibleName(m_aCB_3DLook.GetText());
+    m_aLB_Scheme.SetAccessibleRelationLabeledBy(&m_aCB_3DLook);
 }
 Dim3DLookResourceGroup::~Dim3DLookResourceGroup()
 {
@@ -228,7 +230,7 @@ void Dim3DLookResourceGroup::fillControls( const ChartTypeParameter& rParameter 
 void Dim3DLookResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
     rParameter.b3DLook = m_aCB_3DLook.IsChecked();
-    USHORT nPos = m_aLB_Scheme.GetSelectEntryPos();
+    sal_uInt16 nPos = m_aLB_Scheme.GetSelectEntryPos();
     if( POS_3DSCHEME_SIMPLE == nPos )
         rParameter.eThreeDLookScheme = ThreeDLookScheme_Simple;
     else if( POS_3DSCHEME_REALISTIC == nPos )
@@ -344,6 +346,9 @@ StackingResourceGroup::StackingResourceGroup( Window* pWindow )
     m_aRB_Stack_Y.SetToggleHdl( LINK( this, StackingResourceGroup, StackingChangeHdl ) );
     m_aRB_Stack_Y_Percent.SetToggleHdl( LINK( this, StackingResourceGroup, StackingChangeHdl ) );
     m_aRB_Stack_Z.SetToggleHdl( LINK( this, StackingResourceGroup, StackingChangeHdl ) );
+    m_aRB_Stack_Y.SetAccessibleRelationMemberOf(&m_aCB_Stacked);
+    m_aRB_Stack_Y_Percent.SetAccessibleRelationMemberOf(&m_aCB_Stacked);
+    m_aRB_Stack_Z.SetAccessibleRelationMemberOf(&m_aCB_Stacked);
 }
 StackingResourceGroup::~StackingResourceGroup()
 {
@@ -472,9 +477,9 @@ private:
     MetricField m_aMF_SplineOrder;
 
     FixedLine       m_aFL_DialogButtons;
+    HelpButton      m_aBP_Help;
     OKButton        m_aBP_OK;
     CancelButton    m_aBP_Cancel;
-    HelpButton      m_aBP_Help;
 };
 
 SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
@@ -487,9 +492,9 @@ SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
         , m_aFT_SplineOrder( this, SchResId( FT_SPLINE_ORDER ) )
         , m_aMF_SplineOrder( this, SchResId( MF_SPLINE_ORDER ) )
         , m_aFL_DialogButtons( this, SchResId( FL_SPLINE_DIALOGBUTTONS ) )
+    , m_aBP_Help( this, SchResId(BTN_HELP) )
         , m_aBP_OK( this, SchResId(BTN_OK) )
-        , m_aBP_Cancel( this, SchResId(BTN_CANCEL) )
-        , m_aBP_Help( this, SchResId(BTN_HELP) )
+    , m_aBP_Cancel( this, SchResId(BTN_CANCEL) )
 {
     FreeResource();
 
@@ -707,7 +712,7 @@ IMPL_LINK( SplineResourceGroup, SplineDetailsDialogHdl, void*, EMPTYARG )
     ChartTypeParameter aOldParameter;
     getSplinePropertiesDialog().fillParameter( aOldParameter, m_aCB_Splines.IsChecked() );
 
-    BOOL bOldSmoothLines = m_aCB_Splines.IsChecked();
+    sal_Bool bOldSmoothLines = m_aCB_Splines.IsChecked();
     m_aCB_Splines.Check();
     if( RET_OK == getSplinePropertiesDialog().Execute() )
     {
@@ -768,7 +773,7 @@ void GeometryResourceGroup::setPosition( const Point& rPoint )
 
 void GeometryResourceGroup::fillControls( const ChartTypeParameter& rParameter )
 {
-    USHORT nGeometry3D = static_cast<USHORT>(rParameter.nGeometry3D);
+    sal_uInt16 nGeometry3D = static_cast<sal_uInt16>(rParameter.nGeometry3D);
     m_aGeometryResources.SelectEntryPos(nGeometry3D);
     m_aGeometryResources.Enable(rParameter.b3DLook);
 }
@@ -1090,7 +1095,7 @@ void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, bo
         bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
         m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, bIsHighContrast, rParameter );
     }
-    m_aSubTypeList.SelectItem( static_cast<USHORT>( rParameter.nSubTypeIndex) );
+    m_aSubTypeList.SelectItem( static_cast<sal_uInt16>( rParameter.nSubTypeIndex) );
     m_pAxisTypeResourceGroup->fillControls( rParameter );
     m_pDim3DLookResourceGroup->fillControls( rParameter );
     m_pStackingResourceGroup->fillControls( rParameter );
@@ -1115,7 +1120,7 @@ void ChartTypeTabPage::initializePage()
 
     ::std::vector< ChartTypeDialogController* >::iterator             aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
-    for( USHORT nM=0; aIter != aEnd; aIter++, nM++ )
+    for( sal_uInt16 nM=0; aIter != aEnd; aIter++, nM++ )
     {
         if( (*aIter)->isSubType(aServiceName) )
         {

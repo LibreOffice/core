@@ -45,13 +45,13 @@ class ScTabControl : public TabBar, public DropTargetHelper, public DragSourceHe
 {
 private:
     ScViewData*     pViewData;
-    USHORT          nMouseClickPageId;      /// Last page ID after mouse button down/up
-    USHORT          nSelPageIdByMouse;      /// Selected page ID, if selected with mouse
-    BOOL            bErrorShown;
+    sal_uInt16          nMouseClickPageId;      /// Last page ID after mouse button down/up
+    sal_uInt16          nSelPageIdByMouse;      /// Selected page ID, if selected with mouse
+    sal_Bool            bErrorShown;
 
     void            DoDrag( const Region& rRegion );
 
-    USHORT          GetMaxId() const;
+    sal_uInt16          GetMaxId() const;
     SCTAB           GetPrivatDropPos(const Point& rPos );
 
 protected:
@@ -77,9 +77,9 @@ public:
     using TabBar::StartDrag;
 
     void            UpdateStatus();
-    void            ActivateView(BOOL bActivate);
+    void            ActivateView(sal_Bool bActivate);
 
-    void            SetSheetLayoutRTL( BOOL bSheetRTL );
+    void            SetSheetLayoutRTL( sal_Bool bSheetRTL );
 };
 
 

@@ -118,13 +118,9 @@ const sal_Unicode CHAR_ZWNBSP   = 0x2060;
 #ifdef SC_ROWLIMIT_TYPECONVERSION_NOCONVPASS
 const size_t MAXSUBTOTAL        = 3;
 const size_t MAXQUERY           = 8;
-const size_t PIVOT_MAXFIELD     = 8;
-const size_t PIVOT_MAXPAGEFIELD = 10;
 #else
 const SCSIZE MAXSUBTOTAL        = 3;
 const SCSIZE MAXQUERY           = 8;
-const SCSIZE PIVOT_MAXFIELD     = 8;
-const SCSIZE PIVOT_MAXPAGEFIELD = 10;
 #endif
 
 #define SC_START_INDEX_DB_COLL 50000
@@ -201,38 +197,38 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
                                     // Flags fuer Spalten / Zeilen
                                     // FILTERED immer zusammen mit HIDDEN
                                     // FILTERED und MANUALSIZE nur fuer Zeilen moeglich
-const BYTE   CR_HIDDEN      = 1;
-//const BYTE CR_MARKED      = 2;
-//const BYTE CR_PAGEBREAK   = 4;
-const BYTE   CR_MANUALBREAK = 8;
-const BYTE   CR_FILTERED    = 16;
-const BYTE   CR_MANUALSIZE  = 32;
-const BYTE   CR_ALL         = (CR_HIDDEN | CR_MANUALBREAK | CR_FILTERED | CR_MANUALSIZE);
+const sal_uInt8   CR_HIDDEN      = 1;
+//const sal_uInt8 CR_MARKED      = 2;
+//const sal_uInt8 CR_PAGEBREAK   = 4;
+const sal_uInt8   CR_MANUALBREAK = 8;
+const sal_uInt8   CR_FILTERED    = 16;
+const sal_uInt8   CR_MANUALSIZE  = 32;
+const sal_uInt8   CR_ALL         = (CR_HIDDEN | CR_MANUALBREAK | CR_FILTERED | CR_MANUALSIZE);
 
-typedef BYTE ScBreakType;
+typedef sal_uInt8 ScBreakType;
 const ScBreakType BREAK_NONE   = 0;
 const ScBreakType BREAK_PAGE   = 1;
 const ScBreakType BREAK_MANUAL = 2;
 
 // Insert-/Delete-Flags
-const USHORT IDF_NONE       = 0x0000;
-const USHORT IDF_VALUE      = 0x0001;   /// Numeric values (and numeric results if IDF_FORMULA is not set).
-const USHORT IDF_DATETIME   = 0x0002;   /// Dates, times, datetime values.
-const USHORT IDF_STRING     = 0x0004;   /// Strings (and string results if IDF_FORMULA is not set).
-const USHORT IDF_NOTE       = 0x0008;   /// Cell notes.
-const USHORT IDF_FORMULA    = 0x0010;   /// Formula cells.
-const USHORT IDF_HARDATTR   = 0x0020;   /// Hard cell attributes.
-const USHORT IDF_STYLES     = 0x0040;   /// Cell styles.
-const USHORT IDF_OBJECTS    = 0x0080;   /// Drawing objects.
-const USHORT IDF_EDITATTR   = 0x0100;   /// Rich-text attributes.
-const USHORT IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES;
-const USHORT IDF_CONTENTS   = IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA;
-const USHORT IDF_ALL        = IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS;
-const USHORT IDF_NOCAPTIONS = 0x0200;   /// Internal use only (undo etc.): do not copy/delete caption objects of cell notes.
-const USHORT IDF_ADDNOTES   = 0x0400;   /// Internal use only (copy from clip): do not delete existing cell contents when pasting notes.
+const sal_uInt16 IDF_NONE       = 0x0000;
+const sal_uInt16 IDF_VALUE      = 0x0001;   /// Numeric values (and numeric results if IDF_FORMULA is not set).
+const sal_uInt16 IDF_DATETIME   = 0x0002;   /// Dates, times, datetime values.
+const sal_uInt16 IDF_STRING     = 0x0004;   /// Strings (and string results if IDF_FORMULA is not set).
+const sal_uInt16 IDF_NOTE       = 0x0008;   /// Cell notes.
+const sal_uInt16 IDF_FORMULA    = 0x0010;   /// Formula cells.
+const sal_uInt16 IDF_HARDATTR   = 0x0020;   /// Hard cell attributes.
+const sal_uInt16 IDF_STYLES     = 0x0040;   /// Cell styles.
+const sal_uInt16 IDF_OBJECTS    = 0x0080;   /// Drawing objects.
+const sal_uInt16 IDF_EDITATTR   = 0x0100;   /// Rich-text attributes.
+const sal_uInt16 IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES;
+const sal_uInt16 IDF_CONTENTS   = IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA;
+const sal_uInt16 IDF_ALL        = IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS;
+const sal_uInt16 IDF_NOCAPTIONS = 0x0200;   /// Internal use only (undo etc.): do not copy/delete caption objects of cell notes.
+const sal_uInt16 IDF_ADDNOTES   = 0x0400;   /// Internal use only (copy from clip): do not delete existing cell contents when pasting notes.
 
 /// Copy flags for auto/series fill functions: do not touch notes and drawing objects.
-const USHORT IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
+const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 
 #define PASTE_NOFUNC        0
 #define PASTE_ADD           1
@@ -468,19 +464,19 @@ struct ScImportParam
     SCROW           nRow1;
     SCCOL           nCol2;
     SCROW           nRow2;
-    BOOL            bImport;
+    sal_Bool            bImport;
     String          aDBName;                    // Alias der Datenbank
     String          aStatement;
-    BOOL            bNative;
-    BOOL            bSql;                       // Statement oder Name?
-    BYTE            nType;                      // enum DBObject
+    sal_Bool            bNative;
+    sal_Bool            bSql;                       // Statement oder Name?
+    sal_uInt8           nType;                      // enum DBObject
 
     ScImportParam();
     ScImportParam( const ScImportParam& r );
     ~ScImportParam();
 
     ScImportParam&  operator=   ( const ScImportParam& r );
-    BOOL            operator==  ( const ScImportParam& r ) const;
+    sal_Bool            operator==  ( const ScImportParam& r ) const;
 //UNUSED2009-05 void            Clear       ();
 };
 
@@ -600,24 +596,24 @@ public:
     SC_DLLPUBLIC static ScUnoAddInCollection* GetAddInCollection();
     SC_DLLPUBLIC static ScUserList*         GetUserList();
     static void                 SetUserList( const ScUserList* pNewList );
-    SC_DLLPUBLIC static const String&       GetRscString( USHORT nIndex );
+    SC_DLLPUBLIC static const String&       GetRscString( sal_uInt16 nIndex );
     static void                 OpenURL( const String& rURL, const String& rTarget );
     SC_DLLPUBLIC static String              GetAbsDocName( const String& rFileName,
                                                 SfxObjectShell* pShell );
     SC_DLLPUBLIC static String              GetDocTabName( const String& rFileName,
                                                 const String& rTabName );
-    SC_DLLPUBLIC static ULONG               GetStandardFormat( SvNumberFormatter&,
-                                    ULONG nFormat, short nType );
-    SC_DLLPUBLIC static ULONG               GetStandardFormat( double, SvNumberFormatter&,
-                                    ULONG nFormat, short nType );
+    SC_DLLPUBLIC static sal_uLong               GetStandardFormat( SvNumberFormatter&,
+                                    sal_uLong nFormat, short nType );
+    SC_DLLPUBLIC static sal_uLong               GetStandardFormat( double, SvNumberFormatter&,
+                                    sal_uLong nFormat, short nType );
 
     SC_DLLPUBLIC static double              nScreenPPTX;
     SC_DLLPUBLIC static double              nScreenPPTY;
 
     static ScDocShellRef*   pDrawClipDocShellRef;
 
-    static USHORT           nDefFontHeight;
-    static USHORT           nStdRowHeight;
+    static sal_uInt16           nDefFontHeight;
+    static sal_uInt16           nStdRowHeight;
 
     SC_DLLPUBLIC static long                nLastRowHeightExtra;
     static long             nLastColWidthExtra;
@@ -648,16 +644,16 @@ public:
     static ScFunctionMgr*   GetStarCalcFunctionMgr();
     static void             ResetFunctionList();
 
-    static String           GetErrorString(USHORT nErrNumber);
-    static String           GetLongErrorString(USHORT nErrNumber);
-    static BOOL             EETextObjEqual( const EditTextObject* pObj1,
+    static String           GetErrorString(sal_uInt16 nErrNumber);
+    static String           GetLongErrorString(sal_uInt16 nErrNumber);
+    static sal_Bool             EETextObjEqual( const EditTextObject* pObj1,
                                             const EditTextObject* pObj2 );
-    static BOOL             CheckWidthInvalidate( BOOL& bNumFormatChanged,
+    static sal_Bool             CheckWidthInvalidate( sal_Bool& bNumFormatChanged,
                                                   const SfxItemSet& rNewAttrs,
                                                   const SfxItemSet& rOldAttrs );
-    static BOOL             HasAttrChanged( const SfxItemSet& rNewAttrs,
+    static sal_Bool             HasAttrChanged( const SfxItemSet& rNewAttrs,
                                             const SfxItemSet& rOldAttrs,
-                                            const USHORT      nWhich );
+                                            const sal_uInt16      nWhich );
 
     static ScUnitConverter* GetUnitConverter();
 
@@ -717,13 +713,13 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
     /// a "ReadOnly" formatter for UNO/XML export
     static  SvNumberFormatter*  GetEnglishFormatter();
 
-    static BOOL IsSystemRTL();                      // depending on system language
+    static sal_Bool IsSystemRTL();                      // depending on system language
     static LanguageType GetEditDefaultLanguage();   // for EditEngine::SetDefaultLanguage
-    SC_DLLPUBLIC static BYTE    GetDefaultScriptType();             // for all WEAK characters
+    SC_DLLPUBLIC static sal_uInt8   GetDefaultScriptType();             // for all WEAK characters
     /** Map ATTR_((CJK|CTL)_)?FONT_... to proper WhichIDs.
         If more than one SCRIPTTYPE_... values are or'ed together, prefers
         first COMPLEX, then ASIAN */
-    SC_DLLPUBLIC static USHORT GetScriptedWhichID( BYTE nScriptType, USHORT nWhich );
+    SC_DLLPUBLIC static sal_uInt16 GetScriptedWhichID( sal_uInt8 nScriptType, sal_uInt16 nWhich );
 
     /** Adds a language item to the item set, if the number format item contains
         a language that differs from its parent's language. */
@@ -803,8 +799,8 @@ namespace utl
 
 struct ScQueryEntry
 {
-    BOOL            bDoQuery;
-    BOOL            bQueryByString;
+    sal_Bool            bDoQuery;
+    sal_Bool            bQueryByString;
     bool            bQueryByDate;
     SCCOLROW        nField;
     ScQueryOp       eOp;
@@ -819,11 +815,11 @@ struct ScQueryEntry
     ~ScQueryEntry();
 
     // legt ggbf. pSearchParam und pSearchText an, immer RegExp!
-    utl::TextSearch*    GetSearchTextPtr( BOOL bCaseSens );
+    utl::TextSearch*    GetSearchTextPtr( sal_Bool bCaseSens );
 
     void            Clear();
     ScQueryEntry&   operator=( const ScQueryEntry& r );
-    BOOL            operator==( const ScQueryEntry& r ) const;
+    sal_Bool            operator==( const ScQueryEntry& r ) const;
 };
 
 // -----------------------------------------------------------------------
@@ -834,16 +830,16 @@ struct SC_DLLPUBLIC ScSubTotalParam
     SCROW           nRow1;
     SCCOL           nCol2;
     SCROW           nRow2;
-    BOOL            bRemoveOnly;
-    BOOL            bReplace;                   // vorhandene Ergebnisse ersetzen
-    BOOL            bPagebreak;                 // Seitenumbruch bei Gruppenwechsel
-    BOOL            bCaseSens;                  // Gross-/Kleinschreibung
-    BOOL            bDoSort;                    // vorher sortieren
-    BOOL            bAscending;                 // aufsteigend sortieren
-    BOOL            bUserDef;                   // Benutzer-def. Sort.Reihenfolge
-    USHORT          nUserIndex;                 // Index auf Liste
-    BOOL            bIncludePattern;            // Formate mit sortieren
-    BOOL            bGroupActive[MAXSUBTOTAL];  // aktive Gruppen
+    sal_Bool            bRemoveOnly;
+    sal_Bool            bReplace;                   // vorhandene Ergebnisse ersetzen
+    sal_Bool            bPagebreak;                 // Seitenumbruch bei Gruppenwechsel
+    sal_Bool            bCaseSens;                  // Gross-/Kleinschreibung
+    sal_Bool            bDoSort;                    // vorher sortieren
+    sal_Bool            bAscending;                 // aufsteigend sortieren
+    sal_Bool            bUserDef;                   // Benutzer-def. Sort.Reihenfolge
+    sal_uInt16          nUserIndex;                 // Index auf Liste
+    sal_Bool            bIncludePattern;            // Formate mit sortieren
+    sal_Bool            bGroupActive[MAXSUBTOTAL];  // aktive Gruppen
     SCCOL           nField[MAXSUBTOTAL];        // zugehoeriges Feld
     SCCOL           nSubTotals[MAXSUBTOTAL];    // Anzahl der SubTotals
     SCCOL*          pSubTotals[MAXSUBTOTAL];    // Array der zu berechnenden Spalten
@@ -853,12 +849,12 @@ struct SC_DLLPUBLIC ScSubTotalParam
     ScSubTotalParam( const ScSubTotalParam& r );
 
     ScSubTotalParam&    operator=       ( const ScSubTotalParam& r );
-    BOOL                operator==      ( const ScSubTotalParam& r ) const;
+    sal_Bool                operator==      ( const ScSubTotalParam& r ) const;
     void                Clear           ();
-    void                SetSubTotals    ( USHORT                nGroup,
+    void                SetSubTotals    ( sal_uInt16                nGroup,
                                           const SCCOL*          ptrSubTotals,
                                           const ScSubTotalFunc* ptrFuncions,
-                                          USHORT                nCount );
+                                          sal_uInt16                nCount );
 };
 
 // -----------------------------------------------------------------------
@@ -870,21 +866,21 @@ struct ScConsolidateParam
     SCROW           nRow;                   // bzw. Anfang des Zielbereiches
     SCTAB           nTab;
     ScSubTotalFunc  eFunction;              // Berechnungsvorschrift
-    USHORT          nDataAreaCount;         // Anzahl der Datenbereiche
+    sal_uInt16          nDataAreaCount;         // Anzahl der Datenbereiche
     ScArea**        ppDataAreas;            // Zeiger-Array auf Datenbereiche
-    BOOL            bByCol;                 // nach Spalten
-    BOOL            bByRow;                 // nach Zeilen
-    BOOL            bReferenceData;         // Quelldaten referenzieren
+    sal_Bool            bByCol;                 // nach Spalten
+    sal_Bool            bByRow;                 // nach Zeilen
+    sal_Bool            bReferenceData;         // Quelldaten referenzieren
 
     ScConsolidateParam();
     ScConsolidateParam( const ScConsolidateParam& r );
     ~ScConsolidateParam();
 
     ScConsolidateParam& operator=       ( const ScConsolidateParam& r );
-    BOOL                operator==      ( const ScConsolidateParam& r ) const;
+    sal_Bool                operator==      ( const ScConsolidateParam& r ) const;
     void                Clear           (); // = ClearDataAreas()+Members
     void                ClearDataAreas  ();
-    void                SetAreas        ( ScArea* const* ppAreas, USHORT nCount );
+    void                SetAreas        ( ScArea* const* ppAreas, sal_uInt16 nCount );
 };
 
 // -----------------------------------------------------------------------

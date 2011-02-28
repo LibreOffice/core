@@ -78,7 +78,7 @@ sal_Bool ScAddressConversionObj::ParseUIString( const String& rUIString, ::formu
     sal_Bool bSuccess = sal_False;
     if ( bIsRange )
     {
-        USHORT nResult = aRange.ParseAny( rUIString, pDoc, eConv );
+        sal_uInt16 nResult = aRange.ParseAny( rUIString, pDoc, eConv );
         if ( nResult & SCA_VALID )
         {
             if ( ( nResult & SCA_TAB_3D ) == 0 )
@@ -92,7 +92,7 @@ sal_Bool ScAddressConversionObj::ParseUIString( const String& rUIString, ::formu
     }
     else
     {
-        USHORT nResult = aRange.aStart.Parse( rUIString, pDoc, eConv );
+        sal_uInt16 nResult = aRange.aStart.Parse( rUIString, pDoc, eConv );
         if ( nResult & SCA_VALID )
         {
             if ( ( nResult & SCA_TAB_3D ) == 0 )
@@ -261,7 +261,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString&
     {
         //  generate UI representation string - include sheet only if different from ref sheet
         String aFormatStr;
-        USHORT nFlags = SCA_VALID;
+        sal_uInt16 nFlags = SCA_VALID;
         if ( aRange.aStart.Tab() != nRefSheet )
             nFlags |= SCA_TAB_3D;
         if ( bIsRange )
@@ -283,7 +283,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString&
             //  manually concatenate range so both parts always have the sheet name
             aFormatStr.Append( (sal_Unicode) ':' );
             String aSecond;
-            USHORT nFlags = SCA_VALID;
+            sal_uInt16 nFlags = SCA_VALID;
             if( eConv != ::formula::FormulaGrammar::CONV_XL_A1 )
                 nFlags |= SCA_TAB_3D;
             aRange.aEnd.Format( aSecond, nFlags, pDoc, eConv );

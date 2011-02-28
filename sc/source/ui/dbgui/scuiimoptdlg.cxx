@@ -50,7 +50,7 @@ public:
                 nIter     ( 0 )
             {}
 
-    USHORT  GetCode( const String& rDelimiter ) const;
+    sal_uInt16  GetCode( const String& rDelimiter ) const;
     String  GetDelimiter( sal_Unicode nCode ) const;
 
     String  FirstDel()  { nIter = 0; return theDelTab.GetToken( nIter, cSep ); }
@@ -65,7 +65,7 @@ private:
 
 //------------------------------------------------------------------------
 
-USHORT ScDelimiterTable::GetCode( const String& rDel ) const
+sal_uInt16 ScDelimiterTable::GetCode( const String& rDel ) const
 {
     sal_Unicode nCode = 0;
     xub_StrLen i = 0;
@@ -117,12 +117,12 @@ String ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 
 ScImportOptionsDlg::ScImportOptionsDlg(
         Window*                 pParent,
-        BOOL                    bAscii,
+        sal_Bool                    bAscii,
         const ScImportOptions*  pOptions,
         const String*           pStrTitle,
-        BOOL                    bMultiByte,
-        BOOL                    bOnlyDbtoolsEncodings,
-        BOOL                    bImport )
+        sal_Bool                    bMultiByte,
+        sal_Bool                    bOnlyDbtoolsEncodings,
+        sal_Bool                    bImport )
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
         aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
@@ -132,11 +132,12 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aEdFieldSep ( this, ScResId( ED_FIELDSEP ) ),
         aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
         aEdTextSep  ( this, ScResId( ED_TEXTSEP ) ),
+        aCbQuoteAll ( this, ScResId( CB_QUOTEALL ) ),
+        aCbShown    ( this, ScResId( CB_SAVESHOWN ) ),
         aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp    ( this, ScResId( BTN_HELP ) ),
-        aCbShown    ( this, ScResId( CB_SAVESHOWN ) )
+        aBtnHelp    ( this, ScResId( BTN_HELP ) )
 {
     // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
     pFieldSepTab = new ScDelimiterTable( String(ScResId(SCSTR_FIELDSEP)) );
@@ -211,9 +212,11 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         SetSizePixel( aWinSize );
         aCbFixed.Show();
         aCbFixed.SetClickHdl( LINK( this, ScImportOptionsDlg, FixedWidthHdl ) );
-        aCbFixed.Check( FALSE );
+        aCbFixed.Check( sal_False );
         aCbShown.Show();
-        aCbShown.Check( TRUE );
+        aCbShown.Check( sal_True );
+        aCbQuoteAll.Show();
+        aCbQuoteAll.Check( sal_False );
     }
     else
     {
@@ -225,6 +228,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aEdTextSep.Hide();
         aCbFixed.Hide();
         aCbShown.Hide();
+        aCbQuoteAll.Hide();
         aLbFont.GrabFocus();
         aLbFont.SetDoubleClickHdl( LINK( this, ScImportOptionsDlg, DoubleClickHdl ) );
     }
@@ -259,16 +263,17 @@ void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
         rOptions.nTextSepCode  = GetCodeFromCombo( aEdTextSep );
         rOptions.bFixedWidth = aCbFixed.IsChecked();
         rOptions.bSaveAsShown = aCbShown.IsChecked();
+        rOptions.bQuoteAllText = aCbQuoteAll.IsChecked();
     }
 }
 
 //------------------------------------------------------------------------
 
-USHORT ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
+sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 {
     ScDelimiterTable* pTab;
     String  aStr( rEd.GetText() );
-    USHORT  nCode;
+    sal_uInt16  nCode;
 
     if ( &rEd == &aEdTextSep )
         pTab = pTextSepTab;
@@ -284,7 +289,7 @@ USHORT ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
         nCode = pTab->GetCode( aStr );
 
         if ( nCode == 0 )
-            nCode = (USHORT)aStr.GetChar(0);
+            nCode = (sal_uInt16)aStr.GetChar(0);
     }
 
     return nCode;
@@ -296,12 +301,13 @@ IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
 {
     if( pCheckBox == &aCbFixed )
     {
-        BOOL bEnable = !aCbFixed.IsChecked();
+        sal_Bool bEnable = !aCbFixed.IsChecked();
         aFtFieldSep.Enable( bEnable );
         aEdFieldSep.Enable( bEnable );
         aFtTextSep.Enable( bEnable );
         aEdTextSep.Enable( bEnable );
         aCbShown.Enable( bEnable );
+        aCbQuoteAll.Enable( bEnable );
     }
     return 0;
 }

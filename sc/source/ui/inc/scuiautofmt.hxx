@@ -37,7 +37,7 @@ public:
                              ScDocument*                pDoc );
             ~ScAutoFormatDlg();
 
-    USHORT GetIndex() const { return nIndex; }
+    sal_uInt16 GetIndex() const { return nIndex; }
     String GetCurrFormatName();
 
 private:
@@ -68,9 +68,9 @@ private:
     //------------------------
     ScAutoFormat*           pFormat;
     const ScAutoFormatData* pSelFmtData;
-    USHORT                  nIndex;
-    BOOL                    bCoreDataChanged;
-    BOOL                    bFmtInserted;
+    sal_uInt16                  nIndex;
+    sal_Bool                    bCoreDataChanged;
+    sal_Bool                    bFmtInserted;
 
     void Init           ();
     void UpdateChecks   ();

@@ -70,8 +70,8 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_SPEC_FILTER ),
         //
-        aLbFilterArea   ( this, ScResId( LB_CRITERIA_AREA ) ),
         aFtFilterArea   ( this, ScResId( FT_CRITERIA_AREA ) ),
+        aLbFilterArea   ( this, ScResId( LB_CRITERIA_AREA ) ),
         aEdFilterArea   ( this, this, ScResId( ED_CRITERIA_AREA ) ),
         aRbFilterArea   ( this, ScResId( RB_CRITERIA_AREA ), &aEdFilterArea, this ),
         //
@@ -90,7 +90,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         pViewData       ( NULL ),
         pDoc            ( NULL ),
         pRefInputEdit   ( NULL ),
-        bRefInputMode   ( FALSE ),
+        bRefInputMode   ( sal_False ),
         pTimer          ( NULL )
 {
     Init( rArgSet );
@@ -103,6 +103,11 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
     pTimer->SetTimeout( 50 ); // 50ms warten
     pTimer->SetTimeoutHdl( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
     pTimer->Start();
+
+    aLbCopyArea.SetAccessibleName(aBtnCopyResult.GetText());
+    aEdCopyArea.SetAccessibleName(aBtnCopyResult.GetText());
+    aLbCopyArea.SetAccessibleRelationLabeledBy(&aBtnCopyResult);
+    aEdCopyArea.SetAccessibleRelationLabeledBy(&aBtnCopyResult);
 }
 
 
@@ -110,8 +115,8 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
 
 __EXPORT ScSpecialFilterDlg::~ScSpecialFilterDlg()
 {
-    USHORT nEntries = aLbFilterArea.GetEntryCount();
-    USHORT i;
+    sal_uInt16 nEntries = aLbFilterArea.GetEntryCount();
+    sal_uInt16 i;
 
     for ( i=1; i<nEntries; i++ )
         delete (String*)aLbFilterArea.GetEntryData( i );
@@ -149,7 +154,7 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
         if(pDoc->GetChangeTrack()!=NULL) aBtnCopyResult.Disable();
 
         ScRangeName*    pRangeNames = pDoc->GetRangeName();
-        const USHORT    nCount      = pRangeNames ? pRangeNames->GetCount() : 0;
+        const sal_uInt16    nCount      = pRangeNames ? pRangeNames->GetCount() : 0;
 
         /*
          * Aus den RangeNames des Dokumentes werden nun die
@@ -163,9 +168,9 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
         {
             String       aString;
             ScRangeData* pData = NULL;
-            USHORT       nInsert = 0;
+            sal_uInt16       nInsert = 0;
 
-            for ( USHORT i=0; i<nCount; i++ )
+            for ( sal_uInt16 i=0; i<nCount; i++ )
             {
                 pData = (ScRangeData*)(pRangeNames->At( i ));
                 if ( pData )
@@ -218,19 +223,19 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
                             aStrUndefined );
 
     //  #35206# Spezialfilter braucht immer Spaltenkoepfe
-    aBtnHeader.Check(TRUE);
+    aBtnHeader.Check(sal_True);
     aBtnHeader.Disable();
 
     // Modal-Modus einschalten
-//  SetDispatcherLock( TRUE );
+//  SetDispatcherLock( sal_True );
     //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
+    //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
 }
 
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScSpecialFilterDlg::Close()
+sal_Bool __EXPORT ScSpecialFilterDlg::Close()
 {
     if (pViewData)
         pViewData->GetDocShell()->CancelAutoDBRange();
@@ -303,7 +308,7 @@ ScQueryItem* ScSpecialFilterDlg::GetOutputItem( const ScQueryParam& rParam,
 
 //----------------------------------------------------------------------------
 
-BOOL ScSpecialFilterDlg::IsRefInputMode() const
+sal_Bool ScSpecialFilterDlg::IsRefInputMode() const
 {
     return bRefInputMode;
 }
@@ -323,8 +328,8 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
         String          theAreaStr( aEdFilterArea.GetText() );
         ScQueryParam    theOutParam( theQueryData );
         ScAddress       theAdrCopy;
-        BOOL            bEditInputOk    = TRUE;
-        BOOL            bQueryOk        = FALSE;
+        sal_Bool            bEditInputOk    = sal_True;
+        sal_Bool            bQueryOk        = sal_False;
         ScRange         theFilterArea;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
@@ -335,28 +340,28 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
             if ( STRING_NOTFOUND != nColonPos )
                 theCopyStr.Erase( nColonPos );
 
-            USHORT nResult = theAdrCopy.Parse( theCopyStr, pDoc, eConv );
+            sal_uInt16 nResult = theAdrCopy.Parse( theCopyStr, pDoc, eConv );
 
             if ( SCA_VALID != (nResult & SCA_VALID) )
             {
                 if ( !aBtnMore.GetState() )
-                    aBtnMore.SetState( TRUE );
+                    aBtnMore.SetState( sal_True );
 
                 ERRORBOX( STR_INVALID_TABREF );
                 aEdCopyArea.GrabFocus();
-                bEditInputOk = FALSE;
+                bEditInputOk = sal_False;
             }
         }
 
         if ( bEditInputOk )
         {
-            USHORT nResult = ScRange().Parse( theAreaStr, pDoc, eConv );
+            sal_uInt16 nResult = ScRange().Parse( theAreaStr, pDoc, eConv );
 
             if ( SCA_VALID != (nResult & SCA_VALID) )
             {
                 ERRORBOX( STR_INVALID_TABREF );
                 aEdFilterArea.GrabFocus();
-                bEditInputOk = FALSE;
+                bEditInputOk = sal_False;
             }
         }
 
@@ -368,7 +373,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
              * ein ScQueryParam zu erzeugen:
              */
 
-            USHORT  nResult = theFilterArea.Parse( theAreaStr, pDoc, eConv );
+            sal_uInt16  nResult = theFilterArea.Parse( theAreaStr, pDoc, eConv );
 
             if ( SCA_VALID == (nResult & SCA_VALID) )
             {
@@ -377,21 +382,21 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 
                 if ( aBtnCopyResult.IsChecked() )
                 {
-                    theOutParam.bInplace    = FALSE;
+                    theOutParam.bInplace    = sal_False;
                     theOutParam.nDestTab    = theAdrCopy.Tab();
                     theOutParam.nDestCol    = theAdrCopy.Col();
                     theOutParam.nDestRow    = theAdrCopy.Row();
                 }
                 else
                 {
-                    theOutParam.bInplace    = TRUE;
+                    theOutParam.bInplace    = sal_True;
                     theOutParam.nDestTab    = 0;
                     theOutParam.nDestCol    = 0;
                     theOutParam.nDestRow    = 0;
                 }
 
                 theOutParam.bHasHeader = aBtnHeader.IsChecked();
-                theOutParam.bByRow     = TRUE;
+                theOutParam.bByRow     = sal_True;
                 theOutParam.bCaseSens  = aBtnCase.IsChecked();
                 theOutParam.bRegExp    = aBtnRegExp.IsChecked();
                 theOutParam.bDuplicate = !aBtnUnique.IsChecked();
@@ -411,7 +416,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
                 if ( bQueryOk && theOutParam.GetEntryCount() > MAXQUERY &&
                      theOutParam.GetEntry(MAXQUERY).bDoQuery )
                 {
-                    bQueryOk = FALSE;       // zu viele
+                    bQueryOk = sal_False;       // zu viele
                                             //! andere Fehlermeldung ??
                 }
             }
@@ -419,7 +424,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 
         if ( bQueryOk )
         {
-            SetDispatcherLock( FALSE );
+            SetDispatcherLock( sal_False );
             SwitchToDocument();
             GetBindings().GetDispatcher()->Execute( FID_FILTER_OK,
                                       SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
@@ -451,17 +456,17 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
         if( aEdCopyArea.HasFocus() || aRbCopyArea.HasFocus() )
         {
             pRefInputEdit = &aEdCopyArea;
-            bRefInputMode = TRUE;
+            bRefInputMode = sal_True;
         }
         else if( aEdFilterArea.HasFocus() || aRbFilterArea.HasFocus() )
         {
             pRefInputEdit = &aEdFilterArea;
-            bRefInputMode = TRUE;
+            bRefInputMode = sal_True;
         }
         else if( bRefInputMode )
         {
             pRefInputEdit = NULL;
-            bRefInputMode = FALSE;
+            bRefInputMode = sal_False;
         }
     }
 
@@ -478,7 +483,7 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
     if ( pLb == &aLbFilterArea )
     {
         String  aString;
-        USHORT  nSelPos = aLbFilterArea.GetSelectEntryPos();
+        sal_uInt16  nSelPos = aLbFilterArea.GetSelectEntryPos();
 
         if ( nSelPos > 0 )
             aString = *(String*)aLbFilterArea.GetEntryData( nSelPos );
@@ -499,14 +504,14 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )
         if ( pDoc && pViewData )
         {
             String  theCurAreaStr = pEd->GetText();
-            USHORT  nResult = ScRange().Parse( theCurAreaStr, pDoc );
+            sal_uInt16  nResult = ScRange().Parse( theCurAreaStr, pDoc );
 
             if ( SCA_VALID == (nResult & SCA_VALID) )
             {
                 String* pStr    = NULL;
-                BOOL    bFound  = FALSE;
-                USHORT  i       = 0;
-                USHORT  nCount  = aLbFilterArea.GetEntryCount();
+                sal_Bool    bFound  = sal_False;
+                sal_uInt16  i       = 0;
+                sal_uInt16  nCount  = aLbFilterArea.GetEntryCount();
 
                 for ( i=1; i<nCount && !bFound; i++ )
                 {

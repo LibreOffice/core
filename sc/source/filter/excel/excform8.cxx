@@ -62,7 +62,7 @@ ExcelToSc8::~ExcelToSc8()
 {
 }
 
-bool ExcelToSc8::GetExternalFileIdFromXti( UINT16 nIxti, sal_uInt16& rFileId ) const
+bool ExcelToSc8::GetExternalFileIdFromXti( sal_uInt16 nIxti, sal_uInt16& rFileId ) const
 {
     const String* pFileUrl = rLinkMan.GetSupbookUrl(nIxti);
     if (!pFileUrl || pFileUrl->Len() == 0 || !GetDocShell())
@@ -75,7 +75,7 @@ bool ExcelToSc8::GetExternalFileIdFromXti( UINT16 nIxti, sal_uInt16& rFileId ) c
     return true;
 }
 
-bool ExcelToSc8::Read3DTabReference( UINT16 nIxti, SCTAB& rFirstTab, SCTAB& rLastTab, ExternalTabInfo& rExtInfo )
+bool ExcelToSc8::Read3DTabReference( sal_uInt16 nIxti, SCTAB& rFirstTab, SCTAB& rLastTab, ExternalTabInfo& rExtInfo )
 {
     rFirstTab = rLastTab = 0;
     rExtInfo.mbExternal = !rLinkMan.IsSelfRef(nIxti);
@@ -96,16 +96,16 @@ bool ExcelToSc8::Read3DTabReference( UINT16 nIxti, SCTAB& rFirstTab, SCTAB& rLas
 // otherwise it will seek to the first byte past additional content after <nFormulaLen>
 ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
 {
-    BYTE                    nOp, nLen, nByte;
-    UINT16                  nUINT16;
+    sal_uInt8                   nOp, nLen, nByte;
+    sal_uInt16                  nUINT16;
     double                  fDouble;
     String                  aString;
-    BOOL                    bError = FALSE;
-    BOOL                    bArrayFormula = FALSE;
+    sal_Bool                    bError = sal_False;
+    sal_Bool                    bArrayFormula = sal_False;
     TokenId                 nMerk0;
-    const BOOL              bRangeName = eFT == FT_RangeName;
-    const BOOL              bSharedFormula = eFT == FT_SharedFormula;
-    const BOOL              bRNorSF = bRangeName || bSharedFormula;
+    const sal_Bool              bRangeName = eFT == FT_RangeName;
+    const sal_Bool              bSharedFormula = eFT == FT_SharedFormula;
+    const sal_Bool              bRNorSF = bRangeName || bSharedFormula;
 
     ScSingleRefData         aSRD;
     ScComplexRefData            aCRD;
@@ -142,7 +142,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x02: // Data Table                            [325 277]
                 aIn.Ignore( 4 );
 
-                bArrayFormula = TRUE;
+                bArrayFormula = sal_True;
                 break;
             case 0x03: // Addition                              [312 264]
                 aStack >> nMerk0;
@@ -261,8 +261,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 break;
             case 0x18:                                          // natural language formula
                 {
-                UINT8   nEptg;
-                UINT16  nCol, nRow;
+                sal_uInt8   nEptg;
+                sal_uInt16  nCol, nRow;
                 aIn >> nEptg;
                 switch( nEptg )
                 {                           //  name        size    ext     type
@@ -280,9 +280,9 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                         aSRD.InitAddress( ScAddress( static_cast<SCCOL>(nCol & 0xFF), static_cast<SCROW>(nRow), aEingPos.Tab() ) );
 
                         if( nEptg == 0x02 || nEptg == 0x06 )
-                            aSRD.SetRowRel( TRUE );
+                            aSRD.SetRowRel( sal_True );
                         else
-                            aSRD.SetColRel( TRUE );
+                            aSRD.SetColRel( sal_True );
 
                         aSRD.CalcRelFromAbs( aEingPos );
 
@@ -294,7 +294,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
                         aSRD.InitAddress( ScAddress( static_cast<SCCOL>(nCol & 0xFF), static_cast<SCROW>(nRow), aEingPos.Tab() ) );
 
-                        aSRD.SetColRel( TRUE );
+                        aSRD.SetColRel( sal_True );
 
                         aSRD.CalcRelFromAbs( aEingPos );
 
@@ -329,8 +329,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 break;
             case 0x19: // Special Attribute                     [327 279]
             {
-                UINT16 nData, nFakt;
-                BYTE nOpt;
+                sal_uInt16 nData, nFakt;
+                sal_uInt8 nOpt;
 
                 aIn >> nOpt >> nData;
                 nFakt = 2;
@@ -448,14 +448,14 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x6A:
             case 0x2A: // Deleted Cell Reference                [323 273]
             {
-                UINT16          nCol, nRow;
+                sal_uInt16          nCol, nRow;
 
                 aIn >> nRow >> nCol;
 
                 aSRD.nCol = static_cast<SCCOL>(nCol);
                 aSRD.nRow = nRow & 0x3FFF;
                 aSRD.nRelTab = 0;
-                aSRD.SetTabRel( TRUE );
+                aSRD.SetTabRel( sal_True );
                 aSRD.SetFlag3D( bRangeName );
 
                 ExcRelToScRel8( nRow, nCol, aSRD, bRangeName );
@@ -466,8 +466,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     case 0x6A:
                     case 0x2A: // Deleted Cell Reference        [323 273]
                         // no information which part is deleted, set both
-                        aSRD.SetColDeleted( TRUE );
-                        aSRD.SetRowDeleted( TRUE );
+                        aSRD.SetColDeleted( sal_True );
+                        aSRD.SetRowDeleted( sal_True );
                 }
 
                 aStack << aPool.Store( aSRD );
@@ -480,16 +480,16 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x6B:
             case 0x2B: // Deleted Area Refernce                 [323 273]
             {
-                UINT16          nRowFirst, nRowLast;
-                UINT16          nColFirst, nColLast;
+                sal_uInt16          nRowFirst, nRowLast;
+                sal_uInt16          nColFirst, nColLast;
                 ScSingleRefData &rSRef1 = aCRD.Ref1;
                 ScSingleRefData &rSRef2 = aCRD.Ref2;
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
                 rSRef1.nRelTab = rSRef2.nRelTab = 0;
-                rSRef1.SetTabRel( TRUE );
-                rSRef2.SetTabRel( TRUE );
+                rSRef1.SetTabRel( sal_True );
+                rSRef2.SetTabRel( sal_True );
                 rSRef1.SetFlag3D( bRangeName );
                 rSRef2.SetFlag3D( bRangeName );
 
@@ -507,10 +507,10 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     case 0x6B:
                     case 0x2B: // Deleted Area Refernce         [323 273]
                         // no information which part is deleted, set all
-                        rSRef1.SetColDeleted( TRUE );
-                        rSRef1.SetRowDeleted( TRUE );
-                        rSRef2.SetColDeleted( TRUE );
-                        rSRef2.SetRowDeleted( TRUE );
+                        rSRef1.SetColDeleted( sal_True );
+                        rSRef1.SetRowDeleted( sal_True );
+                        rSRef2.SetColDeleted( sal_True );
+                        rSRef2.SetRowDeleted( sal_True );
                 }
 
                 aStack << aPool.Store( aCRD );
@@ -546,12 +546,12 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x2C: // Cell Reference Within a Name          [323    ]
                        // Cell Reference Within a Shared Formula[    273]
             {
-                UINT16      nRow, nCol;
+                sal_uInt16      nRow, nCol;
 
                 aIn >> nRow >> nCol;
 
                 aSRD.nRelTab = 0;
-                aSRD.SetTabRel( TRUE );
+                aSRD.SetTabRel( sal_True );
                 aSRD.SetFlag3D( bRangeName );
 
                 ExcRelToScRel8( nRow, nCol, aSRD, bRNorSF );
@@ -563,12 +563,12 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x6D:
             case 0x2D: // Area Reference Within a Name          [324    ]
             {      // Area Reference Within a Shared Formula[    274]
-                UINT16                  nRowFirst, nRowLast;
-                UINT16                  nColFirst, nColLast;
+                sal_uInt16                  nRowFirst, nRowLast;
+                sal_uInt16                  nColFirst, nColLast;
 
                 aCRD.Ref1.nRelTab = aCRD.Ref2.nRelTab = 0;
-                aCRD.Ref1.SetTabRel( TRUE );
-                aCRD.Ref2.SetTabRel( TRUE );
+                aCRD.Ref1.SetTabRel( sal_True );
+                aCRD.Ref2.SetTabRel( sal_True );
                 aCRD.Ref1.SetFlag3D( bRangeName );
                 aCRD.Ref2.SetFlag3D( bRangeName );
 
@@ -702,7 +702,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x7C:
             case 0x3C: // Deleted 3-D Cell Reference            [    277]
             {
-                UINT16 nIxti, nRw, nGrbitCol;
+                sal_uInt16 nIxti, nRw, nGrbitCol;
                 SCTAB nTabFirst, nTabLast;
 
                 aIn >> nIxti >> nRw >> nGrbitCol;
@@ -716,8 +716,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 }
 
                 aSRD.nTab = nTabFirst;
-                aSRD.SetFlag3D( TRUE );
-                aSRD.SetTabRel( FALSE );
+                aSRD.SetFlag3D( sal_True );
+                aSRD.SetTabRel( sal_False );
 
                 ExcRelToScRel8( nRw, nGrbitCol, aSRD, bRangeName );
 
@@ -727,8 +727,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     case 0x7C:
                     case 0x3C: // Deleted 3-D Cell Reference    [    277]
                         // no information which part is deleted, set both
-                        aSRD.SetColDeleted( TRUE );
-                        aSRD.SetRowDeleted( TRUE );
+                        aSRD.SetColDeleted( sal_True );
+                        aSRD.SetRowDeleted( sal_True );
                 }
 
                 if (aExtInfo.mbExternal)
@@ -751,7 +751,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 else
                 {
                     if ( !ValidTab(nTabFirst))
-                        aSRD.SetTabDeleted( TRUE );
+                        aSRD.SetTabDeleted( sal_True );
 
                     if( nTabLast != nTabFirst )
                     {
@@ -772,7 +772,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x7D:
             case 0x3D: // Deleted 3-D Area Reference            [    277]
             {
-                UINT16 nIxti, nRw1, nGrbitCol1, nRw2, nGrbitCol2;
+                sal_uInt16 nIxti, nRw1, nGrbitCol1, nRw2, nGrbitCol2;
                 SCTAB nTabFirst, nTabLast;
                 aIn >> nIxti >> nRw1 >> nRw2 >> nGrbitCol1 >> nGrbitCol2;
 
@@ -789,10 +789,10 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
                 rR1.nTab = nTabFirst;
                 rR2.nTab = nTabLast;
-                rR1.SetFlag3D( TRUE );
-                rR1.SetTabRel( FALSE );
+                rR1.SetFlag3D( sal_True );
+                rR1.SetTabRel( sal_False );
                 rR2.SetFlag3D( nTabFirst != nTabLast );
-                rR2.SetTabRel( FALSE );
+                rR2.SetTabRel( sal_False );
 
                 ExcRelToScRel8( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
                 ExcRelToScRel8( nRw2, nGrbitCol2, aCRD.Ref2, bRangeName );
@@ -808,10 +808,10 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     case 0x7D:
                     case 0x3D: // Deleted 3-D Area Reference    [    277]
                         // no information which part is deleted, set all
-                        rR1.SetColDeleted( TRUE );
-                        rR1.SetRowDeleted( TRUE );
-                        rR2.SetColDeleted( TRUE );
-                        rR2.SetRowDeleted( TRUE );
+                        rR1.SetColDeleted( sal_True );
+                        rR1.SetRowDeleted( sal_True );
+                        rR2.SetColDeleted( sal_True );
+                        rR2.SetRowDeleted( sal_True );
                 }
 
                 if (aExtInfo.mbExternal)
@@ -821,15 +821,15 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 else
                 {
                     if ( !ValidTab(nTabFirst) )
-                        rR1.SetTabDeleted( TRUE );
+                        rR1.SetTabDeleted( sal_True );
                     if ( !ValidTab(nTabLast) )
-                        rR2.SetTabDeleted( TRUE );
+                        rR2.SetTabDeleted( sal_True );
 
                     aStack << aPool.Store( aCRD );
                 }
             }
                 break;
-            default: bError = TRUE;
+            default: bError = sal_True;
         }
         bError |= !aIn.IsValid();
     }
@@ -873,17 +873,17 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 // stream seeks to first byte after <nFormulaLen>
 ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen, const FORMULA_TYPE eFT )
 {
-    BYTE                    nOp, nLen;//, nByte;
-    BOOL                    bError = FALSE;
-    BOOL                    bArrayFormula = FALSE;
-    const BOOL              bRangeName = eFT == FT_RangeName;
-    const BOOL              bSharedFormula = eFT == FT_SharedFormula;
-    const BOOL              bRNorSF = bRangeName || bSharedFormula;
+    sal_uInt8                   nOp, nLen;//, nByte;
+    sal_Bool                    bError = sal_False;
+    sal_Bool                    bArrayFormula = sal_False;
+    const sal_Bool              bRangeName = eFT == FT_RangeName;
+    const sal_Bool              bSharedFormula = eFT == FT_SharedFormula;
+    const sal_Bool              bRNorSF = bRangeName || bSharedFormula;
 
     ScSingleRefData         aSRD;
     ScComplexRefData            aCRD;
 
-    bExternName = FALSE;
+    bExternName = sal_False;
 
     if( eStatus != ConvOK )
     {
@@ -910,7 +910,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                        // Array Formula or Shared Formula       [    277]
                 aIn.Ignore( 4 );
 
-                bArrayFormula = TRUE;
+                bArrayFormula = sal_True;
                 break;
             case 0x02: // Data Table                            [325 277]
                 aIn.Ignore( 4 );
@@ -943,8 +943,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 break;
             case 0x19: // Special Attribute                     [327 279]
             {
-                UINT16 nData, nFakt;
-                BYTE nOpt;
+                sal_uInt16 nData, nFakt;
+                sal_uInt8 nOpt;
 
                 aIn >> nOpt >> nData;
                 nFakt = 2;
@@ -990,14 +990,14 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
             case 0x64:
             case 0x24: // Cell Reference                        [319 270]
             {
-                UINT16          nCol, nRow;
+                sal_uInt16          nCol, nRow;
 
                 aIn >> nRow >> nCol;
 
                 aSRD.nCol = static_cast<SCCOL>(nCol);
                 aSRD.nRow = nRow & 0x3FFF;
                 aSRD.nRelTab = 0;
-                aSRD.SetTabRel( TRUE );
+                aSRD.SetTabRel( sal_True );
                 aSRD.SetFlag3D( bRangeName );
 
                 ExcRelToScRel8( nRow, nCol, aSRD, bRangeName );
@@ -1009,16 +1009,16 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
             case 0x65:
             case 0x25: // Area Reference                        [320 270]
             {
-                UINT16          nRowFirst, nRowLast;
-                UINT16          nColFirst, nColLast;
+                sal_uInt16          nRowFirst, nRowLast;
+                sal_uInt16          nColFirst, nColLast;
                 ScSingleRefData &rSRef1 = aCRD.Ref1;
                 ScSingleRefData &rSRef2 = aCRD.Ref2;
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
                 rSRef1.nRelTab = rSRef2.nRelTab = 0;
-                rSRef1.SetTabRel( TRUE );
-                rSRef2.SetTabRel( TRUE );
+                rSRef1.SetTabRel( sal_True );
+                rSRef2.SetTabRel( sal_True );
                 rSRef1.SetFlag3D( bRangeName );
                 rSRef2.SetFlag3D( bRangeName );
 
@@ -1064,12 +1064,12 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
             case 0x2C: // Cell Reference Within a Name          [323    ]
                        // Cell Reference Within a Shared Formula[    273]
             {
-                UINT16      nRow, nCol;
+                sal_uInt16      nRow, nCol;
 
                 aIn >> nRow >> nCol;
 
                 aSRD.nRelTab = 0;
-                aSRD.SetTabRel( TRUE );
+                aSRD.SetTabRel( sal_True );
                 aSRD.SetFlag3D( bRangeName );
 
                 ExcRelToScRel8( nRow, nCol, aSRD, bRNorSF );
@@ -1081,12 +1081,12 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
             case 0x6D:
             case 0x2D: // Area Reference Within a Name          [324    ]
             {      // Area Reference Within a Shared Formula[    274]
-                UINT16                  nRowFirst, nRowLast;
-                UINT16                  nColFirst, nColLast;
+                sal_uInt16                  nRowFirst, nRowLast;
+                sal_uInt16                  nColFirst, nColLast;
 
                 aCRD.Ref1.nRelTab = aCRD.Ref2.nRelTab = 0;
-                aCRD.Ref1.SetTabRel( TRUE );
-                aCRD.Ref2.SetTabRel( TRUE );
+                aCRD.Ref1.SetTabRel( sal_True );
+                aCRD.Ref2.SetTabRel( sal_True );
                 aCRD.Ref1.SetFlag3D( bRangeName );
                 aCRD.Ref2.SetFlag3D( bRangeName );
 
@@ -1123,7 +1123,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
             case 0x7A:
             case 0x3A: // 3-D Cell Reference                    [    275]
             {
-                UINT16          nIxti, nRw, nGrbitCol;
+                sal_uInt16          nIxti, nRw, nGrbitCol;
 
                 aIn >> nIxti >> nRw >> nGrbitCol;
 
@@ -1131,8 +1131,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 if( rLinkMan.GetScTabRange( nFirstScTab, nLastScTab, nIxti ) )
                 {
                     aSRD.nTab = nFirstScTab;
-                    aSRD.SetFlag3D( TRUE );
-                    aSRD.SetTabRel( FALSE );
+                    aSRD.SetFlag3D( sal_True );
+                    aSRD.SetTabRel( sal_False );
 
                     ExcRelToScRel8( nRw, nGrbitCol, aSRD, bRangeName );
 
@@ -1153,7 +1153,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
             case 0x7B:
             case 0x3B: // 3-D Area Reference                    [    276]
             {
-                UINT16          nIxti, nRw1, nGrbitCol1, nRw2, nGrbitCol2;
+                sal_uInt16          nIxti, nRw1, nGrbitCol1, nRw2, nGrbitCol2;
 
                 aIn >> nIxti >> nRw1 >> nRw2 >> nGrbitCol1 >> nGrbitCol2;
 
@@ -1165,10 +1165,10 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
 
                     rR1.nTab = nFirstScTab;
                     rR2.nTab = nLastScTab;
-                    rR1.SetFlag3D( TRUE );
-                    rR1.SetTabRel( FALSE );
+                    rR1.SetFlag3D( sal_True );
+                    rR1.SetTabRel( sal_False );
                     rR2.SetFlag3D( nFirstScTab != nLastScTab );
-                    rR2.SetTabRel( FALSE );
+                    rR2.SetTabRel( sal_False );
 
                     ExcRelToScRel8( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
                     ExcRelToScRel8( nRw2, nGrbitCol2, aCRD.Ref2, bRangeName );
@@ -1193,7 +1193,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 aIn.Ignore( 10 );
                 break;
             default:
-                bError = TRUE;
+                bError = sal_True;
         }
         bError |= !aIn.IsValid();
     }
@@ -1363,11 +1363,11 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
     return eRet;
 }
 
-void ExcelToSc8::ExcRelToScRel8( UINT16 nRow, UINT16 nC, ScSingleRefData &rSRD, const BOOL bName )
+void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData &rSRD, const sal_Bool bName )
 {
-    const BOOL      bColRel = ( nC & 0x4000 ) != 0;
-    const BOOL      bRowRel = ( nC & 0x8000 ) != 0;
-    const UINT8     nCol = static_cast<UINT8>(nC);
+    const sal_Bool      bColRel = ( nC & 0x4000 ) != 0;
+    const sal_Bool      bRowRel = ( nC & 0x8000 ) != 0;
+    const sal_uInt8     nCol = static_cast<sal_uInt8>(nC);
 
     rSRD.SetColRel( bColRel );
     rSRD.SetRowRel( bRowRel );
@@ -1377,7 +1377,7 @@ void ExcelToSc8::ExcRelToScRel8( UINT16 nRow, UINT16 nC, ScSingleRefData &rSRD, 
         // C O L
         if( bColRel )
             //                                                          rel Col
-            rSRD.nRelCol = static_cast<SCsCOL>(static_cast<INT8>(nC));
+            rSRD.nRelCol = static_cast<SCsCOL>(static_cast<sal_Int8>(nC));
         else
             //                                                          abs Col
             rSRD.nCol = static_cast<SCCOL>(nCol);
@@ -1385,7 +1385,7 @@ void ExcelToSc8::ExcRelToScRel8( UINT16 nRow, UINT16 nC, ScSingleRefData &rSRD, 
         // R O W
         if( bRowRel )
             //                                                          rel Row
-            rSRD.nRelRow = static_cast<SCsROW>(static_cast<INT16>(nRow));
+            rSRD.nRelRow = static_cast<SCsROW>(static_cast<sal_Int16>(nRow));
         else
             //                                                          abs Row
             rSRD.nRow = Min( static_cast<SCROW>(nRow), MAXROW);
@@ -1418,12 +1418,12 @@ void ExcelToSc8::ExcRelToScRel8( UINT16 nRow, UINT16 nC, ScSingleRefData &rSRD, 
 
 
 // stream seeks to first byte after <nLen>
-BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
+sal_Bool ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
 {
-    UINT8                   nOp;
-    UINT16                  nRow1, nRow2, nCol1, nCol2;
+    sal_uInt8                   nOp;
+    sal_uInt16                  nRow1, nRow2, nCol1, nCol2;
     SCTAB                                   nTab1, nTab2;
-    UINT16                  nIxti;
+    sal_uInt16                  nIxti;
 
     sal_Size nSeek;
 
@@ -1563,7 +1563,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
                 break;
             case 0x17: // String Constant                       [314 266]
             {
-                UINT8 nStrLen;
+                sal_uInt8 nStrLen;
                 aIn >> nStrLen;
                 aIn.IgnoreUniString( nStrLen );     // reads Grbit even if nLen==0
                 nSeek = 0;
@@ -1571,8 +1571,8 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
                 break;
             case 0x19: // Special Attribute                     [327 279]
             {
-                UINT16  nData;
-                UINT8   nOpt;
+                sal_uInt16  nData;
+                sal_uInt8   nOpt;
                 aIn >> nOpt >> nData;
                 if( nOpt & 0x04 )
                 {// nFakt -> Bytes oder Words ueberlesen    AttrChoose

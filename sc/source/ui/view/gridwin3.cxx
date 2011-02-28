@@ -53,9 +53,9 @@
 
 // -----------------------------------------------------------------------
 
-BOOL ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
     if (pDraw && !pViewData->IsRefMode())
     {
@@ -64,7 +64,7 @@ BOOL ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
         if ( pDraw->IsDetectiveHit( aLogicPos ) )
         {
             //  auf Detektiv-Pfeilen gar nichts (Doppelklick wird bei ButtonUp ausgewertet)
-            bRet = TRUE;
+            bRet = sal_True;
         }
         else
         {
@@ -80,15 +80,15 @@ BOOL ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
     if ( pDrView && !rMEvt.IsLeft() && !bRet )
     {
         pDrView->BrkAction();
-        bRet = TRUE;
+        bRet = sal_True;
     }
     return bRet;
 }
 
-BOOL ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
 {
     ScViewFunc* pView = pViewData->GetView();
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     FuPoor* pDraw = pView->GetDrawFuncPtr();
     if (pDraw && !pViewData->IsRefMode())
     {
@@ -102,7 +102,7 @@ BOOL ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
             ScDrawView* pDrView = pViewData->GetScDrawView();
             if ( pDrView )
             {
-                BOOL bReplaceAll = TRUE;
+                sal_Bool bReplaceAll = sal_True;
                 pDrView->SetAttrToMarked(*pDrawBrush, bReplaceAll);
             }
 
@@ -114,13 +114,13 @@ BOOL ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
     return bRet;
 }
 
-BOOL ScGridWindow::DrawMouseMove(const MouseEvent& rMEvt)
+sal_Bool ScGridWindow::DrawMouseMove(const MouseEvent& rMEvt)
 {
     FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
     if (pDraw && !pViewData->IsRefMode())
     {
         pDraw->SetWindow( this );
-        BOOL bRet = pDraw->MouseMove( rMEvt );
+        sal_Bool bRet = pDraw->MouseMove( rMEvt );
         if ( bRet )
             UpdateStatusPosSize();
         return bRet;
@@ -128,7 +128,7 @@ BOOL ScGridWindow::DrawMouseMove(const MouseEvent& rMEvt)
     else
     {
         SetPointer( Pointer( POINTER_ARROW ) );
-        return FALSE;
+        return sal_False;
     }
 }
 
@@ -145,44 +145,44 @@ void ScGridWindow::DrawEndAction()
     //  ReleaseMouse beim Aufruf
 }
 
-BOOL ScGridWindow::DrawCommand(const CommandEvent& rCEvt)
+sal_Bool ScGridWindow::DrawCommand(const CommandEvent& rCEvt)
 {
     ScDrawView* pDrView = pViewData->GetScDrawView();
     FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
     if (pDrView && pDraw && !pViewData->IsRefMode())
     {
         pDraw->SetWindow( this );
-        BYTE nUsed = pDraw->Command( rCEvt );
+        sal_uInt8 nUsed = pDraw->Command( rCEvt );
         if( nUsed == SC_CMD_USED )
             nButtonDown = 0;                    // MouseButtonUp wird verschluckt...
         if( nUsed || pDrView->IsAction() )
-            return TRUE;
+            return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
-BOOL ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
+sal_Bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
 {
     ScDrawView* pDrView = pViewData->GetScDrawView();
     FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
     if (pDrView && pDraw && !pViewData->IsRefMode())
     {
         pDraw->SetWindow( this );
-        BOOL bOldMarked = pDrView->AreObjectsMarked();
+        sal_Bool bOldMarked = pDrView->AreObjectsMarked();
         if (pDraw->KeyInput( rKEvt ))
         {
-            BOOL bLeaveDraw = FALSE;
-            BOOL bUsed = TRUE;
-            BOOL bNewMarked = pDrView->AreObjectsMarked();
+            sal_Bool bLeaveDraw = sal_False;
+            sal_Bool bUsed = sal_True;
+            sal_Bool bNewMarked = pDrView->AreObjectsMarked();
             if ( !pViewData->GetView()->IsDrawSelMode() )
                 if ( !bNewMarked )
                 {
-                    pViewData->GetViewShell()->SetDrawShell( FALSE );
-                    bLeaveDraw = TRUE;
+                    pViewData->GetViewShell()->SetDrawShell( sal_False );
+                    bLeaveDraw = sal_True;
                     if ( !bOldMarked &&
                         rKEvt.GetKeyCode().GetCode() == KEY_DELETE )
-                        bUsed = FALSE;                  // nichts geloescht
+                        bUsed = sal_False;                  // nichts geloescht
                 }
             if (!bLeaveDraw)
                 UpdateStatusPosSize();      // #108137# for moving/resizing etc. by keyboard
@@ -190,10 +190,10 @@ BOOL ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
         }
     }
 
-    return FALSE;
+    return sal_False;
 }
 
-void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, ULONG nLayer )
+void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, sal_uLong nLayer )
 {
     // #109985#
     const ScViewOptions& rOpts = pViewData->GetOptions();
@@ -244,11 +244,11 @@ void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pCo
     }
 }
 
-MapMode ScGridWindow::GetDrawMapMode( BOOL bForce )
+MapMode ScGridWindow::GetDrawMapMode( sal_Bool bForce )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+    sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
 
     MapMode aDrawMode = pViewData->GetLogicMode();
 
@@ -286,11 +286,11 @@ MapMode ScGridWindow::GetDrawMapMode( BOOL bForce )
     return aDrawMode;
 }
 
-//BOOL ScGridWindow::DrawBeforeScroll()
+//sal_Bool ScGridWindow::DrawBeforeScroll()
 //{
 //  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
 //
-//  BOOL bXor = FALSE;
+//  sal_Bool bXor = sal_False;
 //  if (pDrView)
 //  {
 //      bXor=pDrView->IsShownXorVisible(this);
@@ -299,7 +299,7 @@ MapMode ScGridWindow::GetDrawMapMode( BOOL bForce )
 //  return bXor;
 //}
 
-void ScGridWindow::DrawAfterScroll(/*BOOL bVal*/)
+void ScGridWindow::DrawAfterScroll(/*sal_Bool bVal*/)
 {
     Update();       // immer, damit das Verhalten mit/ohne DrawingLayer gleich ist
 
@@ -311,7 +311,7 @@ void ScGridWindow::DrawAfterScroll(/*BOOL bVal*/)
 
         OutlinerView* pOlView = pDrView->GetTextEditOutlinerView();
         if (pOlView && pOlView->GetWindow() == this)
-            pOlView->ShowCursor(FALSE);                 // ist beim Scrollen weggekommen
+            pOlView->ShowCursor(sal_False);                 // ist beim Scrollen weggekommen
     }
 }
 
@@ -322,7 +322,7 @@ void ScGridWindow::DrawAfterScroll(/*BOOL bVal*/)
 //      pDrView->DrawMarks(this);
 //}
 
-//BOOL ScGridWindow::NeedDrawMarks()
+//sal_Bool ScGridWindow::NeedDrawMarks()
 //{
 //  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
 //  return pDrView && pDrView->IsMarkHdlShown() && pDrView->AreObjectsMarked();
@@ -336,8 +336,8 @@ void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddres
         const ScViewOptions& rOpts = pViewData->GetOptions();
         if(rOpts.GetOption( VOPT_ANCHOR ))
         {
-            BOOL bNegativePage = pViewData->GetDocument()->IsNegativePage( pViewData->GetTabNo() );
-            Point aPos = pViewData->GetScrPos( rAddress.Col(), rAddress.Row(), eWhich, TRUE );
+            sal_Bool bNegativePage = pViewData->GetDocument()->IsNegativePage( pViewData->GetTabNo() );
+            Point aPos = pViewData->GetScrPos( rAddress.Col(), rAddress.Row(), eWhich, sal_True );
             aPos = PixelToLogic(aPos);
             rHdl.AddHdl(new SdrHdl(aPos, bNegativePage ? HDL_ANCHOR_TR : HDL_ANCHOR));
         }
@@ -374,7 +374,7 @@ void ScGridWindow::UpdateStatusPosSize()
     //  position and size of selected object(s) if something is selected,
     //  mouse position otherwise
 
-    BOOL bActionItem = FALSE;
+    sal_Bool bActionItem = sal_False;
     if ( pDrView->IsAction() )              // action rectangle
     {
         Rectangle aRect;
@@ -385,7 +385,7 @@ void ScGridWindow::UpdateStatusPosSize()
             aSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
                     Size( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() ) ) );
-            bActionItem = TRUE;
+            bActionItem = sal_True;
         }
     }
     if ( !bActionItem )
@@ -410,10 +410,10 @@ void ScGridWindow::UpdateStatusPosSize()
     pViewData->GetBindings().SetState(aSet);
 }
 
-BOOL ScGridWindow::DrawHasMarkedObj()
+sal_Bool ScGridWindow::DrawHasMarkedObj()
 {
     ScDrawView* p = pViewData->GetScDrawView();
-    return p ? p->AreObjectsMarked() : FALSE;
+    return p ? p->AreObjectsMarked() : sal_False;
 }
 
 //void ScGridWindow::DrawStartTimer()
@@ -422,7 +422,7 @@ BOOL ScGridWindow::DrawHasMarkedObj()
     //if (pDrView)
     //{
         /* jetzt in DrawMarks
-        USHORT nWinNum = pDrView->FindWin(this);
+        sal_uInt16 nWinNum = pDrView->FindWin(this);
         if (nWinNum!=SDRVIEWWIN_NOTFOUND)
             pDrView->AfterInitRedraw(nWinNum);
         */

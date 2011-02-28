@@ -40,11 +40,11 @@ class ScPreview : public Window
 private:
                                         // eingestellt:
     long            nPageNo;            // Seite im Dokument
-    USHORT          nZoom;              // eingestellter Zoom
+    sal_uInt16          nZoom;              // eingestellter Zoom
     Point           aOffset;            // positiv
 
                                         // berechnet:
-    BOOL            bValid;             // folgende Werte gueltig
+    sal_Bool            bValid;             // folgende Werte gueltig
     SCTAB           nTabCount;
     SCTAB           nTabsTested;        // fuer wieviele Tabellen ist nPages gueltig?
     long            nPages[MAXTABCOUNT];
@@ -57,8 +57,8 @@ private:
     Time            aTime;
     long            nTotalPages;
     Size            aPageSize;          // fuer GetOptimalZoom
-    BOOL            bStateValid;
-    BOOL            bLocationValid;
+    sal_Bool            bStateValid;
+    sal_Bool            bLocationValid;
     ScPrintState    aState;
     ScPreviewLocationData* pLocationData;   // stores table layout for accessibility API
     FmFormView*     pDrawView;
@@ -66,25 +66,25 @@ private:
                                         // intern:
     bool            bInPaint;
     bool            bInSetZoom;
-    BOOL            bInGetState;
+    sal_Bool        bInGetState;
     ScDocShell*     pDocShell;
     ScPreviewShell* pViewShell;
 
-    BOOL            bLeftRulerMove;
-    BOOL            bRightRulerMove;
-    BOOL            bTopRulerMove;
-    BOOL            bBottomRulerMove;
-    BOOL            bHeaderRulerMove;
-    BOOL            bFooterRulerMove;
+    sal_Bool            bLeftRulerMove;
+    sal_Bool            bRightRulerMove;
+    sal_Bool            bTopRulerMove;
+    sal_Bool            bBottomRulerMove;
+    sal_Bool            bHeaderRulerMove;
+    sal_Bool            bFooterRulerMove;
 
-    BOOL            bLeftRulerChange;
-    BOOL            bRightRulerChange;
-    BOOL            bTopRulerChange;
-    BOOL            bBottomRulerChange;
-    BOOL            bHeaderRulerChange;
-    BOOL            bFooterRulerChange;
-    BOOL            bPageMargin;
-    BOOL            bColRulerMove;
+    sal_Bool            bLeftRulerChange;
+    sal_Bool            bRightRulerChange;
+    sal_Bool            bTopRulerChange;
+    sal_Bool            bBottomRulerChange;
+    sal_Bool            bHeaderRulerChange;
+    sal_Bool            bFooterRulerChange;
+    sal_Bool            bPageMargin;
+    sal_Bool            bColRulerMove;
     ScRange         aPageArea;
     long            nRight[ MAXCOL+1 ];
     long            nLeftPosition;
@@ -102,7 +102,7 @@ private:
     void    UpdateDrawView();
     void    DoPrint( ScPreviewLocationData* pFillLocation );
 
-    void    InvalidateLocationData( ULONG nId );
+    void    InvalidateLocationData( sal_uLong nId );
 
     using Window::SetZoom;
 
@@ -125,18 +125,18 @@ public:
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
-    void    DataChanged(BOOL bNewTime = FALSE);             // statt Invalidate rufen
+    void    DataChanged(sal_Bool bNewTime = sal_False);             // statt Invalidate rufen
     void    DoInvalidate();
 
     void    SetXOffset( long nX );
     void    SetYOffset( long nY );
-    void    SetZoom(USHORT nNewZoom);
+    void    SetZoom(sal_uInt16 nNewZoom);
     void    SetPageNo( long nPage );
 
-    BOOL    GetPageMargins()const { return bPageMargin; }
-    void    SetPageMargins( BOOL bVal )  { bPageMargin = bVal; }
-    void    DrawInvert( long nDragPos, USHORT nFlags );
-    void    DragMove( long nDragMovePos, USHORT nFlags );
+    sal_Bool    GetPageMargins()const { return bPageMargin; }
+    void    SetPageMargins( sal_Bool bVal )  { bPageMargin = bVal; }
+    void    DrawInvert( long nDragPos, sal_uInt16 nFlags );
+    void    DragMove( long nDragMovePos, sal_uInt16 nFlags );
 
 
     const ScPreviewLocationData& GetLocationData();
@@ -144,19 +144,19 @@ public:
     String  GetPosString();
 
     long    GetPageNo() const   { return nPageNo; }
-    USHORT  GetZoom() const     { return nZoom; }
+    sal_uInt16  GetZoom() const     { return nZoom; }
     Point   GetOffset() const   { return aOffset; }
 
     SCTAB   GetTab()            { if (!bValid) { CalcPages(0); RecalcPages(); } return nTab; }
     long    GetTotalPages()     { if (!bValid) { CalcPages(0); RecalcPages(); } return nTotalPages; }
 
-    BOOL    AllTested() const   { return bValid && nTabsTested >= nTabCount; }
+    sal_Bool    AllTested() const   { return bValid && nTabsTested >= nTabCount; }
 
-    USHORT  GetOptimalZoom(BOOL bWidthOnly);
+    sal_uInt16  GetOptimalZoom(sal_Bool bWidthOnly);
     long    GetFirstPage(SCTAB nTab);
 
     void    CalcAll()           { CalcPages(MAXTAB); }
-    void    SetInGetState(BOOL bSet) { bInGetState = bSet; }
+    void    SetInGetState(sal_Bool bSet) { bInGetState = bSet; }
 
     DECL_STATIC_LINK( ScPreview, InvalidateHdl, void* );
     static void StaticInvalidate();

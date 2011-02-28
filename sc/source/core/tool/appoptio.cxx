@@ -53,7 +53,7 @@ using namespace com::sun::star::uno;
 
 // STATIC DATA -----------------------------------------------------------
 
-#define SC_VERSION ((USHORT)304)
+#define SC_VERSION ((sal_uInt16)304)
 
 //========================================================================
 //      ScAppOptions - Applikations-Optionen
@@ -89,13 +89,13 @@ void ScAppOptions::SetDefaults()
 
     nZoom           = 100;
     eZoomType       = SVX_ZOOM_PERCENT;
-    bSynchronizeZoom = TRUE;
+    bSynchronizeZoom = sal_True;
     nStatusFunc     = SUBTOTAL_FUNC_SUM;
-    bAutoComplete   = TRUE;
-    bDetectiveAuto  = TRUE;
+    bAutoComplete   = sal_True;
+    bDetectiveAuto  = sal_True;
 
     delete [] pLRUList;
-    pLRUList = new USHORT[5];               // sinnvoll vorbelegen
+    pLRUList = new sal_uInt16[5];               // sinnvoll vorbelegen
     pLRUList[0] = SC_OPCODE_SUM;
     pLRUList[1] = SC_OPCODE_AVERAGE;
     pLRUList[2] = SC_OPCODE_MIN;
@@ -140,7 +140,7 @@ const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
 
 //------------------------------------------------------------------------
 
-void ScAppOptions::SetLRUFuncList( const USHORT* pList, const USHORT nCount )
+void ScAppOptions::SetLRUFuncList( const sal_uInt16* pList, const sal_uInt16 nCount )
 {
     delete [] pLRUList;
 
@@ -148,9 +148,9 @@ void ScAppOptions::SetLRUFuncList( const USHORT* pList, const USHORT nCount )
 
     if ( nLRUFuncCount > 0 )
     {
-        pLRUList = new USHORT[nLRUFuncCount];
+        pLRUList = new sal_uInt16[nLRUFuncCount];
 
-        for ( USHORT i=0; i<nLRUFuncCount; i++ )
+        for ( sal_uInt16 i=0; i<nLRUFuncCount; i++ )
             pLRUList[i] = pList[i];
     }
     else
@@ -170,11 +170,11 @@ void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
         if ( nCount < USHRT_MAX )
         {
             const sal_Int32* pArray = aSeq.getConstArray();
-            USHORT* pUShorts = new USHORT[nCount];
+            sal_uInt16* pUShorts = new sal_uInt16[nCount];
             for (long i=0; i<nCount; i++)
-                pUShorts[i] = (USHORT) pArray[i];
+                pUShorts[i] = (sal_uInt16) pArray[i];
 
-            rOpt.SetLRUFuncList( pUShorts, sal::static_int_cast<USHORT>(nCount) );
+            rOpt.SetLRUFuncList( pUShorts, sal::static_int_cast<sal_uInt16>(nCount) );
 
             delete[] pUShorts;
         }
@@ -184,7 +184,7 @@ void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
 void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
 {
     long nCount = rOpt.GetLRUFuncListCount();
-    USHORT* pUShorts = rOpt.GetLRUFuncList();
+    sal_uInt16* pUShorts = rOpt.GetLRUFuncList();
     if ( nCount && pUShorts )
     {
         Sequence<sal_Int32> aSeq( nCount );
@@ -208,7 +208,7 @@ void lcl_SetSortList( const Any& rValue )
 
         //  if setting is "default", keep default values from ScUserList ctor
         //! mark "default" in a safe way
-        BOOL bDefault = ( nCount == 1 &&
+        sal_Bool bDefault = ( nCount == 1 &&
                         pArray[0].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "NULL" ) ) );
 
         if (!bDefault)
@@ -236,7 +236,7 @@ void lcl_GetSortList( Any& rDest )
         Sequence<OUString> aSeq( nCount );
         OUString* pArray = aSeq.getArray();
         for (long i=0; i<nCount; i++)
-            pArray[i] = (*pUserList)[sal::static_int_cast<USHORT>(i)]->GetString();
+            pArray[i] = (*pUserList)[sal::static_int_cast<sal_uInt16>(i)]->GetString();
         rDest <<= aSeq;
     }
     else
@@ -419,10 +419,10 @@ ScAppCfg::ScAppCfg() :
                         if (pValues[nProp] >>= nIntVal) SetAppMetric( (FieldUnit) nIntVal );
                         break;
                     case SCLAYOUTOPT_STATUSBAR:
-                        if (pValues[nProp] >>= nIntVal) SetStatusFunc( (USHORT) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetStatusFunc( (sal_uInt16) nIntVal );
                         break;
                     case SCLAYOUTOPT_ZOOMVAL:
-                        if (pValues[nProp] >>= nIntVal) SetZoom( (USHORT) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetZoom( (sal_uInt16) nIntVal );
                         break;
                     case SCLAYOUTOPT_ZOOMTYPE:
                         if (pValues[nProp] >>= nIntVal) SetZoomType( (SvxZoomType) nIntVal );

@@ -151,7 +151,7 @@ static long lcl_pRoleListBoxTabs[] =
 void lcl_ShowChooserButton(
     ::chart::RangeSelectionButton & rChooserButton,
     Edit & rEditField,
-    BOOL bShow )
+    sal_Bool bShow )
 {
     if( rChooserButton.IsVisible() != bShow )
     {
@@ -169,8 +169,8 @@ void lcl_enableRangeChoosing( bool bEnable, Dialog * pDialog )
 {
     if( pDialog )
     {
-        pDialog->Show( bEnable ? FALSE : TRUE );
-        pDialog->SetModalInputMode( bEnable ? FALSE : TRUE );
+        pDialog->Show( bEnable ? sal_False : sal_True );
+        pDialog->SetModalInputMode( bEnable ? sal_False : sal_True );
     }
 }
 
@@ -359,6 +359,8 @@ DataSourceTabPage::DataSourceTabPage(
     if( m_apLB_SERIES->First())
         m_apLB_SERIES->Select( m_apLB_SERIES->First());
     m_apLB_SERIES->GrabFocus();
+    m_aBTN_UP.SetAccessibleName(String(SchResId(STR_BUTTON_UP)));
+    m_aBTN_DOWN.SetAccessibleName(String(SchResId(STR_BUTTON_DOWN)));
 }
 
 DataSourceTabPage::~DataSourceTabPage()
@@ -459,7 +461,7 @@ void DataSourceTabPage::updateControlsFromDialogModel()
 
 void DataSourceTabPage::fillSeriesListBox()
 {
-    m_apLB_SERIES->SetUpdateMode( FALSE );
+    m_apLB_SERIES->SetUpdateMode( sal_False );
 
     Reference< XDataSeries > xSelected;
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_apLB_SERIES->FirstSelected());
@@ -511,7 +513,7 @@ void DataSourceTabPage::fillSeriesListBox()
     if( bHasSelectedEntry && pSelectedEntry )
         m_apLB_SERIES->Select( pSelectedEntry );
 
-    m_apLB_SERIES->SetUpdateMode( TRUE );
+    m_apLB_SERIES->SetUpdateMode( sal_True );
 }
 
 void DataSourceTabPage::fillRoleListBox()
@@ -520,7 +522,7 @@ void DataSourceTabPage::fillRoleListBox()
     bool bHasSelectedEntry = (pSeriesEntry != 0);
 
     SvLBoxEntry * pRoleEntry =  m_aLB_ROLE.FirstSelected();
-    ULONG nRoleIndex = SAL_MAX_UINT32;
+    sal_uLong nRoleIndex = SAL_MAX_UINT32;
     if( pRoleEntry )
         nRoleIndex = m_aLB_ROLE.GetModel()->GetAbsPos( pRoleEntry );
 
@@ -533,7 +535,7 @@ void DataSourceTabPage::fillRoleListBox()
                 pSeriesEntry->m_xChartType ));
 
         // fill role list
-        m_aLB_ROLE.SetUpdateMode( FALSE );
+        m_aLB_ROLE.SetUpdateMode( sal_False );
         m_aLB_ROLE.Clear();
         m_aLB_ROLE.RemoveSelection();
 
@@ -551,7 +553,7 @@ void DataSourceTabPage::fillRoleListBox()
             m_aLB_ROLE.Select( m_aLB_ROLE.GetEntry( nRoleIndex ));
         }
 
-        m_aLB_ROLE.SetUpdateMode( TRUE );
+        m_aLB_ROLE.SetUpdateMode( sal_True );
     }
 }
 
@@ -578,7 +580,7 @@ void DataSourceTabPage::updateControlState()
 
     m_aFT_DATALABELS.Show(!bHasCategories);
     m_aFT_CATEGORIES.Show( bHasCategories);
-    BOOL bShowIB = bHasRangeChooser;
+    sal_Bool bShowIB = bHasRangeChooser;
     lcl_ShowChooserButton( m_aIMB_RANGE_CAT, m_aEDT_CATEGORIES, bShowIB );
 
     m_aFT_SERIES.Enable();

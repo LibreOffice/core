@@ -61,20 +61,20 @@ const sal_Unicode pKey1_0[]     = { '1', ',', '0', 0 };
 
 
 FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
-                        const CharSet eVon, UINT32 nDifOption )
+                        const CharSet eVon, sal_uInt32 nDifOption )
 {
     DifParser   aDifParser( rIn, nDifOption, *pDoc, eVon );
 
-    const BOOL  bPlain = aDifParser.IsPlain();
+    const sal_Bool  bPlain = aDifParser.IsPlain();
 
     SCTAB       nBaseTab = rInsPos.Tab();
 
     TOPIC       eTopic = T_UNKNOWN;
-    BOOL        bSyntErrWarn = FALSE;
-    BOOL        bOverflowWarn = FALSE;
+    sal_Bool        bSyntErrWarn = sal_False;
+    sal_Bool        bOverflowWarn = sal_False;
 
     String&     rData = aDifParser.aData;
-    BOOL        bData = FALSE;
+    sal_Bool        bData = sal_False;
 
     SCCOL       nNumCols = 0;
     SCROW       nNumRows = 0;
@@ -96,7 +96,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
             case T_TABLE:
             {
                 if( aDifParser.nVector != 0 || aDifParser.nVal != 1 )
-                    bSyntErrWarn = TRUE;
+                    bSyntErrWarn = sal_True;
                 if( bData )
                     pDoc->RenameTab( nBaseTab, rData );
             }
@@ -104,7 +104,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
             case T_VECTORS:
             {
                 if( aDifParser.nVector != 0 )
-                    bSyntErrWarn = TRUE;
+                    bSyntErrWarn = sal_True;
                 if( aDifParser.nVal > MAXCOL + 1 )
                     nNumCols = SCCOL_MAX;
                 else
@@ -114,7 +114,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
             case T_TUPLES:
             {
                 if( aDifParser.nVector != 0 )
-                    bSyntErrWarn = TRUE;
+                    bSyntErrWarn = sal_True;
                 if( aDifParser.nVal > MAXROW + 1 )
                     nNumRows = SCROW_MAX;
                 else
@@ -124,7 +124,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
             case T_DATA:
             {
                 if( aDifParser.nVector != 0 || aDifParser.nVal != 0 )
-                    bSyntErrWarn = TRUE;
+                    bSyntErrWarn = sal_True;
             }
                 break;
             case T_LABEL:
@@ -204,10 +204,10 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                             pCell = new ScStringCell( aTmp );
                         }
 
-                        pDoc->PutCell( nColCnt, nRowCnt, nBaseTab, pCell, ( BOOL ) TRUE );
+                        pDoc->PutCell( nColCnt, nRowCnt, nBaseTab, pCell, ( sal_Bool ) sal_True );
                     }
                     else
-                        bOverflowWarn = TRUE;
+                        bOverflowWarn = sal_True;
 
                     nColCnt++;
                     break;
@@ -220,11 +220,11 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                         if( rData.Len() > 0 )
                         {
                             pDoc->PutCell( nColCnt, nRowCnt, nBaseTab,
-                                ScBaseCell::CreateTextCell( rData, pDoc ), ( BOOL ) TRUE );
+                                ScBaseCell::CreateTextCell( rData, pDoc ), ( sal_Bool ) sal_True );
                         }
                     }
                     else
-                        bOverflowWarn = TRUE;
+                        bOverflowWarn = sal_True;
 
                     nColCnt++;
                     break;
@@ -254,7 +254,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 }
 
 
-DifParser::DifParser( SvStream& rNewIn, const UINT32 nOption, ScDocument& rDoc, CharSet e ) :
+DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rDoc, CharSet e ) :
     rIn( rNewIn )
 {
     eCharSet = e;
@@ -263,8 +263,7 @@ DifParser::DifParser( SvStream& rNewIn, const UINT32 nOption, ScDocument& rDoc, 
         DBG_ERRORFILE( "CharSet passed overrides and modifies StreamCharSet" );
         rIn.SetStreamCharSet( eCharSet );
     }
-    if ( eCharSet == RTL_TEXTENCODING_UNICODE )
-        rIn.StartReadingUnicodeText();
+    rIn.StartReadingUnicodeText( eCharSet );
 
     bPlain = ( nOption == SC_DIFOPT_PLAIN );
 
@@ -346,8 +345,8 @@ TOPIC DifParser::GetNextTopic( void )
             case S_START:
             {
                 const sal_Unicode*  pRef;
-                UINT16          nCnt = 0;
-                BOOL            bSearch = TRUE;
+                sal_uInt16          nCnt = 0;
+                sal_Bool            bSearch = sal_True;
 
                 pRef = ppKeys[ nCnt ];
 
@@ -356,14 +355,14 @@ TOPIC DifParser::GetNextTopic( void )
                     if( aLine == pRef )
                     {
                         eRet = pTopics[ nCnt ];
-                        bSearch = FALSE;
+                        bSearch = sal_False;
                     }
                     else
                     {
                         nCnt++;
                         pRef = ppKeys[ nCnt ];
                         if( !*pRef )
-                            bSearch = FALSE;
+                            bSearch = sal_False;
                     }
                 }
 
@@ -627,7 +626,7 @@ DATASET DifParser::GetNextDataset( void )
 }
 
 
-const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, UINT32& rRet )
+const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, sal_uInt32& rRet )
 {
     // eat leading whitespace, not specified, but seen in the wild
     while (*pStart == ' ' || *pStart == '\t')
@@ -636,7 +635,7 @@ const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, UINT32& rRe
     sal_Unicode     cAkt = *pStart;
 
     if( IsNumber( cAkt ) )
-        rRet = ( UINT32 ) ( cAkt - '0' );
+        rRet = ( sal_uInt32 ) ( cAkt - '0' );
     else
         return NULL;
 
@@ -646,7 +645,7 @@ const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, UINT32& rRe
     while( IsNumber( cAkt ) && rRet < ( 0xFFFFFFFF / 10 ) )
     {
         rRet *= 10;
-        rRet += ( UINT32 ) ( cAkt - '0' );
+        rRet += ( sal_uInt32 ) ( cAkt - '0' );
 
         pStart++;
         cAkt = *pStart;
@@ -656,18 +655,18 @@ const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, UINT32& rRe
 }
 
 
-BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
+sal_Bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
     {
     double                  fNewVal = 0.0;
-    BOOL                    bNeg = FALSE;
+    sal_Bool                    bNeg = sal_False;
     double                  fFracPos = 1.0;
-    INT32                   nExp = 0;
-    BOOL                    bExpNeg = FALSE;
-    BOOL                    bExpOverflow = FALSE;
-    static const UINT16     nExpLimit = 4096;   // ACHTUNG: muss genauer ermittelt werden!
+    sal_Int32                   nExp = 0;
+    sal_Bool                    bExpNeg = sal_False;
+    sal_Bool                    bExpOverflow = sal_False;
+    static const sal_uInt16     nExpLimit = 4096;   // ACHTUNG: muss genauer ermittelt werden!
 
     sal_Unicode             cAkt;
-    BOOL                    bRet = FALSE;
+    sal_Bool                    bRet = sal_False;
 
     enum STATE { S_FIRST, S_PRE, S_POST, S_EXP_FIRST, S_EXP, S_END, S_FINDEND };
 
@@ -728,7 +727,7 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
                             eS = S_EXP;
                             break;
                         case 0x00:              // IsNumberEnding( cAkt )
-                            bRet = TRUE;        // no
+                            bRet = sal_True;        // no
                         default:                // break!
                             eS = S_END;
                     }
@@ -749,7 +748,7 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
                             eS = S_EXP_FIRST;
                             break;
                         case 0x00:              // IsNumberEnding( cAkt )
-                            bRet = TRUE;        // no
+                            bRet = sal_True;        // no
                         default:                // break!
                             eS = S_END;
                     }
@@ -761,7 +760,7 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
                     if( nExp < nExpLimit )
                     {
                         nExp *= 10;
-                        nExp += ( UINT16 ) ( cAkt - '0' );
+                        nExp += ( sal_uInt16 ) ( cAkt - '0' );
                     }
                     eS = S_EXP;
                 }
@@ -785,11 +784,11 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
                     if( nExp < ( 0xFFFF / 10 ) )
                     {
                         nExp *= 10;
-                        nExp += ( UINT16 ) ( cAkt - '0' );
+                        nExp += ( sal_uInt16 ) ( cAkt - '0' );
                     }
                     else
                     {
-                        bExpOverflow = TRUE;
+                        bExpOverflow = sal_True;
                         eS = S_FINDEND;
                     }
                 }
@@ -802,7 +801,7 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
             case S_FINDEND:
                 if( IsNumberEnding( cAkt ) )
                 {
-                    bRet = TRUE;        // damit sinnvoll weitergeparst werden kann
+                    bRet = sal_True;        // damit sinnvoll weitergeparst werden kann
                     eS = S_END;
                 }
                 break;
@@ -869,7 +868,7 @@ void DifColumn::SetLogical( SCROW nRow )
 }
 
 
-void DifColumn::SetNumFormat( SCROW nRow, const UINT32 nNumFormat )
+void DifColumn::SetNumFormat( SCROW nRow, const sal_uInt32 nNumFormat )
 {
     DBG_ASSERT( ValidRow(nRow), "*DifColumn::SetNumFormat(): Row zu gross!" );
 
@@ -895,7 +894,7 @@ void DifColumn::SetNumFormat( SCROW nRow, const UINT32 nNumFormat )
 }
 
 
-void DifColumn::NewEntry( const SCROW nPos, const UINT32 nNumFormat )
+void DifColumn::NewEntry( const SCROW nPos, const sal_uInt32 nNumFormat )
 {
     pAkt = new ENTRY;
     pAkt->nStart = pAkt->nEnd = nPos;
@@ -939,7 +938,7 @@ void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
 }
 
 
-DifAttrCache::DifAttrCache( const BOOL bNewPlain )
+DifAttrCache::DifAttrCache( const sal_Bool bNewPlain )
 {
     bPlain = bNewPlain;
     ppCols = new DifColumn *[ MAXCOL + 1 ];
@@ -958,7 +957,7 @@ DifAttrCache::~DifAttrCache()
 }
 
 
-void DifAttrCache::SetNumFormat( const SCCOL nCol, const SCROW nRow, const UINT32 nNumFormat )
+void DifAttrCache::SetNumFormat( const SCCOL nCol, const SCROW nRow, const sal_uInt32 nNumFormat )
 {
     DBG_ASSERT( ValidCol(nCol), "-DifAttrCache::SetNumFormat(): Col zu gross!" );
     DBG_ASSERT( !bPlain, "*DifAttrCache::SetNumFormat(): sollte nicht Plain sein!" );

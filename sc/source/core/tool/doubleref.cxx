@@ -68,8 +68,8 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
     if (pQueryRef->getColSize() < 4)
         return false;
 
-    BOOL bValid;
-    BOOL bFound;
+    sal_Bool bValid;
+    sal_Bool bFound;
     OUString aCellStr;
     SCSIZE nIndex = 0;
     SCROW nRow = 0;
@@ -81,7 +81,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
     {
         ScQueryEntry& rEntry = pParam->GetEntry(nIndex);
 
-        bValid = FALSE;
+        bValid = sal_False;
 
         if (nIndex > 0)
         {
@@ -91,19 +91,19 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
             if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_UND)) )
             {
                 rEntry.eConnect = SC_AND;
-                bValid = TRUE;
+                bValid = sal_True;
             }
             else if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_ODER)) )
             {
                 rEntry.eConnect = SC_OR;
-                bValid = TRUE;
+                bValid = sal_True;
             }
         }
 
         if ((nIndex < 1) || bValid)
         {
             // field name in the 2nd column.
-            bFound = FALSE;
+            bFound = sal_False;
             aCellStr = pQueryRef->getString(1, nRow);
             SCCOL nField = pDBRef->findFieldColumn(aCellStr); // TODO: must be case insensitive comparison.
             if (ValidCol(nField))
@@ -118,7 +118,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         if (bValid)
         {
             // equality, non-equality operator in the 3rd column.
-            bFound = FALSE;
+            bFound = sal_False;
             aCellStr = pQueryRef->getString(2, nRow);
             lcl_toUpper(aCellStr);
             const sal_Unicode* p = aCellStr.getStr();
@@ -147,7 +147,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         {
             // Finally, the right-hand-side value in the 4th column.
             *rEntry.pStr = pQueryRef->getString(3, nRow);
-            rEntry.bDoQuery = TRUE;
+            rEntry.bDoQuery = sal_True;
         }
         nIndex++;
         nRow++;
@@ -177,7 +177,7 @@ bool lcl_createExcelQuery(
 
     if (bValid)
     {
-//      ULONG nVisible = 0;
+//      sal_uLong nVisible = 0;
 //      for ( nCol=nCol1; nCol<=nCol2; nCol++ )
 //          nVisible += aCol[nCol].VisibleCount( nRow1+1, nRow2 );
 
@@ -214,7 +214,7 @@ bool lcl_createExcelQuery(
                             pParam->GetEntry(nIndex).eConnect = SC_AND;
                     }
                     else
-                        bValid = FALSE;
+                        bValid = sal_False;
                 }
                 nCol++;
             }
@@ -372,9 +372,9 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
     SCCOL nDBCol2 = e.Col();
 
     SCCOL   nField = nDBCol1;
-    BOOL    bFound = TRUE;
+    sal_Bool    bFound = sal_True;
 
-    bFound = FALSE;
+    bFound = sal_False;
     OUString aCellStr;
     ScAddress aLook( nDBCol1, nDBRow1, nDBTab1 );
     while (!bFound && (aLook.Col() <= nDBCol2))

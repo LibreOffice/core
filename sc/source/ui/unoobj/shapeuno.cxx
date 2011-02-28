@@ -102,7 +102,7 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
       pShapePropertySet(NULL),
       pShapePropertyState(NULL),
       pImplementationId(NULL),
-      bIsTextShape(FALSE),
+      bIsTextShape(false),
       bIsNoteCaption(false),
       bInitializedNotifier(false)
 {
@@ -254,22 +254,22 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo(
     return mxPropSetInfo;
 }
 
-BOOL lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
+sal_Bool lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
 {
-    USHORT nCount = rModel.GetPageCount();
-    for (USHORT i=0; i<nCount; i++)
+    sal_uInt16 nCount = rModel.GetPageCount();
+    for (sal_uInt16 i=0; i<nCount; i++)
         if ( rModel.GetPage(i) == pPage )
         {
             rNum = static_cast<SCTAB>(i);
-            return TRUE;
+            return sal_True;
         }
 
-    return FALSE;
+    return sal_False;
 }
 
-BOOL lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Point& rCaptionPoint )
+sal_Bool lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Point& rCaptionPoint )
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
     rtl::OUString sType(xShape->getShapeType());
     sal_Bool bCaptionShape(sType.equalsAscii("com.sun.star.drawing.CaptionShape"));
     if (bCaptionShape)
@@ -278,7 +278,7 @@ BOOL lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Point&
         if (xShapeProp.is())
         {
             xShapeProp->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" )) ) >>= rCaptionPoint;
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
     }
     return bReturn;
@@ -1400,7 +1400,7 @@ class ShapeUnoEventAccessImpl : public ShapeUnoEventAcess_BASE
 private:
     ScShapeObj* mpShape;
 
-    ScMacroInfo* getInfo( BOOL bCreate = FALSE )
+    ScMacroInfo* getInfo( sal_Bool bCreate = sal_False )
     {
         if( mpShape )
             if( SdrObject* pObj = mpShape->GetSdrObject() )
@@ -1440,7 +1440,7 @@ public:
                 rtl::OUString sValue;
                 if ( pProperties->Value >>= sValue )
                 {
-                    ScMacroInfo* pInfo = getInfo( TRUE );
+                    ScMacroInfo* pInfo = getInfo( sal_True );
                     DBG_ASSERT( pInfo, "shape macro info could not be created!" );
                     if ( !pInfo )
                         break;

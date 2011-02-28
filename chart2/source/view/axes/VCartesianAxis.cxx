@@ -36,11 +36,12 @@
 #include "macros.hxx"
 #include "ViewDefines.hxx"
 #include "PropertyMapper.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "LabelPositionHelper.hxx"
 #include "TrueGuard.hxx"
 #include "BaseGFXHelper.hxx"
 #include "AxisHelper.hxx"
+#include "Tickmarks_Equidistant.hxx"
 
 #include <rtl/math.hxx>
 #include <tools/color.hxx>
@@ -48,6 +49,8 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <editeng/unoprnms.hxx>
+#include <svx/unoshape.hxx>
+#include <svx/unoshtxt.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -110,7 +113,7 @@ Reference< drawing::XShape > createSingleLabel(
 
     //correctPositionForRotation
     LabelPositionHelper::correctPositionForRotation( xShape2DText
-        , rAxisProperties.m_aLabelAlignment, rAxisLabelProperties.fRotationAngleDegree, false );
+        , rAxisProperties.m_aLabelAlignment, rAxisLabelProperties.fRotationAngleDegree, rAxisProperties.m_bComplexCategories );
 
     return xShape2DText;
 }
@@ -176,7 +179,7 @@ void removeShapesAtWrongRhythm( TickIter& rIter
     }
 }
 
-class EquidistantLabelIterator : public EquidistantTickIter
+class LabelIterator : public TickIter
 {
     //this Iterator iterates over existing text labels
 
@@ -190,39 +193,36 @@ class EquidistantLabelIterator : public EquidistantTickIter
     //we iterate through all labels
 
 public:
-    EquidistantLabelIterator( ::std::vector< ::std::vector< TickInfo > >& rTickInfos
-            , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
+    LabelIterator( ::std::vector< TickInfo >& rTickInfoVector
             , const AxisLabelStaggering eAxisLabelStaggering
-            , bool bInnerLine
-            , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
+            , bool bInnerLine );
 
     virtual TickInfo*   firstInfo();
     virtual TickInfo*   nextInfo();
 
 private: //methods
-    EquidistantLabelIterator();
+    LabelIterator();
 
 private: //member
+    PureTickIter m_aPureTickIter;
     const AxisLabelStaggering   m_eAxisLabelStaggering;
-    bool        m_bInnerLine;
+    bool m_bInnerLine;
 };
 
-EquidistantLabelIterator::EquidistantLabelIterator( ::std::vector< ::std::vector< TickInfo > >& rTickInfos
-            , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
+LabelIterator::LabelIterator( ::std::vector< TickInfo >& rTickInfoVector
             , const AxisLabelStaggering eAxisLabelStaggering
-            , bool bInnerLine
-            , sal_Int32 nMinDepth, sal_Int32 nMaxDepth )
-            : EquidistantTickIter( rTickInfos, rIncrement, nMinDepth, nMaxDepth )
+            , bool bInnerLine )
+            : m_aPureTickIter( rTickInfoVector )
             , m_eAxisLabelStaggering(eAxisLabelStaggering)
             , m_bInnerLine(bInnerLine)
 {
 }
 
-TickInfo* EquidistantLabelIterator::firstInfo()
+TickInfo* LabelIterator::firstInfo()
 {
-    TickInfo* pTickInfo = EquidistantTickIter::firstInfo();
+    TickInfo* pTickInfo = m_aPureTickIter.firstInfo();
     while( pTickInfo && !pTickInfo->xTextShape.is() )
-        pTickInfo = EquidistantTickIter::nextInfo();
+        pTickInfo = m_aPureTickIter.nextInfo();
     if(!pTickInfo)
         return NULL;
     if( (STAGGER_EVEN==m_eAxisLabelStaggering && m_bInnerLine)
@@ -232,7 +232,7 @@ TickInfo* EquidistantLabelIterator::firstInfo()
     {
         //skip first label
         do
-            pTickInfo = EquidistantTickIter::nextInfo();
+            pTickInfo = m_aPureTickIter.nextInfo();
         while( pTickInfo && !pTickInfo->xTextShape.is() );
     }
     if(!pTickInfo)
@@ -240,12 +240,12 @@ TickInfo* EquidistantLabelIterator::firstInfo()
     return pTickInfo;
 }
 
-TickInfo* EquidistantLabelIterator::nextInfo()
+TickInfo* LabelIterator::nextInfo()
 {
     TickInfo* pTickInfo = NULL;
     //get next label
     do
-        pTickInfo = EquidistantTickIter::nextInfo();
+        pTickInfo = m_aPureTickIter.nextInfo();
     while( pTickInfo && !pTickInfo->xTextShape.is() );
 
     if(  STAGGER_EVEN==m_eAxisLabelStaggering
@@ -253,13 +253,13 @@ TickInfo* EquidistantLabelIterator::nextInfo()
     {
         //skip one label
         do
-            pTickInfo = EquidistantTickIter::nextInfo();
+            pTickInfo = m_aPureTickIter.nextInfo();
         while( pTickInfo && !pTickInfo->xTextShape.is() );
     }
     return pTickInfo;
 }
 
-B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTickToText )
+B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTickToText, double fRotationAngleDegree )
 {
     //calculates the height or width of a line of labels
     //thus a following line of labels can be shifted for that distance
@@ -282,7 +282,7 @@ B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTick
         xShape2DText = pTickInfo->xTextShape;
         if( xShape2DText.is() )
         {
-            awt::Size aSize  = xShape2DText->getSize();
+            awt::Size aSize = ShapeFactory::getSizeAfterRotation( xShape2DText, fRotationAngleDegree );
             if(fabs(aStaggerDirection.getX())>fabs(aStaggerDirection.getY()))
                 nDistance = ::std::max(nDistance,aSize.Width);
             else
@@ -319,64 +319,102 @@ void lcl_shiftLables( TickIter& rIter, const B2DVector& rStaggerDistance )
     }
 }
 
-class MaxLabelEquidistantTickIter : public EquidistantTickIter
+bool lcl_hasWordBreak( const Reference< drawing::XShape >& rxShape )
 {
-    //iterate over first two and last two labels and the longest label
-public:
-    MaxLabelEquidistantTickIter( ::std::vector< ::std::vector< TickInfo > >& rTickInfos
-            , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
-            , sal_Int32 nLongestLabelIndex );
-    virtual ~MaxLabelEquidistantTickIter();
-
-    virtual TickInfo*   nextInfo();
-
-private:
-    sal_Int32 m_nLongestLabelIndex;
-};
-
-MaxLabelEquidistantTickIter::MaxLabelEquidistantTickIter( ::std::vector< ::std::vector< TickInfo > >& rTickInfos
-            , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
-            , sal_Int32 nLongestLabelIndex )
-            : EquidistantTickIter( rTickInfos, rIncrement, 0//nMinDepth
-                                                , 0//nMaxDepth
-                                                )
-            , m_nLongestLabelIndex( nLongestLabelIndex )
-{
-    sal_Int32 nMaxIndex = getMaxIndex();
-
-    //ensure correct value:
-    if( m_nLongestLabelIndex<0 || m_nLongestLabelIndex>nMaxIndex)
-        m_nLongestLabelIndex = 0;
-
-    //last label is checked anyhow
-    if( m_nLongestLabelIndex==nMaxIndex )
-        m_nLongestLabelIndex = 0;
-    //label before last is checked anyhow
-    if( m_nLongestLabelIndex+1==nMaxIndex )
-        m_nLongestLabelIndex = 0;
-}
-MaxLabelEquidistantTickIter::~MaxLabelEquidistantTickIter()
-{
-}
-
-TickInfo* MaxLabelEquidistantTickIter::nextInfo()
-{
-    sal_Int32 nCurrentPos = getCurrentIndex();
-    sal_Int32 nMaxIndex = getMaxIndex();
-    if( nCurrentPos>0 )
+    if ( rxShape.is() )
     {
-        if( m_nLongestLabelIndex>1 && nCurrentPos<m_nLongestLabelIndex  )
-            gotoIndex( m_nLongestLabelIndex-1 ) ;
-        else
+        SvxShape* pShape = SvxShape::getImplementation( rxShape );
+        SvxShapeText* pShapeText = dynamic_cast< SvxShapeText* >( pShape );
+        if ( pShapeText )
         {
-            if( nMaxIndex>3 && nCurrentPos<nMaxIndex-1 )
-                gotoIndex( nMaxIndex-2 );
-            else if( nMaxIndex>2 && nCurrentPos<nMaxIndex )
-                gotoIndex( nMaxIndex-1 );
+            SvxTextEditSource* pTextEditSource = dynamic_cast< SvxTextEditSource* >( pShapeText->GetEditSource() );
+            if ( pTextEditSource )
+            {
+                pTextEditSource->UpdateOutliner();
+                SvxTextForwarder* pTextForwarder = pTextEditSource->GetTextForwarder();
+                if ( pTextForwarder )
+                {
+                    sal_uInt16 nParaCount = pTextForwarder->GetParagraphCount();
+                    for ( sal_uInt16 nPara = 0; nPara < nParaCount; ++nPara )
+                    {
+                        sal_uInt16 nLineCount = pTextForwarder->GetLineCount( nPara );
+                        for ( sal_uInt16 nLine = 0; nLine < nLineCount; ++nLine )
+                        {
+                            sal_uInt16 nLineStart = 0;
+                            sal_uInt16 nLineEnd = 0;
+                            pTextForwarder->GetLineBoundaries( nLineStart, nLineEnd, nPara, nLine );
+                            sal_uInt16 nWordStart = 0;
+                            sal_uInt16 nWordEnd = 0;
+                            if ( pTextForwarder->GetWordIndices( nPara, nLineStart, nWordStart, nWordEnd ) &&
+                                 ( nWordStart != nLineStart ) )
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
-    return EquidistantTickIter::nextInfo();
+    return false;
+}
+
+class MaxLabelTickIter : public TickIter
+{
+    //iterate over first two and last two labels and the longest label
+public:
+    MaxLabelTickIter( ::std::vector< TickInfo >& rTickInfoVector
+            , sal_Int32 nLongestLabelIndex );
+    virtual ~MaxLabelTickIter();
+
+    virtual TickInfo* firstInfo();
+    virtual TickInfo* nextInfo();
+
+private:
+    ::std::vector< TickInfo >& m_rTickInfoVector;
+    ::std::vector< sal_Int32 > m_aValidIndices;
+    sal_Int32 m_nCurrentIndex;
+};
+
+MaxLabelTickIter::MaxLabelTickIter( ::std::vector< TickInfo >& rTickInfoVector
+            , sal_Int32 nLongestLabelIndex )
+            : m_rTickInfoVector(rTickInfoVector)
+            , m_nCurrentIndex(0)
+{
+    sal_Int32 nMaxIndex = m_rTickInfoVector.size()-1;
+    if( nLongestLabelIndex<0 || nLongestLabelIndex>=nMaxIndex-1 )
+        nLongestLabelIndex = 0;
+
+    if( nMaxIndex>=0 )
+        m_aValidIndices.push_back(0);
+    if( nMaxIndex>=1 )
+        m_aValidIndices.push_back(1);
+    if( nLongestLabelIndex>1 )
+        m_aValidIndices.push_back(nLongestLabelIndex);
+    if( nMaxIndex > 2 )
+        m_aValidIndices.push_back(nMaxIndex-1);
+    if( nMaxIndex > 1 )
+        m_aValidIndices.push_back(nMaxIndex);
+}
+MaxLabelTickIter::~MaxLabelTickIter()
+{
+}
+
+TickInfo* MaxLabelTickIter::firstInfo()
+{
+    m_nCurrentIndex = 0;
+    if( m_nCurrentIndex < static_cast<sal_Int32>(m_aValidIndices.size()) )
+        return &m_rTickInfoVector[m_aValidIndices[m_nCurrentIndex]];
+    return 0;
+}
+
+TickInfo* MaxLabelTickIter::nextInfo()
+{
+    m_nCurrentIndex++;
+    if( m_nCurrentIndex>=0 && m_nCurrentIndex<static_cast<sal_Int32>(m_aValidIndices.size()) )
+        return &m_rTickInfoVector[m_aValidIndices[m_nCurrentIndex]];
+    return 0;
 }
 
 bool VCartesianAxis::isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties
@@ -446,27 +484,27 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::s
             std::vector< ComplexCategory >::const_iterator aEnd(aComplexCategories.end());
             for(;aIt!=aEnd;++aIt)
             {
-                TickInfo aTickInfo;
+                TickInfo aTickInfo(0);
                 ComplexCategory aCat(*aIt);
                 sal_Int32 nCount = aCat.Count;
-                if( nCatIndex + 0.5 + nCount >= m_aScale.Maximum )
+                if( nCatIndex + 1.0 + nCount >= m_aScale.Maximum )
                 {
-                    nCount = static_cast<sal_Int32>(m_aScale.Maximum - 0.5 - nCatIndex);
+                    nCount = static_cast<sal_Int32>(m_aScale.Maximum - 1.0 - nCatIndex);
                     if( nCount <= 0 )
                         nCount = 1;
                 }
-                aTickInfo.fScaledTickValue = nCatIndex + 0.5 + nCount/2.0;
+                aTickInfo.fScaledTickValue = nCatIndex + 1.0 + nCount/2.0;
                 aTickInfo.nFactorForLimitedTextWidth = nCount;
                 aTickInfo.aText = aCat.Text;
                 aTickInfoVector.push_back(aTickInfo);
                 nCatIndex += nCount;
-                if( nCatIndex + 0.5 >= m_aScale.Maximum )
+                if( nCatIndex + 1.0 >= m_aScale.Maximum )
                     break;
             }
             rAllTickInfos.push_back(aTickInfoVector);
         }
     }
-    else //bShiftedPosition==true
+    else //bShiftedPosition==false
     {
         rAllTickInfos.clear();
         sal_Int32 nLevel=0;
@@ -480,19 +518,19 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::s
             std::vector< ComplexCategory >::const_iterator aEnd(aComplexCategories.end());
             for(;aIt!=aEnd;++aIt)
             {
-                TickInfo aTickInfo;
+                TickInfo aTickInfo(0);
                 ComplexCategory aCat(*aIt);
-                aTickInfo.fScaledTickValue = nCatIndex + 0.5;
+                aTickInfo.fScaledTickValue = nCatIndex + 1.0;
                 aTickInfoVector.push_back(aTickInfo);
                 nCatIndex += aCat.Count;
-                if( nCatIndex + 0.5 > m_aScale.Maximum )
+                if( nCatIndex + 1.0 > m_aScale.Maximum )
                     break;
             }
             //fill up with single ticks until maximum scale
-            while( nCatIndex + 0.5 < m_aScale.Maximum )
+            while( nCatIndex + 1.0 < m_aScale.Maximum )
             {
-                TickInfo aTickInfo;
-                aTickInfo.fScaledTickValue = nCatIndex + 0.5;
+                TickInfo aTickInfo(0);
+                aTickInfo.fScaledTickValue = nCatIndex + 1.0;
                 aTickInfoVector.push_back(aTickInfo);
                 nCatIndex ++;
                 if( nLevel>0 )
@@ -500,7 +538,7 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::s
             }
             //add an additional tick at the end
             {
-                TickInfo aTickInfo;
+                TickInfo aTickInfo(0);
                 aTickInfo.fScaledTickValue = m_aScale.Maximum;
                 aTickInfoVector.push_back(aTickInfo);
             }
@@ -511,7 +549,7 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::s
 
 void VCartesianAxis::createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos )
 {
-    if( m_aAxisProperties.m_bComplexCategories && m_bUseTextLabels )
+    if( isComplexCategoryAxis() )
         createAllTickInfosFromComplexCategories( rAllTickInfos, false );
     else
         VAxisBase::createAllTickInfos(rAllTickInfos);
@@ -519,21 +557,13 @@ void VCartesianAxis::createAllTickInfos( ::std::vector< ::std::vector< TickInfo 
 
 ::std::auto_ptr< TickIter > VCartesianAxis::createLabelTickIterator( sal_Int32 nTextLevel )
 {
-    if( m_aAxisProperties.m_bComplexCategories && m_bUseTextLabels )
-    {
-        if( nTextLevel>=0 && nTextLevel < static_cast< sal_Int32 >(m_aAllTickInfos.size()) )
-            return ::std::auto_ptr< TickIter >( new PureTickIter( m_aAllTickInfos[nTextLevel] ) );
-    }
-    else
-    {
-        if(nTextLevel==0)
-            return ::std::auto_ptr< TickIter >( new EquidistantTickIter( m_aAllTickInfos, m_aIncrement, 0, 0 ) );
-    }
+    if( nTextLevel>=0 && nTextLevel < static_cast< sal_Int32 >(m_aAllTickInfos.size()) )
+        return ::std::auto_ptr< TickIter >( new PureTickIter( m_aAllTickInfos[nTextLevel] ) );
     return ::std::auto_ptr< TickIter >();
 }
 ::std::auto_ptr< TickIter > VCartesianAxis::createMaximumLabelTickIterator( sal_Int32 nTextLevel )
 {
-    if( m_aAxisProperties.m_bComplexCategories && m_bUseTextLabels )
+    if( isComplexCategoryAxis() || isDateAxis() )
     {
         return createLabelTickIterator( nTextLevel ); //mmmm maybe todo: create less than all texts here
     }
@@ -541,8 +571,11 @@ void VCartesianAxis::createAllTickInfos( ::std::vector< ::std::vector< TickInfo 
     {
         if(nTextLevel==0)
         {
-            sal_Int32 nLongestLabelIndex = m_bUseTextLabels ? this->getIndexOfLongestLabel( m_aTextLabels ) : 0;
-            return ::std::auto_ptr< TickIter >( new MaxLabelEquidistantTickIter( m_aAllTickInfos, m_aIncrement, nLongestLabelIndex ) );
+            if( !m_aAllTickInfos.empty() )
+            {
+                sal_Int32 nLongestLabelIndex = m_bUseTextLabels ? this->getIndexOfLongestLabel( m_aTextLabels ) : 0;
+                return ::std::auto_ptr< TickIter >( new MaxLabelTickIter( m_aAllTickInfos[0], nLongestLabelIndex ) );
+            }
         }
     }
     return ::std::auto_ptr< TickIter >();
@@ -551,7 +584,7 @@ void VCartesianAxis::createAllTickInfos( ::std::vector< ::std::vector< TickInfo 
 sal_Int32 VCartesianAxis::getTextLevelCount() const
 {
     sal_Int32 nTextLevelCount = 1;
-    if( m_aAxisProperties.m_bComplexCategories && m_bUseTextLabels )
+    if( isComplexCategoryAxis() )
         nTextLevelCount = m_aAxisProperties.m_pExplicitCategoriesProvider->getCategoryLevelCount();
     return nTextLevelCount;
 }
@@ -560,7 +593,7 @@ bool VCartesianAxis::createTextShapes(
                        const Reference< drawing::XShapes >& xTarget
                      , TickIter& rTickIter
                      , AxisLabelProperties& rAxisLabelProperties
-                     , TickmarkHelper_2D* pTickmarkHelper
+                     , TickFactory_2D* pTickFactory
                      , sal_Int32 nScreenDistanceBetweenTicks )
 {
     //returns true if the text shapes have been created succesfully
@@ -574,10 +607,10 @@ bool VCartesianAxis::createTextShapes(
     FixedNumberFormatter aFixedNumberFormatter(
                 m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
 
-    const bool bIsHorizontalAxis = pTickmarkHelper->isHorizontalAxis();
-    const bool bIsVerticalAxis = pTickmarkHelper->isVerticalAxis();
+    const bool bIsHorizontalAxis = pTickFactory->isHorizontalAxis();
+    const bool bIsVerticalAxis = pTickFactory->isVerticalAxis();
     bool bIsStaggered = rAxisLabelProperties.getIsStaggered();
-    B2DVector aTextToTickDistance( pTickmarkHelper->getDistanceAxisTickToText( m_aAxisProperties, true ) );
+    B2DVector aTextToTickDistance( pTickFactory->getDistanceAxisTickToText( m_aAxisProperties, true ) );
     sal_Int32 nLimitedSpaceForText = -1;
     if( isBreakOfLabelsAllowed( rAxisLabelProperties, bIsHorizontalAxis ) )
     {
@@ -673,7 +706,7 @@ bool VCartesianAxis::createTextShapes(
             }
         }
 
-        pTickInfo->updateUnscaledValue( xInverseScaling );
+        //xxxxx pTickInfo->updateUnscaledValue( xInverseScaling );
 
         bool bHasExtraColor=false;
         sal_Int32 nExtraColor=0;
@@ -681,7 +714,7 @@ bool VCartesianAxis::createTextShapes(
         rtl::OUString aLabel;
         if(pCategories)
         {
-            sal_Int32 nIndex = static_cast< sal_Int32 >(pTickInfo->fUnscaledTickValue) - 1; //first category (index 0) matches with real number 1.0
+            sal_Int32 nIndex = static_cast< sal_Int32 >(pTickInfo->getUnscaledTickValue()) - 1; //first category (index 0) matches with real number 1.0
             if( nIndex>=0 && nIndex<pCategories->getLength() )
                 aLabel = (*pCategories)[nIndex];
         }
@@ -690,7 +723,7 @@ bool VCartesianAxis::createTextShapes(
             aLabel = pTickInfo->aText;
         }
         else
-            aLabel = aFixedNumberFormatter.getFormattedString( pTickInfo->fUnscaledTickValue, nExtraColor, bHasExtraColor );
+            aLabel = aFixedNumberFormatter.getFormattedString( pTickInfo->getUnscaledTickValue(), nExtraColor, bHasExtraColor );
 
         if(pColorAny)
             *pColorAny = uno::makeAny(bHasExtraColor?nExtraColor:nColor);
@@ -714,10 +747,23 @@ bool VCartesianAxis::createTextShapes(
 
         recordMaximumTextSize( pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree );
 
+         //better rotate if single words are broken apart
+        if( nLimitedSpaceForText>0 && !rAxisLabelProperties.bOverlapAllowed
+                && ::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 )
+                && m_aAxisProperties.m_bComplexCategories
+                && lcl_hasWordBreak( pTickInfo->xTextShape ) )
+        {
+            rAxisLabelProperties.fRotationAngleDegree = 90;
+            rAxisLabelProperties.bLineBreakAllowed = false;
+            m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree;
+            removeTextShapesFromTicks();
+            return false;
+        }
+
         //if NO OVERLAP -> remove overlapping shapes
         if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
         {
-            if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, m_aAxisLabelProperties.fRotationAngleDegree ) )
+            if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree ) )
             {
                 bool bOverlapAlsoAfterSwitchingOnAutoStaggering = true;
                 if( !bIsStaggered && isAutoStaggeringOfLabelsAllowed( rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis ) )
@@ -1189,12 +1235,12 @@ void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, doub
     }
 }
 
-TickmarkHelper* VCartesianAxis::createTickmarkHelper()
+TickFactory* VCartesianAxis::createTickFactory()
 {
-    return createTickmarkHelper2D();
+    return createTickFactory2D();
 }
 
-TickmarkHelper_2D* VCartesianAxis::createTickmarkHelper2D()
+TickFactory_2D* VCartesianAxis::createTickFactory2D()
 {
     B2DVector aStart, aEnd;
     this->get2DAxisMainLine( aStart, aEnd, this->getLogicValueWhereMainLineCrossesOtherAxis() );
@@ -1202,7 +1248,7 @@ TickmarkHelper_2D* VCartesianAxis::createTickmarkHelper2D()
     B2DVector aLabelLineStart, aLabelLineEnd;
     this->get2DAxisMainLine( aLabelLineStart, aLabelLineEnd, this->getLogicValueWhereLabelLineCrossesOtherAxis() );
 
-    return new TickmarkHelper_2D( m_aScale, m_aIncrement, aStart, aEnd, aLabelLineStart-aStart );
+    return new TickFactory_2D( m_aScale, m_aIncrement, aStart, aEnd, aLabelLineStart-aStart );
 }
 
 void lcl_hideIdenticalScreenValues( TickIter& rTickIter )
@@ -1226,7 +1272,7 @@ void lcl_hideIdenticalScreenValues( TickIter& rTickIter )
 //'hide' tickmarks with identical screen values in aAllTickInfos
 void VCartesianAxis::hideIdenticalScreenValues( ::std::vector< ::std::vector< TickInfo > >& rTickInfos ) const
 {
-    if( m_aAxisProperties.m_bComplexCategories && m_bUseTextLabels )
+    if( isComplexCategoryAxis() || isDateAxis() )
     {
         sal_Int32 nCount = rTickInfos.size();
         for( sal_Int32 nN=0; nN<nCount; nN++ )
@@ -1272,12 +1318,12 @@ sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()
     return nRet;
 }
 
-void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties, TickmarkHelper_2D* pTickmarkHelper2D )
+void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties, TickFactory_2D* pTickFactory2D )
 {
-    if( !pTickmarkHelper2D )
+    if( !pTickFactory2D )
         return;
 
-    if( m_aAxisProperties.m_bComplexCategories && m_bUseTextLabels )
+    if( isComplexCategoryAxis() )
     {
         sal_Int32 nTextLevelCount = getTextLevelCount();
         B2DVector aCummulatedLabelsDistance(0,0);
@@ -1286,27 +1332,33 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
             ::std::auto_ptr< TickIter > apTickIter = createLabelTickIterator( nTextLevel );
             if(apTickIter.get())
             {
+                double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
                 if( nTextLevel>0 )
+                {
                     lcl_shiftLables( *apTickIter.get(), aCummulatedLabelsDistance );
+                    fRotationAngleDegree = 0.0;
+                }
                 aCummulatedLabelsDistance += lcl_getLabelsDistance( *apTickIter.get()
-                    , pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties ) );
+                    , pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties )
+                    , fRotationAngleDegree );
             }
         }
     }
     else if( rAxisLabelProperties.getIsStaggered() )
     {
-        EquidistantLabelIterator aInnerIter( m_aAllTickInfos, m_aIncrement
-            , rAxisLabelProperties.eStaggering, true, 0, 0 );
-        EquidistantLabelIterator aOuterIter( m_aAllTickInfos, m_aIncrement
-            , rAxisLabelProperties.eStaggering, false, 0, 0 );
+        if( !m_aAllTickInfos.empty() )
+        {
+            LabelIterator aInnerIter( m_aAllTickInfos[0], rAxisLabelProperties.eStaggering, true );
+            LabelIterator aOuterIter( m_aAllTickInfos[0], rAxisLabelProperties.eStaggering, false );
 
-        lcl_shiftLables( aOuterIter
-            , lcl_getLabelsDistance( aInnerIter
-                , pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties ) ) );
+            lcl_shiftLables( aOuterIter
+                , lcl_getLabelsDistance( aInnerIter
+                    , pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties ), 0.0 ) );
+        }
     }
 }
 
-void SAL_CALL VCartesianAxis::createLabels()
+void VCartesianAxis::createLabels()
 {
     if( !prepareShapeCreation() )
         return;
@@ -1315,14 +1367,14 @@ void SAL_CALL VCartesianAxis::createLabels()
     //create labels
     if( m_aAxisProperties.m_bDisplayLabels )
     {
-        std::auto_ptr< TickmarkHelper_2D > apTickmarkHelper2D( this->createTickmarkHelper2D() );
-        TickmarkHelper_2D* pTickmarkHelper2D = apTickmarkHelper2D.get();
-        if( !pTickmarkHelper2D )
+        std::auto_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
+        TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
+        if( !pTickFactory2D )
             return;
 
         //-----------------------------------------
         //get the transformed screen values for all tickmarks in aAllTickInfos
-        pTickmarkHelper2D->updateScreenValues( m_aAllTickInfos );
+        pTickFactory2D->updateScreenValues( m_aAllTickInfos );
         //-----------------------------------------
         //'hide' tickmarks with identical screen values in aAllTickInfos
         hideIdenticalScreenValues( m_aAllTickInfos );
@@ -1339,25 +1391,38 @@ void SAL_CALL VCartesianAxis::createLabels()
             {
                 if(nTextLevel==0)
                 {
-                    nScreenDistanceBetweenTicks = TickmarkHelper_2D::getTickScreenDistance( *apTickIter.get() );
+                    nScreenDistanceBetweenTicks = TickFactory_2D::getTickScreenDistance( *apTickIter.get() );
                     if( nTextLevelCount>1 )
                         nScreenDistanceBetweenTicks*=2; //the above used tick iter does contain also the sub ticks -> thus the given distance is only the half
                 }
 
-                AxisLabelProperties aCopy(m_aAxisLabelProperties);
-                aCopy.bRhythmIsFix = true;
-                aCopy.nRhythm = 1;
-                AxisLabelProperties& rAxisLabelProperties = nTextLevel==0 ? m_aAxisLabelProperties : aCopy;
-                while( !createTextShapes( m_xTextTarget, *apTickIter.get(), rAxisLabelProperties, pTickmarkHelper2D, nScreenDistanceBetweenTicks ) )
+                AxisLabelProperties aComplexProps(m_aAxisLabelProperties);
+                if( m_aAxisProperties.m_bComplexCategories )
+                {
+                    if( nTextLevel==0 )
+                    {
+                        aComplexProps.bLineBreakAllowed = true;
+                        aComplexProps.bOverlapAllowed = !::rtl::math::approxEqual( aComplexProps.fRotationAngleDegree, 0.0 );
+                    }
+                    else
+                    {
+                        aComplexProps.bOverlapAllowed = true;
+                        aComplexProps.bRhythmIsFix = true;
+                        aComplexProps.nRhythm = 1;
+                        aComplexProps.fRotationAngleDegree = 0.0;
+                    }
+                }
+                AxisLabelProperties& rAxisLabelProperties =  m_aAxisProperties.m_bComplexCategories ? aComplexProps : m_aAxisLabelProperties;
+                while( !createTextShapes( m_xTextTarget, *apTickIter.get(), rAxisLabelProperties, pTickFactory2D, nScreenDistanceBetweenTicks ) )
                 {
                 };
             }
         }
-        doStaggeringOfLabels( m_aAxisLabelProperties, pTickmarkHelper2D );
+        doStaggeringOfLabels( m_aAxisLabelProperties, pTickFactory2D );
     }
 }
 
-void SAL_CALL VCartesianAxis::createMaximumLabels()
+void VCartesianAxis::createMaximumLabels()
 {
     TrueGuard aRecordMaximumTextSize(m_bRecordMaximumTextSize);
 
@@ -1368,20 +1433,20 @@ void SAL_CALL VCartesianAxis::createMaximumLabels()
     //create labels
     if( m_aAxisProperties.m_bDisplayLabels )
     {
-        std::auto_ptr< TickmarkHelper_2D > apTickmarkHelper2D( this->createTickmarkHelper2D() );
-        TickmarkHelper_2D* pTickmarkHelper2D = apTickmarkHelper2D.get();
-        if( !pTickmarkHelper2D )
+        std::auto_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
+        TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
+        if( !pTickFactory2D )
             return;
 
         //-----------------------------------------
         //get the transformed screen values for all tickmarks in aAllTickInfos
-        pTickmarkHelper2D->updateScreenValues( m_aAllTickInfos );
+        pTickFactory2D->updateScreenValues( m_aAllTickInfos );
 
         //create tick mark text shapes
         //@todo: iterate through all tick depth wich should be labeled
 
         AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
-        if( isAutoStaggeringOfLabelsAllowed( aAxisLabelProperties, pTickmarkHelper2D->isHorizontalAxis(), pTickmarkHelper2D->isVerticalAxis() ) )
+        if( isAutoStaggeringOfLabelsAllowed( aAxisLabelProperties, pTickFactory2D->isHorizontalAxis(), pTickFactory2D->isVerticalAxis() ) )
             aAxisLabelProperties.eStaggering = STAGGER_EVEN;
         aAxisLabelProperties.bOverlapAllowed = true;
         aAxisLabelProperties.bLineBreakAllowed = false;
@@ -1391,33 +1456,33 @@ void SAL_CALL VCartesianAxis::createMaximumLabels()
             ::std::auto_ptr< TickIter > apTickIter = createMaximumLabelTickIterator( nTextLevel );
             if(apTickIter.get())
             {
-                while( !createTextShapes( m_xTextTarget, *apTickIter.get(), aAxisLabelProperties, pTickmarkHelper2D, -1 ) )
+                while( !createTextShapes( m_xTextTarget, *apTickIter.get(), aAxisLabelProperties, pTickFactory2D, -1 ) )
                 {
                 };
             }
         }
-        doStaggeringOfLabels( aAxisLabelProperties, pTickmarkHelper2D );
+        doStaggeringOfLabels( aAxisLabelProperties, pTickFactory2D );
     }
 }
 
-void SAL_CALL VCartesianAxis::updatePositions()
+void VCartesianAxis::updatePositions()
 {
     //-----------------------------------------
     //update positions of labels
     if( m_aAxisProperties.m_bDisplayLabels )
     {
-        std::auto_ptr< TickmarkHelper_2D > apTickmarkHelper2D( this->createTickmarkHelper2D() );
-        TickmarkHelper_2D* pTickmarkHelper2D = apTickmarkHelper2D.get();
-        if( !pTickmarkHelper2D )
+        std::auto_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
+        TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
+        if( !pTickFactory2D )
             return;
 
         //-----------------------------------------
         //update positions of all existing text shapes
-        pTickmarkHelper2D->updateScreenValues( m_aAllTickInfos );
+        pTickFactory2D->updateScreenValues( m_aAllTickInfos );
 
         ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter = m_aAllTickInfos.begin();
         const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = m_aAllTickInfos.end();
-        for( ; aDepthIter != aDepthEnd; aDepthIter++ )
+        for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd; aDepthIter++, nDepth++ )
         {
             ::std::vector< TickInfo >::iterator aTickIter = aDepthIter->begin();
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = aDepthIter->end();
@@ -1427,15 +1492,19 @@ void SAL_CALL VCartesianAxis::updatePositions()
                 Reference< drawing::XShape > xShape2DText( rTickInfo.xTextShape );
                 if( xShape2DText.is() )
                 {
-                    B2DVector aTextToTickDistance( pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties, true ) );
+                    B2DVector aTextToTickDistance( pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties, true ) );
                     B2DVector aTickScreenPos2D( rTickInfo.aTickScreenPosition );
                     aTickScreenPos2D += aTextToTickDistance;
                     awt::Point aAnchorScreenPosition2D(
                         static_cast<sal_Int32>(aTickScreenPos2D.getX())
                         ,static_cast<sal_Int32>(aTickScreenPos2D.getY()));
 
+                    double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
+                    if( nDepth>0 )
+                        fRotationAngleDegree = 0.0;
+
                     // #i78696# use mathematically correct rotation now
-                    const double fRotationAnglePi(m_aAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
+                    const double fRotationAnglePi(fRotationAngleDegree * (F_PI / -180.0));
                     uno::Any aATransformation = ShapeFactory::makeTransformation(aAnchorScreenPosition2D, fRotationAnglePi);
 
                     //set new position
@@ -1454,16 +1523,16 @@ void SAL_CALL VCartesianAxis::updatePositions()
 
                     //correctPositionForRotation
                     LabelPositionHelper::correctPositionForRotation( xShape2DText
-                        , m_aAxisProperties.m_aLabelAlignment, m_aAxisLabelProperties.fRotationAngleDegree, false );
+                        , m_aAxisProperties.m_aLabelAlignment, fRotationAngleDegree, m_aAxisProperties.m_bComplexCategories );
                 }
             }
         }
 
-        doStaggeringOfLabels( m_aAxisLabelProperties, pTickmarkHelper2D );
+        doStaggeringOfLabels( m_aAxisLabelProperties, pTickFactory2D );
     }
 }
 
-void VCartesianAxis::createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickmarkHelper_2D& rTickmarkHelper2D, bool bOnlyAtLabels )
+void VCartesianAxis::createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory_2D& rTickFactory2D, bool bOnlyAtLabels )
 {
     sal_Int32 nPointCount = rTickInfos.size();
     drawing::PointSequenceSequence aPoints(2*nPointCount);
@@ -1482,11 +1551,11 @@ void VCartesianAxis::createTickMarkLineShapes( ::std::vector< TickInfo >& rTickI
             fInnerDirectionSign *= -1.0;
         bTicksAtLabels = bTicksAtLabels || bOnlyAtLabels;
         //add ticks at labels:
-        rTickmarkHelper2D.addPointSequenceForTickLine( aPoints, nN++, (*aTickIter).fScaledTickValue
+        rTickFactory2D.addPointSequenceForTickLine( aPoints, nN++, (*aTickIter).fScaledTickValue
             , fInnerDirectionSign , rTickmarkProperties, bTicksAtLabels );
         //add ticks at axis (without lables):
         if( !bOnlyAtLabels && m_aAxisProperties.m_eTickmarkPos == ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS )
-            rTickmarkHelper2D.addPointSequenceForTickLine( aPoints, nN++, (*aTickIter).fScaledTickValue
+            rTickFactory2D.addPointSequenceForTickLine( aPoints, nN++, (*aTickIter).fScaledTickValue
                 , m_aAxisProperties.m_fInnerDirectionSign, rTickmarkProperties, !bTicksAtLabels );
     }
     aPoints.realloc(nN);
@@ -1494,14 +1563,14 @@ void VCartesianAxis::createTickMarkLineShapes( ::std::vector< TickInfo >& rTickI
                                 , &rTickmarkProperties.aLineProperties );
 }
 
-void SAL_CALL VCartesianAxis::createShapes()
+void VCartesianAxis::createShapes()
 {
     if( !prepareShapeCreation() )
         return;
 
-    std::auto_ptr< TickmarkHelper_2D > apTickmarkHelper2D( this->createTickmarkHelper2D() );
-    TickmarkHelper_2D* pTickmarkHelper2D = apTickmarkHelper2D.get();
-    if( !pTickmarkHelper2D )
+    std::auto_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
+    TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
+    if( !pTickFactory2D )
         return;
 
     //-----------------------------------------
@@ -1510,23 +1579,26 @@ void SAL_CALL VCartesianAxis::createShapes()
     {
         //-----------------------------------------
         //create extra long ticks to separate complex categories (create them only there where the labels are)
-        if( m_aAxisProperties.m_bComplexCategories && m_bUseTextLabels )
+        if( isComplexCategoryAxis() )
         {
             ::std::vector< ::std::vector< TickInfo > > aComplexTickInfos;
             createAllTickInfosFromComplexCategories( aComplexTickInfos, true );
-            pTickmarkHelper2D->updateScreenValues( aComplexTickInfos );
+            pTickFactory2D->updateScreenValues( aComplexTickInfos );
             hideIdenticalScreenValues( aComplexTickInfos );
 
             ::std::vector<TickmarkProperties> aTickmarkPropertiesList;
             static bool bIncludeSpaceBetweenTickAndText = false;
-            sal_Int32 nOffset = static_cast<sal_Int32>(pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties, false, bIncludeSpaceBetweenTickAndText ).getLength());
+            sal_Int32 nOffset = static_cast<sal_Int32>(pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties, false, bIncludeSpaceBetweenTickAndText ).getLength());
             sal_Int32 nTextLevelCount = getTextLevelCount();
             for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
             {
                 ::std::auto_ptr< TickIter > apTickIter = createLabelTickIterator( nTextLevel );
                 if( apTickIter.get() )
                 {
-                    B2DVector aLabelsDistance( lcl_getLabelsDistance( *apTickIter.get(), pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties, false ) ) );
+                    double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
+                    if( nTextLevel>0 )
+                        fRotationAngleDegree = 0.0;
+                    B2DVector aLabelsDistance( lcl_getLabelsDistance( *apTickIter.get(), pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties, false ), fRotationAngleDegree ) );
                     sal_Int32 nCurrentLength = static_cast<sal_Int32>(aLabelsDistance.getLength());
                     aTickmarkPropertiesList.push_back( m_aAxisProperties.makeTickmarkPropertiesForComplexCategories( nOffset + nCurrentLength, 0, nTextLevel ) );
                     nOffset += nCurrentLength;
@@ -1540,20 +1612,20 @@ void SAL_CALL VCartesianAxis::createShapes()
             {
                 if(nDepth==0 && !m_aAxisProperties.m_nMajorTickmarks)
                     continue;
-                createTickMarkLineShapes( *aDepthIter, aTickmarkPropertiesList[nDepth], *pTickmarkHelper2D, true /*bOnlyAtLabels*/ );
+                createTickMarkLineShapes( *aDepthIter, aTickmarkPropertiesList[nDepth], *pTickFactory2D, true /*bOnlyAtLabels*/ );
             }
         }
         //-----------------------------------------
         //create normal ticks for major and minor intervals
         {
-            ::std::vector< ::std::vector< TickInfo > > aAllShiftedTickInfos;
-            if( m_aIncrement.ShiftedPosition || ( m_aAxisProperties.m_bComplexCategories && m_bUseTextLabels ) )
+            ::std::vector< ::std::vector< TickInfo > > aUnshiftedTickInfos;
+            if( m_aScale.ShiftedCategoryPosition )// if ShiftedCategoryPosition==true the tickmarks in m_aAllTickInfos are shifted
             {
-                pTickmarkHelper2D->getAllTicksShifted( aAllShiftedTickInfos );
-                pTickmarkHelper2D->updateScreenValues( aAllShiftedTickInfos );
-                hideIdenticalScreenValues( aAllShiftedTickInfos );
+                pTickFactory2D->getAllTicks( aUnshiftedTickInfos );
+                pTickFactory2D->updateScreenValues( aUnshiftedTickInfos );
+                hideIdenticalScreenValues( aUnshiftedTickInfos );
             }
-            ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos = m_aIncrement.ShiftedPosition ? aAllShiftedTickInfos : m_aAllTickInfos;
+            ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos = m_aScale.ShiftedCategoryPosition ? aUnshiftedTickInfos : m_aAllTickInfos;
 
             ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = rAllTickInfos.begin();
             const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = rAllTickInfos.end();
@@ -1562,14 +1634,14 @@ void SAL_CALL VCartesianAxis::createShapes()
 
             sal_Int32 nTickmarkPropertiesCount = m_aAxisProperties.m_aTickmarkPropertiesList.size();
             for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; aDepthIter++, nDepth++ )
-                createTickMarkLineShapes( *aDepthIter, m_aAxisProperties.m_aTickmarkPropertiesList[nDepth], *pTickmarkHelper2D, false /*bOnlyAtLabels*/ );
+                createTickMarkLineShapes( *aDepthIter, m_aAxisProperties.m_aTickmarkPropertiesList[nDepth], *pTickFactory2D, false /*bOnlyAtLabels*/ );
         }
         //-----------------------------------------
         //create axis main lines
         //it serves also as the handle shape for the axis selection
         {
             drawing::PointSequenceSequence aPoints(1);
-            apTickmarkHelper2D->createPointSequenceForAxisMainLine( aPoints );
+            apTickFactory2D->createPointSequenceForAxisMainLine( aPoints );
             Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
                     m_xGroupShape_Shapes, aPoints
                     , &m_aAxisProperties.m_aLineProperties );

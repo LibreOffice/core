@@ -147,7 +147,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     // ab Biff8
     pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc( GetRoot() );
 
-    bTabTruncated = FALSE;
+    bTabTruncated = sal_False;
 
     // Excel-Dokument per Default auf 31.12.1899, entspricht Excel-Einstellungen mit 1.1.1900
     ScDocOptions aOpt = pD->GetDocOptions();
@@ -156,9 +156,9 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     pD->GetFormatTable()->ChangeNullDate( 30, 12, 1899 );
 
     ScDocOptions aDocOpt( pD->GetDocOptions() );
-    aDocOpt.SetIgnoreCase( TRUE );              // always in Excel
-    aDocOpt.SetFormulaRegexEnabled( FALSE );    // regular expressions? what's that?
-    aDocOpt.SetLookUpColRowNames( FALSE );      // default: no natural language refs
+    aDocOpt.SetIgnoreCase( sal_True );              // always in Excel
+    aDocOpt.SetFormulaRegexEnabled( sal_False );    // regular expressions? what's that?
+    aDocOpt.SetLookUpColRowNames( sal_False );      // default: no natural language refs
     pD->SetDocOptions( aDocOpt );
 }
 
@@ -183,7 +183,7 @@ void ImportExcel::ReadFileSharing()
     if( (nRecommendReadOnly != 0) || (nPasswordHash != 0) )
     {
         if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
-            pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, TRUE ) );
+            pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
 
         if( SfxObjectShell* pShell = GetDocShell() )
         {
@@ -407,7 +407,7 @@ void ImportExcel::Window1()
 
 void ImportExcel::Row25( void )
 {
-    UINT16  nRow, nRowHeight;
+    sal_uInt16  nRow, nRowHeight;
 
     aIn >> nRow;
     aIn.Ignore( 4 );   // Mic und Mac ueberspringen
@@ -423,7 +423,7 @@ void ImportExcel::Row25( void )
         }
         else
         {// -------------------- BIFF5
-            UINT16  nGrbit;
+            sal_uInt16  nGrbit;
 
             aIn.Ignore( 2 );   // reserved
             aIn >> nGrbit;
@@ -492,8 +492,8 @@ void ImportExcel:: WinProtection( void )
 
 void ImportExcel::Columndefault( void )
 {// Default Cell Attributes
-    UINT16  nColMic, nColMac;
-    BYTE    nOpt0;
+    sal_uInt16  nColMic, nColMac;
+    sal_uInt8   nOpt0;
 
     aIn >> nColMic >> nColMac;
 
@@ -503,9 +503,9 @@ void ImportExcel::Columndefault( void )
     nColMac--;
 
     if( nColMac > MAXCOL )
-        nColMac = static_cast<UINT16>(MAXCOL);
+        nColMac = static_cast<sal_uInt16>(MAXCOL);
 
-    for( UINT16 nCol = nColMic ; nCol <= nColMac ; nCol++ )
+    for( sal_uInt16 nCol = nColMic ; nCol <= nColMac ; nCol++ )
     {
         aIn >> nOpt0;
         aIn.Ignore( 2 );   // nur 0. Attribut-Byte benutzt
@@ -518,8 +518,8 @@ void ImportExcel::Columndefault( void )
 
 void ImportExcel::Array25( void )
 {
-    UINT16      nFirstRow, nLastRow, nFormLen;
-    BYTE        nFirstCol, nLastCol;
+    sal_uInt16      nFirstRow, nLastRow, nFormLen;
+    sal_uInt8       nFirstCol, nLastCol;
 
     aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
 
@@ -557,7 +557,7 @@ void ImportExcel::Array25( void )
 
 void ImportExcel::Rec1904( void )
 {
-    UINT16  n1904;
+    sal_uInt16  n1904;
 
     aIn >> n1904;
 
@@ -573,12 +573,12 @@ void ImportExcel::Rec1904( void )
 
 void ImportExcel::Externname25( void )
 {
-    UINT32      nRes;
-    UINT16      nOpt;
+    sal_uInt32      nRes;
+    sal_uInt16      nOpt;
 
     aIn >> nOpt >> nRes;
 
-    String aName( aIn.ReadByteString( FALSE ) );
+    String aName( aIn.ReadByteString( sal_False ) );
 
     if( ( nOpt & 0x0001 ) || ( ( nOpt & 0xFFFE ) == 0x0000 ) )
     {// external name
@@ -598,16 +598,16 @@ void ImportExcel::Externname25( void )
 
 void ImportExcel::Colwidth( void )
 {// Column Width
-    BYTE    nColFirst, nColLast;
-    UINT16  nColWidth;
+    sal_uInt8   nColFirst, nColLast;
+    sal_uInt16  nColWidth;
 
     aIn >> nColFirst >> nColLast >> nColWidth;
 
 //! TODO: add a check for the unlikely case of changed MAXCOL (-> XclImpAddressConverter)
 //   if( nColLast > MAXCOL )
-//       nColLast = static_cast<UINT16>(MAXCOL);
+//       nColLast = static_cast<sal_uInt16>(MAXCOL);
 
-    USHORT nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
+    sal_uInt16 nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
     pColRowBuff->SetWidthRange( nColFirst, nColLast, nScWidth );
 }
 
@@ -666,7 +666,7 @@ void ImportExcel::DefColWidth( void )
     long nFontHt = GetFontBuffer().GetAppFontData().mnHeight;
     fDefWidth += XclTools::GetXclDefColWidthCorrection( nFontHt );
 
-    USHORT nScWidth = XclTools::GetScColumnWidth( limit_cast< sal_uInt16 >( fDefWidth ), GetCharWidth() );
+    sal_uInt16 nScWidth = XclTools::GetScColumnWidth( limit_cast< sal_uInt16 >( fDefWidth ), GetCharWidth() );
     pColRowBuff->SetDefWidth( nScWidth );
 }
 
@@ -678,8 +678,8 @@ void ImportExcel::Builtinfmtcnt( void )
 
 void ImportExcel::Colinfo( void )
 {// Column Formatting Information
-    UINT16  nColFirst, nColLast, nColWidth, nXF;
-    UINT16  nOpt;
+    sal_uInt16  nColFirst, nColLast, nColWidth, nXF;
+    sal_uInt16  nOpt;
 
     aIn >> nColFirst >> nColLast >> nColWidth >> nXF >> nOpt;
 
@@ -687,7 +687,7 @@ void ImportExcel::Colinfo( void )
         return;
 
     if( nColLast > MAXCOL )
-        nColLast = static_cast<UINT16>(MAXCOL);
+        nColLast = static_cast<sal_uInt16>(MAXCOL);
 
     bool bHidden = ::get_flag( nOpt, EXC_COLINFO_HIDDEN );
     bool bCollapsed = ::get_flag( nOpt, EXC_COLINFO_COLLAPSED );
@@ -697,7 +697,7 @@ void ImportExcel::Colinfo( void )
     if( bHidden )
         pColRowBuff->HideColRange( nColFirst, nColLast );
 
-    USHORT nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
+    sal_uInt16 nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
     pColRowBuff->SetWidthRange( nColFirst, nColLast, nScWidth );
     pColRowBuff->SetDefaultXF( nColFirst, nColLast, nXF );
 }
@@ -705,7 +705,7 @@ void ImportExcel::Colinfo( void )
 
 void ImportExcel::Wsbool( void )
 {
-    UINT16 nFlags;
+    sal_uInt16 nFlags;
     aIn >> nFlags;
 
     pRowOutlineBuff->SetButtonMode( ::get_flag( nFlags, EXC_WSBOOL_ROWBELOW ) );
@@ -717,7 +717,7 @@ void ImportExcel::Wsbool( void )
 
 void ImportExcel::Boundsheet( void )
 {
-    UINT16 nGrbit = 0;
+    sal_uInt16 nGrbit = 0;
 
     if( GetBiff() == EXC_BIFF5 )
     {
@@ -727,7 +727,7 @@ void ImportExcel::Boundsheet( void )
         aIn >> nGrbit;
     }
 
-    String aName( aIn.ReadByteString( FALSE ) );
+    String aName( aIn.ReadByteString( sal_False ) );
 
     SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
     if( nScTab > 0 )
@@ -737,7 +737,7 @@ void ImportExcel::Boundsheet( void )
     }
 
     if( ( nGrbit & 0x0001 ) || ( nGrbit & 0x0002 ) )
-        pD->SetVisible( nScTab, FALSE );
+        pD->SetVisible( nScTab, sal_False );
 
     if( !pD->RenameTab( nScTab, aName ) )
     {
@@ -771,7 +771,7 @@ void ImportExcel::ReadUsesElfs()
     if( maStrm.ReaduInt16() != 0 )
     {
         ScDocOptions aDocOpt = GetDoc().GetDocOptions();
-        aDocOpt.SetLookUpColRowNames( TRUE );
+        aDocOpt.SetLookUpColRowNames( sal_True );
         GetDoc().SetDocOptions( aDocOpt );
     }
 }
@@ -779,7 +779,7 @@ void ImportExcel::ReadUsesElfs()
 
 void ImportExcel::Hideobj( void )
 {
-    UINT16      nHide;
+    sal_uInt16      nHide;
     ScVObjMode  eOle, eChart, eDraw;
 
     aIn >> nHide;
@@ -820,15 +820,15 @@ void ImportExcel::Bundleheader( void )
 
 void ImportExcel::Standardwidth( void )
 {
-    USHORT nScWidth = XclTools::GetScColumnWidth( maStrm.ReaduInt16(), GetCharWidth() );
-    pColRowBuff->SetDefWidth( nScWidth, TRUE );
+    sal_uInt16 nScWidth = XclTools::GetScColumnWidth( maStrm.ReaduInt16(), GetCharWidth() );
+    pColRowBuff->SetDefWidth( nScWidth, sal_True );
 }
 
 
 void ImportExcel::Shrfmla( void )
 {
-    UINT16              nFirstRow, nLastRow, nLenExpr;
-    BYTE                nFirstCol, nLastCol;
+    sal_uInt16              nFirstRow, nLastRow, nLenExpr;
+    sal_uInt8               nFirstCol, nLastCol;
 
     aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
     aIn.Ignore( 2 );
@@ -854,8 +854,8 @@ void ImportExcel::Shrfmla( void )
 void ImportExcel::Mulrk( void )
 {
     XclAddress aXclPos;
-    UINT16  nXF;
-    INT32   nRkNum;
+    sal_uInt16  nXF;
+    sal_Int32   nRkNum;
 
     aIn >> aXclPos;
 
@@ -876,7 +876,7 @@ void ImportExcel::Mulrk( void )
 void ImportExcel::Mulblank( void )
 {
     XclAddress aXclPos;
-    UINT16  nXF;
+    sal_uInt16  nXF;
 
     aIn >> aXclPos;
 
@@ -952,7 +952,7 @@ void ImportExcel::Olesize( void )
 
 void ImportExcel::Row34( void )
 {
-    UINT16  nRow, nRowHeight, nGrbit, nXF;
+    sal_uInt16  nRow, nRowHeight, nGrbit, nXF;
 
     aIn >> nRow;
     aIn.Ignore( 4 );   // Mic und Mac ueberspringen
@@ -999,8 +999,8 @@ void ImportExcel::Bof3( void )
 
 void ImportExcel::Array34( void )
 {
-    UINT16                  nFirstRow, nLastRow, nFormLen;
-    BYTE                    nFirstCol, nLastCol;
+    sal_uInt16                  nFirstRow, nLastRow, nFormLen;
+    sal_uInt8                   nFirstCol, nLastCol;
 
     aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
     aIn.Ignore( (GetBiff() >= EXC_BIFF5) ? 6 : 2 );
@@ -1042,10 +1042,10 @@ void ImportExcel::Defrowheight345( void )
 
 void ImportExcel::TableOp( void )
 {
-    UINT16 nFirstRow, nLastRow;
-    UINT8 nFirstCol, nLastCol;
-    UINT16 nGrbit;
-    UINT16 nInpRow, nInpCol, nInpRow2, nInpCol2;
+    sal_uInt16 nFirstRow, nLastRow;
+    sal_uInt8 nFirstCol, nLastCol;
+    sal_uInt16 nGrbit;
+    sal_uInt16 nInpRow, nInpCol, nInpRow2, nInpCol2;
 
     aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol >> nGrbit
         >> nInpRow >> nInpCol >> nInpRow2 >> nInpCol2;
@@ -1056,50 +1056,50 @@ void ImportExcel::TableOp( void )
         {
             ScTabOpParam aTabOpParam;
             aTabOpParam.nMode = (nGrbit & EXC_TABLEOP_BOTH) ? 2 : ((nGrbit & EXC_TABLEOP_ROW) ? 1 : 0 );
-            USHORT nCol = nFirstCol - 1;
-            USHORT nRow = nFirstRow - 1;
+            sal_uInt16 nCol = nFirstCol - 1;
+            sal_uInt16 nRow = nFirstRow - 1;
             SCTAB nTab = GetCurrScTab();
             switch( aTabOpParam.nMode )
             {
                 case 0:     // COL
                     aTabOpParam.aRefFormulaCell.Set(
                             static_cast<SCCOL>(nFirstCol),
-                            static_cast<SCROW>(nFirstRow - 1), nTab, FALSE,
-                            FALSE, FALSE );
+                            static_cast<SCROW>(nFirstRow - 1), nTab, sal_False,
+                            sal_False, sal_False );
                     aTabOpParam.aRefFormulaEnd.Set(
                             static_cast<SCCOL>(nLastCol),
-                            static_cast<SCROW>(nFirstRow - 1), nTab, FALSE,
-                            FALSE, FALSE );
+                            static_cast<SCROW>(nFirstRow - 1), nTab, sal_False,
+                            sal_False, sal_False );
                     aTabOpParam.aRefColCell.Set( static_cast<SCCOL>(nInpCol),
-                            static_cast<SCROW>(nInpRow), nTab, FALSE, FALSE,
-                            FALSE );
+                            static_cast<SCROW>(nInpRow), nTab, sal_False, sal_False,
+                            sal_False );
                     nRow++;
                 break;
                 case 1:     // ROW
                     aTabOpParam.aRefFormulaCell.Set(
                             static_cast<SCCOL>(nFirstCol - 1),
-                            static_cast<SCROW>(nFirstRow), nTab, FALSE, FALSE,
-                            FALSE );
+                            static_cast<SCROW>(nFirstRow), nTab, sal_False, sal_False,
+                            sal_False );
                     aTabOpParam.aRefFormulaEnd.Set(
                             static_cast<SCCOL>(nFirstCol - 1),
-                            static_cast<SCROW>(nLastRow), nTab, FALSE, FALSE,
-                            FALSE );
+                            static_cast<SCROW>(nLastRow), nTab, sal_False, sal_False,
+                            sal_False );
                     aTabOpParam.aRefRowCell.Set( static_cast<SCCOL>(nInpCol),
-                            static_cast<SCROW>(nInpRow), nTab, FALSE, FALSE,
-                            FALSE );
+                            static_cast<SCROW>(nInpRow), nTab, sal_False, sal_False,
+                            sal_False );
                     nCol++;
                 break;
                 case 2:     // TWO-INPUT
                     aTabOpParam.aRefFormulaCell.Set(
                             static_cast<SCCOL>(nFirstCol - 1),
-                            static_cast<SCROW>(nFirstRow - 1), nTab, FALSE,
-                            FALSE, FALSE );
+                            static_cast<SCROW>(nFirstRow - 1), nTab, sal_False,
+                            sal_False, sal_False );
                     aTabOpParam.aRefRowCell.Set( static_cast<SCCOL>(nInpCol),
-                            static_cast<SCROW>(nInpRow), nTab, FALSE, FALSE,
-                            FALSE );
+                            static_cast<SCROW>(nInpRow), nTab, sal_False, sal_False,
+                            sal_False );
                     aTabOpParam.aRefColCell.Set( static_cast<SCCOL>(nInpCol2),
-                            static_cast<SCROW>(nInpRow2), nTab, FALSE, FALSE,
-                            FALSE );
+                            static_cast<SCROW>(nInpRow2), nTab, sal_False, sal_False,
+                            sal_False );
                 break;
             }
 
@@ -1112,7 +1112,7 @@ void ImportExcel::TableOp( void )
     }
     else
     {
-        bTabTruncated = TRUE;
+        bTabTruncated = sal_True;
         GetTracer().TraceInvalidRow(GetCurrScTab(), nLastRow, MAXROW);
     }
 }
@@ -1139,7 +1139,7 @@ void ImportExcel::Bof4( void )
 void ImportExcel::Bof5( void )
 {
     //POST: eDateiTyp = Typ der zu lesenden Datei
-    UINT16      nSubType, nVers;
+    sal_uInt16      nSubType, nVers;
     BiffTyp     eDatei;
 
     maStrm.DisableDecryption();
@@ -1195,7 +1195,7 @@ void ImportExcel::NeueTabelle( void )
 }
 
 
-const ScTokenArray* ImportExcel::ErrorToFormula( BYTE bErrOrVal, BYTE nError, double& rVal )
+const ScTokenArray* ImportExcel::ErrorToFormula( sal_uInt8 bErrOrVal, sal_uInt8 nError, double& rVal )
 {
     return pFormConv->GetBoolErr( XclTools::ErrorToEnum( rVal, bErrOrVal, nError ) );
 }
@@ -1278,7 +1278,7 @@ void ImportExcel::PostDocLoad( void )
     {
         for( SCTAB n = 0 ; n < nLast ; n++ )
         {
-            p = pExcRoot->pPrintRanges->First( static_cast<UINT16>(n) );
+            p = pExcRoot->pPrintRanges->First( static_cast<sal_uInt16>(n) );
             if( p )
             {
                 DBG_ASSERT( pExcRoot->pPrintRanges->GetActList(),
@@ -1304,27 +1304,27 @@ void ImportExcel::PostDocLoad( void )
     {
         for( SCTAB n = 0 ; n < nLast ; n++ )
         {
-            p = pExcRoot->pPrintTitles->First( static_cast<UINT16>(n) );
+            p = pExcRoot->pPrintTitles->First( static_cast<sal_uInt16>(n) );
             if( p )
             {
                 DBG_ASSERT( pExcRoot->pPrintTitles->GetActList(),
                     "-ImportExcel::PostDocLoad(): Imaginaere Tabelle gefunden!" );
 
-                BOOL    bRowVirgin = TRUE;
-                BOOL    bColVirgin = TRUE;
+                sal_Bool    bRowVirgin = sal_True;
+                sal_Bool    bColVirgin = sal_True;
 
                 while( p )
                 {
                     if( p->aStart.Col() == 0 && p->aEnd.Col() == MAXCOL && bRowVirgin )
                     {
                         pD->SetRepeatRowRange( n, p );
-                        bRowVirgin = FALSE;
+                        bRowVirgin = sal_False;
                     }
 
                     if( p->aStart.Row() == 0 && p->aEnd.Row() == MAXROW && bColVirgin )
                     {
                         pD->SetRepeatColRange( n, p );
-                        bColVirgin = FALSE;
+                        bColVirgin = sal_False;
                     }
 
                     p = pExcRoot->pPrintTitles->Next();
@@ -1349,10 +1349,10 @@ XclImpOutlineDataBuffer::~XclImpOutlineDataBuffer()
 
 void XclImpOutlineDataBuffer::Convert()
 {
-    mxColOutlineBuff->SetOutlineArray( GetDoc().GetOutlineTable( mnScTab, TRUE )->GetColArray() );
+    mxColOutlineBuff->SetOutlineArray( GetDoc().GetOutlineTable( mnScTab, sal_True )->GetColArray() );
     mxColOutlineBuff->MakeScOutline();
 
-    mxRowOutlineBuff->SetOutlineArray( GetDoc().GetOutlineTable( mnScTab, TRUE )->GetRowArray() );
+    mxRowOutlineBuff->SetOutlineArray( GetDoc().GetOutlineTable( mnScTab, sal_True )->GetRowArray() );
     mxRowOutlineBuff->MakeScOutline();
 
     mxColRowBuff->ConvertHiddenFlags( mnScTab );

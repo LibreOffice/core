@@ -31,21 +31,11 @@
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _MOREBTN_HXX
 #include <vcl/morebtn.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svx/checklbx.hxx>
@@ -67,8 +57,8 @@ class ScDPFunctionListBox : public MultiListBox
 public:
     explicit            ScDPFunctionListBox( Window* pParent, const ResId& rResId );
 
-    void                SetSelection( USHORT nFuncMask );
-    USHORT              GetSelection() const;
+    void                SetSelection( sal_uInt16 nFuncMask );
+    sal_uInt16              GetSelection() const;
 
 private:
     void                FillFunctionNames();
@@ -79,14 +69,14 @@ private:
 class ScDPFunctionDlg : public ModalDialog
 {
 public:
-    explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVec& rLabelVec,
-                            const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
+    explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVector& rLabelVec,
+                            const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
-    USHORT              GetFuncMask() const;
+    sal_uInt16              GetFuncMask() const;
     ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const;
 
 private:
-    void                Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
+    void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( DblClickHdl, MultiListBox* );
@@ -110,7 +100,7 @@ private:
 
     ScDPListBoxWrapper  maLbTypeWrp;        /// Wrapper for direct usage of API constants.
 
-    const ScDPLabelDataVec& mrLabelVec;     /// Data of all labels.
+    const ScDPLabelDataVector& mrLabelVec;  /// Data of all labels.
     bool                mbEmptyItem;        /// true = Empty base item in listbox.
 };
 
@@ -120,15 +110,15 @@ class ScDPSubtotalDlg : public ModalDialog
 {
 public:
     explicit            ScDPSubtotalDlg( Window* pParent, ScDPObject& rDPObj,
-                            const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData,
+                            const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
                             const ScDPNameVec& rDataFields, bool bEnableLayout );
 
-    USHORT              GetFuncMask() const;
+    sal_uInt16              GetFuncMask() const;
 
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
 
 private:
-    void                Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
+    void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
     DECL_LINK( DblClickHdl, MultiListBox* );
     DECL_LINK( RadioClickHdl, RadioButton* );
@@ -212,7 +202,7 @@ private:
 class ScDPShowDetailDlg : public ModalDialog
 {
 public:
-    explicit            ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHORT nOrient );
+    explicit            ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient );
 
     virtual short       Execute();
 

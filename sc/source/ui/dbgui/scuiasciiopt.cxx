@@ -272,7 +272,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     OUString sTextSeparators;
     bool bMergeDelimiters = false;
     bool bFixedWidth = false;
-    bool bQuotedFieldAsText = true;
+    bool bQuotedFieldAsText = false;
     bool bDetectSpecialNum = false;
     sal_Int32 nFromRow = 1;
     sal_Int32 nCharSet = -1;
@@ -321,34 +321,45 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     maFieldSeparators = GetSeparators();
 
     // Clipboard is always Unicode, else detect.
-    bool bPreselectUnicode = !mbFileImport;
+    rtl_TextEncoding ePreselectUnicode = (mbFileImport ?
+            RTL_TEXTENCODING_DONTKNOW : RTL_TEXTENCODING_UNICODE);
     // Sniff for Unicode / not
-    if( !bPreselectUnicode && mpDatStream )
+    if( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW && mpDatStream )
     {
         Seek( 0 );
-        mpDatStream->StartReadingUnicodeText();
-        ULONG nUniPos = mpDatStream->Tell();
-        if ( nUniPos > 0 )
-            bPreselectUnicode = TRUE;   // read 0xfeff/0xfffe
-        else
+        mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
+        sal_uLong nUniPos = mpDatStream->Tell();
+        switch (nUniPos)
         {
-            UINT16 n;
-            *mpDatStream >> n;
-            // Assume that normal ASCII/ANSI/ISO/etc. text doesn't start with
-            // control characters except CR,LF,TAB
-            if ( (n & 0xff00) < 0x2000 )
-            {
-                switch ( n & 0xff00 )
+            case 2:
+                ePreselectUnicode = RTL_TEXTENCODING_UNICODE;   // UTF-16
+                break;
+            case 3:
+                ePreselectUnicode = RTL_TEXTENCODING_UTF8;      // UTF-8
+                break;
+            case 0:
                 {
-                    case 0x0900 :
-                    case 0x0a00 :
-                    case 0x0d00 :
-                    break;
-                    default:
-                        bPreselectUnicode = TRUE;
+                    sal_uInt16 n;
+                    *mpDatStream >> n;
+                    // Assume that normal ASCII/ANSI/ISO/etc. text doesn't start with
+                    // control characters except CR,LF,TAB
+                    if ( (n & 0xff00) < 0x2000 )
+                    {
+                        switch ( n & 0xff00 )
+                        {
+                            case 0x0900 :
+                            case 0x0a00 :
+                            case 0x0d00 :
+                                break;
+                            default:
+                                ePreselectUnicode = RTL_TEXTENCODING_UNICODE;   // UTF-16
+                        }
+                    }
+                    mpDatStream->Seek(0);
                 }
-            }
-            mpDatStream->Seek(0);
+                break;
+            default:
+                ;   // nothing
         }
         mnStreamPos = mpDatStream->Tell();
     }
@@ -374,15 +385,15 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 
     // *** text encoding ListBox ***
     // all encodings allowed, including Unicode, but subsets are excluded
-    aLbCharSet.FillFromTextEncodingTable( TRUE );
+    aLbCharSet.FillFromTextEncodingTable( sal_True );
     // Insert one "SYSTEM" entry for compatibility in AsciiOptions and system
     // independent document linkage.
     aLbCharSet.InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
-    aLbCharSet.SelectTextEncoding( bPreselectUnicode ?
-        RTL_TEXTENCODING_UNICODE : gsl_getSystemTextEncoding() );
+    aLbCharSet.SelectTextEncoding( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW ?
+            gsl_getSystemTextEncoding() : ePreselectUnicode );
 
-    if( nCharSet >= 0 )
-        aLbCharSet.SelectEntryPos( static_cast<USHORT>(nCharSet) );
+    if( nCharSet >= 0 && ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW )
+        aLbCharSet.SelectEntryPos( static_cast<sal_uInt16>(nCharSet) );
 
     SetSelectedCharSet();
     aLbCharSet.SetSelectHdl( LINK( this, ScImportAsciiDlg, CharSetHdl ) );
@@ -415,6 +426,9 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     UpdateVertical();
 
     maTableBox.Execute( CSVCMD_NEWCELLTEXTS );
+
+    aEdOther.SetAccessibleName(aCkbOther.GetText());
+    aEdOther.SetAccessibleRelationLabeledBy(&aCkbOther);
 }
 
 
@@ -426,7 +440,7 @@ ScImportAsciiDlg::~ScImportAsciiDlg()
 
 // ----------------------------------------------------------------------------
 
-bool ScImportAsciiDlg::GetLine( ULONG nLine, String &rText )
+bool ScImportAsciiDlg::GetLine( sal_uLong nLine, String &rText )
 {
     if (nLine >= ASCIIDLG_MAXROWS || !mpDatStream)
         return false;
@@ -435,15 +449,14 @@ bool ScImportAsciiDlg::GetLine( ULONG nLine, String &rText )
     bool bFixed = aRbFixed.IsChecked();
 
     if (!mpRowPosArray)
-        mpRowPosArray = new ULONG[ASCIIDLG_MAXROWS + 2];
+        mpRowPosArray = new sal_uLong[ASCIIDLG_MAXROWS + 2];
 
     if (!mnRowPosCount) // complete re-fresh
     {
         memset( mpRowPosArray, 0, sizeof(mpRowPosArray[0]) * (ASCIIDLG_MAXROWS+2));
 
         Seek(0);
-        if ( mpDatStream->GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
-            mpDatStream->StartReadingUnicodeText();
+        mpDatStream->StartReadingUnicodeText( mpDatStream->GetStreamCharSet() );
 
         mnStreamPos = mpDatStream->Tell();
         mpRowPosArray[mnRowPosCount] = mnStreamPos;
@@ -573,7 +586,7 @@ String ScImportAsciiDlg::GetSeparators() const
 
 void ScImportAsciiDlg::SetupSeparatorCtrls()
 {
-    BOOL bEnable = aRbSeparated.IsChecked();
+    sal_Bool bEnable = aRbSeparated.IsChecked();
     aCkbTab.Enable( bEnable );
     aCkbSemicolon.Enable( bEnable );
     aCkbComma.Enable( bEnable );
@@ -693,7 +706,7 @@ IMPL_LINK( ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox*, EMPTYARG )
         maPreviewLine[i].Erase();
 
     maTableBox.Execute( CSVCMD_SETLINECOUNT, mnRowPosCount);
-    bool bMergeSep = (aCkbAsOnce.IsChecked() == TRUE);
+    bool bMergeSep = (aCkbAsOnce.IsChecked() == sal_True);
     maTableBox.SetUniStrings( maPreviewLine, maFieldSeparators, mcTextSep, bMergeSep);
 
     return 0;

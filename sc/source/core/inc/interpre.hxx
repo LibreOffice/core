@@ -53,14 +53,14 @@ struct ScCompare
 {
     double  nVal[2];
     String* pVal[2];
-    BOOL    bVal[2];
-    BOOL    bEmpty[2];
+    sal_Bool    bVal[2];
+    sal_Bool    bEmpty[2];
         ScCompare( String* p1, String* p2 )
         {
             pVal[ 0 ] = p1;
             pVal[ 1 ] = p2;
-            bEmpty[0] = FALSE;
-            bEmpty[1] = FALSE;
+            bEmpty[0] = sal_False;
+            bEmpty[1] = sal_False;
         }
 };
 
@@ -125,9 +125,9 @@ public:
 
     /// Could string be a regular expression?
     /// If pDoc!=NULL the document options are taken into account and if
-    /// RegularExpressions are disabled the function returns FALSE regardless
+    /// RegularExpressions are disabled the function returns sal_False regardless
     /// of the string content.
-    static BOOL MayBeRegExp( const String& rStr, const ScDocument* pDoc );
+    static sal_Bool MayBeRegExp( const String& rStr, const ScDocument* pDoc );
 
     /// Fail safe division, returning an errDivisionByZero coded into a double
     /// if denominator is 0.0
@@ -136,7 +136,7 @@ public:
     ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR);
 private:
     static ScTokenStack*    pGlobalStack;
-    static BOOL             bGlobalStackInUse;
+    static sal_Bool             bGlobalStackInUse;
 
     formula::FormulaTokenIterator aCode;
     ScAddress   aPos;
@@ -153,26 +153,26 @@ private:
     String      aTempStr;               // for GetString()
     ScTokenStack* pStackObj;            // contains the stacks
     formula::FormulaToken**   pStack;                 // the current stack
-    USHORT      nGlobalError;           // global (local to this formula expression) error
-    USHORT      sp;                     // stack pointer
-    USHORT      maxsp;                  // the maximal used stack pointer
-    ULONG       nFuncFmtIndex;          // NumberFormatIndex of a function
-    ULONG       nCurFmtIndex;           // current NumberFormatIndex
-    ULONG       nRetFmtIndex;           // NumberFormatIndex of an expression, if any
+    sal_uInt16      nGlobalError;           // global (local to this formula expression) error
+    sal_uInt16      sp;                     // stack pointer
+    sal_uInt16      maxsp;                  // the maximal used stack pointer
+    sal_uLong       nFuncFmtIndex;          // NumberFormatIndex of a function
+    sal_uLong       nCurFmtIndex;           // current NumberFormatIndex
+    sal_uLong       nRetFmtIndex;           // NumberFormatIndex of an expression, if any
     short       nFuncFmtType;           // NumberFormatType of a function
     short       nCurFmtType;            // current NumberFormatType
     short       nRetFmtType;            // NumberFormatType of an expression
-    USHORT      mnStringNoValueError;   // the error set in ConvertStringToValue() if no value
-    BOOL        glSubTotal;             // flag for subtotal functions
-    BYTE        cPar;                   // current count of parameters
-    BOOL        bCalcAsShown;           // precision as shown
-    BOOL        bMatrixFormula;         // formula cell is a matrix formula
+    sal_uInt16      mnStringNoValueError;   // the error set in ConvertStringToValue() if no value
+    sal_Bool        glSubTotal;             // flag for subtotal functions
+    sal_uInt8        cPar;                   // current count of parameters
+    sal_Bool        bCalcAsShown;           // precision as shown
+    sal_Bool        bMatrixFormula;         // formula cell is a matrix formula
 
 //---------------------------------Funktionen in interpre.cxx---------
 // nMust <= nAct <= nMax ? ok : PushError
-inline BOOL MustHaveParamCount( short nAct, short nMust );
-inline BOOL MustHaveParamCount( short nAct, short nMust, short nMax );
-inline BOOL MustHaveParamCountMin( short nAct, short nMin );
+inline sal_Bool MustHaveParamCount( short nAct, short nMust );
+inline sal_Bool MustHaveParamCount( short nAct, short nMust, short nMax );
+inline sal_Bool MustHaveParamCountMin( short nAct, short nMin );
 void PushParameterExpected();
 void PushIllegalParameter();
 void PushIllegalArgument();
@@ -183,8 +183,8 @@ void PushNA();
 //-------------------------------------------------------------------------
 void ReplaceCell( ScAddress& );     // for TableOp
 void ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );  // for TableOp
-BOOL IsTableOpInRange( const ScRange& );
-ULONG GetCellNumberFormat( const ScAddress&, const ScBaseCell* );
+sal_Bool IsTableOpInRange( const ScRange& );
+sal_uLong GetCellNumberFormat( const ScAddress&, const ScBaseCell* );
 double ConvertStringToValue( const String& );
 double GetCellValue( const ScAddress&, const ScBaseCell* );
 double GetCellValueOrZero( const ScAddress&, const ScBaseCell* );
@@ -192,26 +192,26 @@ double GetValueCellValue( const ScAddress&, const ScValueCell* );
 ScBaseCell* GetCell( const ScAddress& rPos )
     { return pDok->GetCell( rPos ); }
 void GetCellString( String& rStr, const ScBaseCell* pCell );
-inline USHORT GetCellErrCode( const ScBaseCell* pCell )
+inline sal_uInt16 GetCellErrCode( const ScBaseCell* pCell )
     { return pCell ? pCell->GetErrorCode() : 0; }
 inline CellType GetCellType( const ScBaseCell* pCell )
     { return pCell ? pCell->GetCellType() : CELLTYPE_NONE; }
 /// Really empty or inherited emptiness.
-inline BOOL HasCellEmptyData( const ScBaseCell* pCell )
-    { return pCell ? pCell->HasEmptyData() : TRUE; }
+inline sal_Bool HasCellEmptyData( const ScBaseCell* pCell )
+    { return pCell ? pCell->HasEmptyData() : sal_True; }
 /// This includes inherited emptiness, which usually is regarded as value!
-inline BOOL HasCellValueData( const ScBaseCell* pCell )
-    { return pCell ? pCell->HasValueData() : FALSE; }
+inline sal_Bool HasCellValueData( const ScBaseCell* pCell )
+    { return pCell ? pCell->HasValueData() : sal_False; }
 /// Not empty and not value.
-inline BOOL HasCellStringData( const ScBaseCell* pCell )
-    { return pCell ? pCell->HasStringData() : FALSE; }
+inline sal_Bool HasCellStringData( const ScBaseCell* pCell )
+    { return pCell ? pCell->HasStringData() : sal_False; }
 
-BOOL CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr);
-BOOL CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr);
-BOOL CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                   SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr);
+sal_Bool CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt8* pCellArr);
+sal_Bool CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt8* pCellArr);
+sal_Bool CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                   SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt8* pCellArr);
 
 //-----------------------------------------------------------------------------
 // Stack operations
@@ -266,7 +266,7 @@ inline bool IfErrorPushError()
     result. Also obtain number format and type if _both_, type and index
     pointer, are not NULL. */
 void PushCellResultToken( bool bDisplayEmptyAsString, const ScAddress & rAddress,
-        short * pRetTypeExpr, ULONG * pRetIndexExpr );
+        short * pRetTypeExpr, sal_uLong * pRetIndexExpr );
 
 formula::FormulaTokenRef PopToken();
 void Pop();
@@ -279,7 +279,7 @@ void ValidateRef( const ScRefList & rRefList );
 void SingleRefToVars( const ScSingleRefData & rRef, SCCOL & rCol, SCROW & rRow, SCTAB & rTab );
 void PopSingleRef( ScAddress& );
 void PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab);
-void DoubleRefToRange( const ScComplexRefData&, ScRange&, BOOL bDontCheckForTableOp = FALSE );
+void DoubleRefToRange( const ScComplexRefData&, ScRange&, sal_Bool bDontCheckForTableOp = sal_False );
 /** If formula::StackVar formula::svDoubleRef pop ScDoubleRefToken and return values of
     ScComplexRefData.
     Else if StackVar svRefList return values of the ScComplexRefData where
@@ -289,26 +289,26 @@ void DoubleRefToRange( const ScComplexRefData&, ScRange&, BOOL bDontCheckForTabl
     while(nParamCount--) PopDoubleRef(aRange,nParamCount,nRefInList);
   */
 void PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRefInList );
-void PopDoubleRef( ScRange&, BOOL bDontCheckForTableOp = FALSE );
+void PopDoubleRef( ScRange&, sal_Bool bDontCheckForTableOp = sal_False );
 void DoubleRefToVars( const ScToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
-        BOOL bDontCheckForTableOp = FALSE );
+        sal_Bool bDontCheckForTableOp = sal_False );
 ScDBRangeBase* PopDoubleRef();
 void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                           SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
-                          BOOL bDontCheckForTableOp = FALSE );
-BOOL PopDoubleRefOrSingleRef( ScAddress& rAdr );
+                          sal_Bool bDontCheckForTableOp = sal_False );
+sal_Bool PopDoubleRefOrSingleRef( ScAddress& rAdr );
 void PopDoubleRefPushMatrix();
 // If MatrixFormula: convert formula::svDoubleRef to svMatrix, create JumpMatrix.
 // Else convert area reference parameters marked as ForceArray to array.
-// Returns TRUE if JumpMatrix created.
+// Returns sal_True if JumpMatrix created.
 bool ConvertMatrixParameters();
 inline void MatrixDoubleRefToMatrix();      // if MatrixFormula: PopDoubleRefPushMatrix
 // If MatrixFormula or ForceArray: ConvertMatrixParameters()
 inline bool MatrixParameterConversion();
 ScMatrixRef PopMatrix();
-//void PushByte(BYTE nVal);
+//void PushByte(sal_uInt8 nVal);
 void PushDouble(double nVal);
 void PushInt( int nVal );
 void PushStringBuffer( const sal_Unicode* pString );
@@ -317,20 +317,20 @@ void PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab);
 void PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                  SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
 void PushMatrix(ScMatrix* pMat);
-void PushError( USHORT nError );
+void PushError( sal_uInt16 nError );
 /// Raw stack type without default replacements.
 formula::StackVar GetRawStackType();
 /// Stack type with replacement of defaults, e.g. svMissing and formula::svEmptyCell will result in formula::svDouble.
 formula::StackVar GetStackType();
 // peek StackType of Parameter, Parameter 1 == TOS, 2 == TOS-1, ...
-formula::StackVar GetStackType( BYTE nParam );
-BYTE GetByte() { return cPar; }
+formula::StackVar GetStackType( sal_uInt8 nParam );
+sal_uInt8 GetByte() { return cPar; }
 // generiert aus DoubleRef positionsabhaengige SingleRef
-BOOL DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
+sal_Bool DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
 double GetDouble();
 double GetDoubleWithDefault(double nDefault);
-BOOL IsMissing();
-BOOL GetBool() { return GetDouble() != 0.0; }
+sal_Bool IsMissing();
+sal_Bool GetBool() { return GetDouble() != 0.0; }
 const String& GetString();
 // pop matrix and obtain one element, upper left or according to jump matrix
 ScMatValType GetDoubleOrStringFromMatrix( double& rDouble, String& rString );
@@ -344,15 +344,15 @@ void ScTableOp();                                       // Mehrfachoperationen
 void ScErrCell();                                       // Sonderbehandlung
                                                         // Fehlerzelle
 //-----------------------------allgemeine Hilfsfunktionen
-void SetMaxIterationCount(USHORT n);
+void SetMaxIterationCount(sal_uInt16 n);
 inline void CurFmtToFuncFmt()
     { nFuncFmtType = nCurFmtType; nFuncFmtIndex = nCurFmtIndex; }
 // Check for String overflow of rResult+rAdd and set error and erase rResult
-// if so. Return TRUE if ok, FALSE if overflow
-inline BOOL CheckStringResultLen( String& rResult, const String& rAdd );
+// if so. Return sal_True if ok, sal_False if overflow
+inline sal_Bool CheckStringResultLen( String& rResult, const String& rAdd );
 // Set error according to rVal, and set rVal to 0.0 if there was an error.
 inline void TreatDoubleError( double& rVal );
-// Lookup using ScLookupCache, @returns TRUE if found and result address
+// Lookup using ScLookupCache, @returns sal_True if found and result address
 bool LookupQueryWithCache( ScAddress & o_rResultPos,
         const ScQueryParam & rParam ) const;
 
@@ -453,20 +453,20 @@ void ScJis();
 void ScAsc();
 void ScUnicode();
 void ScUnichar();
-void ScMin( BOOL bTextAsZero = FALSE );
-void ScMax( BOOL bTextAsZero = FALSE );
-double IterateParameters( ScIterFunc, BOOL bTextAsZero = FALSE );
+void ScMin( sal_Bool bTextAsZero = sal_False );
+void ScMax( sal_Bool bTextAsZero = sal_False );
+double IterateParameters( ScIterFunc, sal_Bool bTextAsZero = sal_False );
 void ScSumSQ();
 void ScSum();
 void ScProduct();
-void ScAverage( BOOL bTextAsZero = FALSE );
+void ScAverage( sal_Bool bTextAsZero = sal_False );
 void ScCount();
 void ScCount2();
-void GetStVarParams( double& rVal, double& rValCount, BOOL bTextAsZero = FALSE );
-void ScVar( BOOL bTextAsZero = FALSE );
-void ScVarP( BOOL bTextAsZero = FALSE );
-void ScStDev( BOOL bTextAsZero = FALSE );
-void ScStDevP( BOOL bTextAsZero = FALSE );
+void GetStVarParams( double& rVal, double& rValCount, sal_Bool bTextAsZero = sal_False );
+void ScVar( sal_Bool bTextAsZero = sal_False );
+void ScVarP( sal_Bool bTextAsZero = sal_False );
+void ScStDev( sal_Bool bTextAsZero = sal_False );
+void ScStDevP( sal_Bool bTextAsZero = sal_False );
 void ScColumns();
 void ScRows();
 void ScTables();
@@ -482,13 +482,13 @@ void ScHLookup();
 void ScVLookup();
 void ScSubTotal();
 
-// If upon call rMissingField==TRUE then the database field parameter may be
+// If upon call rMissingField==sal_True then the database field parameter may be
 // missing (Xcl DCOUNT() syntax), or may be faked as missing by having the
 // value 0.0 or being exactly the entire database range reference (old SO
-// compatibility). If this was the case then rMissingField is set to TRUE upon
-// return. If rMissingField==FALSE upon call all "missing cases" are considered
+// compatibility). If this was the case then rMissingField is set to sal_True upon
+// return. If rMissingField==sal_False upon call all "missing cases" are considered
 // to be an error.
-ScDBQueryParamBase* GetDBParams( BOOL& rMissingField );
+ScDBQueryParamBase* GetDBParams( sal_Bool& rMissingField );
 
 void DBIterator( ScIterFunc );
 void ScDBSum();
@@ -526,8 +526,8 @@ void ScConcat();
 void ScExternal();
 void ScMissing();
 void ScMacro();
-BOOL SetSbxVariable( SbxVariable* pVar, const ScAddress& );
-BOOL SetSbxVariable( SbxVariable* pVar, SCCOL nCol, SCROW nRow, SCTAB nTab );
+sal_Bool SetSbxVariable( SbxVariable* pVar, const ScAddress& );
+sal_Bool SetSbxVariable( SbxVariable* pVar, SCCOL nCol, SCROW nRow, SCTAB nTab );
 void ScErrorType();
 void ScDBArea();
 void ScColRowNameAuto();
@@ -541,13 +541,13 @@ void ScTTT();
 
 /** Obtain the date serial number for a given date.
     @param bStrict
-        If FALSE, nYear < 100 takes the two-digit year setting into account,
+        If sal_False, nYear < 100 takes the two-digit year setting into account,
         and rollover of invalid calendar dates takes place, e.g. 1999-02-31 =>
         1999-03-03.
-        If TRUE, the date passed must be a valid Gregorian calendar date. No
+        If sal_True, the date passed must be a valid Gregorian calendar date. No
         two-digit expanding or rollover is done.
  */
-double GetDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, bool bStrict );
+double GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, bool bStrict );
 
 void ScGetActDate();
 void ScGetActTime();
@@ -656,21 +656,21 @@ void ScSumX2DY2();
 void ScSumXMY2();
 void ScGrowth();
 bool CalculateSkew(double& fSum,double& fCount,double& vSum,std::vector<double>& values);
-void CalculateSlopeIntercept(BOOL bSlope);
-void CalculateSmallLarge(BOOL bSmall);
-void CalculatePearsonCovar(BOOL _bPearson,BOOL _bStexy);
-bool CalculateTest( BOOL _bTemplin
+void CalculateSlopeIntercept(sal_Bool bSlope);
+void CalculateSmallLarge(sal_Bool bSmall);
+void CalculatePearsonCovar(sal_Bool _bPearson,sal_Bool _bStexy);
+bool CalculateTest( sal_Bool _bTemplin
                    ,const SCSIZE nC1, const SCSIZE nC2,const SCSIZE nR1,const SCSIZE nR2
                    ,const ScMatrixRef& pMat1,const ScMatrixRef& pMat2
                    ,double& fT,double& fF);
-void CalculateLookup(BOOL HLookup);
+void CalculateLookup(sal_Bool HLookup);
 bool FillEntry(ScQueryEntry& rEntry);
-void CalculateAddSub(BOOL _bSub);
+void CalculateAddSub(sal_Bool _bSub);
 void CalculateTrendGrowth(bool _bGrowth);
 void CalulateRGPRKP(bool _bRKP);
-void CalculateSumX2MY2SumX2DY2(BOOL _bSumX2DY2);
+void CalculateSumX2MY2SumX2DY2(sal_Bool _bSumX2DY2);
 void CalculateMatrixValue(const ScMatrix* pMat,SCSIZE nC,SCSIZE nR);
-bool CheckMatrix(bool _bLOG,BYTE& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX,SCSIZE& nRY,SCSIZE& M,SCSIZE& N,ScMatrixRef& pMatX,ScMatrixRef& pMatY);
+bool CheckMatrix(bool _bLOG,sal_uInt8& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX,SCSIZE& nRY,SCSIZE& M,SCSIZE& N,ScMatrixRef& pMatX,ScMatrixRef& pMatY);
 void ScRGP();
 void ScRKP();
 void ScForecast();
@@ -680,7 +680,7 @@ void ScBadName();
 // Statistik:
 double phi(double x);
 double integralPhi(double x);
-double taylor(double* pPolynom, USHORT nMax, double x);
+double taylor(double* pPolynom, sal_uInt16 nMax, double x);
 double gauss(double x);
 double gaussinv(double x);
 double GetBetaDist(double x, double alpha, double beta);  //cumulative distribution function
@@ -739,8 +739,8 @@ void ScSkew();
 void ScMedian();
 double GetMedian( ::std::vector<double> & rArray );
 double GetPercentile( ::std::vector<double> & rArray, double fPercentile );
-void GetNumberSequenceArray( BYTE nParamCount, ::std::vector<double>& rArray );
-void GetSortArray(BYTE nParamCount, ::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = NULL);
+void GetNumberSequenceArray( sal_uInt8 nParamCount, ::std::vector<double>& rArray );
+void GetSortArray(sal_uInt8 nParamCount, ::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = NULL);
 void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = NULL);
 void ScModalValue();
 void ScAveDev();
@@ -791,17 +791,17 @@ public:
 
     formula::StackVar Interpret();
 
-    void SetError(USHORT nError)
+    void SetError(sal_uInt16 nError)
             { if (nError && !nGlobalError) nGlobalError = nError; }
 
-    USHORT GetError()                               const   { return nGlobalError; }
+    sal_uInt16 GetError()                               const   { return nGlobalError; }
     formula::StackVar  GetResultType()              const   { return xResult->GetType(); }
     const String&   GetStringResult()               const   { return xResult->GetString(); }
     double          GetNumResult()                  const   { return xResult->GetDouble(); }
     formula::FormulaTokenRef
                     GetResultToken()                const   { return xResult; }
     short           GetRetFormatType()              const   { return nRetFmtType; }
-    ULONG           GetRetFormatIndex()             const   { return nRetFmtIndex; }
+    sal_uLong           GetRetFormatIndex()             const   { return nRetFmtIndex; }
 };
 
 
@@ -831,48 +831,48 @@ inline ScTokenMatrixMap& ScInterpreter::GetTokenMatrixMap()
 }
 
 
-inline BOOL ScInterpreter::MustHaveParamCount( short nAct, short nMust )
+inline sal_Bool ScInterpreter::MustHaveParamCount( short nAct, short nMust )
 {
     if ( nAct == nMust )
-        return TRUE;
+        return sal_True;
     if ( nAct < nMust )
         PushParameterExpected();
     else
         PushIllegalParameter();
-    return FALSE;
+    return sal_False;
 }
 
 
-inline BOOL ScInterpreter::MustHaveParamCount( short nAct, short nMust, short nMax )
+inline sal_Bool ScInterpreter::MustHaveParamCount( short nAct, short nMust, short nMax )
 {
     if ( nMust <= nAct && nAct <= nMax )
-        return TRUE;
+        return sal_True;
     if ( nAct < nMust )
         PushParameterExpected();
     else
         PushIllegalParameter();
-    return FALSE;
+    return sal_False;
 }
 
 
-inline BOOL ScInterpreter::MustHaveParamCountMin( short nAct, short nMin )
+inline sal_Bool ScInterpreter::MustHaveParamCountMin( short nAct, short nMin )
 {
     if ( nAct >= nMin )
-        return TRUE;
+        return sal_True;
     PushParameterExpected();
-    return FALSE;
+    return sal_False;
 }
 
 
-inline BOOL ScInterpreter::CheckStringResultLen( String& rResult, const String& rAdd )
+inline sal_Bool ScInterpreter::CheckStringResultLen( String& rResult, const String& rAdd )
 {
-    if ( (ULONG) rResult.Len() + rAdd.Len() > STRING_MAXLEN )
+    if ( (sal_uLong) rResult.Len() + rAdd.Len() > STRING_MAXLEN )
     {
         SetError( errStringOverflow );
         rResult.Erase();
-        return FALSE;
+        return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -880,7 +880,7 @@ inline void ScInterpreter::TreatDoubleError( double& rVal )
 {
     if ( !::rtl::math::isFinite( rVal ) )
     {
-        USHORT nErr = GetDoubleErrorValue( rVal );
+        sal_uInt16 nErr = GetDoubleErrorValue( rVal );
         if ( nErr )
             SetError( nErr );
         else

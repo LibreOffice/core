@@ -39,12 +39,12 @@ class ScImportOptionsDlg : public ModalDialog
 {
 public:
                 ScImportOptionsDlg( Window*                 pParent,
-                                    BOOL                    bAscii = TRUE,
+                                    sal_Bool                    bAscii = sal_True,
                                     const ScImportOptions*  pOptions = NULL,
                                     const String*           pStrTitle = NULL,
-                                    BOOL                    bMultiByte = FALSE,
-                                    BOOL                    bOnlyDbtoolsEncodings = FALSE,
-                                    BOOL                    bImport = TRUE );
+                                    sal_Bool                    bMultiByte = sal_False,
+                                    sal_Bool                    bOnlyDbtoolsEncodings = sal_False,
+                                    sal_Bool                    bImport = sal_True );
 
                 ~ScImportOptionsDlg();
 
@@ -58,17 +58,18 @@ private:
     ComboBox            aEdFieldSep;
     FixedText           aFtTextSep;
     ComboBox            aEdTextSep;
+    CheckBox            aCbQuoteAll;
+    CheckBox            aCbShown;
     CheckBox            aCbFixed;
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
-    CheckBox            aCbShown;
 
     ScDelimiterTable*   pFieldSepTab;
     ScDelimiterTable*   pTextSepTab;
 
 private:
-    USHORT GetCodeFromCombo( const ComboBox& rEd ) const;
+    sal_uInt16 GetCodeFromCombo( const ComboBox& rEd ) const;
 
     DECL_LINK( FixedWidthHdl, CheckBox* );
     DECL_LINK( DoubleClickHdl, ListBox* );

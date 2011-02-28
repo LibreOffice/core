@@ -77,7 +77,7 @@
 
 // -----------------------------------------------------------------------
 
-inline BOOL IsAmbiguousScript( BYTE nScript )
+inline sal_Bool IsAmbiguousScript( sal_uInt8 nScript )
 {
     //! move to a header file
     return ( nScript != SCRIPTTYPE_LATIN &&
@@ -114,9 +114,9 @@ inline BOOL IsAmbiguousScript( BYTE nScript )
 //UNUSED2008-05      //  (because CELLTYPE_SYMBOLS wasn't written in the file)
 //UNUSED2008-05
 //UNUSED2008-05      ScFontToSubsFontConverter_AutoPtr xFontConverter;
-//UNUSED2008-05      const ULONG nFontConverterFlags = FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
+//UNUSED2008-05      const sal_uLong nFontConverterFlags = FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
 //UNUSED2008-05
-//UNUSED2008-05      BOOL bListInitialized = FALSE;
+//UNUSED2008-05      sal_Bool bListInitialized = sal_False;
 //UNUSED2008-05      ScSymbolStringCellEntry* pCurrentEntry = NULL;
 //UNUSED2008-05
 //UNUSED2008-05      ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
@@ -138,7 +138,7 @@ inline BOOL IsAmbiguousScript( BYTE nScript )
 //UNUSED2008-05                      if (!bListInitialized)
 //UNUSED2008-05                      {
 //UNUSED2008-05                          pCurrentEntry = (ScSymbolStringCellEntry*)rList.First();
-//UNUSED2008-05                          bListInitialized = TRUE;
+//UNUSED2008-05                          bListInitialized = sal_True;
 //UNUSED2008-05                      }
 //UNUSED2008-05
 //UNUSED2008-05                      while ( pCurrentEntry && pCurrentEntry->nRow < nRow )
@@ -187,7 +187,7 @@ inline BOOL IsAmbiguousScript( BYTE nScript )
 long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                               double nPPTX, double nPPTY,
                               const Fraction& rZoomX, const Fraction& rZoomY,
-                              BOOL bWidth, const ScNeededSizeOptions& rOptions )
+                              sal_Bool bWidth, const ScNeededSizeOptions& rOptions )
 {
     long nValue=0;
     SCSIZE nIndex;
@@ -230,7 +230,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         const SfxPoolItem* pCondItem;
         SvxCellHorJustify eHorJust;
         if (pCondSet &&
-                pCondSet->GetItemState(ATTR_HOR_JUSTIFY, TRUE, &pCondItem) == SFX_ITEM_SET)
+                pCondSet->GetItemState(ATTR_HOR_JUSTIFY, sal_True, &pCondItem) == SFX_ITEM_SET)
             eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem*)pCondItem)->GetValue();
         else
             eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
@@ -239,7 +239,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         if ( eHorJust == SVX_HOR_JUSTIFY_BLOCK )
             bBreak = true;
         else if ( pCondSet &&
-                    pCondSet->GetItemState(ATTR_LINEBREAK, TRUE, &pCondItem) == SFX_ITEM_SET)
+                    pCondSet->GetItemState(ATTR_LINEBREAK, sal_True, &pCondItem) == SFX_ITEM_SET)
             bBreak = ((const SfxBoolItem*)pCondItem)->GetValue();
         else
             bBreak = ((const SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
@@ -251,7 +251,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         //  get other attributes from pattern and conditional formatting
 
         SvxCellOrientation eOrient = pPattern->GetCellOrientation( pCondSet );
-        BOOL bAsianVertical = ( eOrient == SVX_ORIENTATION_STACKED &&
+        sal_Bool bAsianVertical = ( eOrient == SVX_ORIENTATION_STACKED &&
                 ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN, pCondSet )).GetValue() );
         if ( bAsianVertical )
             bBreak = false;
@@ -264,14 +264,14 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         if ( eOrient == SVX_ORIENTATION_STANDARD )
         {
             if (pCondSet &&
-                    pCondSet->GetItemState(ATTR_ROTATE_VALUE, TRUE, &pCondItem) == SFX_ITEM_SET)
+                    pCondSet->GetItemState(ATTR_ROTATE_VALUE, sal_True, &pCondItem) == SFX_ITEM_SET)
                 nRotate = ((const SfxInt32Item*)pCondItem)->GetValue();
             else
                 nRotate = ((const SfxInt32Item&)pPattern->GetItem(ATTR_ROTATE_VALUE)).GetValue();
             if ( nRotate )
             {
                 if (pCondSet &&
-                        pCondSet->GetItemState(ATTR_ROTATE_MODE, TRUE, &pCondItem) == SFX_ITEM_SET)
+                        pCondSet->GetItemState(ATTR_ROTATE_MODE, sal_True, &pCondItem) == SFX_ITEM_SET)
                     eRotMode = (SvxRotateMode)((const SvxRotateModeItem*)pCondItem)->GetValue();
                 else
                     eRotMode = (SvxRotateMode)((const SvxRotateModeItem&)
@@ -287,26 +287,26 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             // ignore orientation/rotation if "repeat" is active
             eOrient = SVX_ORIENTATION_STANDARD;
             nRotate = 0;
-            bAsianVertical = FALSE;
+            bAsianVertical = sal_False;
         }
 
         const SvxMarginItem* pMargin;
         if (pCondSet &&
-                pCondSet->GetItemState(ATTR_MARGIN, TRUE, &pCondItem) == SFX_ITEM_SET)
+                pCondSet->GetItemState(ATTR_MARGIN, sal_True, &pCondItem) == SFX_ITEM_SET)
             pMargin = (const SvxMarginItem*) pCondItem;
         else
             pMargin = (const SvxMarginItem*) &pPattern->GetItem(ATTR_MARGIN);
-        USHORT nIndent = 0;
+        sal_uInt16 nIndent = 0;
         if ( eHorJust == SVX_HOR_JUSTIFY_LEFT )
         {
             if (pCondSet &&
-                    pCondSet->GetItemState(ATTR_INDENT, TRUE, &pCondItem) == SFX_ITEM_SET)
+                    pCondSet->GetItemState(ATTR_INDENT, sal_True, &pCondItem) == SFX_ITEM_SET)
                 nIndent = ((const SfxUInt16Item*)pCondItem)->GetValue();
             else
                 nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
         }
 
-        BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pCell );
+        sal_uInt8 nScript = pDocument->GetScriptType( nCol, nRow, nTab, pCell );
         if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
         //  also call SetFont for edit cells, because bGetFont may be set only once
@@ -320,10 +320,10 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             pDev->SetFont(aFont);
         }
 
-        BOOL bAddMargin = TRUE;
+        sal_Bool bAddMargin = sal_True;
         CellType eCellType = pCell->GetCellType();
 
-        BOOL bEditEngine = ( eCellType == CELLTYPE_EDIT ||
+        sal_Bool bEditEngine = ( eCellType == CELLTYPE_EDIT ||
                                 eOrient == SVX_ORIENTATION_STACKED ||
                                 IsAmbiguousScript( nScript ) ||
                                 ((eCellType == CELLTYPE_FORMULA) && ((ScFormulaCell*)pCell)->IsMultilineResult()) );
@@ -333,10 +333,10 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             String aValStr;
             Color* pColor;
             SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-            ULONG nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
+            sal_uLong nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
             ScCellFormat::GetString( pCell, nFormat, aValStr, &pColor,
                                         *pFormatter,
-                                        TRUE, rOptions.bFormula, ftCheck );
+                                        sal_True, rOptions.bFormula, ftCheck );
             if (aValStr.Len())
             {
                 //  SetFont ist nach oben verschoben
@@ -362,7 +362,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                     else if ( rOptions.bTotalSize )
                     {
                         nWidth = (long) ( pDocument->GetColWidth( nCol,nTab ) * nPPT );
-                        bAddMargin = FALSE;
+                        bAddMargin = sal_False;
                         //  nur nach rechts:
                         //! unterscheiden nach Ausrichtung oben/unten (nur Text/ganze Hoehe)
                         if ( pPattern->GetRotateDir( pCondSet ) == SC_ROTDIR_RIGHT )
@@ -411,7 +411,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                                         * nPPT );
                     nDocPixel = (nDocPixel * 9) / 10;           // zur Sicherheit
                     if ( aSize.Width() > nDocPixel )
-                        bEditEngine = TRUE;
+                        bEditEngine = sal_True;
                 }
             }
         }
@@ -426,9 +426,9 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             // am Dokument speichern ?
             ScFieldEditEngine* pEngine = pDocument->CreateFieldEditEngine();
 
-            pEngine->SetUpdateMode( FALSE );
-            BOOL bTextWysiwyg = ( pDev->GetOutDevType() == OUTDEV_PRINTER );
-            ULONG nCtrl = pEngine->GetControlWord();
+            pEngine->SetUpdateMode( sal_False );
+            sal_Bool bTextWysiwyg = ( pDev->GetOutDevType() == OUTDEV_PRINTER );
+            sal_uInt32 nCtrl = pEngine->GetControlWord();
             if ( bTextWysiwyg )
                 nCtrl |= EE_CNTRL_FORMAT100;
             else
@@ -498,22 +498,22 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             {
                 Color* pColor;
                 SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-                ULONG nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
+                sal_uLong nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
                 String aString;
                 ScCellFormat::GetString( pCell, nFormat, aString, &pColor,
                                             *pFormatter,
-                                            TRUE, rOptions.bFormula, ftCheck );
+                                            sal_True, rOptions.bFormula, ftCheck );
                 if (aString.Len())
                     pEngine->SetTextNewDefaults(aString, pSet);
                 else
                     pEngine->SetDefaults(pSet);
             }
 
-            BOOL bEngineVertical = pEngine->IsVertical();
+            sal_Bool bEngineVertical = pEngine->IsVertical();
             pEngine->SetVertical( bAsianVertical );
-            pEngine->SetUpdateMode( TRUE );
+            pEngine->SetUpdateMode( sal_True );
 
-            BOOL bEdWidth = bWidth;
+            sal_Bool bEdWidth = bWidth;
             if ( eOrient != SVX_ORIENTATION_STANDARD && eOrient != SVX_ORIENTATION_STACKED )
                 bEdWidth = !bEdWidth;
             if ( nRotate )
@@ -531,7 +531,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                 else if ( rOptions.bTotalSize )
                 {
                     nWidth = (long) ( pDocument->GetColWidth( nCol,nTab ) * nPPT );
-                    bAddMargin = FALSE;
+                    bAddMargin = sal_False;
                     if ( pPattern->GetRotateDir( pCondSet ) == SC_ROTDIR_RIGHT )
                         nWidth += (long)( pDocument->GetRowHeight( nRow,nTab ) *
                                             nPPT * nCosAbs / nSinAbs );
@@ -618,7 +618,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             //      20 * nZoom/100
             //      bedingte Formatierung hier nicht interessant
 
-            INT16 nFlags = ((const ScMergeFlagAttr&)pPattern->GetItem(ATTR_MERGE_FLAG)).GetValue();
+            sal_Int16 nFlags = ((const ScMergeFlagAttr&)pPattern->GetItem(ATTR_MERGE_FLAG)).GetValue();
             if (nFlags & SC_MF_AUTO)
                 nValue += (rZoomX.GetNumerator()*20)/rZoomX.GetDenominator();
         }
@@ -627,7 +627,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
 }
 
 long ScColumn::GetSimpleTextNeededSize( SCSIZE nIndex, OutputDevice* pDev,
-        BOOL bWidth )
+        sal_Bool bWidth )
 {
     long nValue=0;
     if ( nIndex < nCount )
@@ -638,9 +638,9 @@ long ScColumn::GetSimpleTextNeededSize( SCSIZE nIndex, OutputDevice* pDev,
         String aValStr;
         Color* pColor;
         SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-        ULONG nFormat = pPattern->GetNumberFormat( pFormatter );
+        sal_uLong nFormat = pPattern->GetNumberFormat( pFormatter );
         ScCellFormat::GetString( pCell, nFormat, aValStr, &pColor,
-                                    *pFormatter, TRUE, FALSE, ftCheck );
+                                    *pFormatter, sal_True, sal_False, ftCheck );
         if ( aValStr.Len() )
         {
             if ( bWidth )
@@ -652,20 +652,20 @@ long ScColumn::GetSimpleTextNeededSize( SCSIZE nIndex, OutputDevice* pDev,
     return nValue;
 }
 
-USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nPPTY,
+sal_uInt16 ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nPPTY,
                                         const Fraction& rZoomX, const Fraction& rZoomY,
-                                        BOOL bFormula, USHORT nOldWidth,
+                                        sal_Bool bFormula, sal_uInt16 nOldWidth,
                                         const ScMarkData* pMarkData,
-                                        BOOL bSimpleTextImport )
+                                        sal_Bool bSimpleTextImport )
 {
     if (nCount == 0)
         return nOldWidth;
 
-    USHORT  nWidth = (USHORT) (nOldWidth * nPPTX);
-    BOOL    bFound = FALSE;
+    sal_uInt16  nWidth = (sal_uInt16) (nOldWidth * nPPTX);
+    sal_Bool    bFound = sal_False;
 
     SCSIZE nIndex;
-    ScMarkedDataIter aDataIter(this, pMarkData, TRUE);
+    ScMarkedDataIter aDataIter(this, pMarkData, sal_True);
     if ( bSimpleTextImport )
     {   // alles eins bis auf NumberFormate
         const ScPatternAttr* pPattern = GetPattern( 0 );
@@ -679,14 +679,14 @@ USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nP
 
         while (aDataIter.Next( nIndex ))
         {
-            USHORT nThis = (USHORT) (GetSimpleTextNeededSize( nIndex, pDev,
-                TRUE ) + nMargin);
+            sal_uInt16 nThis = (sal_uInt16) (GetSimpleTextNeededSize( nIndex, pDev,
+                sal_True ) + nMargin);
             if (nThis)
             {
                 if (nThis>nWidth || !bFound)
                 {
                     nWidth = nThis;
-                    bFound = TRUE;
+                    bFound = sal_True;
                 }
             }
         }
@@ -696,27 +696,27 @@ USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nP
         ScNeededSizeOptions aOptions;
         aOptions.bFormula = bFormula;
         const ScPatternAttr* pOldPattern = NULL;
-        BYTE nOldScript = 0;
+        sal_uInt8 nOldScript = 0;
 
         while (aDataIter.Next( nIndex ))
         {
             SCROW nRow = pItems[nIndex].nRow;
 
-            BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pItems[nIndex].pCell );
+            sal_uInt8 nScript = pDocument->GetScriptType( nCol, nRow, nTab, pItems[nIndex].pCell );
             if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
             const ScPatternAttr* pPattern = GetPattern( nRow );
             aOptions.pPattern = pPattern;
             aOptions.bGetFont = (pPattern != pOldPattern || nScript != nOldScript);
-            USHORT nThis = (USHORT) GetNeededSize( nRow, pDev, nPPTX, nPPTY,
-                rZoomX, rZoomY, TRUE, aOptions );
+            sal_uInt16 nThis = (sal_uInt16) GetNeededSize( nRow, pDev, nPPTX, nPPTY,
+                rZoomX, rZoomY, sal_True, aOptions );
             pOldPattern = pPattern;
             if (nThis)
             {
                 if (nThis>nWidth || !bFound)
                 {
                     nWidth = nThis;
-                    bFound = TRUE;
+                    bFound = sal_True;
                 }
             }
         }
@@ -725,16 +725,16 @@ USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nP
     if (bFound)
     {
         nWidth += 2;
-        USHORT nTwips = (USHORT) (nWidth / nPPTX);
+        sal_uInt16 nTwips = (sal_uInt16) (nWidth / nPPTX);
         return nTwips;
     }
     else
         return nOldWidth;
 }
 
-USHORT lcl_GetAttribHeight( const ScPatternAttr& rPattern, USHORT nFontHeightId )
+sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16 nFontHeightId )
 {
-    USHORT nHeight = (USHORT) ((const SvxFontHeightItem&) rPattern.GetItem(nFontHeightId)).GetHeight();
+    sal_uInt16 nHeight = (sal_uInt16) ((const SvxFontHeightItem&) rPattern.GetItem(nFontHeightId)).GetHeight();
     const SvxMarginItem* pMargin = (const SvxMarginItem*) &rPattern.GetItem(ATTR_MARGIN);
     nHeight += nHeight / 5;
     //  gibt bei 10pt 240
@@ -749,7 +749,7 @@ USHORT lcl_GetAttribHeight( const ScPatternAttr& rPattern, USHORT nFontHeightId 
 
     if ( nHeight + 240 > ScGlobal::nDefFontHeight )
     {
-        nHeight = sal::static_int_cast<USHORT>( nHeight + ScGlobal::nDefFontHeight );
+        nHeight = sal::static_int_cast<sal_uInt16>( nHeight + ScGlobal::nDefFontHeight );
         nHeight -= 240;
     }
 
@@ -768,11 +768,11 @@ USHORT lcl_GetAttribHeight( const ScPatternAttr& rPattern, USHORT nFontHeightId 
 //  nMinHeight, nMinStart zur Optimierung: ab nRow >= nMinStart ist mindestens nMinHeight
 //  (wird nur bei bStdAllowed ausgewertet)
 
-void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight,
+void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHeight,
                                 OutputDevice* pDev,
                                 double nPPTX, double nPPTY,
                                 const Fraction& rZoomX, const Fraction& rZoomY,
-                                BOOL bShrink, USHORT nMinHeight, SCROW nMinStart )
+                                sal_Bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart )
 {
     ScAttrIterator aIter( pAttrArray, nStartRow, nEndRow );
 
@@ -797,11 +797,11 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
         else
         {
             SCROW nRow = 0;
-            BOOL bStdAllowed = (pPattern->GetCellOrientation() == SVX_ORIENTATION_STANDARD);
-            BOOL bStdOnly = FALSE;
+            sal_Bool bStdAllowed = (pPattern->GetCellOrientation() == SVX_ORIENTATION_STANDARD);
+            sal_Bool bStdOnly = sal_False;
             if (bStdAllowed)
             {
-                BOOL bBreak = ((SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue() ||
+                sal_Bool bBreak = ((SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue() ||
                                 ((SvxCellHorJustify)((const SvxHorJustifyItem&)pPattern->
                                     GetItem( ATTR_HOR_JUSTIFY )).GetValue() ==
                                     SVX_HOR_JUSTIFY_BLOCK);
@@ -810,12 +810,12 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
                 // bedingte Formatierung: Zellen durchgehen
                 if ( bStdOnly && ((const SfxUInt32Item&)pPattern->
                                     GetItem(ATTR_CONDITIONAL)).GetValue() )
-                    bStdOnly = FALSE;
+                    bStdOnly = sal_False;
 
                 // gedrehter Text: Zellen durchgehen
                 if ( bStdOnly && ((const SfxInt32Item&)pPattern->
                                     GetItem(ATTR_ROTATE_VALUE)).GetValue() )
-                    bStdOnly = FALSE;
+                    bStdOnly = sal_False;
             }
 
             if (bStdOnly)
@@ -823,11 +823,11 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
                 {
                     if (nEditPos == nStart)
                     {
-                        bStdOnly = FALSE;
+                        bStdOnly = sal_False;
                         if (nEnd > nEditPos)
                             nNextEnd = nEnd;
                         nEnd = nEditPos;                // einzeln ausrechnen
-                        bStdAllowed = FALSE;            // wird auf jeden Fall per Zelle berechnet
+                        bStdAllowed = sal_False;            // wird auf jeden Fall per Zelle berechnet
                     }
                     else
                     {
@@ -838,11 +838,11 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
 
             if (bStdAllowed)
             {
-                USHORT nLatHeight = 0;
-                USHORT nCjkHeight = 0;
-                USHORT nCtlHeight = 0;
-                USHORT nDefHeight;
-                BYTE nDefScript = ScGlobal::GetDefaultScriptType();
+                sal_uInt16 nLatHeight = 0;
+                sal_uInt16 nCjkHeight = 0;
+                sal_uInt16 nCtlHeight = 0;
+                sal_uInt16 nDefHeight;
+                sal_uInt8 nDefScript = ScGlobal::GetDefaultScriptType();
                 if ( nDefScript == SCRIPTTYPE_ASIAN )
                     nDefHeight = nCjkHeight = lcl_GetAttribHeight( *pPattern, ATTR_CJK_FONT_HEIGHT );
                 else if ( nDefScript == SCRIPTTYPE_COMPLEX )
@@ -869,7 +869,7 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
                     Search(nStart,nIndex);
                     while ( nIndex < nCount && (nRow=pItems[nIndex].nRow) <= nEnd )
                     {
-                        BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pItems[nIndex].pCell );
+                        sal_uInt8 nScript = pDocument->GetScriptType( nCol, nRow, nTab, pItems[nIndex].pCell );
                         if ( nScript != nDefScript )
                         {
                             if ( nScript == SCRIPTTYPE_ASIAN )
@@ -905,16 +905,16 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
 
                 SCSIZE nIndex;
                 Search(nStart,nIndex);
-                while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEnd) : FALSE )
+                while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEnd) : sal_False )
                 {
                     //  Zellhoehe nur berechnen, wenn sie spaeter auch gebraucht wird (#37928#)
 
                     if ( bShrink || !(pDocument->GetRowFlags(nRow, nTab) & CR_MANUALSIZE) )
                     {
                         aOptions.pPattern = pPattern;
-                        USHORT nHeight = (USHORT)
+                        sal_uInt16 nHeight = (sal_uInt16)
                                 ( GetNeededSize( nRow, pDev, nPPTX, nPPTY,
-                                                    rZoomX, rZoomY, FALSE, aOptions ) / nPPTY );
+                                                    rZoomX, rZoomY, sal_False, aOptions ) / nPPTY );
                         if (nHeight > pHeight[nRow-nStartRow])
                             pHeight[nRow-nStartRow] = nHeight;
                     }
@@ -934,9 +934,9 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
     }
 }
 
-BOOL ScColumn::GetNextSpellingCell(SCROW& nRow, BOOL bInSel, const ScMarkData& rData) const
+sal_Bool ScColumn::GetNextSpellingCell(SCROW& nRow, sal_Bool bInSel, const ScMarkData& rData) const
 {
-    BOOL bStop = FALSE;
+    sal_Bool bStop = sal_False;
     CellType eCellType;
     SCSIZE nIndex;
     if (!bInSel && Search(nRow, nIndex))
@@ -945,17 +945,17 @@ BOOL ScColumn::GetNextSpellingCell(SCROW& nRow, BOOL bInSel, const ScMarkData& r
         if ( (eCellType == CELLTYPE_STRING || eCellType == CELLTYPE_EDIT) &&
              !(HasAttrib( nRow, nRow, HASATTR_PROTECTED) &&
                pDocument->IsTabProtected(nTab)) )
-                return TRUE;
+                return sal_True;
     }
     while (!bStop)
     {
         if (bInSel)
         {
-            nRow = rData.GetNextMarked(nCol, nRow, FALSE);
+            nRow = rData.GetNextMarked(nCol, nRow, sal_False);
             if (!ValidRow(nRow))
             {
                 nRow = MAXROW+1;
-                bStop = TRUE;
+                bStop = sal_True;
             }
             else
             {
@@ -963,7 +963,7 @@ BOOL ScColumn::GetNextSpellingCell(SCROW& nRow, BOOL bInSel, const ScMarkData& r
                 if ( (eCellType == CELLTYPE_STRING || eCellType == CELLTYPE_EDIT) &&
                      !(HasAttrib( nRow, nRow, HASATTR_PROTECTED) &&
                        pDocument->IsTabProtected(nTab)) )
-                        return TRUE;
+                        return sal_True;
                 else
                     nRow++;
             }
@@ -974,17 +974,17 @@ BOOL ScColumn::GetNextSpellingCell(SCROW& nRow, BOOL bInSel, const ScMarkData& r
             if ( (eCellType == CELLTYPE_STRING || eCellType == CELLTYPE_EDIT) &&
                  !(HasAttrib( nRow, nRow, HASATTR_PROTECTED) &&
                    pDocument->IsTabProtected(nTab)) )
-                    return TRUE;
+                    return sal_True;
             else
                 nRow++;
         }
         else
         {
             nRow = MAXROW+1;
-            bStop = TRUE;
+            bStop = sal_True;
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
 // =========================================================================================
@@ -1060,8 +1060,8 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
                 pDocument->ApplyAsianEditSettings( *pEngine );
             }
             pEngine->SetText( *pData );
-            USHORT nParCount = pEngine->GetParagraphCount();
-            for (USHORT nPar=0; nPar<nParCount; nPar++)
+            sal_uInt16 nParCount = pEngine->GetParagraphCount();
+            for (sal_uInt16 nPar=0; nPar<nParCount; nPar++)
             {
                 pEngine->QuickRemoveCharAttribs( nPar );
                 const SfxItemSet& rOld = pEngine->GetParaAttribs( nPar );
@@ -1072,16 +1072,16 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
                 }
             }
             //  URL-Felder in Text wandeln (andere gibt's nicht, darum pType=0)
-            pEngine->RemoveFields( TRUE );
+            pEngine->RemoveFields( sal_True );
 
-            BOOL bSpellErrors = pEngine->HasOnlineSpellErrors();
-            BOOL bNeedObject = bSpellErrors || nParCount>1;         // Errors/Absaetze behalten
+            sal_Bool bSpellErrors = pEngine->HasOnlineSpellErrors();
+            sal_Bool bNeedObject = bSpellErrors || nParCount>1;         // Errors/Absaetze behalten
             //  ScEditAttrTester nicht mehr noetig, Felder sind raus
 
             if ( bNeedObject )                                      // bleibt Edit-Zelle
             {
-                ULONG nCtrl = pEngine->GetControlWord();
-                ULONG nWantBig = bSpellErrors ? EE_CNTRL_ALLOWBIGOBJS : 0;
+                sal_uLong nCtrl = pEngine->GetControlWord();
+                sal_uLong nWantBig = bSpellErrors ? EE_CNTRL_ALLOWBIGOBJS : 0;
                 if ( ( nCtrl & EE_CNTRL_ALLOWBIGOBJS ) != nWantBig )
                     pEngine->SetControlWord( (nCtrl & ~EE_CNTRL_ALLOWBIGOBJS) | nWantBig );
                 EditTextObject* pNewData = pEngine->CreateTextObject();
@@ -1104,14 +1104,14 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
 
 // =========================================================================================
 
-BOOL ScColumn::TestTabRefAbs(SCTAB nTable)
+sal_Bool ScColumn::TestTabRefAbs(SCTAB nTable)
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if (pItems)
         for (SCSIZE i = 0; i < nCount; i++)
             if ( pItems[i].pCell->GetCellType() == CELLTYPE_FORMULA )
                 if (((ScFormulaCell*)pItems[i].pCell)->TestTabRefAbs(nTable))
-                    bRet = TRUE;
+                    bRet = sal_True;
     return bRet;
 }
 
@@ -1129,7 +1129,7 @@ ScColumnIterator::~ScColumnIterator()
 {
 }
 
-BOOL ScColumnIterator::Next( SCROW& rRow, ScBaseCell*& rpCell )
+sal_Bool ScColumnIterator::Next( SCROW& rRow, ScBaseCell*& rpCell )
 {
     if ( nPos < pColumn->nCount )
     {
@@ -1138,13 +1138,13 @@ BOOL ScColumnIterator::Next( SCROW& rRow, ScBaseCell*& rpCell )
         {
             rpCell = pColumn->pItems[nPos].pCell;
             ++nPos;
-            return TRUE;
+            return sal_True;
         }
     }
 
     rRow = 0;
     rpCell = NULL;
-    return FALSE;
+    return sal_False;
 }
 
 SCSIZE ScColumnIterator::GetIndex() const           // Index zur letzen abgefragten Zelle
@@ -1155,10 +1155,10 @@ SCSIZE ScColumnIterator::GetIndex() const           // Index zur letzen abgefrag
 // -----------------------------------------------------------------------------------------
 
 ScMarkedDataIter::ScMarkedDataIter( const ScColumn* pCol, const ScMarkData* pMarkData,
-                                    BOOL bAllIfNone ) :
+                                    sal_Bool bAllIfNone ) :
     pColumn( pCol ),
     pMarkIter( NULL ),
-    bNext( TRUE ),
+    bNext( sal_True ),
     bAll( bAllIfNone )
 {
     if (pMarkData && pMarkData->IsMultiMarked())
@@ -1170,9 +1170,9 @@ ScMarkedDataIter::~ScMarkedDataIter()
     delete pMarkIter;
 }
 
-BOOL ScMarkedDataIter::Next( SCSIZE& rIndex )
+sal_Bool ScMarkedDataIter::Next( SCSIZE& rIndex )
 {
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     do
     {
         if (bNext)
@@ -1185,28 +1185,28 @@ BOOL ScMarkedDataIter::Next( SCSIZE& rIndex )
                     nBottom = MAXROW;
                 }
                 else
-                    return FALSE;
+                    return sal_False;
             }
             pColumn->Search( nTop, nPos );
-            bNext = FALSE;
-            bAll  = FALSE;                  // nur beim ersten Versuch
+            bNext = sal_False;
+            bAll  = sal_False;                  // nur beim ersten Versuch
         }
 
         if ( nPos >= pColumn->nCount )
-            return FALSE;
+            return sal_False;
 
         if ( pColumn->pItems[nPos].nRow <= nBottom )
-            bFound = TRUE;
+            bFound = sal_True;
         else
-            bNext = TRUE;
+            bNext = sal_True;
     }
     while (!bFound);
 
     rIndex = nPos++;
-    return TRUE;
+    return sal_True;
 }
 
-//UNUSED2009-05 USHORT ScColumn::GetErrorData( SCROW nRow ) const
+//UNUSED2009-05 sal_uInt16 ScColumn::GetErrorData( SCROW nRow ) const
 //UNUSED2009-05 {
 //UNUSED2009-05     SCSIZE  nIndex;
 //UNUSED2009-05     if (Search(nRow, nIndex))
@@ -1226,24 +1226,24 @@ BOOL ScMarkedDataIter::Next( SCSIZE& rIndex )
 
 //------------
 
-BOOL ScColumn::IsEmptyData() const
+sal_Bool ScColumn::IsEmptyData() const
 {
     return (nCount == 0);
 }
 
-BOOL ScColumn::IsEmptyVisData(BOOL bNotes) const
+sal_Bool ScColumn::IsEmptyVisData(sal_Bool bNotes) const
 {
     if (!pItems || nCount == 0)
-        return TRUE;
+        return sal_True;
     else
     {
-        BOOL bVisData = FALSE;
+        sal_Bool bVisData = sal_False;
         SCSIZE i;
         for (i=0; i<nCount && !bVisData; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
-                bVisData = TRUE;
+                bVisData = sal_True;
         }
         return !bVisData;
     }
@@ -1268,20 +1268,20 @@ SCSIZE ScColumn::VisibleCount( SCROW nStartRow, SCROW nEndRow ) const
     return nVisCount;
 }
 
-SCROW ScColumn::GetLastVisDataPos(BOOL bNotes) const
+SCROW ScColumn::GetLastVisDataPos(sal_Bool bNotes) const
 {
     SCROW nRet = 0;
     if (pItems)
     {
         SCSIZE i;
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         for (i=nCount; i>0 && !bFound; )
         {
             --i;
             ScBaseCell* pCell = pItems[i].pCell;
             if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
             {
-                bFound = TRUE;
+                bFound = sal_True;
                 nRet = pItems[i].nRow;
             }
         }
@@ -1289,19 +1289,19 @@ SCROW ScColumn::GetLastVisDataPos(BOOL bNotes) const
     return nRet;
 }
 
-SCROW ScColumn::GetFirstVisDataPos(BOOL bNotes) const
+SCROW ScColumn::GetFirstVisDataPos(sal_Bool bNotes) const
 {
     SCROW nRet = 0;
     if (pItems)
     {
         SCSIZE i;
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         for (i=0; i<nCount && !bFound; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
             {
-                bFound = TRUE;
+                bFound = sal_True;
                 nRet = pItems[i].nRow;
             }
         }
@@ -1309,49 +1309,49 @@ SCROW ScColumn::GetFirstVisDataPos(BOOL bNotes) const
     return nRet;
 }
 
-BOOL ScColumn::HasVisibleDataAt(SCROW nRow) const
+sal_Bool ScColumn::HasVisibleDataAt(SCROW nRow) const
 {
     SCSIZE nIndex;
     if (Search(nRow, nIndex))
         if (!pItems[nIndex].pCell->IsBlank())
-            return TRUE;
+            return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
-BOOL ScColumn::IsEmptyAttr() const
+sal_Bool ScColumn::IsEmptyAttr() const
 {
     if (pAttrArray)
         return pAttrArray->IsEmpty();
     else
-        return TRUE;
+        return sal_True;
 }
 
-BOOL ScColumn::IsEmpty() const
+sal_Bool ScColumn::IsEmpty() const
 {
     return (IsEmptyData() && IsEmptyAttr());
 }
 
-BOOL ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes) const
+sal_Bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes) const
 {
     if ( nCount == 0 || !pItems )
-        return TRUE;
+        return sal_True;
 
     SCSIZE nIndex;
     Search( nStartRow, nIndex );
     while ( nIndex < nCount && pItems[nIndex].nRow <= nEndRow )
     {
         if ( !pItems[nIndex].pCell->IsBlank( bIgnoreNotes ) )   // found a cell
-            return FALSE;                           // not empty
+            return sal_False;                           // not empty
         ++nIndex;
     }
-    return TRUE;                                    // no cell found
+    return sal_True;                                    // no cell found
 }
 
 SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const
 {
     SCSIZE nLines = 0;
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     SCSIZE i;
     if (pItems && (nCount > 0))
     {
@@ -1407,9 +1407,9 @@ SCROW ScColumn::GetLastDataPos() const
         return 0;
 }
 
-BOOL ScColumn::GetPrevDataPos(SCROW& rRow) const
+sal_Bool ScColumn::GetPrevDataPos(SCROW& rRow) const
 {
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     SCSIZE i = nCount;
     while (!bFound && (i > 0))
     {
@@ -1421,13 +1421,13 @@ BOOL ScColumn::GetPrevDataPos(SCROW& rRow) const
     return bFound;
 }
 
-BOOL ScColumn::GetNextDataPos(SCROW& rRow) const        // greater than rRow
+sal_Bool ScColumn::GetNextDataPos(SCROW& rRow) const        // greater than rRow
 {
     SCSIZE nIndex;
     if (Search( rRow, nIndex ))
         ++nIndex;                   // next cell
 
-    BOOL bMore = ( nIndex < nCount );
+    sal_Bool bMore = ( nIndex < nCount );
     if ( bMore )
         rRow = pItems[nIndex].nRow;
     return bMore;
@@ -1436,12 +1436,12 @@ BOOL ScColumn::GetNextDataPos(SCROW& rRow) const        // greater than rRow
 void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
 {
     if (!nMovY) return;
-    BOOL bForward = (nMovY>0);
+    sal_Bool bForward = (nMovY>0);
 
     SCSIZE nIndex;
-    BOOL bThere = Search(rRow, nIndex);
+    sal_Bool bThere = Search(rRow, nIndex);
     if (bThere && pItems[nIndex].pCell->IsBlank())
-        bThere = FALSE;
+        bThere = sal_False;
 
     if (bThere)
     {
@@ -1481,7 +1481,7 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
         }
         if (nLast==rRow)
         {
-            bThere = FALSE;
+            bThere = sal_False;
             nIndex = bForward ? nOldIndex+1 : nOldIndex;
         }
         else
@@ -1511,7 +1511,7 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
     }
 }
 
-BOOL ScColumn::HasDataAt(SCROW nRow) const
+sal_Bool ScColumn::HasDataAt(SCROW nRow) const
 {
 /*  SCSIZE nIndex;
     return Search( nRow, nIndex );
@@ -1522,13 +1522,13 @@ BOOL ScColumn::HasDataAt(SCROW nRow) const
     SCSIZE nIndex;
     if (Search(nRow, nIndex))
         if (!pItems[nIndex].pCell->IsBlank())
-            return TRUE;
+            return sal_True;
 
-    return FALSE;
+    return sal_False;
 
 }
 
-BOOL ScColumn::IsAllAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
+sal_Bool ScColumn::IsAllAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
 {
     if (pAttrArray && rCol.pAttrArray)
         return pAttrArray->IsAllEqual( *rCol.pAttrArray, nStartRow, nEndRow );
@@ -1536,7 +1536,7 @@ BOOL ScColumn::IsAllAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEnd
         return !pAttrArray && !rCol.pAttrArray;
 }
 
-BOOL ScColumn::IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
+sal_Bool ScColumn::IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
 {
     if (pAttrArray && rCol.pAttrArray)
         return pAttrArray->IsVisibleEqual( *rCol.pAttrArray, nStartRow, nEndRow );
@@ -1544,43 +1544,43 @@ BOOL ScColumn::IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW 
         return !pAttrArray && !rCol.pAttrArray;
 }
 
-BOOL ScColumn::GetFirstVisibleAttr( SCROW& rFirstRow ) const
+sal_Bool ScColumn::GetFirstVisibleAttr( SCROW& rFirstRow ) const
 {
     if (pAttrArray)
         return pAttrArray->GetFirstVisibleAttr( rFirstRow );
     else
-        return FALSE;
+        return sal_False;
 }
 
-BOOL ScColumn::GetLastVisibleAttr( SCROW& rLastRow ) const
+sal_Bool ScColumn::GetLastVisibleAttr( SCROW& rLastRow ) const
 {
     if (pAttrArray)
     {
         // row of last cell is needed
-        SCROW nLastData = GetLastVisDataPos( TRUE );    // always including notes, 0 if none
+        SCROW nLastData = GetLastVisDataPos( sal_True );    // always including notes, 0 if none
 
         return pAttrArray->GetLastVisibleAttr( rLastRow, nLastData );
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
-BOOL ScColumn::HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const
+sal_Bool ScColumn::HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const
 {
     if (pAttrArray)
         return pAttrArray->HasVisibleAttrIn( nStartRow, nEndRow );
     else
-        return FALSE;
+        return sal_False;
 }
 
-void ScColumn::FindUsed( SCROW nStartRow, SCROW nEndRow, BOOL* pUsed ) const
+void ScColumn::FindUsed( SCROW nStartRow, SCROW nEndRow, sal_Bool* pUsed ) const
 {
     SCROW nRow = 0;
     SCSIZE nIndex;
     Search( nStartRow, nIndex );
-    while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEndRow) : FALSE )
+    while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEndRow) : sal_False )
     {
-        pUsed[nRow-nStartRow] = TRUE;
+        pUsed[nRow-nStartRow] = sal_True;
         ++nIndex;
     }
 }
@@ -1681,7 +1681,7 @@ void ScColumn::CompileDBFormula()
         }
 }
 
-void ScColumn::CompileDBFormula( BOOL bCreateFormulaString )
+void ScColumn::CompileDBFormula( sal_Bool bCreateFormulaString )
 {
     if (pItems)
         for (SCSIZE i = 0; i < nCount; i++)
@@ -1692,7 +1692,7 @@ void ScColumn::CompileDBFormula( BOOL bCreateFormulaString )
         }
 }
 
-void ScColumn::CompileNameFormula( BOOL bCreateFormulaString )
+void ScColumn::CompileNameFormula( sal_Bool bCreateFormulaString )
 {
     if (pItems)
         for (SCSIZE i = 0; i < nCount; i++)
@@ -1717,13 +1717,13 @@ void ScColumn::CompileColRowNameFormula()
 void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
 {
     double nValue = 0.0;
-    BOOL bVal = FALSE;
-    BOOL bCell = TRUE;
+    sal_Bool bVal = sal_False;
+    sal_Bool bCell = sal_True;
     switch (pCell->GetCellType())
     {
         case CELLTYPE_VALUE:
             nValue = ((ScValueCell*)pCell)->GetValue();
-            bVal = TRUE;
+            bVal = sal_True;
             break;
         case CELLTYPE_FORMULA:
             {
@@ -1733,19 +1733,19 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
                     if ( pFC->GetErrCode() )
                     {
                         if ( rData.eFunc != SUBTOTAL_FUNC_CNT ) // fuer Anzahl einfach weglassen
-                            rData.bError = TRUE;
+                            rData.bError = sal_True;
                     }
                     else if (pFC->IsValue())
                     {
                         nValue = pFC->GetValue();
-                        bVal = TRUE;
+                        bVal = sal_True;
                     }
                     // sonst Text
                 }
             }
             break;
         case CELLTYPE_NOTE:
-            bCell = FALSE;
+            bCell = sal_False;
             break;
         // bei Strings nichts
         default:
@@ -1764,7 +1764,7 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
                 {
                     ++rData.nCount;
                     if (!SubTotal::SafePlus( rData.nVal, nValue ))
-                        rData.bError = TRUE;
+                        rData.bError = sal_True;
                 }
                 break;
             case SUBTOTAL_FUNC_CNT:             // nur Werte
@@ -1797,10 +1797,10 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
 void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
                                         ScFunctionData& rData,
                                         ScFlatBoolRowSegments& rHiddenRows,
-                                        BOOL bDoExclude, SCROW nExStartRow, SCROW nExEndRow )
+                                        sal_Bool bDoExclude, SCROW nExStartRow, SCROW nExEndRow )
 {
     SCSIZE nIndex;
-    ScMarkedDataIter aDataIter(this, &rMark, FALSE);
+    ScMarkedDataIter aDataIter(this, &rMark, sal_False);
     while (aDataIter.Next( nIndex ))
     {
         SCROW nRow = pItems[nIndex].nRow;
@@ -1828,9 +1828,9 @@ void ScColumn::UpdateAreaFunction( ScFunctionData& rData,
     }
 }
 
-ULONG ScColumn::GetWeightedCount() const
+sal_uLong ScColumn::GetWeightedCount() const
 {
-    ULONG nTotal = 0;
+    sal_uLong nTotal = 0;
 
     //  Notizen werden nicht gezaehlt
 
@@ -1859,9 +1859,9 @@ ULONG ScColumn::GetWeightedCount() const
     return nTotal;
 }
 
-ULONG ScColumn::GetCodeCount() const
+sal_uLong ScColumn::GetCodeCount() const
 {
-    ULONG nCodeCount = 0;
+    sal_uLong nCodeCount = 0;
 
     for (SCSIZE i=0; i<nCount; i++)
     {

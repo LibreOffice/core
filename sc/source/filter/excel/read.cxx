@@ -89,9 +89,9 @@ FltError ImportExcel::Read( void )
     Zustand             eAkt = Z_BiffNull, ePrev = Z_BiffNull;
 
     FltError            eLastErr = eERR_OK;
-    UINT16              nOpcode;
-    UINT16              nBofLevel = 0;
-    BOOL                bBiff4Workbook = FALSE;
+    sal_uInt16              nOpcode;
+    sal_uInt16              nBofLevel = 0;
+    sal_Bool                bBiff4Workbook = sal_False;
 
     DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
@@ -189,7 +189,7 @@ FltError ImportExcel::Read( void )
                                 else if( pExcRoot->eDateiTyp == Biff4W )
                                 {
                                     eAkt = Z_Biff4W;
-                                    bBiff4Workbook = TRUE;
+                                    bBiff4Workbook = sal_True;
                                 }
                             break;
                             case EXC_BIFF5:
@@ -722,7 +722,7 @@ FltError ImportExcel::Read( void )
                             break;
                             case Biff5V:
                             default:
-                                pD->SetVisible( GetCurrScTab(), FALSE );
+                                pD->SetVisible( GetCurrScTab(), sal_False );
                                 ePrev = eAkt;
                                 eAkt = Z_Biffn0;
                         }
@@ -782,7 +782,7 @@ FltError ImportExcel8::Read( void )
 {
 #if EXC_INCL_DUMPER
     {
-        Biff8RecDumper aDumper( GetRoot(), TRUE );
+        Biff8RecDumper aDumper( GetRoot(), sal_True );
         if( aDumper.Dump( aIn ) )
             return ERRCODE_ABORT;
     }

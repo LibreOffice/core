@@ -62,8 +62,6 @@
 // moved from fieldwnd.hxx, see also SC_DAPI_MAXFIELDS
 #define MAX_LABELS  256
 
-#define MAX_PAGEFIELDS 10   // maximum count of fields for page area
-
 #define     PIVOT_MAXFUNC           11
 #define     PIVOT_FUNC_NONE         0x0000
 #define     PIVOT_FUNC_SUM          0x0001
@@ -114,32 +112,32 @@ public:
 private:
     union
     {
-        ULONG   nNumFormat;
+        sal_uLong   nNumFormat;
         sal_Int32 mnDatePart;
     };
 
     String  aString;
     double  fValue;
-    BYTE    mbFlag;
-    //BOOL  bHasValue: 1 ;
-    //BOOL  bHasData: 1;
-    //BOOL  bErr: 1;
+    sal_uInt8   mbFlag;
+    //sal_Bool  bHasValue: 1 ;
+    //sal_Bool  bHasData: 1;
+    //sal_Bool  bErr: 1;
 
     friend class ScDPTableDataCache;
 public:
     ScDPItemData() : nNumFormat( 0 ), fValue(0.0), mbFlag( 0 ){}
-    ScDPItemData( ULONG nNF, const String & rS, double fV, BYTE bF ):nNumFormat(nNF), aString(rS), fValue(fV), mbFlag( bF ){}
-    ScDPItemData( const String& rS, double fV = 0.0, BOOL bHV = FALSE, const ULONG nNumFormat = 0 , BOOL bData = TRUE) ;
-    ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nDocTab );
+    ScDPItemData( sal_uLong nNF, const String & rS, double fV, sal_uInt8 bF ):nNumFormat(nNF), aString(rS), fValue(fV), mbFlag( bF ){}
+    ScDPItemData( const String& rS, double fV = 0.0, sal_Bool bHV = sal_False, const sal_uLong nNumFormat = 0 , sal_Bool bData = sal_True) ;
+    ScDPItemData( ScDocument* pDoc, SCROW nRow, sal_uInt16 nCol, sal_uInt16 nDocTab );
 
     void        SetString( const String& rS ) { aString = rS; mbFlag &= ~(MK_VAL|MK_DATE); nNumFormat = 0; mbFlag |= MK_DATA; }
-//  void        SetValue ( double value , ULONG nNumFormat = 0 ) { bHasValue = TRUE; nNumFormat = 0;bHasData = TRUE; bDate = FALSE; fValue = value ;}
-    BOOL        IsCaseInsEqual( const ScDPItemData& r ) const;
+//  void        SetValue ( double value , sal_uLong nNumFormat = 0 ) { bHasValue = sal_True; nNumFormat = 0;bHasData = sal_True; bDate = sal_False; fValue = value ;}
+    sal_Bool        IsCaseInsEqual( const ScDPItemData& r ) const;
 
     size_t      Hash() const;
 
     // exact equality
-    BOOL        operator==( const ScDPItemData& r ) const;
+    sal_Bool        operator==( const ScDPItemData& r ) const;
     // case insensitive equality
     static sal_Int32    Compare( const ScDPItemData& rA, const ScDPItemData& rB );
 
@@ -148,21 +146,21 @@ public:
 #endif
 
 public:
-    BOOL IsHasData() const ;
-    BOOL IsHasErr() const ;
-    BOOL IsValue() const;
+    sal_Bool IsHasData() const ;
+    sal_Bool IsHasErr() const ;
+    sal_Bool IsValue() const;
     String  GetString() const ;
     double  GetValue() const ;
-    ULONG    GetNumFormat() const ;
-    BOOL HasStringData() const ;
-    BOOL IsDate() const;
-    BOOL HasDatePart() const;
-    void SetDate( BOOL b ) ;
+    sal_uLong    GetNumFormat() const ;
+    sal_Bool HasStringData() const ;
+    sal_Bool IsDate() const;
+    sal_Bool HasDatePart() const;
+    void SetDate( sal_Bool b ) ;
 
     TypedStrData*  CreateTypeString( );
     sal_uInt8    GetType() const;
-    BYTE & GetFlag() throw() { return mbFlag; }
-    const BYTE & GetFlag() const throw() { return const_cast<ScDPItemData*>(this)->GetFlag(); }
+    sal_uInt8 & GetFlag() throw() { return mbFlag; }
+    const sal_uInt8 & GetFlag() const throw() { return const_cast<ScDPItemData*>(this)->GetFlag(); }
 };
 
 class SC_DLLPUBLIC ScDPItemDataPool
@@ -194,8 +192,8 @@ class ScTabViewShell;
 namespace ScDPGlobal
 {
 // used for core data
-    String GetFieldFuncString( const String& rSourceName, USHORT &rFuncMask, BOOL bIsValue );
-    String GetFuncString( const String &rString, const USHORT nIndex );
+    String GetFieldFuncString( const String& rSourceName, sal_uInt16 &rFuncMask, sal_Bool bIsValue );
+    String GetFuncString( const String &rString, const sal_uInt16 nIndex );
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> DP_GetMembers( const com::sun::star::uno::Reference<
                                                                                       com::sun::star::sheet::XDimensionsSupplier>&rSrc, long nField );
 // common operation
@@ -203,7 +201,7 @@ namespace ScDPGlobal
     Rectangle operator *( const Rectangle &rLeft, const std::pair<double,double> & rRight );
 // used for  DataPilot Panel
     ScDPInfoWnd* GetDPInfoWnd( ScTabViewShell *pViewShell );
-   bool ChkDPTableOverlap( ScDocument *pDestDoc, std::list<ScDPObject> & rClipboard, SCCOL nClipStartCol, SCROW nClipStartRow, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab, USHORT nEndTab, BOOL bExcludeClip = FALSE );
+   bool ChkDPTableOverlap( ScDocument *pDestDoc, std::list<ScDPObject> & rClipboard, SCCOL nClipStartCol, SCROW nClipStartRow, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab, sal_uInt16 nEndTab, sal_Bool bExcludeClip = sal_False );
 
 }
 #endif

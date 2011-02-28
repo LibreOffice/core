@@ -44,19 +44,43 @@ static const sal_Char pStrFix[] = "FIX";
 
 ScImportOptions::ScImportOptions( const String& rStr )
 {
-    bFixedWidth = FALSE;
+    // Use the same string format as ScAsciiOptions,
+    // because the import options string is passed here when a CSV file is loaded and saved again.
+    // The old format is still supported because it might be used in macros.
+
+    bFixedWidth = sal_False;
     nFieldSepCode = 0;
-    if ( rStr.GetTokenCount(',') >= 3 )
+    nTextSepCode = 0;
+    eCharSet = RTL_TEXTENCODING_DONTKNOW;
+    bSaveAsShown = sal_True;    // "true" if not in string (after CSV import)
+    bQuoteAllText = sal_False;
+    xub_StrLen nTokenCount = rStr.GetTokenCount(',');
+    if ( nTokenCount >= 3 )
     {
+        // first 3 tokens: common
         String aToken( rStr.GetToken( 0, ',' ) );
         if( aToken.EqualsIgnoreCaseAscii( pStrFix ) )
-            bFixedWidth = TRUE;
+            bFixedWidth = sal_True;
         else
             nFieldSepCode = (sal_Unicode) aToken.ToInt32();
         nTextSepCode  = (sal_Unicode) rStr.GetToken(1,',').ToInt32();
         aStrFont      = rStr.GetToken(2,',');
         eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
-        bSaveAsShown  = (rStr.GetToken( 3, ',' ).ToInt32() ? TRUE : FALSE);
+
+        if ( nTokenCount == 4 )
+        {
+            // compatibility with old options string: "Save as shown" as 4th token, numeric
+            bSaveAsShown = (rStr.GetToken( 3, ',' ).ToInt32() ? sal_True : sal_False);
+            bQuoteAllText = sal_True;   // use old default then
+        }
+        else
+        {
+            // look at the same positions as in ScAsciiOptions
+            if ( nTokenCount >= 7 )
+                bQuoteAllText = rStr.GetToken(6, ',').EqualsAscii("true");
+            if ( nTokenCount >= 9 )
+                bSaveAsShown = rStr.GetToken(8, ',').EqualsAscii("true");
+        }
     }
 }
 
@@ -74,8 +98,11 @@ String ScImportOptions::BuildString() const
     aResult += String::CreateFromInt32(nTextSepCode);
     aResult += ',';
     aResult += aStrFont;
-    aResult += ',';
-    aResult += String::CreateFromInt32( bSaveAsShown ? 1 : 0 );
+                                                            // use the same string format as ScAsciiOptions:
+    aResult.AppendAscii( ",1,,0," );                        // first row, no column info, default language
+    aResult.AppendAscii(bQuoteAllText ? "true" : "false");  // same as "quoted field as text" in ScAsciiOptions
+    aResult.AppendAscii( ",true," );                        // "detect special numbers"
+    aResult.AppendAscii(bSaveAsShown ? "true" : "false");   // "save as shown": not in ScAsciiOptions
 
     return aResult;
 }

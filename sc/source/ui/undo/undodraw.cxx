@@ -75,7 +75,7 @@ String __EXPORT ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const
         return String();
 }
 
-USHORT __EXPORT ScUndoDraw::GetId() const
+sal_uInt16 __EXPORT ScUndoDraw::GetId() const
 {
     if (pDrawUndo)
         return pDrawUndo->GetId();
@@ -83,26 +83,26 @@ USHORT __EXPORT ScUndoDraw::GetId() const
         return 0;
 }
 
-BOOL __EXPORT ScUndoDraw::IsLinked()
+sal_Bool __EXPORT ScUndoDraw::IsLinked()
 {
     if (pDrawUndo)
         return pDrawUndo->IsLinked();
     else
-        return FALSE;
+        return sal_False;
 }
 
-void __EXPORT ScUndoDraw::SetLinked( BOOL bIsLinked )
+void __EXPORT ScUndoDraw::SetLinked( sal_Bool bIsLinked )
 {
     if (pDrawUndo)
         pDrawUndo->SetLinked(bIsLinked);
 }
 
-BOOL  __EXPORT ScUndoDraw::Merge( SfxUndoAction* pNextAction )
+sal_Bool  __EXPORT ScUndoDraw::Merge( SfxUndoAction* pNextAction )
 {
     if (pDrawUndo)
         return pDrawUndo->Merge(pNextAction);
     else
-        return FALSE;
+        return sal_False;
 }
 
 void ScUndoDraw::UpdateSubShell()
@@ -139,12 +139,12 @@ void __EXPORT ScUndoDraw::Repeat(SfxRepeatTarget& rTarget)
         pDrawUndo->Repeat(rTarget);
 }
 
-BOOL __EXPORT ScUndoDraw::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool __EXPORT ScUndoDraw::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     if (pDrawUndo)
         return pDrawUndo->CanRepeat(rTarget);
     else
-        return FALSE;
+        return sal_False;
 }
 
 

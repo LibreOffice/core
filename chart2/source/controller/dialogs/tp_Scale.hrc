@@ -25,18 +25,39 @@
  *
  ************************************************************************/
 
-#ifndef SC_PVGLOB_HXX
-#define SC_PVGLOB_HXX
+#include "ResourceIds.hrc"
 
-//-------------------------------------------------------------------
+#define FL_SCALE            1
 
-class PivotGlobal
-{
-public:
-    static long nObjHeight;
-    static long nObjWidth;
-    static long nSelSpace;
-};
+#define TXT_MIN             1
+#define TXT_MAX             2
+#define TXT_STEP_MAIN       3
+#define TXT_STEP_HELP_COUNT 4
+#define TXT_ORIGIN          5
+#define TXT_TIME_RESOLUTION 6
+#define TXT_AXIS_TYPE       7
+#define TXT_STEP_HELP       8
 
+#define CBX_AUTO_MIN        1
+#define CBX_AUTO_MAX        2
+#define CBX_AUTO_STEP_MAIN  3
+#define CBX_AUTO_STEP_HELP  4
+#define CBX_AUTO_ORIGIN     5
+#define CBX_LOGARITHM       6
+#define CBX_REVERSE         7
+#define CBX_AUTO_TIME_RESOLUTION 8
 
-#endif // SC_PVGLOB_HXX
+#define EDT_STEP_MAIN       1
+#define EDT_MAX             2
+#define EDT_MIN             3
+#define EDT_ORIGIN          4
+
+#define MT_STEPHELP         10
+#define MT_MAIN_DATE_STEP   11
+
+#define LB_AXIS_TYPE        1
+#define LB_MAIN_TIME_UNIT   2
+#define LB_HELP_TIME_UNIT   3
+#define LB_TIME_RESOLUTION  4
+
+#define STR_LIST_TIME_UNIT  1

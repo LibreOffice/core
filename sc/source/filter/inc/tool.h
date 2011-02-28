@@ -32,22 +32,22 @@
 #include <document.hxx>
 
 // Defaultwerte
-const BYTE  nDezStd = 0;        // Dezimalstellen fuer Standard-Zellen
-const BYTE  nDezFloat = 2;  //        "         "  Float-Zellen
+const sal_uInt8 nDezStd = 0;        // Dezimalstellen fuer Standard-Zellen
+const sal_uInt8 nDezFloat = 2;  //        "         "  Float-Zellen
 
 void        PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char *pString );
 
-void        SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, BYTE nFormat, BYTE nSt );
+void        SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt );
 
 void        InitPage( void );
 
 String      DosToSystem( sal_Char *pSource );
 
-double      SnumToDouble( INT16 nVal );
+double      SnumToDouble( sal_Int16 nVal );
 
-double          Snum32ToDouble( UINT32 nValue );
+double          Snum32ToDouble( sal_uInt32 nValue );
 
-typedef UINT16 StampTyp;
+typedef sal_uInt16 StampTyp;
 
 #define MAKE_STAMP(nF,nS) ((nS&0x0F)+((nF&0x7F)*16))
             // Bit 0...3  = Bit 0...3 von Stellenzahl
@@ -65,24 +65,24 @@ public:
                         pAttr = NULL;
                     }
 
-                    FormIdent( BYTE nFormat, BYTE nSt, SfxUInt32Item& rAttr )
+                    FormIdent( sal_uInt8 nFormat, sal_uInt8 nSt, SfxUInt32Item& rAttr )
                     {
                         nStamp = MAKE_STAMP( nFormat, nSt );
                         pAttr = &rAttr;
                     }
 
-                    FormIdent( BYTE nFormat, BYTE nSt )
+                    FormIdent( sal_uInt8 nFormat, sal_uInt8 nSt )
                     {
                         nStamp = MAKE_STAMP( nFormat, nSt );
                         pAttr = NULL;
                     }
 
-    BOOL            operator ==( const FormIdent& rComp ) const
+    sal_Bool            operator ==( const FormIdent& rComp ) const
                     {
                         return ( nStamp == rComp.nStamp );
                     }
 
-    BOOL            operator ==( const StampTyp& rStamp ) const
+    sal_Bool            operator ==( const StampTyp& rStamp ) const
                     {
                         return ( nStamp == rStamp );
                     }
@@ -97,7 +97,7 @@ public:
                         return pAttr;
                     }
 
-    void            SetStamp( BYTE nFormat, BYTE nSt )
+    void            SetStamp( sal_uInt8 nFormat, sal_uInt8 nSt )
                     {
                         nStamp = MAKE_STAMP( nFormat, nSt );
                     }
@@ -113,27 +113,27 @@ class FormCache
 {
 private:
     FormIdent           aIdents[ __nSize ]; //gepufferte Formate
-    BOOL                bValid[ __nSize ];
+    sal_Bool                bValid[ __nSize ];
     FormIdent           aCompareIdent;      // zum Vergleichen
-    BYTE                nDefaultFormat;     // Defaultformat der Datei
+    sal_uInt8               nDefaultFormat;     // Defaultformat der Datei
     SvNumberFormatter*  pFormTable;         // Value-Format-Table-Anker
     StampTyp            nIndex;
     LanguageType        eLanguage;          // Systemsprache
 
-    SfxUInt32Item*      NewAttr( BYTE nFormat, BYTE nSt );
+    SfxUInt32Item*      NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt );
 public:
-                        FormCache( ScDocument*, BYTE nNewDefaultFormat = 0xFF );
+                        FormCache( ScDocument*, sal_uInt8 nNewDefaultFormat = 0xFF );
                         ~FormCache();
 
-    inline const SfxUInt32Item* GetAttr( BYTE nFormat, BYTE nSt );
-    void                SetDefaultFormat( BYTE nD = 0xFF )
+    inline const SfxUInt32Item* GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt );
+    void                SetDefaultFormat( sal_uInt8 nD = 0xFF )
                         {
                             nDefaultFormat = nD;
                         }
 };
 
 
-inline const SfxUInt32Item* FormCache::GetAttr( BYTE nFormat, BYTE nSt )
+inline const SfxUInt32Item* FormCache::GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
 {
     // PREC:    nFormat = Lotus-Format-Byte
     //          nSt = Stellenzahl
@@ -153,7 +153,7 @@ inline const SfxUInt32Item* FormCache::GetAttr( BYTE nFormat, BYTE nSt )
         DBG_ASSERT( pAttr, "FormCache::GetAttr(): Nix Speicherus" );
 
         aIdents[ nIndex ] = FormIdent( nFormat, nSt, *pAttr );
-        bValid[ nIndex ] = TRUE;
+        bValid[ nIndex ] = sal_True;
 
         pRet = pAttr;
     }

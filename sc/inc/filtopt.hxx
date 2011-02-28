@@ -38,7 +38,7 @@
 
 class SC_DLLPUBLIC ScFilterOptions : public utl::ConfigItem
 {
-    BOOL        bWK3Flag;
+    sal_Bool        bWK3Flag;
     double      fExcelColScale;
     double      fExcelRowScale;
 
@@ -50,7 +50,7 @@ public:
     virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
     virtual void    Commit();
 
-    BOOL        GetWK3Flag() const          { return bWK3Flag; }
+    sal_Bool        GetWK3Flag() const          { return bWK3Flag; }
     double      GetExcelColScale() const    { return fExcelColScale; }
     double      GetExcelRowScale() const    { return fExcelRowScale; }
 

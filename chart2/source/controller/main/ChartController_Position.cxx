@@ -37,6 +37,7 @@
 #include "UndoGuard.hxx"
 #include "Strings.hrc"
 #include "ObjectNameProvider.hxx"
+#include "DiagramHelper.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
 #include "CommonConverters.hxx"
 #include <svx/ActionDescriptionProvider.hxx>
@@ -72,16 +73,16 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, Rectangle& r
 
     const SfxPoolItem* pPoolItem=NULL;
     //read position
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_X,TRUE,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_X,sal_True,&pPoolItem))
         nPosX=((const SfxInt32Item*)pPoolItem)->GetValue();
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_Y,TRUE,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_Y,sal_True,&pPoolItem))
         nPosY=((const SfxInt32Item*)pPoolItem)->GetValue();
     //read size
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_WIDTH,TRUE,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_WIDTH,sal_True,&pPoolItem))
         nSizX=((const SfxUInt32Item*)pPoolItem)->GetValue();
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,TRUE,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,sal_True,&pPoolItem))
         nSizY=((const SfxUInt32Item*)pPoolItem)->GetValue();
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_SIZE_POINT,TRUE,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_SIZE_POINT,sal_True,&pPoolItem))
         eRP=(RECT_POINT)((const SfxAllEnumItem*)pPoolItem)->GetValue();
 
     switch( eRP )
@@ -135,11 +136,13 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
     if( pProvider )
         aSelectedSize = ToSize( ( pProvider->getRectangleOfObject( aCID ) ) );
 
+    ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
+
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::POS_SIZE,
-            ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aCID ))),
-        m_xUndoManager, getModel() );
+            ObjectNameProvider::getName( eObjectType)),
+        m_xUndoManager );
 
     SfxAbstractTabDialog * pDlg = NULL;
     try
@@ -169,12 +172,15 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
                 awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
                 Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
-                bool bChanged = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
-                            , getModel()
+                bool bChanged = false;
+                if ( eObjectType == OBJECTTYPE_LEGEND )
+                    bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( getModel(), false , true );
+
+                bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID(), getModel()
                             , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
                             , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
-                if( bChanged )
-                    aUndoGuard.commitAction();
+                if( bMoved || bChanged )
+                    aUndoGuard.commit();
             }
         }
         delete pDlg;

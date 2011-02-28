@@ -44,11 +44,11 @@
 class ScShowTabDlg : public ModalDialog
 {
 private:
+    FixedText                       aFtLbTitle;
     ::svtools::ToolTipMultiListBox  aLb;
     OKButton                        aBtnOk;
     CancelButton                    aBtnCancel;
     HelpButton                      aBtnHelp;
-    FixedText                       aFtLbTitle;
 
     DECL_LINK( DblClkHdl, void * );
 
@@ -62,11 +62,11 @@ public:
                 const ::rtl::OString& nDlgHelpId, const rtl::OString& nLbHelpId );
 
     /** Inserts a string into the ListBox. */
-    void    Insert( const String& rString, BOOL bSelected );
+    void    Insert( const String& rString, sal_Bool bSelected );
 
-    USHORT  GetSelectEntryCount() const;
-    String  GetSelectEntry(USHORT nPos) const;
-    USHORT  GetSelectEntryPos(USHORT nPos) const;
+    sal_uInt16  GetSelectEntryCount() const;
+    String  GetSelectEntry(sal_uInt16 nPos) const;
+    sal_uInt16  GetSelectEntryPos(sal_uInt16 nPos) const;
 };
 
 

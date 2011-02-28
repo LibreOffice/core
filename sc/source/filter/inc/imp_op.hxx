@@ -117,7 +117,7 @@ protected:
     SCTAB                   nBdshtTab;          // Counter fuer Boundsheet
     ScFormulaCell*          pLastFormCell;      // fuer String-Records
 
-    BOOL                    bTabTruncated;      // wenn Bereichsueberschreitung zum
+    sal_Bool                    bTabTruncated;      // wenn Bereichsueberschreitung zum
                                                 //  Abschneiden von Zellen fuehrt
 
     // Record-Funktionen
@@ -184,12 +184,12 @@ protected:
 
     // ---------------------------------------------------------------
     void                    Formula( const XclAddress& rXclPos,
-                                UINT16 nXF, UINT16 nFormLen, double &rCurVal, BOOL bShrFmla );
+                                sal_uInt16 nXF, sal_uInt16 nFormLen, double &rCurVal, sal_Bool bShrFmla );
                                             //      -> excform.cxx
 
     virtual void            EndSheet( void );
     void                    NeueTabelle( void );
-    const ScTokenArray*     ErrorToFormula( BYTE bErrOrVal, BYTE nError,
+    const ScTokenArray*     ErrorToFormula( sal_uInt8 bErrOrVal, sal_uInt8 nError,
                                 double& rVal );
 
     virtual void            AdjustRowHeight();

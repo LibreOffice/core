@@ -134,6 +134,11 @@ public:
     /** Converts the passed rectangle from Excel chart units into 1/100 mm. */
     ::com::sun::star::awt::Rectangle CalcHmmFromChartRect( const XclChRectangle& rRect ) const;
 
+    /** Converts the passed horizontal coordinate from 1/100 mm into a relative position. */
+    double              CalcRelativeFromHmmX( sal_Int32 nPosX ) const;
+    /** Converts the passed vertical coordinate from 1/100 mm into a relative position. */
+    double              CalcRelativeFromHmmY( sal_Int32 nPosY ) const;
+
     /** Converts the passed horizontal coordinate from Excel chart units into a relative position. */
     double              CalcRelativeFromChartX( sal_Int32 nPosX ) const;
     /** Converts the passed vertical coordinate from Excel chart units into a relative position. */
@@ -1136,13 +1141,16 @@ public:
     explicit            XclImpChLabelRange( const XclImpChRoot& rRoot );
     /** Reads the CHLABELRANGE record (category axis scaling properties). */
     void                ReadChLabelRange( XclImpStream& rStrm );
+    /** Reads the CHDATERANGE record (date axis scaling properties). */
+    void                ReadChDateRange( XclImpStream& rStrm );
     /** Converts category axis scaling settings. */
     void                Convert( ScfPropertySet& rPropSet, ScaleData& rScaleData, bool bMirrorOrient ) const;
     /** Converts position settings of this axis at a crossing axis. */
     void                ConvertAxisPosition( ScfPropertySet& rPropSet, bool b3dChart ) const;
 
 private:
-    XclChLabelRange     maData;             /// Contents of the CHLABELRANGE record.
+    XclChLabelRange     maLabelData;        /// Contents of the CHLABELRANGE record.
+    XclChDateRange      maDateData;         /// Contents of the CHDATERANGE record.
 };
 
 typedef ScfRef< XclImpChLabelRange > XclImpChLabelRangeRef;

@@ -786,7 +786,7 @@ protected:
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
-    virtual SvXMLImportContext *CreateContext(USHORT nPrefix,
+    virtual SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
                                       const ::rtl::OUString& rLocalName,
                                       const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -805,7 +805,7 @@ public:
     //     the root element (i.e. office:document-meta)
     SvXMLImportContext *CreateMetaContext(
                                     const ::rtl::OUString& rLocalName );
-    SvXMLImportContext *CreateFontDeclsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
+    SvXMLImportContext *CreateFontDeclsContext(const sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateScriptContext(
                                     const ::rtl::OUString& rLocalName );
@@ -835,7 +835,7 @@ public:
 //  SvI18NMap& GetI18NMap() { return *pI18NMap; }
 
 //  inline const SvXMLImportItemMapper& GetParaItemMapper() const;
-//  SvXMLImportContext *CreateParaItemImportContext( USHORT nPrefix,
+//  SvXMLImportContext *CreateParaItemImportContext( sal_uInt16 nPrefix,
 //                                const ::rtl::OUString& rLocalName,
 //                                const ::com::sun::star::uno::Reference<
 //                                  ::com::sun::star::xml::sax::XAttributeList& xAttrList,
@@ -1032,7 +1032,7 @@ public:
             The value of the processed formula attribute.
 
         @param bRestrictToExternalNmsp
-            If set to TRUE, only namespaces of external formula grammars will
+            If set to sal_True, only namespaces of external formula grammars will
             be recognized. Internal namespace prefixes (e.g. 'oooc:' or 'of:'
             will be considered to be part of the formula, e.g. an expression
             with range operator.

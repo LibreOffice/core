@@ -80,7 +80,7 @@ private:
     ::com::sun::star::beans::XPropertyState*                                pShapePropertyState;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > mxPropSetInfo;
     com::sun::star::uno::Sequence< sal_Int8 >*                              pImplementationId;
-    BOOL                                                                    bIsTextShape;
+    bool                                                                    bIsTextShape;
     bool                                                                    bIsNoteCaption;
     bool                                                                    bInitializedNotifier;
 

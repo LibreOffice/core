@@ -152,7 +152,7 @@ void ScInterpreter::ScGCD()
                 case svDoubleRef :
                 case svRefList :
                 {
-                    USHORT nErr = 0;
+                    sal_uInt16 nErr = 0;
                     PopDoubleRef( aRange, nParamCount, nRefInList);
                     double nCellVal;
                     ScValueIterator aValIter(pDok, aRange, glSubTotal);
@@ -241,7 +241,7 @@ void ScInterpreter:: ScLCM()
                 case svDoubleRef :
                 case svRefList :
                 {
-                    USHORT nErr = 0;
+                    sal_uInt16 nErr = 0;
                     PopDoubleRef( aRange, nParamCount, nRefInList);
                     double nCellVal;
                     ScValueIterator aValIter(pDok, aRange, glSubTotal);
@@ -547,7 +547,7 @@ void ScInterpreter::ScMatValue()
                 ScBaseCell* pCell = GetCell( aAdr );
                 if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
                 {
-                    USHORT nErrCode = ((ScFormulaCell*)pCell)->GetErrCode();
+                    sal_uInt16 nErrCode = ((ScFormulaCell*)pCell)->GetErrCode();
                     if (nErrCode != 0)
                         PushError( nErrCode);
                     else
@@ -834,7 +834,7 @@ void ScInterpreter::ScMatDet()
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
-        if ( nC != nR || nC == 0 || (ULONG) nC * nC > ScMatrix::GetElementsMax() )
+        if ( nC != nR || nC == 0 || (sal_uLong) nC * nC > ScMatrix::GetElementsMax() )
             PushIllegalArgument();
         else
         {
@@ -881,7 +881,7 @@ void ScInterpreter::ScMatInv()
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
-        if ( nC != nR || nC == 0 || (ULONG) nC * nC > ScMatrix::GetElementsMax() )
+        if ( nC != nR || nC == 0 || (sal_uLong) nC * nC > ScMatrix::GetElementsMax() )
             PushIllegalArgument();
         else
         {
@@ -1106,7 +1106,7 @@ ScMatrixRef ScInterpreter::MatConcat(ScMatrix* pMat1, ScMatrix* pMat2)
         {
             for (j = 0; j < nMinR; j++)
             {
-                USHORT nErr = pMat1->GetErrorIfNotString( i, j);
+                sal_uInt16 nErr = pMat1->GetErrorIfNotString( i, j);
                 if (!nErr)
                     nErr = pMat2->GetErrorIfNotString( i, j);
                 if (nErr)
@@ -1155,9 +1155,9 @@ void lcl_GetDiffDateTimeFmtType( short& nFuncFmt, short nFmt1, short nFmt2 )
 void ScInterpreter::ScAdd()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAdd" );
-    CalculateAddSub(FALSE);
+    CalculateAddSub(sal_False);
 }
-void ScInterpreter::CalculateAddSub(BOOL _bSub)
+void ScInterpreter::CalculateAddSub(sal_Bool _bSub)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculateAddSub" );
     ScMatrixRef pMat1 = NULL;
@@ -1166,7 +1166,7 @@ void ScInterpreter::CalculateAddSub(BOOL _bSub)
     short nFmt1, nFmt2;
     nFmt1 = nFmt2 = NUMBERFORMAT_UNDEFINED;
     short nFmtCurrencyType = nCurFmtType;
-    ULONG nFmtCurrencyIndex = nCurFmtIndex;
+    sal_uLong nFmtCurrencyIndex = nCurFmtIndex;
     short nFmtPercentType = nCurFmtType;
     if ( GetStackType() == svMatrix )
         pMat2 = GetMatrix();
@@ -1232,18 +1232,18 @@ void ScInterpreter::CalculateAddSub(BOOL _bSub)
     else if (pMat1 || pMat2)
     {
         double fVal;
-        BOOL bFlag;
+        sal_Bool bFlag;
         ScMatrixRef pMat = pMat1;
         if (!pMat)
         {
             fVal = fVal1;
             pMat = pMat2;
-            bFlag = TRUE;           // double - Matrix
+            bFlag = sal_True;           // double - Matrix
         }
         else
         {
             fVal = fVal2;
-            bFlag = FALSE;          // Matrix - double
+            bFlag = sal_False;          // Matrix - double
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
@@ -1317,18 +1317,18 @@ void ScInterpreter::ScAmpersand()
     else if (pMat1 || pMat2)
     {
         String sStr;
-        BOOL bFlag;
+        sal_Bool bFlag;
         ScMatrixRef pMat = pMat1;
         if (!pMat)
         {
             sStr = sStr1;
             pMat = pMat2;
-            bFlag = TRUE;           // double - Matrix
+            bFlag = sal_True;           // double - Matrix
         }
         else
         {
             sStr = sStr2;
-            bFlag = FALSE;          // Matrix - double
+            bFlag = sal_False;          // Matrix - double
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
@@ -1345,7 +1345,7 @@ void ScInterpreter::ScAmpersand()
             {
                 for ( SCSIZE i = 0; i < nCount; i++ )
                 {
-                    USHORT nErr = pMat->GetErrorIfNotString( i);
+                    sal_uInt16 nErr = pMat->GetErrorIfNotString( i);
                     if (nErr)
                         pResMat->PutError( nErr, i);
                     else
@@ -1360,7 +1360,7 @@ void ScInterpreter::ScAmpersand()
             {
                 for ( SCSIZE i = 0; i < nCount; i++ )
                 {
-                    USHORT nErr = pMat->GetErrorIfNotString( i);
+                    sal_uInt16 nErr = pMat->GetErrorIfNotString( i);
                     if (nErr)
                         pResMat->PutError( nErr, i);
                     else
@@ -1387,7 +1387,7 @@ void ScInterpreter::ScAmpersand()
 void ScInterpreter::ScSub()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSub" );
-    CalculateAddSub(TRUE);
+    CalculateAddSub(sal_True);
 }
 
 void ScInterpreter::ScMul()
@@ -1397,7 +1397,7 @@ void ScInterpreter::ScMul()
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
     short nFmtCurrencyType = nCurFmtType;
-    ULONG nFmtCurrencyIndex = nCurFmtIndex;
+    sal_uLong nFmtCurrencyIndex = nCurFmtIndex;
     if ( GetStackType() == svMatrix )
         pMat2 = GetMatrix();
     else
@@ -1476,7 +1476,7 @@ void ScInterpreter::ScDiv()
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
     short nFmtCurrencyType = nCurFmtType;
-    ULONG nFmtCurrencyIndex = nCurFmtIndex;
+    sal_uLong nFmtCurrencyIndex = nCurFmtIndex;
     short nFmtCurrencyType2 = NUMBERFORMAT_UNDEFINED;
     if ( GetStackType() == svMatrix )
         pMat2 = GetMatrix();
@@ -1511,18 +1511,18 @@ void ScInterpreter::ScDiv()
     else if (pMat1 || pMat2)
     {
         double fVal;
-        BOOL bFlag;
+        sal_Bool bFlag;
         ScMatrixRef pMat = pMat1;
         if (!pMat)
         {
             fVal = fVal1;
             pMat = pMat2;
-            bFlag = TRUE;           // double - Matrix
+            bFlag = sal_True;           // double - Matrix
         }
         else
         {
             fVal = fVal2;
-            bFlag = FALSE;          // Matrix - double
+            bFlag = sal_False;          // Matrix - double
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
@@ -1593,18 +1593,18 @@ void ScInterpreter::ScPow()
     else if (pMat1 || pMat2)
     {
         double fVal;
-        BOOL bFlag;
+        sal_Bool bFlag;
         ScMatrixRef pMat = pMat1;
         if (!pMat)
         {
             fVal = fVal1;
             pMat = pMat2;
-            bFlag = TRUE;           // double - Matrix
+            bFlag = sal_True;           // double - Matrix
         }
         else
         {
             fVal = fVal2;
-            bFlag = FALSE;          // Matrix - double
+            bFlag = sal_False;          // Matrix - double
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
@@ -1638,7 +1638,7 @@ void ScInterpreter::ScPow()
 void ScInterpreter::ScSumProduct()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumProduct" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 30 ) )
         return;
 
@@ -1656,7 +1656,7 @@ void ScInterpreter::ScSumProduct()
     pMat2->GetDimensions(nC, nR);
     pMat = pMat2;
     MatrixMul aMul;
-    for (USHORT i = 1; i < nParamCount; i++)
+    for (sal_uInt16 i = 1; i < nParamCount; i++)
     {
         pMat1 = GetMatrix();
         if (!pMat1)
@@ -1692,9 +1692,9 @@ void ScInterpreter::ScSumProduct()
 void ScInterpreter::ScSumX2MY2()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumX2MY2" );
-    CalculateSumX2MY2SumX2DY2(FALSE);
+    CalculateSumX2MY2SumX2DY2(sal_False);
 }
-void ScInterpreter::CalculateSumX2MY2SumX2DY2(BOOL _bSumX2DY2)
+void ScInterpreter::CalculateSumX2MY2SumX2DY2(sal_Bool _bSumX2DY2)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculateSumX2MY2SumX2DY2" );
     if ( !MustHaveParamCount( GetByte(), 2 ) )
@@ -1738,7 +1738,7 @@ void ScInterpreter::CalculateSumX2MY2SumX2DY2(BOOL _bSumX2DY2)
 void ScInterpreter::ScSumX2DY2()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumX2DY2" );
-    CalculateSumX2MY2SumX2DY2(TRUE);
+    CalculateSumX2MY2SumX2DY2(sal_True);
 }
 
 void ScInterpreter::ScSumXMY2()
@@ -2226,7 +2226,7 @@ double lcl_GetSSresid(ScMatrixRef pMatX, ScMatrixRef pMatY, double fSlope,
 // Fill default values in matrix X, transform Y to log(Y) in case LOGEST|GROWTH,
 // determine sizes of matrices X and Y, determine kind of regression, clone
 // Y in case LOGEST|GROWTH, if constant.
-bool ScInterpreter::CheckMatrix(bool _bLOG, BYTE& nCase, SCSIZE& nCX,
+bool ScInterpreter::CheckMatrix(bool _bLOG, sal_uInt8& nCase, SCSIZE& nCX,
                         SCSIZE& nCY, SCSIZE& nRX, SCSIZE& nRY, SCSIZE& M,
                         SCSIZE& N, ScMatrixRef& pMatX, ScMatrixRef& pMatY)
 {
@@ -2402,7 +2402,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
     }
 
     // 1 = simple; 2 = multiple with Y as column; 3 = multiple with Y as row
-    BYTE nCase;
+    sal_uInt8 nCase;
 
     SCSIZE nCX, nCY;     // number of columns
     SCSIZE nRX, nRY;     // number of rows
@@ -2935,7 +2935,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
     }
 
     // 1 = simple; 2 = multiple with Y as column; 3 = multiple with Y as row
-    BYTE nCase;
+    sal_uInt8 nCase;
 
     SCSIZE nCX, nCY;     // number of columns
     SCSIZE nRX, nRY;     // number of rows
@@ -3180,7 +3180,6 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
     return;
 }
 
-
 void ScInterpreter::ScMatRef()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMatRef" );
@@ -3207,7 +3206,7 @@ void ScInterpreter::ScMatRef()
                 if (ScMatrix::IsNonValueType( nMatValType))
                 {
                     if (ScMatrix::IsEmptyPathType( nMatValType))
-                    {   // result of empty FALSE jump path
+                    {   // result of empty sal_False jump path
                         nFuncFmtType = NUMBERFORMAT_LOGICAL;
                         PushInt(0);
                     }
@@ -3231,7 +3230,7 @@ void ScInterpreter::ScMatRef()
         else
         {
             // If not a result matrix, obtain the cell value.
-            USHORT nErr = pCell->GetErrCode();
+            sal_uInt16 nErr = pCell->GetErrCode();
             if (nErr)
                 PushError( nErr );
             else if( pCell->IsValue() )

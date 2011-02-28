@@ -69,7 +69,7 @@ namespace {
     @return  true = The passed string list contains an empty string entry.
  */
 template< typename ListBoxType >
-bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, USHORT nEmptyPos = LISTBOX_APPEND )
+bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, sal_uInt16 nEmptyPos = LISTBOX_APPEND )
 {
     bool bEmpty = false;
     if( const OUString* pStr = rStrings.getConstArray() )
@@ -89,7 +89,7 @@ bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, U
 }
 
 template< typename ListBoxType >
-bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rMembers, USHORT nEmptyPos = LISTBOX_APPEND )
+bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rMembers, sal_uInt16 nEmptyPos = LISTBOX_APPEND )
 {
     bool bEmpty = false;
     vector<ScDPLabelData::Member>::const_iterator itr = rMembers.begin(), itrEnd = rMembers.end();
@@ -108,16 +108,16 @@ bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rM
 }
 
 /** Searches for a listbox entry, starts search at specified position. */
-USHORT lclFindListBoxEntry( const ListBox& rLBox, const String& rEntry, USHORT nStartPos )
+sal_uInt16 lclFindListBoxEntry( const ListBox& rLBox, const String& rEntry, sal_uInt16 nStartPos )
 {
-    USHORT nPos = nStartPos;
+    sal_uInt16 nPos = nStartPos;
     while( (nPos < rLBox.GetEntryCount()) && (rLBox.GetEntry( nPos ) != rEntry) )
         ++nPos;
     return (nPos < rLBox.GetEntryCount()) ? nPos : LISTBOX_ENTRY_NOTFOUND;
 }
 
 /** This table represents the order of the strings in the resource string array. */
-static const USHORT spnFunctions[] =
+static const sal_uInt16 spnFunctions[] =
 {
     PIVOT_FUNC_SUM,
     PIVOT_FUNC_COUNT,
@@ -132,12 +132,12 @@ static const USHORT spnFunctions[] =
     PIVOT_FUNC_STD_VARP
 };
 
-const USHORT SC_BASEITEM_PREV_POS = 0;
-const USHORT SC_BASEITEM_NEXT_POS = 1;
-const USHORT SC_BASEITEM_USER_POS = 2;
+const sal_uInt16 SC_BASEITEM_PREV_POS = 0;
+const sal_uInt16 SC_BASEITEM_NEXT_POS = 1;
+const sal_uInt16 SC_BASEITEM_USER_POS = 2;
 
-const USHORT SC_SORTNAME_POS = 0;
-const USHORT SC_SORTDATA_POS = 1;
+const sal_uInt16 SC_SORTNAME_POS = 0;
+const sal_uInt16 SC_SORTDATA_POS = 1;
 
 const long SC_SHOW_DEFAULT = 10;
 
@@ -180,19 +180,19 @@ ScDPFunctionListBox::ScDPFunctionListBox( Window* pParent, const ResId& rResId )
     FillFunctionNames();
 }
 
-void ScDPFunctionListBox::SetSelection( USHORT nFuncMask )
+void ScDPFunctionListBox::SetSelection( sal_uInt16 nFuncMask )
 {
     if( (nFuncMask == PIVOT_FUNC_NONE) || (nFuncMask == PIVOT_FUNC_AUTO) )
         SetNoSelection();
     else
-        for( USHORT nEntry = 0, nCount = GetEntryCount(); nEntry < nCount; ++nEntry )
+        for( sal_uInt16 nEntry = 0, nCount = GetEntryCount(); nEntry < nCount; ++nEntry )
             SelectEntryPos( nEntry, (nFuncMask & spnFunctions[ nEntry ]) != 0 );
 }
 
-USHORT ScDPFunctionListBox::GetSelection() const
+sal_uInt16 ScDPFunctionListBox::GetSelection() const
 {
-    USHORT nFuncMask = PIVOT_FUNC_NONE;
-    for( USHORT nSel = 0, nCount = GetSelectEntryCount(); nSel < nCount; ++nSel )
+    sal_uInt16 nFuncMask = PIVOT_FUNC_NONE;
+    for( sal_uInt16 nSel = 0, nCount = GetSelectEntryCount(); nSel < nCount; ++nSel )
         nFuncMask |= spnFunctions[ GetSelectEntryPos( nSel ) ];
     return nFuncMask;
 }
@@ -202,15 +202,15 @@ void ScDPFunctionListBox::FillFunctionNames()
     DBG_ASSERT( !GetEntryCount(), "ScDPFunctionListBox::FillFunctionNames - do not add texts to resource" );
     Clear();
     ResStringArray aArr( ScResId( SCSTR_DPFUNCLISTBOX ) );
-    for( USHORT nIndex = 0, nCount = sal::static_int_cast<USHORT>(aArr.Count()); nIndex < nCount; ++nIndex )
+    for( sal_uInt16 nIndex = 0, nCount = sal::static_int_cast<sal_uInt16>(aArr.Count()); nIndex < nCount; ++nIndex )
         InsertEntry( aArr.GetString( nIndex ) );
 }
 
 // ============================================================================
 
 ScDPFunctionDlg::ScDPFunctionDlg(
-        Window* pParent, const ScDPLabelDataVec& rLabelVec,
-        const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData ) :
+        Window* pParent, const ScDPLabelDataVector& rLabelVec,
+        const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DPDATAFIELD ) ),
     maFlFunc        ( this, ScResId( FL_FUNC ) ),
     maLbFunc        ( this, ScResId( LB_FUNC ) ),
@@ -235,7 +235,7 @@ ScDPFunctionDlg::ScDPFunctionDlg(
     Init( rLabelData, rFuncData );
 }
 
-USHORT ScDPFunctionDlg::GetFuncMask() const
+sal_uInt16 ScDPFunctionDlg::GetFuncMask() const
 {
     return maLbFunc.GetSelection();
 }
@@ -247,7 +247,7 @@ DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
     aRef.ReferenceType = maLbTypeWrp.GetControlValue();
     aRef.ReferenceField = maLbBaseField.GetSelectEntry();
 
-    USHORT nBaseItemPos = maLbBaseItem.GetSelectEntryPos();
+    sal_uInt16 nBaseItemPos = maLbBaseItem.GetSelectEntryPos();
     switch( nBaseItemPos )
     {
         case SC_BASEITEM_PREV_POS:
@@ -267,10 +267,10 @@ DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
     return aRef;
 }
 
-void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData )
+void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData )
 {
     // list box
-    USHORT nFuncMask = (rFuncData.mnFuncMask == PIVOT_FUNC_NONE) ? PIVOT_FUNC_SUM : rFuncData.mnFuncMask;
+    sal_uInt16 nFuncMask = (rFuncData.mnFuncMask == PIVOT_FUNC_NONE) ? PIVOT_FUNC_SUM : rFuncData.mnFuncMask;
     maLbFunc.SetSelection( nFuncMask );
 
     // field name
@@ -291,7 +291,7 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData&
     maLbBaseField.SetSelectHdl( LINK( this, ScDPFunctionDlg, SelectHdl ) );
 
     // base field list box
-    for( ScDPLabelDataVec::const_iterator aIt = mrLabelVec.begin(), aEnd = mrLabelVec.end(); aIt != aEnd; ++aIt )
+    for( ScDPLabelDataVector::const_iterator aIt = mrLabelVec.begin(), aEnd = mrLabelVec.end(); aIt != aEnd; ++aIt )
         maLbBaseField.InsertEntry(aIt->getDisplayName());
 
     // base item list box
@@ -325,8 +325,8 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData&
             }
             else
             {
-                USHORT nStartPos = mbEmptyItem ? (SC_BASEITEM_USER_POS + 1) : SC_BASEITEM_USER_POS;
-                USHORT nPos = lclFindListBoxEntry( maLbBaseItem, rFuncData.maFieldRef.ReferenceItemName, nStartPos );
+                sal_uInt16 nStartPos = mbEmptyItem ? (SC_BASEITEM_USER_POS + 1) : SC_BASEITEM_USER_POS;
+                sal_uInt16 nPos = lclFindListBoxEntry( maLbBaseItem, rFuncData.maFieldRef.ReferenceItemName, nStartPos );
                 if( nPos >= maLbBaseItem.GetEntryCount() )
                     nPos = (maLbBaseItem.GetEntryCount() > SC_BASEITEM_USER_POS) ? SC_BASEITEM_USER_POS : SC_BASEITEM_PREV_POS;
                 maLbBaseItem.SelectEntryPos( nPos );
@@ -378,7 +378,7 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, ListBox*, pLBox )
             mbEmptyItem = lclFillListBox( maLbBaseItem, mrLabelVec[ nBasePos ].maMembers, SC_BASEITEM_USER_POS );
 
         // select base item
-        USHORT nItemPos = (maLbBaseItem.GetEntryCount() > SC_BASEITEM_USER_POS) ? SC_BASEITEM_USER_POS : SC_BASEITEM_PREV_POS;
+        sal_uInt16 nItemPos = (maLbBaseItem.GetEntryCount() > SC_BASEITEM_USER_POS) ? SC_BASEITEM_USER_POS : SC_BASEITEM_PREV_POS;
         maLbBaseItem.SelectEntryPos( nItemPos );
     }
     return 0;
@@ -393,7 +393,7 @@ IMPL_LINK( ScDPFunctionDlg, DblClickHdl, MultiListBox*, EMPTYARG )
 // ============================================================================
 
 ScDPSubtotalDlg::ScDPSubtotalDlg( Window* pParent, ScDPObject& rDPObj,
-        const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData,
+        const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
         const ScDPNameVec& rDataFields, bool bEnableLayout ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_PIVOTSUBT ) ),
     maFlSubt        ( this, ScResId( FL_FUNC ) ),
@@ -417,9 +417,9 @@ ScDPSubtotalDlg::ScDPSubtotalDlg( Window* pParent, ScDPObject& rDPObj,
     Init( rLabelData, rFuncData );
 }
 
-USHORT ScDPSubtotalDlg::GetFuncMask() const
+sal_uInt16 ScDPSubtotalDlg::GetFuncMask() const
 {
-    USHORT nFuncMask = PIVOT_FUNC_NONE;
+    sal_uInt16 nFuncMask = PIVOT_FUNC_NONE;
 
     if( maRbAuto.IsChecked() )
         nFuncMask = PIVOT_FUNC_AUTO;
@@ -440,7 +440,7 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
     rLabelData.maShowInfo = maLabelData.maShowInfo;
 }
 
-void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData )
+void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData )
 {
     // field name
     maFtName.SetText(rLabelData.getDisplayName());
@@ -565,8 +565,8 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
     // *** HIDDEN ITEMS ***
 
     rLabelData.maMembers = maLabelData.maMembers;
-    ULONG nVisCount = maLbHide.GetEntryCount();
-    for( USHORT nPos = 0; nPos < nVisCount; ++nPos )
+    sal_uLong nVisCount = maLbHide.GetEntryCount();
+    for( sal_uInt16 nPos = 0; nPos < nVisCount; ++nPos )
         rLabelData.maMembers[nPos].mbVisible = !maLbHide.IsChecked(nPos);
 
     // *** HIERARCHY ***
@@ -591,7 +591,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     if( maLbSortBy.GetEntryCount() > SC_SORTDATA_POS )
         maLbSortBy.SetSeparatorPos( SC_SORTDATA_POS - 1 );
 
-    USHORT nSortPos = SC_SORTNAME_POS;
+    sal_uInt16 nSortPos = SC_SORTNAME_POS;
     if( nSortMode == DataPilotFieldSortMode::DATA )
     {
         nSortPos = lclFindListBoxEntry( maLbSortBy, maLabelData.maSortInfo.Field, SC_SORTDATA_POS );
@@ -661,7 +661,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
         lclFillListBox( maLbHierarchy, maLabelData.maHiers );
         sal_Int32 nHier = maLabelData.mnUsedHier;
         if( (nHier < 0) || (nHier >= maLabelData.maHiers.getLength()) ) nHier = 0;
-        maLbHierarchy.SelectEntryPos( static_cast< USHORT >( nHier ) );
+        maLbHierarchy.SelectEntryPos( static_cast< sal_uInt16 >( nHier ) );
         maLbHierarchy.SetSelectHdl( LINK( this, ScDPSubtotalOptDlg, SelectHdl ) );
     }
     else
@@ -677,7 +677,7 @@ void ScDPSubtotalOptDlg::InitHideListBox()
     lclFillListBox( maLbHide, maLabelData.maMembers );
     size_t n = maLabelData.maMembers.size();
     for (size_t i = 0; i < n; ++i)
-        maLbHide.CheckEntryPos(static_cast<USHORT>(i), !maLabelData.maMembers[i].mbVisible);
+        maLbHide.CheckEntryPos(static_cast<sal_uInt16>(i), !maLabelData.maMembers[i].mbVisible);
     bool bEnable = maLbHide.GetEntryCount() > 0;
     maFlHide.Enable( bEnable );
     maLbHide.Enable( bEnable );
@@ -718,7 +718,7 @@ IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox*, pLBox )
 
 // ============================================================================
 
-ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHORT nOrient ) :
+ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DPSHOWDETAIL ) ),
     maFtDims        ( this, ScResId( FT_DIMS ) ),
     maLbDims        ( this, ScResId( LB_DIMS ) ),
@@ -734,7 +734,7 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHOR
     long nDimCount = rDPObj.GetDimCount();
     for (long nDim=0; nDim<nDimCount; nDim++)
     {
-        BOOL bIsDataLayout;
+        sal_Bool bIsDataLayout;
         sal_Int32 nDimFlags = 0;
         String aName = rDPObj.GetDimName( nDim, bIsDataLayout, &nDimFlags );
         if ( !bIsDataLayout && !rDPObj.IsDuplicated( nDim ) && ScDPObject::IsOrientationAllowed( nOrient, nDimFlags ) )
@@ -775,7 +775,7 @@ String ScDPShowDetailDlg::GetDimensionName() const
         return aSelectedName;
 
     long nDim = itr->second;
-    BOOL bIsDataLayout = false;
+    sal_Bool bIsDataLayout = false;
     return mrDPObj.GetDimName(nDim, bIsDataLayout);
 }
 

@@ -30,8 +30,6 @@
 
 #include "CandleStickChart.hxx"
 #include "ShapeFactory.hxx"
-//#include "chartview/servicenames_charttypes.hxx"
-//#include "servicenames_coosystems.hxx"
 #include "CommonConverters.hxx"
 #include "ObjectIdentifier.hxx"
 #include "LabelPositionHelper.hxx"
@@ -40,6 +38,7 @@
 #include "VLegendSymbolFactory.hxx"
 #include "FormattedStringHelper.hxx"
 #include "DataSeriesHelper.hxx"
+#include "DateHelper.hxx"
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <editeng/unoprnms.hxx>
@@ -76,22 +75,6 @@ CandleStickChart::~CandleStickChart()
 // MinimumAndMaximumSupplier
 //-------------------------------------------------------------------------
 
-double CandleStickChart::getMinimumX()
-{
-    if( m_bCategoryXAxis )
-        return 0.5;//first category (index 0) matches with real number 1.0
-    return VSeriesPlotter::getMinimumX();
-}
-double CandleStickChart::getMaximumX()
-{
-    if( m_bCategoryXAxis )
-    {
-        //return category count
-        sal_Int32 nPointCount = getPointCount();
-        return nPointCount+0.5;//first category (index 0) matches with real number 1.0
-    }
-    return VSeriesPlotter::getMaximumX();
-}
 bool CandleStickChart::isSeperateStackingForDifferentSigns( sal_Int32 /* nDimensionIndex */ )
 {
     return false;
@@ -103,7 +86,7 @@ bool CandleStickChart::isSeperateStackingForDifferentSigns( sal_Int32 /* nDimens
 
 LegendSymbolStyle CandleStickChart::getLegendSymbolStyle()
 {
-    return chart2::LegendSymbolStyle_VERTICAL_LINE;
+    return LegendSymbolStyle_LINE;
 }
 
 //-----------------------------------------------------------------
@@ -118,18 +101,6 @@ APPHELPER_XSERVICEINFO_IMPL(CandleStickChart,CHART2_VIEW_CANDLESTICKCHART_SERVIC
     uno::Sequence< rtl::OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = CHART2_VIEW_CANDLESTICKCHART_SERVICE_NAME;
     return aSNS;
-}
-*/
-/*
-//-----------------------------------------------------------------
-// chart2::XPlotter
-//-----------------------------------------------------------------
-
-    ::rtl::OUString SAL_CALL CandleStickChart
-::getCoordinateSystemTypeID()
-    throw (uno::RuntimeException)
-{
-    return CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
 }
 */
 
@@ -205,11 +176,12 @@ void CandleStickChart::createShapes()
     }
 
     //(@todo maybe different iteration for breaks in axis ?)
-    sal_Int32 nStartCategoryIndex = m_pMainPosHelper->getStartCategoryIndex(); // inclusive
-    sal_Int32 nEndCategoryIndex   = m_pMainPosHelper->getEndCategoryIndex(); //inclusive
+    sal_Int32 nStartIndex = 0;
+    sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
+    double fLogicZ = 1.5;//as defined
 //=============================================================================
-    //iterate through all shown categories
-    for( sal_Int32 nIndex = nStartCategoryIndex; nIndex < nEndCategoryIndex; nIndex++ )
+    //iterate through all x values per indices
+    for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
     {
         ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
         const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
@@ -247,28 +219,48 @@ void CandleStickChart::createShapes()
                 for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
                 {
                     //collect data point information (logic coordinates, style ):
-                    double fLogicX = pPosHelper->getSlotPos( (*aSeriesIter)->getXValue( nIndex ), fSlotX );
-                    double fY_First = (*aSeriesIter)->getY_First( nIndex );
-                    double fY_Last = (*aSeriesIter)->getY_Last( nIndex );
-                    double fY_Min = (*aSeriesIter)->getY_Min( nIndex );
-                    double fY_Max = (*aSeriesIter)->getY_Max( nIndex );
+                    double fUnscaledX = (*aSeriesIter)->getXValue( nIndex );
+                    if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() )
+                        fUnscaledX = DateHelper::RasterizeDateValue( fUnscaledX, m_aNullDate, m_nTimeResolution );
+                    if(fUnscaledX<pPosHelper->getLogicMinX() || fUnscaledX>pPosHelper->getLogicMaxX())
+                        continue;//point not visible
+                    double fScaledX = pPosHelper->getScaledSlotPos( fUnscaledX, fSlotX );
+
+                    double fUnscaledY_First = (*aSeriesIter)->getY_First( nIndex );
+                    double fUnscaledY_Last = (*aSeriesIter)->getY_Last( nIndex );
+                    double fUnscaledY_Min = (*aSeriesIter)->getY_Min( nIndex );
+                    double fUnscaledY_Max = (*aSeriesIter)->getY_Max( nIndex );
 
                     bool bBlack=false;
-                    if(fY_Last<=fY_First)
+                    if(fUnscaledY_Last<=fUnscaledY_First)
                     {
-                        std::swap(fY_First,fY_Last);
+                        std::swap(fUnscaledY_First,fUnscaledY_Last);
                         bBlack=true;
                     }
-                    if(fY_Max<fY_Min)
-                        std::swap(fY_Min,fY_Max);
+                    if(fUnscaledY_Max<fUnscaledY_Min)
+                        std::swap(fUnscaledY_Min,fUnscaledY_Max);
                     //transformation 3) -> 4)
-                    double fHalfWidth = pPosHelper->getSlotWidth()/2.0;
-                    drawing::Position3D aPosLeftFirst( pPosHelper->transformLogicToScene( fLogicX-fHalfWidth, fY_First ,0 ,true ) );
-                    drawing::Position3D aPosRightLast( pPosHelper->transformLogicToScene( fLogicX+fHalfWidth, fY_Last  ,0 ,true ) );
-                    drawing::Position3D aPosMiddleFirst( pPosHelper->transformLogicToScene( fLogicX, fY_First ,0 ,true ) );
-                    drawing::Position3D aPosMiddleLast( pPosHelper->transformLogicToScene( fLogicX, fY_Last  ,0 ,true ) );
-                    drawing::Position3D aPosMiddleMinimum( pPosHelper->transformLogicToScene( fLogicX, fY_Min ,0 ,true ) );
-                    drawing::Position3D aPosMiddleMaximum( pPosHelper->transformLogicToScene( fLogicX, fY_Max ,0 ,true ) );
+                    double fHalfScaledWidth = pPosHelper->getScaledSlotWidth()/2.0;
+
+                    double fScaledY_First(fUnscaledY_First);
+                    double fScaledY_Last(fUnscaledY_Last);
+                    double fScaledY_Min(fUnscaledY_Min);
+                    double fScaledY_Max(fUnscaledY_Max);
+                    pPosHelper->clipLogicValues( 0,&fScaledY_First,0 );
+                    pPosHelper->clipLogicValues( 0,&fScaledY_Last,0 );
+                    pPosHelper->clipLogicValues( 0,&fScaledY_Min,0 );
+                    pPosHelper->clipLogicValues( 0,&fScaledY_Max,0 );
+                    pPosHelper->doLogicScaling( 0,&fScaledY_First,0 );
+                    pPosHelper->doLogicScaling( 0,&fScaledY_Last,0 );
+                    pPosHelper->doLogicScaling( 0,&fScaledY_Min,0 );
+                    pPosHelper->doLogicScaling( 0,&fScaledY_Max,0 );
+
+                    drawing::Position3D aPosLeftFirst( pPosHelper->transformScaledLogicToScene( fScaledX-fHalfScaledWidth, fScaledY_First ,0 ,true ) );
+                    drawing::Position3D aPosRightLast( pPosHelper->transformScaledLogicToScene( fScaledX+fHalfScaledWidth, fScaledY_Last  ,0 ,true ) );
+                    drawing::Position3D aPosMiddleFirst( pPosHelper->transformScaledLogicToScene( fScaledX, fScaledY_First ,0 ,true ) );
+                    drawing::Position3D aPosMiddleLast( pPosHelper->transformScaledLogicToScene( fScaledX, fScaledY_Last  ,0 ,true ) );
+                    drawing::Position3D aPosMiddleMinimum( pPosHelper->transformScaledLogicToScene( fScaledX, fScaledY_Min ,0 ,true ) );
+                    drawing::Position3D aPosMiddleMaximum( pPosHelper->transformScaledLogicToScene( fScaledX, fScaledY_Max ,0 ,true ) );
 
                     uno::Reference< drawing::XShapes > xLossGainTarget( xGainTarget );
                     if(bBlack)
@@ -329,13 +321,13 @@ void CandleStickChart::createShapes()
                         drawing::PolyPolygonShape3D aPoly;
 
                         sal_Int32 nLineIndex = 0;
-                        if( bShowFirst &&  pPosHelper->isLogicVisible( fLogicX, fY_First ,0 )
+                        if( bShowFirst &&  pPosHelper->isLogicVisible( fUnscaledX, fUnscaledY_First ,fLogicZ )
                             && isValidPosition(aPosLeftFirst) && isValidPosition(aPosMiddleFirst) )
                         {
                             AddPointToPoly( aPoly, aPosLeftFirst, nLineIndex );
                             AddPointToPoly( aPoly, aPosMiddleFirst, nLineIndex++ );
                         }
-                        if( pPosHelper->isLogicVisible( fLogicX, fY_Last ,0 )
+                        if( pPosHelper->isLogicVisible( fUnscaledX, fUnscaledY_Last ,fLogicZ )
                             && isValidPosition(aPosMiddleLast) && isValidPosition(aPosRightLast) )
                         {
                             AddPointToPoly( aPoly, aPosMiddleLast, nLineIndex );
@@ -361,16 +353,16 @@ void CandleStickChart::createShapes()
                     {
                         if(isValidPosition(aPosMiddleFirst))
                             this->createDataLabel( xTextTarget, **aSeriesIter, nIndex
-                                        , fY_First, 1.0, Position3DToAWTPoint(aPosMiddleFirst), LABEL_ALIGN_LEFT_BOTTOM );
+                                        , fUnscaledY_First, 1.0, Position3DToAWTPoint(aPosMiddleFirst), LABEL_ALIGN_LEFT_BOTTOM );
                         if(isValidPosition(aPosMiddleLast))
                             this->createDataLabel( xTextTarget, **aSeriesIter, nIndex
-                                        , fY_Last, 1.0, Position3DToAWTPoint(aPosMiddleLast), LABEL_ALIGN_RIGHT_TOP );
+                                        , fUnscaledY_Last, 1.0, Position3DToAWTPoint(aPosMiddleLast), LABEL_ALIGN_RIGHT_TOP );
                         if(isValidPosition(aPosMiddleMinimum))
                             this->createDataLabel( xTextTarget, **aSeriesIter, nIndex
-                                        , fY_Min, 1.0, Position3DToAWTPoint(aPosMiddleMinimum), LABEL_ALIGN_BOTTOM );
+                                        , fUnscaledY_Min, 1.0, Position3DToAWTPoint(aPosMiddleMinimum), LABEL_ALIGN_BOTTOM );
                         if(isValidPosition(aPosMiddleMaximum))
                             this->createDataLabel( xTextTarget, **aSeriesIter, nIndex
-                                        , fY_Max, 1.0, Position3DToAWTPoint(aPosMiddleMaximum), LABEL_ALIGN_TOP );
+                                        , fUnscaledY_Max, 1.0, Position3DToAWTPoint(aPosMiddleMaximum), LABEL_ALIGN_TOP );
                     }
                 }//next series in x slot (next y slot)
             }//next x slot

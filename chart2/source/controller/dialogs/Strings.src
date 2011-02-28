@@ -101,6 +101,15 @@ String STR_PAGE_POSITION
     Text [ en-US ] = "Position" ;
 };
 
+String STR_BUTTON_UP
+{
+    Text [ en-US ] = "Up";
+};
+String STR_BUTTON_DOWN
+{
+    Text [ en-US ] = "Down";
+};
+
 String STR_PAGE_LAYOUT
 {
     Text [ en-US ] = "Layout";
@@ -388,11 +397,6 @@ String STR_TIP_DATAPOINT_VALUES
     Text [ en-US ] = "Values: %POINTVALUES";
 };
 
-String STR_TIP_CATEGORY_VALUE
-{
-    Text [ en-US ] = "'%CATEGORYVALUE'";
-};
-
 String STR_TIP_DATAPOINT
 {
     Text [ en-US ] = "Data Point %POINTNUMBER, data series %SERIESNUMBER, values: %POINTVALUES";
@@ -462,6 +466,10 @@ String STR_ACTION_REARRANGE_CHART
 String STR_ACTION_NOTPOSSIBLE
 {
     Text [ en-US ] = "This function cannot be completed with the selected objects." ;
+};
+String STR_ACTION_EDIT_TEXT
+{
+    Text [ en-US ] = "Edit text";
 };
 
 String STR_COLUMN_LABEL

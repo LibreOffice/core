@@ -160,7 +160,7 @@ public:
     }
 };
 
-void dispatchExecute(css::uno::Reference< css::frame::XModel>& xModel, USHORT nSlot, SfxCallMode nCall)
+void dispatchExecute(css::uno::Reference< css::frame::XModel>& xModel, sal_uInt16 nSlot, SfxCallMode nCall)
 {
     ScTabViewShell* pViewShell = getBestViewShell( xModel );
     SfxViewFrame* pViewFrame = NULL;
@@ -202,10 +202,10 @@ implnCut()
 {
     ScTabViewShell* pViewShell =  getCurrentBestViewShell();
     if ( pViewShell )
-        pViewShell->CutToClip( NULL, TRUE );
+        pViewShell->CutToClip( NULL, sal_True );
 }
 
-void implnPasteSpecial(USHORT nFlags,USHORT nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
+void implnPasteSpecial(sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
 {
     PasteCellsWarningReseter resetWarningBox;
     sal_Bool bAsLink(sal_False), bOtherDoc(sal_False);
@@ -231,7 +231,7 @@ void implnPasteSpecial(USHORT nFlags,USHORT nFunction,sal_Bool bSkipEmpty, sal_B
                     pDoc = pOwnClip->GetDocument();
                 pTabViewShell->PasteFromClip( nFlags, pDoc,
                     nFunction, bSkipEmpty, bTranspose, bAsLink,
-                    eMoveMode, IDF_NONE, TRUE );
+                    eMoveMode, IDF_NONE, sal_True );
                 pTabViewShell->CellContentChanged();
             }
         }
@@ -460,7 +460,7 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
                 }
             }
             else
-                pDispatcher->Execute( (USHORT)SID_PRINTDOC, (SfxCallMode)SFX_CALLMODE_SYNCHRON, aArgs );
+                pDispatcher->Execute( (sal_uInt16)SID_PRINTDOC, (SfxCallMode)SFX_CALLMODE_SYNCHRON, aArgs );
         }
 
     }

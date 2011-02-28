@@ -307,11 +307,11 @@ public:
 
     /** Returns true, if the passed item set contains the item.
         @param bDeep  true = Searches in parent item sets too. */
-    static bool         CheckItem( const SfxItemSet& rItemSet, USHORT nWhichId, bool bDeep );
+    static bool         CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep );
     /** Returns true, if the passed item set contains at least one of the items.
         @param pnWhichIds  Zero-terminated array of Which-IDs.
         @param bDeep  true = Searches in parent item sets too. */
-    static bool         CheckItems( const SfxItemSet& rItemSet, const USHORT* pnWhichIds, bool bDeep );
+    static bool         CheckItems( const SfxItemSet& rItemSet, const sal_uInt16* pnWhichIds, bool bDeep );
 
     /** Puts the item into the passed item set.
         @descr  The item will be put into the item set, if bSkipPoolDef is false,
@@ -322,7 +322,7 @@ public:
         @param bSkipPoolDef  true = Do not put item if it is equal to pool default; false = Always put the item. */
     static void         PutItem(
                             SfxItemSet& rItemSet, const SfxPoolItem& rItem,
-                            USHORT nWhichId, bool bSkipPoolDef );
+                            sal_uInt16 nWhichId, bool bSkipPoolDef );
 
     /** Puts the item into the passed item set.
         @descr  The item will be put into the item set, if bSkipPoolDef is false,
@@ -415,7 +415,7 @@ typedef ::std::vector< String >                     ScfStringVec;
 template< typename Type > class ScfDelList
 {
 public:
-    inline explicit     ScfDelList( USHORT nInitSize = 16, USHORT nResize = 16 ) :
+    inline explicit     ScfDelList( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 ) :
                             maList( nInitSize, nResize ) {}
     /** Creates a deep copy of the passed list (copy-constructs all contained objects). */
     inline explicit     ScfDelList( const ScfDelList& rSrc ) { *this = rSrc; }
@@ -424,23 +424,23 @@ public:
     /** Creates a deep copy of the passed list (copy-constructs all contained objects). */
     ScfDelList&         operator=( const ScfDelList& rSrc );
 
-    inline void         Insert( Type* pObj, ULONG nIndex )      { if( pObj ) maList.Insert( pObj, nIndex ); }
+    inline void         Insert( Type* pObj, sal_uLong nIndex )      { if( pObj ) maList.Insert( pObj, nIndex ); }
     inline void         Append( Type* pObj )                    { if( pObj ) maList.Insert( pObj, LIST_APPEND ); }
     /** Removes the object without deletion. */
-    inline Type*        Remove( ULONG nIndex )                  { return static_cast< Type* >( maList.Remove( nIndex ) ); }
+    inline Type*        Remove( sal_uLong nIndex )                  { return static_cast< Type* >( maList.Remove( nIndex ) ); }
     /** Removes and deletes the object. */
-    inline void         Delete( ULONG nIndex )                  { delete Remove( nIndex ); }
+    inline void         Delete( sal_uLong nIndex )                  { delete Remove( nIndex ); }
     /** Exchanges the contained object with the passed, returns the old. */
-    inline Type*        Exchange( Type* pObj, ULONG nIndex )    { return static_cast< Type* >( maList.Replace( pObj, nIndex ) ); }
+    inline Type*        Exchange( Type* pObj, sal_uLong nIndex )    { return static_cast< Type* >( maList.Replace( pObj, nIndex ) ); }
     /** Replaces (deletes) the contained object. */
-    inline void         Replace( Type* pObj, ULONG nIndex )     { delete Exchange( pObj, nIndex ); }
+    inline void         Replace( Type* pObj, sal_uLong nIndex )     { delete Exchange( pObj, nIndex ); }
 
     void                Clear();
-    inline ULONG        Count() const                           { return maList.Count(); }
+    inline sal_uLong        Count() const                           { return maList.Count(); }
     inline bool         Empty() const                           { return maList.Count() == 0; }
 
     inline Type*        GetCurObject() const                    { return static_cast< Type* >( maList.GetCurObject() ); }
-    inline ULONG        GetCurPos() const                       { return maList.GetCurPos(); }
+    inline sal_uLong        GetCurPos() const                       { return maList.GetCurPos(); }
     inline Type*        GetObject( sal_uInt32 nIndex ) const    { return static_cast< Type* >( maList.GetObject( nIndex ) ); }
 
     inline Type*        First() const                           { return static_cast< Type* >( maList.First() ); }
@@ -482,7 +482,7 @@ template< typename Type >
 class ScfDelStack : private ScfDelList< Type >
 {
 public:
-    inline              ScfDelStack( USHORT nInitSize = 16, USHORT nResize = 16 ) :
+    inline              ScfDelStack( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 ) :
                             ScfDelList< Type >( nInitSize, nResize ) {}
 
     inline void         Push( Type* pObj )      { Append( pObj ); }
@@ -510,14 +510,14 @@ class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
         // eFormat == EIF_BIFF_LE4 -> nur Nicht-Storage-Dateien _koennen_ zum Erfolg fuehren
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* );
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
-                 const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, UINT32 nDifOption = SC_DIFOPT_EXCEL );
+                 const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
     virtual FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange );
     virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange,
-                                   double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE,
+                                   double nOutputFactor = 1.0, sal_Bool bCalcWidthHeight = sal_True,
                                    SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange );
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight );
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, sal_Bool bCalcWidthHeight );
     virtual String         GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
 
     // various export filters
@@ -526,10 +526,10 @@ class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
 #endif
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, CharSet eDest );
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const CharSet eDest,
-                                 UINT32 nDifOption = SC_DIFOPT_EXCEL );
+                                 sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest,
-                 UINT32 nDifOption = SC_DIFOPT_EXCEL );
-    virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, BOOL bAll,
+                 sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
+    virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, sal_Bool bAll,
                   const String& rStreamPath, String& rNonConvertibleChars );
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest );
 };

@@ -36,26 +36,26 @@
 #include <vector>
 
 typedef OpCode DefTokenId;
-// in PRODUCT version: ambiguity between OpCode (being USHORT) and UINT16
+// in PRODUCT version: ambiguity between OpCode (being sal_uInt16) and UINT16
 // Unfortunately a typedef is just a dumb alias and not a real type ...
-//typedef UINT16 TokenId;
+//typedef sal_uInt16 TokenId;
 struct TokenId
 {
-        UINT16          nId;
+        sal_uInt16          nId;
 
                         TokenId() : nId( 0 ) {}
-                        TokenId( UINT16 n ) : nId( n ) {}
+                        TokenId( sal_uInt16 n ) : nId( n ) {}
                         TokenId( const TokenId& r ) : nId( r.nId ) {}
     inline  TokenId&    operator =( const TokenId& r ) { nId = r.nId; return *this; }
-    inline  TokenId&    operator =( UINT16 n ) { nId = n; return *this; }
-    inline              operator UINT16&() { return nId; }
-    inline              operator const UINT16&() const { return nId; }
-    inline  BOOL        operator <( UINT16 n ) const { return nId < n; }
-    inline  BOOL        operator >( UINT16 n ) const { return nId > n; }
-    inline  BOOL        operator <=( UINT16 n ) const { return nId <= n; }
-    inline  BOOL        operator >=( UINT16 n ) const { return nId >= n; }
-    inline  BOOL        operator ==( UINT16 n ) const { return nId == n; }
-    inline  BOOL        operator !=( UINT16 n ) const { return nId != n; }
+    inline  TokenId&    operator =( sal_uInt16 n ) { nId = n; return *this; }
+    inline              operator sal_uInt16&() { return nId; }
+    inline              operator const sal_uInt16&() const { return nId; }
+    inline  sal_Bool        operator <( sal_uInt16 n ) const { return nId < n; }
+    inline  sal_Bool        operator >( sal_uInt16 n ) const { return nId > n; }
+    inline  sal_Bool        operator <=( sal_uInt16 n ) const { return nId <= n; }
+    inline  sal_Bool        operator >=( sal_uInt16 n ) const { return nId >= n; }
+    inline  sal_Bool        operator ==( sal_uInt16 n ) const { return nId == n; }
+    inline  sal_Bool        operator !=( sal_uInt16 n ) const { return nId != n; }
 };
 
 
@@ -92,25 +92,25 @@ class TokenPool
     // Ausgabe Id = 0 -> Fehlerfall
     private:
         String**                    ppP_Str;    // Pool fuer Strings
-        UINT16                      nP_Str;     // ...mit Groesse
-        UINT16                      nP_StrAkt;  // ...und Schreibmarke
+        sal_uInt16                      nP_Str;     // ...mit Groesse
+        sal_uInt16                      nP_StrAkt;  // ...und Schreibmarke
 
         double*                     pP_Dbl;     // Pool fuer Doubles
-        UINT16                      nP_Dbl;
-        UINT16                      nP_DblAkt;
+        sal_uInt16                      nP_Dbl;
+        sal_uInt16                      nP_DblAkt;
 
-        USHORT*                     pP_Err;     // Pool for error codes
-        UINT16                      nP_Err;
-        UINT16                      nP_ErrAkt;
+        sal_uInt16*                     pP_Err;     // Pool for error codes
+        sal_uInt16                      nP_Err;
+        sal_uInt16                      nP_ErrAkt;
 
         ScSingleRefData**               ppP_RefTr;  // Pool fuer Referenzen
-        UINT16                      nP_RefTr;
-        UINT16                      nP_RefTrAkt;
+        sal_uInt16                      nP_RefTr;
+        sal_uInt16                      nP_RefTrAkt;
 
-        UINT16*                     pP_Id;      // Pool fuer Id-Folgen
-        UINT16                      nP_Id;
-        UINT16                      nP_IdAkt;
-        UINT16                      nP_IdLast;  // letzter Folgen-Beginn
+        sal_uInt16*                     pP_Id;      // Pool fuer Id-Folgen
+        sal_uInt16                      nP_Id;
+        sal_uInt16                      nP_IdAkt;
+        sal_uInt16                      nP_IdLast;  // letzter Folgen-Beginn
 
         struct  EXTCONT
         {
@@ -120,8 +120,8 @@ class TokenPool
                                         eId( e ), aText( r ){}
         };
         EXTCONT**                   ppP_Ext;
-        UINT16                      nP_Ext;
-        UINT16                      nP_ExtAkt;
+        sal_uInt16                      nP_Ext;
+        sal_uInt16                      nP_ExtAkt;
 
         struct  NLFCONT
         {
@@ -129,12 +129,12 @@ class TokenPool
                                     NLFCONT( const ScSingleRefData& r ) : aRef( r ) {}
         };
         NLFCONT**                   ppP_Nlf;
-        UINT16                      nP_Nlf;
-        UINT16                      nP_NlfAkt;
+        sal_uInt16                      nP_Nlf;
+        sal_uInt16                      nP_NlfAkt;
 
         ScMatrix**                  ppP_Matrix;     // Pool fuer Matricies
-        UINT16                      nP_Matrix;
-        UINT16                      nP_MatrixAkt;
+        sal_uInt16                      nP_Matrix;
+        sal_uInt16                      nP_MatrixAkt;
 
         /** for storage of external names */
         struct ExtName
@@ -162,15 +162,15 @@ class TokenPool
         };
         ::std::vector<ExtAreaRef>   maExtAreaRefs;
 
-        UINT16*                     pElement;   // Array mit Indizes fuer Elemente
+        sal_uInt16*                     pElement;   // Array mit Indizes fuer Elemente
         E_TYPE*                     pType;      // ...mit Typ-Info
-        UINT16*                     pSize;      // ...mit Laengenangabe (Anz. UINT16)
-        UINT16                      nElement;
-        UINT16                      nElementAkt;
+        sal_uInt16*                     pSize;      // ...mit Laengenangabe (Anz. sal_uInt16)
+        sal_uInt16                      nElement;
+        sal_uInt16                      nElementAkt;
 
-        static const UINT16         nScTokenOff;// Offset fuer SC-Token
+        static const sal_uInt16         nScTokenOff;// Offset fuer SC-Token
 #ifdef DBG_UTIL
-        UINT16                      nRek;       // Rekursionszaehler
+        sal_uInt16                      nRek;       // Rekursionszaehler
 #endif
         ScTokenArray*               pScToken;   // Tokenbastler
 
@@ -183,8 +183,8 @@ class TokenPool
         void                        GrowExt( void );
         void                        GrowNlf( void );
         void                        GrowMatrix( void );
-        void                        GetElement( const UINT16 nId );
-        void                        GetElementRek( const UINT16 nId );
+        void                        GetElement( const sal_uInt16 nId );
+        void                        GetElementRek( const sal_uInt16 nId );
     public:
                                     TokenPool( void );
                                     ~TokenPool();
@@ -195,11 +195,11 @@ class TokenPool
         inline void                 operator >>( TokenStack& rStack );
         inline const TokenId        Store( void );
         const TokenId               Store( const double& rDouble );
-//UNUSED2008-05  const TokenId               StoreError( USHORT nError );
+//UNUSED2008-05  const TokenId               StoreError( sal_uInt16 nError );
 
                                     // nur fuer Range-Names
-        const TokenId               Store( const UINT16 nIndex );
-        inline const TokenId        Store( const INT16 nWert );
+        const TokenId               Store( const sal_uInt16 nIndex );
+        inline const TokenId        Store( const sal_Int16 nWert );
         const TokenId               Store( const String& rString );
         const TokenId               Store( const ScSingleRefData& rTr );
         const TokenId               Store( const ScComplexRefData& rTr );
@@ -216,7 +216,7 @@ class TokenPool
         inline const ScTokenArray*  operator []( const TokenId nId );
         void                        Reset( void );
         inline E_TYPE               GetType( const TokenId& nId ) const;
-        BOOL                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
+        sal_Bool                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
         const String*               GetExternal( const TokenId& nId ) const;
 //UNUSED2008-05  const String*               GetString( const TokenId& nId ) const;
         ScMatrix*                   GetMatrix( unsigned int n ) const;
@@ -231,10 +231,10 @@ class TokenStack
 {
     private:
         TokenId*                    pStack;     // Stack als Array
-        UINT16                      nPos;       // Schreibmarke
-        UINT16                      nSize;      // Erster Index ausserhalb des Stacks
+        sal_uInt16                      nPos;       // Schreibmarke
+        sal_uInt16                      nSize;      // Erster Index ausserhalb des Stacks
     public:
-                                    TokenStack( UINT16 nNewSize = 1024 );
+                                    TokenStack( sal_uInt16 nNewSize = 1024 );
                                     ~TokenStack();
         inline TokenStack&          operator <<( const TokenId nNewId );
         inline void                 operator >>( TokenId &rId );
@@ -304,14 +304,14 @@ inline TokenPool& TokenPool::operator <<( const TokenId nId )
 {
     // POST: nId's werden hintereinander im Pool unter einer neuen Id
     //       abgelegt. Vorgang wird mit >> oder Store() abgeschlossen
-    // nId -> ( UINT16 ) nId - 1;
-    DBG_ASSERT( ( UINT16 ) nId < nScTokenOff,
+    // nId -> ( sal_uInt16 ) nId - 1;
+    DBG_ASSERT( ( sal_uInt16 ) nId < nScTokenOff,
         "-TokenPool::operator <<: TokenId im DefToken-Bereich!" );
 
     if( nP_IdAkt >= nP_Id )
         GrowId();
 
-    pP_Id[ nP_IdAkt ] = ( ( UINT16 ) nId ) - 1;
+    pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) nId ) - 1;
     nP_IdAkt++;
 
     return *this;
@@ -320,13 +320,13 @@ inline TokenPool& TokenPool::operator <<( const TokenId nId )
 
 inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
 {
-    DBG_ASSERT( ( UINT32 ) eId + nScTokenOff < 0xFFFF,
+    DBG_ASSERT( ( sal_uInt32 ) eId + nScTokenOff < 0xFFFF,
         "-TokenPool::operator<<: enmum zu gross!" );
 
     if( nP_IdAkt >= nP_Id )
         GrowId();
 
-    pP_Id[ nP_IdAkt ] = ( ( UINT16 ) eId ) + nScTokenOff;
+    pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) eId ) + nScTokenOff;
     nP_IdAkt++;
 
     return *this;
@@ -338,7 +338,7 @@ inline TokenPool& TokenPool::operator <<( TokenStack& rStack )
     if( nP_IdAkt >= nP_Id )
         GrowId();
 
-    pP_Id[ nP_IdAkt ] = ( ( UINT16 ) rStack.Get() ) - 1;
+    pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) rStack.Get() ) - 1;
     nP_IdAkt++;
 
     return *this;
@@ -361,7 +361,7 @@ inline const TokenId TokenPool::Store( void )
 }
 
 
-inline const TokenId TokenPool::Store( const INT16 nWert )
+inline const TokenId TokenPool::Store( const sal_Int16 nWert )
 {
     return Store( ( double ) nWert );
 }
@@ -382,7 +382,7 @@ const inline ScTokenArray* TokenPool::operator []( const TokenId nId )
 #ifdef DBG_UTIL
         nRek = 0;
 #endif
-        GetElement( ( UINT16 ) nId - 1 );
+        GetElement( ( sal_uInt16 ) nId - 1 );
     }
 
     return pScToken;
@@ -393,7 +393,7 @@ inline E_TYPE TokenPool::GetType( const TokenId& rId ) const
 {
     E_TYPE nRet;
 
-    UINT16 nId = (UINT16) rId - 1;
+    sal_uInt16 nId = (sal_uInt16) rId - 1;
 
     if( nId < nElementAkt )
         nRet = pType[ nId ] ;

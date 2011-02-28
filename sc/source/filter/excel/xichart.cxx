@@ -43,6 +43,9 @@
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
+#include <com/sun/star/chart/TimeInterval.hpp>
+#include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -59,11 +62,11 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
@@ -107,6 +110,7 @@ using ::com::sun::star::drawing::XShape;
 
 using ::com::sun::star::chart2::IncrementData;
 using ::com::sun::star::chart2::RelativePosition;
+using ::com::sun::star::chart2::RelativeSize;
 using ::com::sun::star::chart2::ScaleData;
 using ::com::sun::star::chart2::SubIncrement;
 using ::com::sun::star::chart2::XAxis;
@@ -147,13 +151,12 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclChRectangle& rRect )
     return rStrm >> rRect.mnX >> rRect.mnY >> rRect.mnWidth >> rRect.mnHeight;
 }
 
-template< typename Type >
-void lclSetValueOrClearAny( Any& rAny, const Type& rValue, bool bClear )
+inline void lclSetValueOrClearAny( Any& rAny, double fValue, bool bClear )
 {
     if( bClear )
         rAny.clear();
     else
-        rAny <<= rValue;
+        rAny <<= fValue;
 }
 
 void lclSetExpValueOrClearAny( Any& rAny, double fValue, bool bLogScale, bool bClear )
@@ -161,6 +164,50 @@ void lclSetExpValueOrClearAny( Any& rAny, double fValue, bool bLogScale, bool bC
     if( !bClear && bLogScale )
         fValue = pow( 10.0, fValue );
     lclSetValueOrClearAny( rAny, fValue, bClear );
+}
+
+double lclGetSerialDay( const XclImpRoot& rRoot, sal_uInt16 nValue, sal_uInt16 nTimeUnit )
+{
+    switch( nTimeUnit )
+    {
+        case EXC_CHDATERANGE_DAYS:
+            return nValue;
+        case EXC_CHDATERANGE_MONTHS:
+            return rRoot.GetDoubleFromDateTime( Date( 1, static_cast< sal_uInt16 >( 1 + nValue % 12 ), static_cast< sal_uInt16 >( rRoot.GetBaseYear() + nValue / 12 ) ) );
+        case EXC_CHDATERANGE_YEARS:
+            return rRoot.GetDoubleFromDateTime( Date( 1, 1, static_cast< sal_uInt16 >( rRoot.GetBaseYear() + nValue ) ) );
+        default:
+            OSL_ENSURE( false, "lclGetSerialDay - unexpected time unit" );
+    }
+    return nValue;
+}
+
+void lclConvertTimeValue( const XclImpRoot& rRoot, Any& rAny, sal_uInt16 nValue, bool bAuto, sal_uInt16 nTimeUnit )
+{
+    if( bAuto )
+        rAny.clear();
+    else
+        rAny <<= lclGetSerialDay( rRoot, nValue, nTimeUnit );
+}
+
+sal_Int32 lclGetApiTimeUnit( sal_uInt16 nTimeUnit )
+{
+    switch( nTimeUnit )
+    {
+        case EXC_CHDATERANGE_DAYS:      return cssc::TimeUnit::DAY;
+        case EXC_CHDATERANGE_MONTHS:    return cssc::TimeUnit::MONTH;
+        case EXC_CHDATERANGE_YEARS:     return cssc::TimeUnit::YEAR;
+        default:                        OSL_ENSURE( false, "lclGetApiTimeUnit - unexpected time unit" );
+    }
+    return cssc::TimeUnit::DAY;
+}
+
+void lclConvertTimeInterval( Any& rInterval, sal_uInt16 nValue, bool bAuto, sal_uInt16 nTimeUnit )
+{
+    if( bAuto || (nValue == 0) )
+        rInterval.clear();
+    else
+        rInterval <<= cssc::TimeInterval( nValue, lclGetApiTimeUnit( nTimeUnit ) );
 }
 
 } // namespace
@@ -292,14 +339,24 @@ sal_Int32 XclImpChRoot::CalcHmmFromChartY( sal_Int32 nPosY ) const
         CalcHmmFromChartY( rRect.mnHeight ) );
 }
 
+double XclImpChRoot::CalcRelativeFromHmmX( sal_Int32 nPosX ) const
+{
+    return static_cast< double >( nPosX ) / mxChData->maChartRect.GetWidth();
+}
+
+double XclImpChRoot::CalcRelativeFromHmmY( sal_Int32 nPosY ) const
+{
+    return static_cast< double >( nPosY ) / mxChData->maChartRect.GetHeight();
+}
+
 double XclImpChRoot::CalcRelativeFromChartX( sal_Int32 nPosX ) const
 {
-    return static_cast< double >( CalcHmmFromChartX( nPosX ) ) / mxChData->maChartRect.GetWidth();
+    return CalcRelativeFromHmmX( CalcHmmFromChartX( nPosX ) );
 }
 
 double XclImpChRoot::CalcRelativeFromChartY( sal_Int32 nPosY ) const
 {
-    return static_cast< double >( CalcHmmFromChartY( nPosY ) ) / mxChData->maChartRect.GetHeight();
+    return CalcRelativeFromHmmY( CalcHmmFromChartY( nPosY ) );
 }
 
 void XclImpChRoot::ConvertLineFormat( ScfPropertySet& rPropSet,
@@ -2432,18 +2489,30 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
             manual mode, if the legend is moved or resized). With manual plot
             areas, Excel ignores the value in maData.mnDockMode completely. */
         cssc2::LegendPosition eApiPos = cssc2::LegendPosition_CUSTOM;
-        cssc2::LegendExpansion eApiExpand = cssc2::LegendExpansion_BALANCED;
+        cssc::ChartLegendExpansion eApiExpand = cssc::ChartLegendExpansion_CUSTOM;
         if( !GetChartData().IsManualPlotArea() ) switch( maData.mnDockMode )
         {
-            case EXC_CHLEGEND_LEFT:     eApiPos = cssc2::LegendPosition_LINE_START; eApiExpand = cssc2::LegendExpansion_HIGH;   break;
-            case EXC_CHLEGEND_RIGHT:    eApiPos = cssc2::LegendPosition_LINE_END;   eApiExpand = cssc2::LegendExpansion_HIGH;   break;
-            case EXC_CHLEGEND_TOP:      eApiPos = cssc2::LegendPosition_PAGE_START; eApiExpand = cssc2::LegendExpansion_WIDE;   break;
-            case EXC_CHLEGEND_BOTTOM:   eApiPos = cssc2::LegendPosition_PAGE_END;   eApiExpand = cssc2::LegendExpansion_WIDE;   break;
+            case EXC_CHLEGEND_LEFT:
+                eApiPos = cssc2::LegendPosition_LINE_START;
+                eApiExpand = cssc::ChartLegendExpansion_HIGH;
+            break;
+            case EXC_CHLEGEND_RIGHT:
             // top-right not supported
-            case EXC_CHLEGEND_CORNER:   eApiPos = cssc2::LegendPosition_LINE_END;   eApiExpand = cssc2::LegendExpansion_HIGH;   break;
+            case EXC_CHLEGEND_CORNER:
+                eApiPos = cssc2::LegendPosition_LINE_END;
+                eApiExpand = cssc::ChartLegendExpansion_HIGH;
+            break;
+            case EXC_CHLEGEND_TOP:
+                eApiPos = cssc2::LegendPosition_PAGE_START;
+                eApiExpand = cssc::ChartLegendExpansion_WIDE;
+            break;
+            case EXC_CHLEGEND_BOTTOM:
+                eApiPos = cssc2::LegendPosition_PAGE_END;
+                eApiExpand = cssc::ChartLegendExpansion_WIDE;
+            break;
         }
 
-        // no automatic position: try to find the correct position and size
+        // no automatic position/size: try to find the correct position and size
         if( eApiPos == cssc2::LegendPosition_CUSTOM )
         {
             const XclChFramePos* pFramePos = mxFramePos.is() ? &mxFramePos->GetFramePosData() : 0;
@@ -2453,38 +2522,35 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
                 ignored. */
             if( pFramePos )
             {
-                RelativePosition aRelPos;
-                aRelPos.Primary = CalcRelativeFromChartX( pFramePos->maRect.mnX );
-                aRelPos.Secondary = CalcRelativeFromChartY( pFramePos->maRect.mnY );
-                aRelPos.Anchor = ::com::sun::star::drawing::Alignment_TOP_LEFT;
+                RelativePosition aRelPos(
+                    CalcRelativeFromChartX( pFramePos->maRect.mnX ),
+                    CalcRelativeFromChartY( pFramePos->maRect.mnY ),
+                    ::com::sun::star::drawing::Alignment_TOP_LEFT );
                 aLegendProp.SetProperty( EXC_CHPROP_RELATIVEPOSITION, aRelPos );
             }
             else
             {
-                // no manual position found, just go for the default
+                // no manual position/size found, just go for the default
                 eApiPos = cssc2::LegendPosition_LINE_END;
             }
 
-
-            /*  Legend size. #i71697# It is not possible to set the legend size
-                directly in the Chart, do some magic here. */
-            if( !pFramePos || (pFramePos->mnBRMode != EXC_CHFRAMEPOS_ABSSIZE_POINTS) ||
-                (pFramePos->maRect.mnWidth == 0) || (pFramePos->maRect.mnHeight == 0) )
+            /*  Legend size. The member mnBRMode specifies whether size is
+                automatic or changes manually. Manual size is given in points,
+                not in chart units. */
+            if( pFramePos && (pFramePos->mnBRMode == EXC_CHFRAMEPOS_ABSSIZE_POINTS) &&
+                (pFramePos->maRect.mnWidth > 0) && (pFramePos->maRect.mnHeight > 0) )
             {
-                // automatic size: determine entry direction from flags
-                eApiExpand = ::get_flagvalue( maData.mnFlags, EXC_CHLEGEND_STACKED,
-                    cssc2::LegendExpansion_HIGH, cssc2::LegendExpansion_WIDE );
+                eApiExpand = cssc::ChartLegendExpansion_CUSTOM;
+                sal_Int32 nWidthHmm = static_cast< sal_Int32 >( pFramePos->maRect.mnWidth / EXC_POINTS_PER_HMM );
+                sal_Int32 nHeightHmm = static_cast< sal_Int32 >( pFramePos->maRect.mnHeight / EXC_POINTS_PER_HMM );
+                RelativeSize aRelSize( CalcRelativeFromHmmX( nWidthHmm ), CalcRelativeFromHmmY( nHeightHmm ) );
+                aLegendProp.SetProperty( EXC_CHPROP_RELATIVESIZE, aRelSize );
             }
             else
             {
-                // legend size is given in points, not in chart units
-                double fRatio = static_cast< double >( pFramePos->maRect.mnWidth ) / pFramePos->maRect.mnHeight;
-                if( fRatio > 1.5 )
-                    eApiExpand = cssc2::LegendExpansion_WIDE;
-                else if( fRatio < 0.75 )
-                    eApiExpand = cssc2::LegendExpansion_HIGH;
-                else
-                    eApiExpand = cssc2::LegendExpansion_BALANCED;
+                // automatic size: determine entry direction from flags
+                eApiExpand = ::get_flagvalue( maData.mnFlags, EXC_CHLEGEND_STACKED,
+                    cssc::ChartLegendExpansion_HIGH, cssc::ChartLegendExpansion_WIDE );
             }
         }
         aLegendProp.SetProperty( EXC_CHPROP_ANCHORPOSITION, eApiPos );
@@ -2837,20 +2903,60 @@ XclImpChLabelRange::XclImpChLabelRange( const XclImpChRoot& rRoot ) :
 
 void XclImpChLabelRange::ReadChLabelRange( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnCross >> maData.mnLabelFreq >> maData.mnTickFreq >> maData.mnFlags;
+    rStrm >> maLabelData.mnCross >> maLabelData.mnLabelFreq >> maLabelData.mnTickFreq >> maLabelData.mnFlags;
+}
+
+void XclImpChLabelRange::ReadChDateRange( XclImpStream& rStrm )
+{
+    rStrm   >> maDateData.mnMinDate
+            >> maDateData.mnMaxDate
+            >> maDateData.mnMajorStep
+            >> maDateData.mnMajorUnit
+            >> maDateData.mnMinorStep
+            >> maDateData.mnMinorUnit
+            >> maDateData.mnBaseUnit
+            >> maDateData.mnCross
+            >> maDateData.mnFlags;
 }
 
 void XclImpChLabelRange::Convert( ScfPropertySet& rPropSet, ScaleData& rScaleData, bool bMirrorOrient ) const
 {
-    // do not overlap text unless all labels are visible
-    rPropSet.SetBoolProperty( EXC_CHPROP_TEXTOVERLAP, maData.mnLabelFreq == 1 );
-    // do not break text into several lines unless all labels are visible
-    rPropSet.SetBoolProperty( EXC_CHPROP_TEXTBREAK, maData.mnLabelFreq == 1 );
-    // do not stagger labels in two lines
-    rPropSet.SetProperty( EXC_CHPROP_ARRANGEORDER, cssc::ChartAxisArrangeOrderType_SIDE_BY_SIDE );
+    // automatic axis type detection
+    rScaleData.AutoDateAxis = ::get_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTODATE );
+
+    // the flag EXC_CHDATERANGE_DATEAXIS specifies whether this is a date axis
+    if( ::get_flag( maDateData.mnFlags, EXC_CHDATERANGE_DATEAXIS ) )
+    {
+        /*  Chart2 requires axis type CATEGORY for automatic category/date axis
+            (even if it is a date axis currently). */
+        rScaleData.AxisType = rScaleData.AutoDateAxis ? cssc2::AxisType::CATEGORY : cssc2::AxisType::DATE;
+        rScaleData.Scaling.set( ScfApiHelper::CreateInstance( SERVICE_CHART2_LINEARSCALING ), UNO_QUERY );
+        /*  Min/max values depend on base time unit, they specify the number of
+            days, months, or years starting from null date. */
+        lclConvertTimeValue( GetRoot(), rScaleData.Minimum, maDateData.mnMinDate, ::get_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOMIN ), maDateData.mnBaseUnit );
+        lclConvertTimeValue( GetRoot(), rScaleData.Maximum, maDateData.mnMaxDate, ::get_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOMAX ), maDateData.mnBaseUnit );
+        // increment
+        cssc::TimeIncrement& rTimeIncrement = rScaleData.TimeIncrement;
+        lclConvertTimeInterval( rTimeIncrement.MajorTimeInterval, maDateData.mnMajorStep, ::get_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOMAJOR ), maDateData.mnMajorUnit );
+        lclConvertTimeInterval( rTimeIncrement.MinorTimeInterval, maDateData.mnMinorStep, ::get_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOMINOR ), maDateData.mnMinorUnit );
+        // base unit
+        if( ::get_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOBASE ) )
+            rTimeIncrement.TimeResolution.clear();
+        else
+            rTimeIncrement.TimeResolution <<= lclGetApiTimeUnit( maDateData.mnBaseUnit );
+    }
+    else
+    {
+        // do not overlap text unless all labels are visible
+        rPropSet.SetBoolProperty( EXC_CHPROP_TEXTOVERLAP, maLabelData.mnLabelFreq == 1 );
+        // do not break text into several lines unless all labels are visible
+        rPropSet.SetBoolProperty( EXC_CHPROP_TEXTBREAK, maLabelData.mnLabelFreq == 1 );
+        // do not stagger labels in two lines
+        rPropSet.SetProperty( EXC_CHPROP_ARRANGEORDER, cssc::ChartAxisArrangeOrderType_SIDE_BY_SIDE );
+    }
 
     // reverse order
-    bool bReverse = ::get_flag( maData.mnFlags, EXC_CHLABELRANGE_REVERSE ) != bMirrorOrient;
+    bool bReverse = ::get_flag( maLabelData.mnFlags, EXC_CHLABELRANGE_REVERSE ) != bMirrorOrient;
     rScaleData.Orientation = bReverse ? cssc2::AxisOrientation_REVERSE : cssc2::AxisOrientation_MATHEMATICAL;
 
     //! TODO #i58731# show n-th category
@@ -2862,13 +2968,29 @@ void XclImpChLabelRange::ConvertAxisPosition( ScfPropertySet& rPropSet, bool b3d
         does not move the Y axis in 3D charts, regardless of actual settings.
         But: the Y axis has to be moved to "end", if the X axis is mirrored,
         to keep it at the left end of the chart. */
-    bool bMaxCross = ::get_flag( maData.mnFlags, b3dChart ? EXC_CHLABELRANGE_REVERSE : EXC_CHLABELRANGE_MAXCROSS );
+    bool bMaxCross = ::get_flag( maLabelData.mnFlags, b3dChart ? EXC_CHLABELRANGE_REVERSE : EXC_CHLABELRANGE_MAXCROSS );
     cssc::ChartAxisPosition eAxisPos = bMaxCross ? cssc::ChartAxisPosition_END : cssc::ChartAxisPosition_VALUE;
     rPropSet.SetProperty( EXC_CHPROP_CROSSOVERPOSITION, eAxisPos );
 
-    // crossing position
-    double fCrossingPos = b3dChart ? 1.0 : maData.mnCross;
-    rPropSet.SetProperty( EXC_CHPROP_CROSSOVERVALUE, fCrossingPos );
+    // crossing position (depending on axis type text/date)
+    if( ::get_flag( maDateData.mnFlags, EXC_CHDATERANGE_DATEAXIS ) )
+    {
+        bool bAutoCross = ::get_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOCROSS );
+        /*  Crossing position value depends on base time unit, it specifies the
+            number of days, months, or years from null date. Note that Excel
+            2007/2010 write broken BIFF8 files, they always stores the number
+            of days cregardless of the base time unit (and they are reading it
+            the same way, thus wrongly displaying files written by Excel
+            97-2003). This filter sticks to the correct behaviour of Excel
+            97-2003. */
+        double fCrossingPos = bAutoCross ? 1.0 : lclGetSerialDay( GetRoot(), maDateData.mnCross, maDateData.mnBaseUnit );
+        rPropSet.SetProperty( EXC_CHPROP_CROSSOVERVALUE, fCrossingPos );
+    }
+    else
+    {
+        double fCrossingPos = b3dChart ? 1.0 : maLabelData.mnCross;
+        rPropSet.SetProperty( EXC_CHPROP_CROSSOVERVALUE, fCrossingPos );
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -2909,6 +3031,7 @@ void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) co
     Sequence< SubIncrement >& rSubIncrementSeq = rIncrementData.SubIncrements;
     rSubIncrementSeq.realloc( 1 );
     Any& rIntervalCount = rSubIncrementSeq[ 0 ].IntervalCount;
+    rIntervalCount.clear();
     if( bLogScale )
     {
         if( !bAutoMinor )
@@ -2916,14 +3039,12 @@ void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) co
     }
     else
     {
-        sal_Int32 nCount = 0;
         if( !bAutoMajor && !bAutoMinor && (0.0 < maData.mfMinorStep) && (maData.mfMinorStep <= maData.mfMajorStep) )
         {
             double fCount = maData.mfMajorStep / maData.mfMinorStep + 0.5;
-            if( fCount < 1001.0 )
-                nCount = static_cast< sal_Int32 >( fCount );
+            if( (1.0 <= fCount) && (fCount < 1001.0) )
+                rIntervalCount <<= static_cast< sal_Int32 >( fCount );
         }
-        lclSetValueOrClearAny( rIntervalCount, nCount, nCount == 0 );
     }
 
     // reverse order
@@ -3043,6 +3164,11 @@ void XclImpChAxis::ReadSubRecord( XclImpStream& rStrm )
         case EXC_ID_CHLABELRANGE:
             mxLabelRange.reset( new XclImpChLabelRange( GetChRoot() ) );
             mxLabelRange->ReadChLabelRange( rStrm );
+        break;
+        case EXC_ID_CHDATERANGE:
+            if( !mxLabelRange )
+                mxLabelRange.reset( new XclImpChLabelRange( GetChRoot() ) );
+            mxLabelRange->ReadChDateRange( rStrm );
         break;
         case EXC_ID_CHVALUERANGE:
             mxValueRange.reset( new XclImpChValueRange( GetChRoot() ) );

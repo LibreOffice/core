@@ -110,9 +110,9 @@ ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(
                 , m_aFT_Scheme      ( this, SchResId( FT_SCHEME ) )
                 , m_aLB_Scheme      ( this, SchResId( LB_SCHEME ) )
                 , m_aFL_Seperator   ( this, SchResId( FL_SEPERATOR ) )
-                , m_aCB_RoundedEdge ( this, SchResId( CB_ROUNDEDEDGE ) )
                 , m_aCB_Shading     ( this, SchResId( CB_SHADING ) )
                 , m_aCB_ObjectLines ( this, SchResId( CB_OBJECTLINES ) )
+                , m_aCB_RoundedEdge ( this, SchResId( CB_ROUNDEDEDGE ) )
                 , m_bUpdateOtherControls( true )
                 , m_bCommitToModel( true )
                 , m_rControllerLockHelper( rControllerLockHelper )
@@ -128,9 +128,9 @@ ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(
     m_aCB_Shading.SetToggleHdl( LINK( this, ThreeD_SceneAppearance_TabPage, SelectShading ) );
     m_aCB_ObjectLines.SetToggleHdl( LINK( this, ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines ) );
 
-    m_aCB_RoundedEdge.EnableTriState( TRUE );
-    m_aCB_Shading.EnableTriState( TRUE );
-    m_aCB_ObjectLines.EnableTriState( TRUE );
+    m_aCB_RoundedEdge.EnableTriState( sal_True );
+    m_aCB_Shading.EnableTriState( sal_True );
+    m_aCB_ObjectLines.EnableTriState( sal_True );
 
     initControlsFromModel();
 }
@@ -220,50 +220,50 @@ void ThreeD_SceneAppearance_TabPage::initControlsFromModel()
 
     if(aProps.m_aShadeMode == drawing::ShadeMode_FLAT)
     {
-        m_aCB_Shading.EnableTriState( FALSE );
-        m_aCB_Shading.Check(FALSE);
+        m_aCB_Shading.EnableTriState( sal_False );
+        m_aCB_Shading.Check(sal_False);
     }
     else if(aProps.m_aShadeMode == drawing::ShadeMode_SMOOTH)
     {
-        m_aCB_Shading.EnableTriState( FALSE );
-        m_aCB_Shading.Check(TRUE);
+        m_aCB_Shading.EnableTriState( sal_False );
+        m_aCB_Shading.Check(sal_True);
     }
     else
     {
-        m_aCB_Shading.EnableTriState( TRUE );
+        m_aCB_Shading.EnableTriState( sal_True );
         m_aCB_Shading.SetState( STATE_DONTKNOW );
     }
 
     if(aProps.m_nObjectLines == 0)
     {
-        m_aCB_ObjectLines.EnableTriState( FALSE );
-        m_aCB_ObjectLines.Check(FALSE);
+        m_aCB_ObjectLines.EnableTriState( sal_False );
+        m_aCB_ObjectLines.Check(sal_False);
     }
     else if(aProps.m_nObjectLines==1)
     {
-        m_aCB_ObjectLines.EnableTriState( FALSE );
-        m_aCB_ObjectLines.Check(TRUE);
+        m_aCB_ObjectLines.EnableTriState( sal_False );
+        m_aCB_ObjectLines.Check(sal_True);
     }
     else
     {
-        m_aCB_ObjectLines.EnableTriState( TRUE );
+        m_aCB_ObjectLines.EnableTriState( sal_True );
         m_aCB_ObjectLines.SetState( STATE_DONTKNOW );
     }
 
     if(aProps.m_nRoundedEdges >= 5)
     {
-        m_aCB_RoundedEdge.EnableTriState( FALSE );
-        m_aCB_RoundedEdge.Check(TRUE);
+        m_aCB_RoundedEdge.EnableTriState( sal_False );
+        m_aCB_RoundedEdge.Check(sal_True);
     }
     else if(aProps.m_nRoundedEdges<0)
     {
-        m_aCB_RoundedEdge.EnableTriState( FALSE );
+        m_aCB_RoundedEdge.EnableTriState( sal_False );
         m_aCB_RoundedEdge.SetState( STATE_DONTKNOW );
     }
     else
     {
-        m_aCB_RoundedEdge.EnableTriState( TRUE );
-        m_aCB_RoundedEdge.Check(FALSE);
+        m_aCB_RoundedEdge.EnableTriState( sal_True );
+        m_aCB_RoundedEdge.Check(sal_False);
     }
     m_aCB_RoundedEdge.Enable( !m_aCB_ObjectLines.IsChecked() );
 
@@ -332,7 +332,7 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectShading, void*, EMPTYARG )
     if( !m_bUpdateOtherControls )
         return 0;
 
-    m_aCB_Shading.EnableTriState( FALSE );
+    m_aCB_Shading.EnableTriState( sal_False );
     applyShadeModeToModel();
     updateScheme();
     return 0;
@@ -344,15 +344,15 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, Check
 
     if( pCheckBox == &m_aCB_ObjectLines )
     {
-        m_aCB_ObjectLines.EnableTriState( FALSE );
+        m_aCB_ObjectLines.EnableTriState( sal_False );
         m_bUpdateOtherControls = false;
         m_aCB_RoundedEdge.Enable( !m_aCB_ObjectLines.IsChecked() );
         if(!m_aCB_RoundedEdge.IsEnabled())
-            m_aCB_RoundedEdge.Check(FALSE);
+            m_aCB_RoundedEdge.Check(sal_False);
         m_bUpdateOtherControls = true;
     }
     else
-        m_aCB_RoundedEdge.EnableTriState( FALSE );
+        m_aCB_RoundedEdge.EnableTriState( sal_False );
     applyRoundedEdgeAndObjectLinesToModel();
     updateScheme();
     return 0;

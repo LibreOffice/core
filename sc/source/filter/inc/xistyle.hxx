@@ -228,7 +228,7 @@ public:
     void                CreateScFormats();
 
     /** Returns the format key with the passed Excel index or NUMBERFORMAT_ENTRY_NOT_FOUND on error. */
-    ULONG               GetScFormat( sal_uInt16 nXclNumFmt ) const;
+    sal_uLong               GetScFormat( sal_uInt16 nXclNumFmt ) const;
 
     /** Fills an Excel number format to the passed item set.
         @param rItemSet  The destination item set.
@@ -242,11 +242,11 @@ public:
         @param nScNumFmt  The Calc number formatter index of the format.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
     void                FillScFmtToItemSet(
-                            SfxItemSet& rItemSet, ULONG nScNumFmt,
+                            SfxItemSet& rItemSet, sal_uLong nScNumFmt,
                             bool bSkipPoolDefs = false ) const;
 
 private:
-    typedef ::std::map< sal_uInt16, ULONG > XclImpIndexMap;
+    typedef ::std::map< sal_uInt16, sal_uLong > XclImpIndexMap;
 
     XclImpIndexMap      maIndexMap;     /// Maps Excel format indexes to Calc formats.
     sal_uInt16          mnNextXclIdx;   /// Index counter for BIFF2-BIFF4.
@@ -416,7 +416,7 @@ public:
                             SCCOL nScCol1, SCROW nScRow1,
                             SCCOL nScCol2, SCROW nScRow2,
                             SCTAB nScTab,
-                            ULONG nForceScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND );
+                            sal_uLong nForceScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND );
 
     /** Converts formatting information from BIFF2 cell record data directly. */
     static void         ApplyPatternForBiff2CellFormat(
@@ -603,13 +603,13 @@ private:
     void                Find(
                             XclImpXFRange*& rpPrevRange,
                             XclImpXFRange*& rpNextRange,
-                            ULONG& rnNextIndex,
+                            sal_uLong& rnNextIndex,
                             SCROW nScRow ) const;
 
     /** Tries to concatenate a range with its predecessor.
         @descr  The ranges must have the same XF index and must not have a gap.
         The resulting range has the index nIndex-1. */
-    void                TryConcatPrev( ULONG nIndex );
+    void                TryConcatPrev( sal_uLong nIndex );
 
 private:
     ScfDelList< XclImpXFRange > maIndexList;    /// The list of XF index range.
@@ -668,7 +668,7 @@ private:
         @param nLine
         BOX_LINE_RIGHT = copy most-right border of top row;
         BOX_LINE_BOTTOM = copy most-bottom border of first column. */
-    void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, USHORT nLine );
+    void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, sal_uInt16 nLine );
 
 private:
     typedef ScfRef< XclImpXFRangeColumn >           XclImpXFRangeColumnRef;

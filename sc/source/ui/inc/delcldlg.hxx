@@ -52,7 +52,7 @@ private:
 
 
 public:
-            ScDeleteCellDlg( Window* pParent, BOOL bDisallowCellMove = FALSE );
+            ScDeleteCellDlg( Window* pParent, sal_Bool bDisallowCellMove = sal_False );
             ~ScDeleteCellDlg();
 
     DelCellCmd GetDelCellCmd() const;
