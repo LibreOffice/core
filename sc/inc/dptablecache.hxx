@@ -58,19 +58,19 @@ private:
     DataGridType                maTableDataValues; // Data Pilot Table's index - value map
     RowGridType                 maSourceData;      // Data Pilot Table's source data
     RowGridType                 maGlobalOrder;     // Sorted members index
-    RowGridType                 maIndexOrder;      // Index the sorted numbers
+    mutable RowGridType         maIndexOrder;      // Index the sorted numbers
     DataListType                maLabelNames;      // Source label data
     std::vector<bool>           mbEmptyRow;        //If empty row?
 
     mutable ScDPItemDataPool    maAdditionalData;
 
 public:
-    SCROW GetOrder( long nDim, SCROW nIndex );
+    SCROW GetOrder( long nDim, SCROW nIndex ) const;
     SCROW GetIdByItemData( long nDim,  String sItemData  ) const;
     SCROW GetIdByItemData( long nDim, const ScDPItemData& rData ) const;
 
-    SCROW GetAdditionalItemID ( String sItemData );
-    SCROW GetAdditionalItemID( const ScDPItemData& rData );
+    SCROW GetAdditionalItemID ( String sItemData ) const;
+    SCROW GetAdditionalItemID( const ScDPItemData& rData ) const;
 
     SCCOL GetDimensionIndex( String sName) const;
     const ScDPItemData* GetSortedItemData( SCCOL nDim, SCROW nOrder ) const;

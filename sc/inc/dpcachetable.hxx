@@ -134,7 +134,7 @@ public:
     sal_Int32 getRowSize() const;
     sal_Int32 getColSize() const;
 
-    ScDPTableDataCache* getCache() const;
+    const ScDPTableDataCache* getCache() const;
 
     /** Fill the internal table from the cell range provided.  This function
         assumes that the first row is the column header. */
@@ -173,12 +173,15 @@ public:
                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rTabData,
                      const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
+    SCROW getOrder(long nDim, SCROW nIndex) const;
     void clear();
     bool empty() const;
 
 private:
     ScDPCacheTable();
     ScDPCacheTable(const ScDPCacheTable&);
+
+    ScDPTableDataCache* getCache();
 
     /**
      * Check if a given row meets all specified criteria.

@@ -174,7 +174,7 @@ public:
     long                    GetDataDimensionCount();
     ScDPDimension*          GetDataDimension(long nIndex);
     String                  GetDataDimName(long nIndex);
-    ScDPTableDataCache*         GetCache();
+    const ScDPTableDataCache* GetCache();
     const ScDPItemData*            GetItemDataById( long nDim, long nId );
     long                                       GetDataLayoutDim(){ return pData->GetColumnCount(); }
     SCROW                                GetMemberId(  long  nDim, const ScDPItemData& rData );

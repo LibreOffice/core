@@ -144,7 +144,7 @@ BOOL ScSheetDPData::IsDateDimension(long nDim)
     }
     else
     {
-        return aCacheTable.getCache()->IsDateDimension( nDim);
+        return GetCacheTable().getCache()->IsDateDimension( nDim);
     }
 }
 

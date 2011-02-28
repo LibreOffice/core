@@ -996,19 +996,19 @@ SCROW ScDPTableDataCache::GetIdByItemData( long nDim, const ScDPItemData& rData 
     return  GetRowCount() + maAdditionalData.getDataId(rData);
 }
 
-SCROW ScDPTableDataCache::GetAdditionalItemID ( String sItemData )
+SCROW ScDPTableDataCache::GetAdditionalItemID ( String sItemData ) const
 {
     ScDPItemData rData ( sItemData );
     return GetAdditionalItemID( rData );
 }
 
-SCROW ScDPTableDataCache::GetAdditionalItemID( const ScDPItemData& rData )
+SCROW ScDPTableDataCache::GetAdditionalItemID( const ScDPItemData& rData ) const
 {
     return GetRowCount() + maAdditionalData.insertData( rData );
 }
 
 
-SCROW ScDPTableDataCache::GetOrder(long nDim, SCROW nIndex)
+SCROW ScDPTableDataCache::GetOrder(long nDim, SCROW nIndex) const
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
     DBG_ASSERT( nDim >=0 && nDim < mnColumnCount, "ScDPTableDataCache::GetOrder : out of bound" );
@@ -1016,7 +1016,7 @@ SCROW ScDPTableDataCache::GetOrder(long nDim, SCROW nIndex)
     if ( maIndexOrder[nDim].size() !=  maGlobalOrder[nDim].size() )
     { //not inited
         SCROW i  = 0;
-        maIndexOrder[nDim].resize(  maGlobalOrder[nDim].size(), 0 );
+        maIndexOrder[nDim].resize(maGlobalOrder[nDim].size(), 0);
         for ( size_t n = 0 ; n<  maGlobalOrder[nDim].size(); n++ )
         {
             i =  maGlobalOrder[nDim][n];
