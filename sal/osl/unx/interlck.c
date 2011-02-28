@@ -29,6 +29,7 @@
 
 #include "system.h"
 
+#include <osl/armarch.h>
 #include <osl/interlck.h>
 #include <osl/diagnose.h>
 
@@ -36,6 +37,42 @@
 #error please use asm/interlck_sparc.s
 #elif defined ( SOLARIS) && defined ( X86 )
 #error please use asm/interlck_x86.s
+#elif defined ( ARM ) && (( __GNUC__ < 4 ) || (( __GNUC__ == 4) && ( __GNUC_MINOR__ < 6 ))) && ( __ARM_ARCH__ >= 6)
+oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
+{
+    register oslInterlockedCount nCount __asm__ ("r1");
+    int nResult;
+
+    __asm__ __volatile__ (
+"1:   ldrex %0, [%3]\n"
+"     add %0, %0, #1\n"
+"     strex %1, %0, [%3]\n"
+"     teq %1, #0\n"
+"     bne 1b"
+        : "=&r" (nCount), "=&r" (nResult), "=m" (*pCount)
+        : "r" (pCount)
+        : "memory");
+
+    return nCount;
+}
+
+oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
+{
+    register oslInterlockedCount nCount __asm__ ("r1");
+    int nResult;
+
+    __asm__ __volatile__ (
+"0:   ldrex %0, [%3]\n"
+"     sub %0, %0, #1\n"
+"     strex %1, %0, [%3]\n"
+"     teq %1, #0\n"
+"     bne 0b"
+        : "=&r" (nCount), "=&r" (nResult), "=m" (*pCount)
+        : "r" (pCount)
+        : "memory");
+
+    return nCount;
+}
 #elif defined ( GCC ) && ( defined ( X86 ) || defined ( X86_64 ) )
 /* That's possible on x86-64 too since oslInterlockedCount is a sal_Int32 */
 
