@@ -201,7 +201,9 @@ void ScSheetDPData::CreateCacheTable()
         // already cached.
         return;
 
-    aCacheTable.setCache(mrDesc.CreateCache());
+    if (!aCacheTable.hasCache())
+        aCacheTable.setCache(mrDesc.CreateCache());
+
     aCacheTable.fillTable(aQuery, pSpecial, bIgnoreEmptyRows, bRepeatIfEmpty);
 }
 

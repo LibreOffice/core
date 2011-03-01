@@ -170,6 +170,7 @@ public:
     void clear();
     bool empty() const;
     void setCache(ScDPCache* p);
+    bool hasCache() const;
 
 private:
     ScDPCacheTable();

@@ -214,7 +214,9 @@ void ScDatabaseDPData::CreateCacheTable()
     if (!aCacheTable.empty())
         return;
 
-    aCacheTable.setCache(mrImport.CreateCache());
+    if (!aCacheTable.hasCache())
+        aCacheTable.setCache(mrImport.CreateCache());
+
     aCacheTable.fillTable();
 }
 
