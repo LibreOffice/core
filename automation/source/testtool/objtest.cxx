@@ -1106,15 +1106,6 @@ void TestToolObj::WaitForAnswer ()
 {
     if ( bUseIPC )
     {
-    #ifdef DBG_UTILx
-        USHORT nSysWinModeMemo = GetpApp()->GetSystemWindowMode();
-        GetpApp()->SetSystemWindowMode( 0 );
-        ModelessDialog aDlg(NULL);
-        aDlg.SetOutputSizePixel(Size(200,0));
-        aDlg.SetText(CUniString("Waiting for Answer"));
-        aDlg.Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-        GetpApp()->SetSystemWindowMode( nSysWinModeMemo );
-    #endif
         BOOL bWasRealWait = !bReturnOK;
         BasicRuntime aRun( NULL );
         if ( BasicRuntimeAccess::HasRuntime() )
