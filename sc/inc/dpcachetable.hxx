@@ -49,19 +49,12 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class Date;
-
+class ScDPItemData;
+class ScDPTableDataCache;
 class ScDocument;
 class ScRange;
-class ScDPDimension;
-class ScDPCollection;
-struct ScDPCacheCell;
-struct ScQueryParam;
-class ScDPItemData;
-class Date;
-
-class ScDPTableDataCache;
 struct ScDPValueData;
-// ----------------------------------------------------------------------------
+struct ScQueryParam;
 
 class SC_DLLPUBLIC ScDPCacheTable
 {
@@ -190,7 +183,6 @@ private:
      * @param rCriteria a list of criteria
      */
     bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const;
-    void getValueData(ScDocument* pDoc, const ScAddress& rPos, ScDPCacheCell& rCell);
     void initNoneCache( ScDocument* pDoc );
 
 private:
