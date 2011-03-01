@@ -943,21 +943,8 @@ int SfxDispatcher::GetShellAndSlot_Impl
         if ( bRealSlot && ((0 == *ppSlot) || (0 == (*ppSlot)->GetExecFnc()) ))
             return sal_False;
 
-#ifdef DBG_UTILx
-        ByteString aMsg( nSlot );
-        aMsg += " found in ";
-        aMsg += (*ppShell)->GetInterface()->GetClassName();
-        DbgTrace( aMsg.GetBuffer() );
-#endif
-
         return sal_True;
     }
-
-#ifdef DBG_UTILx
-    ByteString aMsg( nSlot );
-    aMsg += " not found";
-    DbgTrace( aMsg.GetBuffer() );
-#endif
 
     return sal_False;
 }
@@ -2175,11 +2162,6 @@ sal_Bool SfxDispatcher::_TryIntercept_Impl
         {
             rServer.SetSlot(pSlot);
             rServer.SetShellLevel(0);
-#ifdef DBG_UTILx
-            String aMsg( nSlot );
-            aMsg += " intercepted";
-            DbgTrace( aMsg.GetBuffer() );
-#endif
             return sal_True;
         }
     }
@@ -2303,9 +2285,6 @@ sal_Bool SfxDispatcher::_FindServer
 
     // search through all the shells of the chained dispatchers
     // from top to bottom
-#ifdef DBG_UTILx
-    String aStack( "Stack:" );
-#endif
     sal_uInt16 nFirstShell = pImp->bModal && !bModal ? pImp->aStack.Count() : 0;
     for ( sal_uInt16 i = nFirstShell; i < nTotCount; ++i )
     {
@@ -2346,20 +2325,6 @@ sal_Bool SfxDispatcher::_FindServer
                 pSlot = 0;
         }
 
-#ifdef DBG_UTILx
-        if ( pSlot )
-        {
-            String aMsg( nSlot );
-            aMsg += " found in ";
-            aMsg += pObjShell->GetInterface()->GetClassName();
-            DbgTrace( aMsg.GetBuffer() );
-        }
-        else
-        {
-            aStack += " ";
-            aStack += pObjShell->GetInterface()->GetClassName();
-        }
-#endif
         if ( pSlot && !IsAllowed( nSlot ) )
         {
             pSlot = NULL;
@@ -2373,12 +2338,6 @@ sal_Bool SfxDispatcher::_FindServer
         }
     }
 
-#ifdef DBG_UTILx
-    String aMsg( nSlot );
-    aMsg += " not found in ";
-    aMsg += aStack;
-    DbgTrace( aMsg.GetBuffer() );
-#endif
     return sal_False;
 }
 
