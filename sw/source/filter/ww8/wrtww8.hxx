@@ -58,7 +58,7 @@ namespace msfilter
     class MSCodec_Std97;
 }
 
-class SwAttrIter;
+class WW8SwAttrIter;
 class AttributeOutputBase;
 class DocxAttributeOutput;
 class RtfAttributeOutput;
@@ -751,10 +751,10 @@ protected:
     virtual void ExportDocument_Impl() = 0;
 
     /// Get the next position in the text node to output
-    virtual xub_StrLen GetNextPos( SwAttrIter* pAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos );
+    virtual xub_StrLen GetNextPos( WW8SwAttrIter* pAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos );
 
     /// Update the information for GetNextPos().
-    virtual void UpdatePosition( SwAttrIter* pAttrIter, xub_StrLen nAktPos, xub_StrLen nEnd );
+    virtual void UpdatePosition( WW8SwAttrIter* pAttrIter, xub_StrLen nAktPos, xub_StrLen nEnd );
 
     /// Output SwTxtNode
     void OutputTextNode( const SwTxtNode& );
