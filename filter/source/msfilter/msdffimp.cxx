@@ -41,6 +41,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/seqstream.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <sot/exchange.hxx>
 #include <sot/storinfo.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -467,6 +469,9 @@ SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
                 }
                 else                                    // a complex property needs content
                     aPropFlag.bSet = sal_False;         // otherwise something is wrong
+
+                if ( ( nContentEx + nContent ) > aHd.GetRecEndFilePos() )   // asure that the complex property does not
+                    nContent = aHd.GetRecEndFilePos() - nContentEx;         // point behind the propertyset itself
             }
             rRec.mpContents[ nRecType ] = nContent;
             rRec.mpFlags[ nRecType ] = aPropFlag;
@@ -3172,7 +3177,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const
     ApplyAttributes( rIn, rSet, aDffObjTemp );
 }
 
-void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const
+void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const
 {
 //  MapUnit eMap( rManager.GetModel()->GetScaleUnit() );
 
@@ -3306,6 +3311,105 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const 
     {
         ApplyCustomShapeGeometryAttributes( rIn, rSet, rObjData );
         ApplyCustomShapeTextAttributes( rSet );
+        if ( rManager.GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_EXCEL )
+        {
+            if ( mnFix16Angle || ( rObjData.nSpFlags & SP_FFLIPV ) )
+                CheckAndCorrectExcelTextRotation( rIn, rSet, rObjData );
+        }
+    }
+}
+
+void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const
+{
+    sal_Bool bRotateTextWithShape = rObjData.bRotateTextWithShape;
+    if ( rObjData.bOpt2 )       // sj: #158494# is the second property set available ? if then we have to check the xml data of
+    {                           // the shape, because the textrotation of Excel 2003 and greater versions is stored there
+                                // (upright property of the textbox)
+        if ( rManager.pSecPropSet->SeekToContent( DFF_Prop_metroBlob, rIn ) )
+        {
+            sal_uInt32 nLen = rManager.pSecPropSet->GetPropertyValue( DFF_Prop_metroBlob );
+            if ( nLen )
+            {
+                ::com::sun::star::uno::Sequence< sal_Int8 > aXMLDataSeq( nLen );
+                rIn.Read( aXMLDataSeq.getArray(), nLen );
+                ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream
+                    ( new ::comphelper::SequenceInputStream( aXMLDataSeq ) );
+                try
+                {
+                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+                    if ( xFactory.is() )
+                    {
+                        ::com::sun::star::uno::Reference< com::sun::star::embed::XStorage > xStorage
+                            ( ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
+                                OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xFactory, sal_True ) );
+                        if ( xStorage.is() )
+                        {
+                            const rtl::OUString sDRS( RTL_CONSTASCII_USTRINGPARAM ( "drs" ) );
+                            ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+                                xStorageDRS( xStorage->openStorageElement( sDRS, ::com::sun::star::embed::ElementModes::SEEKABLEREAD ) );
+                            if ( xStorageDRS.is() )
+                            {
+                                const rtl::OUString sShapeXML( RTL_CONSTASCII_USTRINGPARAM ( "shapexml.xml" ) );
+                                ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xShapeXMLStream( xStorageDRS->openStreamElement( sShapeXML, ::com::sun::star::embed::ElementModes::SEEKABLEREAD ) );
+                                if ( xShapeXMLStream.is() )
+                                {
+                                    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xShapeXMLInputStream( xShapeXMLStream->getInputStream() );
+                                    if ( xShapeXMLInputStream.is() )
+                                    {
+                                        ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+                                        sal_Int32 nBytesRead = xShapeXMLInputStream->readBytes( aSeq, 0x7fffffff );
+                                        if ( nBytesRead )
+                                        {   // for only one property I spare to use a XML parser at this point, this
+                                            // should be enhanced if needed
+
+                                            bRotateTextWithShape = sal_True;    // using the correct xml default
+                                            const char* pArry = reinterpret_cast< char* >( aSeq.getArray() );
+                                            const char* pUpright = "upright=";
+                                            const char* pEnd = pArry + nBytesRead;
+                                            const char* pPtr = pArry;
+                                            while( ( pPtr + 12 ) < pEnd )
+                                            {
+                                                if ( !memcmp( pUpright, pPtr, 8 ) )
+                                                {
+                                                    bRotateTextWithShape = ( pPtr[ 9 ] != '1' ) && ( pPtr[ 9 ] != 't' );
+                                                    break;
+                                                }
+                                                else
+                                                    pPtr++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch( com::sun::star::uno::Exception& )
+                {
+                }
+            }
+        }
+    }
+    if ( !bRotateTextWithShape )
+    {
+        const com::sun::star::uno::Any* pAny, aAny;
+        SdrCustomShapeGeometryItem aGeometryItem((SdrCustomShapeGeometryItem&)rSet.Get( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+        const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
+        pAny = aGeometryItem.GetPropertyValueByName( sTextRotateAngle );
+        double fExtraTextRotateAngle = 0.0;
+        if ( pAny )
+            *pAny >>= fExtraTextRotateAngle;
+
+        if ( rManager.mnFix16Angle )
+            fExtraTextRotateAngle += mnFix16Angle / 100.0;
+        if ( rObjData.nSpFlags & SP_FFLIPV )
+            fExtraTextRotateAngle -= 180.0;
+
+        com::sun::star::beans::PropertyValue aTextRotateAngle;
+        aTextRotateAngle.Name = sTextRotateAngle;
+        aTextRotateAngle.Value <<= fExtraTextRotateAngle;
+        aGeometryItem.SetPropertyValue( aTextRotateAngle );
+        rSet.Put( aGeometryItem );
     }
 }
 
@@ -4835,6 +4939,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
     rHd.SeekToBegOfRecord( rSt );
     DffObjData aObjData( rHd, rClientRect, nCalledByGroup );
+    aObjData.bRotateTextWithShape = ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_EXCEL ) == 0;
     maShapeRecords.Consume( rSt, FALSE );
     aObjData.bShapeType = maShapeRecords.SeekToContent( rSt, DFF_msofbtSp, SEEK_FROM_BEGINNING );
     if ( aObjData.bShapeType )
@@ -4872,6 +4977,13 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     {
         InitializePropSet();    // get the default PropSet
         ( (DffPropertyReader*) this )->mnFix16Angle = 0;
+    }
+    aObjData.bOpt2 = maShapeRecords.SeekToContent( rSt, DFF_msofbtUDefProp, SEEK_FROM_CURRENT_AND_RESTART );
+    if ( aObjData.bOpt2 )
+    {
+        maShapeRecords.Current()->SeekToBegOfRecord( rSt );
+        pSecPropSet = new DffPropertyReader( *this );
+        pSecPropSet->ReadPropSet( rSt, NULL );
     }
 
     aObjData.bChildAnchor = maShapeRecords.SeekToContent( rSt, DFF_msofbtChildAnchor, SEEK_FROM_CURRENT_AND_RESTART );
@@ -6164,6 +6276,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      pStData2( pStData2_ ),
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
+     pSecPropSet( NULL ),
      pEscherBlipCache( NULL ),
      mnDefaultColor( mnDefaultColor_),
      mpTracer( pTracer ),
@@ -6216,6 +6329,7 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL, MS
      pStData2( 0 ),
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
+     pSecPropSet( NULL ),
      pEscherBlipCache( NULL ),
      mnDefaultColor( COL_DEFAULT ),
      mpTracer( pTracer ),
@@ -6238,6 +6352,7 @@ SvxMSDffManager::~SvxMSDffManager()
             delete (EscherBlipCacheEntry*)pPtr;
         delete pEscherBlipCache;
     }
+    delete pSecPropSet;
     delete pBLIPInfos;
     delete pShapeInfos;
     delete pShapeOrders;
