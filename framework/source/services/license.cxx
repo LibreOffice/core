@@ -268,10 +268,9 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         // determine the filename of the license to show
         ::rtl::OUString  aLangString;
         ::com::sun::star::lang::Locale aLocale;
-        ::rtl::OString aMgrName = ::rtl::OString("fwe");
         AllSettings aSettings(Application::GetSettings());
         aLocale = aSettings.GetUILocale();
-        ResMgr* pResMgr = ResMgr::SearchCreateResMgr(aMgrName, aLocale);
+        ResMgr* pResMgr = ResMgr::SearchCreateResMgr("fwe", aLocale);
 
         aLangString = aLocale.Language;
         if ( aLocale.Country.getLength() != 0 )
