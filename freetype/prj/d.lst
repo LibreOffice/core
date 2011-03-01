@@ -1,0 +1,3 @@
+mkdir: %_DEST%\inc%_EXT%\external\freetpye
+..\%__SRC%\bin\freetype-2.4.4.dll %_DEST%\bin%_EXT%\freetype-2.4.4.dll
+
