@@ -265,7 +265,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("Exception in DefaultNumberingProvider::makeNumberingString");
+                        OSL_FAIL("Exception in DefaultNumberingProvider::makeNumberingString");
                     }
                 }
                 // start just next to the left edge
@@ -337,7 +337,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("Exception in DefaultNumberingProvider::makeNumberingString");
+                        OSL_FAIL("Exception in DefaultNumberingProvider::makeNumberingString");
                     }
 
                     aLeft.Y() -= (pDev->GetTextHeight()/2);
@@ -397,7 +397,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                 static sal_Bool bAssert = FALSE;
                 if(!bAssert)
                 {
-                    DBG_ERROR("exception in ::UserDraw");
+                    OSL_FAIL("exception in ::UserDraw");
                     bAssert = sal_True;
                 }
             }

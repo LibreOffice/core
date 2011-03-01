@@ -280,7 +280,7 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
                 if (pNeuUserData!=NULL) {
                     pNeuPlusData->pUserDataList->InsertUserData(pNeuUserData);
                 } else {
-                    DBG_ERROR("SdrObjPlusData::Clone(): UserData.Clone() liefert NULL");
+                    OSL_FAIL("SdrObjPlusData::Clone(): UserData.Clone() liefert NULL");
                 }
             }
         }
@@ -2742,7 +2742,7 @@ void SdrObject::InsertUserData(SdrObjUserData* pData, USHORT nPos)
         if (pPlusData->pUserDataList==NULL) pPlusData->pUserDataList=new SdrObjUserDataList;
         pPlusData->pUserDataList->InsertUserData(pData,nPos);
     } else {
-        DBG_ERROR("SdrObject::InsertUserData(): pData ist NULL-Pointer");
+        OSL_FAIL("SdrObject::InsertUserData(): pData ist NULL-Pointer");
     }
 }
 
@@ -2756,7 +2756,7 @@ void SdrObject::DeleteUserData(USHORT nNum)
             pPlusData->pUserDataList=NULL;
         }
     } else {
-        DBG_ERROR("SdrObject::DeleteUserData(): ungueltiger Index");
+        OSL_FAIL("SdrObject::DeleteUserData(): ungueltiger Index");
     }
 }
 
@@ -3022,7 +3022,7 @@ sal_Bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B
             }
             default:
             {
-                DBG_ERROR("TRGetBaseGeometry: Missing unit translation to 100th mm!");
+                OSL_FAIL("TRGetBaseGeometry: Missing unit translation to 100th mm!");
             }
         }
     }
@@ -3073,7 +3073,7 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
             }
             default:
             {
-                DBG_ERROR("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
+                OSL_FAIL("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
             }
         }
     }

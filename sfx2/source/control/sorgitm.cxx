@@ -103,7 +103,7 @@ bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nM
             aValue = aLanguage;
             break;
         default:
-            DBG_ERROR("Wrong MemberId!");
+            OSL_FAIL("Wrong MemberId!");
                return false;
      }
 
@@ -128,7 +128,7 @@ bool SfxScriptOrganizerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
                 aLanguage = aValue;
             break;
         default:
-            DBG_ERROR("Wrong MemberId!");
+            OSL_FAIL("Wrong MemberId!");
             return false;
     }
 

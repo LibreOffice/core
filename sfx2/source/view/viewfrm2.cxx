@@ -331,7 +331,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                 aFactName = pImp->aFactoryName;
             else
             {
-                DBG_ERROR("Missing argument!");
+                OSL_FAIL("Missing argument!");
                 break;
             }
 
@@ -448,7 +448,7 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
                 break;
 
             default:
-                DBG_ERROR( "invalid message-id" );
+                OSL_FAIL( "invalid message-id" );
             }
         }
         ++pRanges;

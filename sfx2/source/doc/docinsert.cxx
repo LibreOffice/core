@@ -249,7 +249,7 @@ IMPL_LINK( DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG 
             }
             catch( IllegalArgumentException )
             {
-                DBG_ERROR( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+                OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
             }
         }
 
@@ -270,7 +270,7 @@ IMPL_LINK( DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG 
                 }
                 catch( IllegalArgumentException )
                 {
-                    DBG_ERROR( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+                    OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
                 }
             }
         }

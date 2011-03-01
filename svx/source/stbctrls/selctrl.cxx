@@ -123,7 +123,7 @@ void SvxSelectionModeControl::DrawItemText_Impl()
         case 3:
             _nId = RID_SVXSTR_SELMODE_BLK;
             break;
-        default: DBG_ERROR( "invalid selection mode!" );
+        default: OSL_FAIL( "invalid selection mode!" );
     }
 
     if ( _nId )

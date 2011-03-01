@@ -1143,7 +1143,7 @@ String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
         {
             if ( bAdd )
             {
-                DBG_ERROR( "Sorry, AddWord not implemented" );
+                OSL_FAIL( "Sorry, AddWord not implemented" );
             }
             else // Ignore
             {

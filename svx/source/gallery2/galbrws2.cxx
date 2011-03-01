@@ -130,7 +130,7 @@ void GalleryBackgroundPopup::StateChanged( USHORT nSID, SfxItemState eState, con
             InsertItem( 1, pStrItem->GetValue() );
         else
         {
-            DBG_ERROR( "SgaBGPopup::StateChanged(...): Wrong item type!" );
+            OSL_FAIL( "SgaBGPopup::StateChanged(...): Wrong item type!" );
         }
     }
 }

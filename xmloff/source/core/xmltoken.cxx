@@ -3190,7 +3190,7 @@ namespace xmloff { namespace token {
         if (nRescheduleCount > 0)
             --nRescheduleCount;
         else {
-            DBG_ERROR("RescheduleCount not increased");
+            OSL_FAIL("RescheduleCount not increased");
         }
     }
 

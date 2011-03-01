@@ -348,7 +348,7 @@ namespace basic
         if ( pos != m_aCreationListeners.end() )
             m_aCreationListeners.erase( pos );
         else {
-            DBG_ERROR( "ImplRepository::revokeCreationListener: listener is not registered!" );
+            OSL_FAIL( "ImplRepository::revokeCreationListener: listener is not registered!" );
         }
     }
 

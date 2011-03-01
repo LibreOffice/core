@@ -366,7 +366,7 @@ void SvXMLMetaExport::Export()
             } else if (attrname.equalsAsciiL(s_xmlns, strlen(s_xmlns))) {
                 // default initialized empty string
             } else {
-            DBG_ERROR("namespace attribute not starting with xmlns unexpected");
+            OSL_FAIL("namespace attribute not starting with xmlns unexpected");
             }
             ns.Second = rNsMap.GetNameByKey(key);
             namespaces.push_back(ns);

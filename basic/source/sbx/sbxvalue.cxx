@@ -624,7 +624,7 @@ BOOL SbxValue::Put( const SbxValues& rVal )
                         {
                             if ( p != this )
                             {
-                                DBG_ERROR( "TheRealValue" );
+                                OSL_FAIL( "TheRealValue" );
                             }
                             HACK(nicht bei Parent-Prop - sonst CyclicRef)
                             SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);

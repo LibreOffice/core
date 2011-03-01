@@ -45,7 +45,7 @@ SfxSlotKind SfxSlot::GetKind() const
             return (SfxSlotKind) SFX_KIND_ENUM;
         else
         {
-            DBG_ERROR( "invalid slot kind detected" );
+            OSL_FAIL( "invalid slot kind detected" );
             return SFX_KIND_ENUM;
         }
     }

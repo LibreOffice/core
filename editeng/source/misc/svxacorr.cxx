@@ -1472,7 +1472,7 @@ void SvxAutoCorrect::SaveCplSttExceptList( LanguageType eLang )
 #ifdef DBG_UTIL
     else
     {
-        DBG_ERROR("Save an empty list? ");
+        OSL_FAIL("Save an empty list? ");
     }
 #endif
 }
@@ -1488,7 +1488,7 @@ void SvxAutoCorrect::SaveWrdSttExceptList(LanguageType eLang)
 #ifdef DBG_UTIL
     else
     {
-        DBG_ERROR("Save an empty list? ");
+        OSL_FAIL("Save an empty list? ");
     }
 #endif
 }

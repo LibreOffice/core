@@ -1460,7 +1460,7 @@ void BasicManager::CheckModules( StarBASIC* pLib, BOOL bReference ) const
     // cause modified
     if( !bModified && bReference )
     {
-        DBG_ERROR( "Per Reference eingebundene Basic-Library ist nicht compiliert!" );
+        OSL_FAIL( "Per Reference eingebundene Basic-Library ist nicht compiliert!" );
         pLib->SetModified( FALSE );
     }
 }

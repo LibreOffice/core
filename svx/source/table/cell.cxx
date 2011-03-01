@@ -182,7 +182,7 @@ namespace sdr
 
         BaseProperties& CellProperties::Clone(SdrObject& rObj) const
         {
-            DBG_ERROR("CellProperties::Clone(), does not work yet!");
+            OSL_FAIL("CellProperties::Clone(), does not work yet!");
             return *(new CellProperties(*this, rObj,0));
         }
 
@@ -334,7 +334,7 @@ void Cell::dispose()
         }
         catch( Exception& )
         {
-            DBG_ERROR("Cell::dispose(), exception caught!");
+            OSL_FAIL("Cell::dispose(), exception caught!");
         }
         mxTable.clear();
     }
@@ -554,7 +554,7 @@ const SfxItemSet& Cell::GetObjectItemSet()
     }
     else
     {
-        DBG_ERROR("Cell::GetObjectItemSet(), called without properties!");
+        OSL_FAIL("Cell::GetObjectItemSet(), called without properties!");
         return GetObject().GetObjectItemSet();
     }
 }
@@ -977,7 +977,7 @@ Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMa
         }
         else
         {
-            DBG_ERROR("GetAnyForItem() Returnvalue has wrong Type!" );
+            OSL_FAIL("GetAnyForItem() Returnvalue has wrong Type!" );
         }
     }
 
@@ -1272,11 +1272,11 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
         }
         catch( UnknownPropertyException& )
         {
-            DBG_ERROR("svx::Cell::setPropertyValues(), unknown property!" );
+            OSL_FAIL("svx::Cell::setPropertyValues(), unknown property!" );
         }
         catch( Exception& )
         {
-            DBG_ERROR("svx::Cell::setPropertyValues(), Exception caught!" );
+            OSL_FAIL("svx::Cell::setPropertyValues(), Exception caught!" );
         }
     }
 }
@@ -1304,11 +1304,11 @@ Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aP
         }
         catch( UnknownPropertyException& )
         {
-            DBG_ERROR("svx::Cell::setPropertyValues(), unknown property!" );
+            OSL_FAIL("svx::Cell::setPropertyValues(), unknown property!" );
         }
         catch( Exception& )
         {
-            DBG_ERROR( "svx::Cell::getPropertyValues(), Exception caught!" );
+            OSL_FAIL( "svx::Cell::getPropertyValues(), Exception caught!" );
         }
     }
 

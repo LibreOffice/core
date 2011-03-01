@@ -1694,7 +1694,7 @@ IMPL_LINK( SvxSearchDialog, TemplateHdl_Impl, Button *, EMPTYARG )
                     break;
 
                 default:
-                    DBG_ERROR( "StyleSheetFamily was changed?" );
+                    OSL_FAIL( "StyleSheetFamily was changed?" );
             }
 
             rBindings.EnterRegistrations();

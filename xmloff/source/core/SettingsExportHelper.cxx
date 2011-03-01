@@ -83,7 +83,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
              * This assertion pops up when exporting values which are set to:
              * PropertyAttribute::MAYBEVOID, and thus are _supposed_ to have
              * a VOID value...so I'm removing it ...mtg
-             * DBG_ERROR("no type");
+             * OSL_FAIL("no type");
              */
         }
         break;
@@ -180,7 +180,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 exportSymbolDescriptors(aProps, rName);
             }
             else {
-                DBG_ERROR("this type is not implemented now");
+                OSL_FAIL("this type is not implemented now");
             }
         }
         break;

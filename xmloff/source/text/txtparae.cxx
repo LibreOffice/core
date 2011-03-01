@@ -2337,7 +2337,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 exportSoftPageBreak(xPropSet,   bAutoStyles);
             }
             else {
-                DBG_ERROR("unknown text portion type");
+                OSL_FAIL("unknown text portion type");
             }
         }
         else

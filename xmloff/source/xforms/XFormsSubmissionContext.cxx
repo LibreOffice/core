@@ -166,7 +166,7 @@ void XFormsSubmissionContext::HandleAttribute( sal_uInt16 nToken,
         lcl_setValue( mxSubmission, OUSTRING("IncludeNamespacePrefixes"), rValue );
         break;
     default:
-        DBG_ERROR( "unknown attribute" );
+        OSL_FAIL( "unknown attribute" );
         break;
     }
 }
@@ -178,7 +178,7 @@ SvXMLImportContext* XFormsSubmissionContext::HandleChild(
     const OUString&,
     const Reference<XAttributeList>& )
 {
-    DBG_ERROR( "no children supported" );
+    OSL_FAIL( "no children supported" );
     return NULL;
 }
 

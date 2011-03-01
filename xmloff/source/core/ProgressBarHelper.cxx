@@ -123,7 +123,7 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
 #ifdef DBG_UTIL
         else if (!bFailure)
         {
-            DBG_ERROR("tried to set a wrong value on the progressbar");
+            OSL_FAIL("tried to set a wrong value on the progressbar");
             bFailure = sal_True;
         }
 #endif

@@ -423,7 +423,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "FmTabWin::UpdateContent: caught an exception!" );
+        OSL_FAIL( "FmTabWin::UpdateContent: caught an exception!" );
     }
 }
 

@@ -83,7 +83,7 @@ bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
 
         case MID_LEFT: nVal = lLeft; break;
         case MID_RIGHT: nVal = lRight; break;
-        default: DBG_ERROR("Wrong MemberId!"); return false;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     if ( bConvert )
@@ -119,7 +119,7 @@ bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         {
             case MID_LEFT: lLeft = nVal; break;
             case MID_RIGHT: lRight = nVal; break;
-            default: DBG_ERROR("Wrong MemberId!"); return false;
+            default: OSL_FAIL("Wrong MemberId!"); return false;
         }
 
         return true;
@@ -209,7 +209,7 @@ bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
 
         case MID_UPPER: nVal = lLeft; break;
         case MID_LOWER: nVal = lRight; break;
-        default: DBG_ERROR("Wrong MemberId!"); return false;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     if ( bConvert )
@@ -245,7 +245,7 @@ bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         {
             case MID_UPPER: lLeft = nVal; break;
             case MID_LOWER: lRight = nVal; break;
-            default: DBG_ERROR("Wrong MemberId!"); return false;
+            default: OSL_FAIL("Wrong MemberId!"); return false;
         }
 
         return true;
@@ -331,7 +331,7 @@ bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
         case MID_WIDTH: nVal = lWidth; break;
         case MID_HEIGHT: nVal = lHeight; break;
 
-        default: DBG_ERROR("Wrong MemberId!"); return false;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     rVal <<= nVal;
@@ -366,7 +366,7 @@ bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
             case MID_WIDTH: lWidth = nVal; break;
             case MID_HEIGHT: lHeight = nVal; break;
 
-            default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+            default: OSL_FAIL("Wrong MemberId!"); return sal_False;
         }
 
         return true;
@@ -610,7 +610,7 @@ bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId )
         case MID_ORTHO: rVal <<= (sal_Bool) bOrtho; break;
         case MID_ACTUAL: rVal <<= (sal_Int32) nActColumn; break;
         case MID_TABLE: rVal <<= (sal_Bool) bTable; break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
     }
 
     return true;
@@ -631,7 +631,7 @@ bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMember
         case MID_ORTHO: rVal >>= nVal; bOrtho = (BOOL) nVal; break;
         case MID_ACTUAL: rVal >>= nVal; nActColumn = (USHORT) nVal; break;
         case MID_TABLE: rVal >>= nVal; bTable = (BOOL) nVal; break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
     }
 
     return true;
@@ -718,7 +718,7 @@ bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId )
         case MID_END_Y : rVal <<= nEndY; break;
         case MID_LIMIT : rVal <<= bLimits; break;
         default:
-            DBG_ERROR( "Wrong MemberId" );
+            OSL_FAIL( "Wrong MemberId" );
             return sal_False;
     }
 
@@ -736,7 +736,7 @@ bool SvxObjectItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMember
         case MID_END_X : bRet = (rVal >>= nEndX); break;
         case MID_END_Y : bRet = (rVal >>= nEndY); break;
         case MID_LIMIT : bRet = (rVal >>= bLimits); break;
-        default: DBG_ERROR( "Wrong MemberId" );
+        default: OSL_FAIL( "Wrong MemberId" );
     }
 
     return bRet;

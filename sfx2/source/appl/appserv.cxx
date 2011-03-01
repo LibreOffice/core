@@ -1090,7 +1090,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
             catch( const ::com::sun::star::uno::Exception& )
             {
-                DBG_ERROR( "OfficeApplication::ExecuteApp_Impl(SID_ONLINE_REGISTRATION): caught an exception!" );
+                OSL_FAIL( "OfficeApplication::ExecuteApp_Impl(SID_ONLINE_REGISTRATION): caught an exception!" );
             }
         }
         break;

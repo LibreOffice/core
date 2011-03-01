@@ -329,7 +329,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
 #endif
     if ( fp == 0 )
     {
-        DBG_ERROR( "Log file could not be created!" );
+        OSL_FAIL( "Log file could not be created!" );
         return;
     }
 

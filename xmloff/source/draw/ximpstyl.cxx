@@ -1286,7 +1286,7 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) co
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR( "xmloff::SdXMLStylesContext::SetMasterPageStyles(), exception caught!" );
+        OSL_FAIL( "xmloff::SdXMLStylesContext::SetMasterPageStyles(), exception caught!" );
     }
 }
 
@@ -1306,7 +1306,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR( "xmloff::SdXMLStylesContext::ImpSetGraphicStyles(), exception caught!" );
+        OSL_FAIL( "xmloff::SdXMLStylesContext::ImpSetGraphicStyles(), exception caught!" );
     }
 }
 
@@ -1322,7 +1322,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR( "xmloff::SdXMLStylesContext::ImpSetCellStyles(), exception caught!" );
+        OSL_FAIL( "xmloff::SdXMLStylesContext::ImpSetCellStyles(), exception caught!" );
     }
 }
 

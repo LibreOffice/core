@@ -178,7 +178,7 @@ void ConvDicNameContainer::FlushDics() const
             }
             catch(Exception &)
             {
-                DBG_ERROR( "flushing of conversion dictionary failed" );
+                OSL_FAIL( "flushing of conversion dictionary failed" );
             }
         }
     }

@@ -85,7 +85,7 @@ BOOL EditUndoManager::Undo( USHORT nCount )
             pImpEE->SetActiveView( pImpEE->GetEditViews().GetObject(0) );
         else
         {
-            DBG_ERROR("Undo in engine is not possible without a View! ");
+            OSL_FAIL("Undo in engine is not possible without a View! ");
             return FALSE;
         }
     }
@@ -120,7 +120,7 @@ BOOL EditUndoManager::Redo( USHORT nCount )
             pImpEE->SetActiveView( pImpEE->GetEditViews().GetObject(0) );
         else
         {
-            DBG_ERROR( "Redo in Engine ohne View nicht moeglich!" );
+            OSL_FAIL( "Redo in Engine ohne View nicht moeglich!" );
             return FALSE;
         }
     }

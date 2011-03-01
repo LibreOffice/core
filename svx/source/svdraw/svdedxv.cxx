@@ -586,7 +586,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
 
     if(pTextEditOutliner)
     {
-        DBG_ERROR("SdrObjEditView::SdrBeginTextEdit() da stand noch ein alter Outliner rum");
+        OSL_FAIL("SdrObjEditView::SdrBeginTextEdit() da stand noch ein alter Outliner rum");
         delete pTextEditOutliner;
         pTextEditOutliner = 0L;
     }

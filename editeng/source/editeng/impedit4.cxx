@@ -118,7 +118,7 @@ EditPaM ImpEditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFor
         aPaM = ReadBin( rInput, aSel );
     else
     {
-        DBG_ERROR( "Read: Unknown Format" );
+        OSL_FAIL( "Read: Unknown Format" );
     }
 
     FormatFullDoc();        // perhaps a simple format is enough?
@@ -250,7 +250,7 @@ void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelectio
             WriteBin( rOutput, aSel );
         else
         {
-            DBG_ERROR( "Write: Unknown Format" );
+            OSL_FAIL( "Write: Unknown Format" );
         }
     }
 }

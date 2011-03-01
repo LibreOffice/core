@@ -501,7 +501,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             SbMethod* pImplMethod = pIfaceMethod->getImplMethod();
             if( !pImplMethod )
             {
-                DBG_ERROR( "No ImplMethod" );
+                OSL_FAIL( "No ImplMethod" );
                 continue;
             }
 
@@ -511,7 +511,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             SbMethod* pImplMethodCopy = p ? PTR_CAST(SbMethod,p) : NULL;
             if( !pImplMethodCopy )
             {
-                DBG_ERROR( "Found no ImplMethod copy" );
+                OSL_FAIL( "Found no ImplMethod copy" );
                 continue;
             }
             SbIfaceMapperMethod* pNewIfaceMethod =
@@ -975,7 +975,7 @@ void SbModule::implProcessModuleRunInit( ClassModuleRunInitItem& rItem )
                     if( rParentItem.m_bProcessing )
                     {
                         // TODO: raise error?
-                        DBG_ERROR( "Cyclic module dependency detected" );
+                        OSL_FAIL( "Cyclic module dependency detected" );
                         continue;
                     }
 

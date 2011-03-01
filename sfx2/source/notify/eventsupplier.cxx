@@ -226,7 +226,7 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
             else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_MACRO_NAME)))
                 aProperties[ nIndex ].Value >>= aMacroName;
             else {
-                DBG_ERROR("Unknown property value!");
+                OSL_FAIL("Unknown property value!");
             }
             nIndex += 1;
         }
@@ -409,7 +409,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
             else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_MACRO_NAME)))
                 aProperties[ nIndex ].Value >>= aMacroName;
             else {
-                DBG_ERROR("Unknown propery value!");
+                OSL_FAIL("Unknown propery value!");
             }
             nIndex += 1;
         }

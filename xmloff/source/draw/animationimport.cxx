@@ -397,7 +397,7 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsImportImpl::convertTarget(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsImportImpl::convertTarget(), RuntimeException catched!" );
     }
 
     Any aAny;
@@ -567,7 +567,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
                 }
                 else
                 {
-                    DBG_ERROR("AnimationsImportHelperImpl::convertTiming(), unknown event trigger!");
+                    OSL_FAIL("AnimationsImportHelperImpl::convertTiming(), unknown event trigger!");
                 }
 
                 aAny <<= aEvent;
@@ -741,7 +741,7 @@ AnimationNodeContext::AnimationNodeContext(
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsImportImpl::AnimationsImportImpl(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsImportImpl::AnimationsImportImpl(), RuntimeException catched!" );
     }
 }
 
@@ -1259,7 +1259,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationNodeContext::StartElement(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationNodeContext::StartElement(), RuntimeException catched!" );
     }
 }
 
@@ -1446,7 +1446,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::AnimationsImport::postProcessRootNode(), exception caught!");
+        OSL_FAIL("xmloff::AnimationsImport::postProcessRootNode(), exception caught!");
     }
 }
 

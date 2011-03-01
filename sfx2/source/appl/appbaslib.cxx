@@ -144,7 +144,7 @@ Reference< XLibraryContainer > SfxBasicManagerHolder::getLibraryContainer( Conta
     case SCRIPTS:   return mxBasicContainer.get();
     case DIALOGS:   return mxDialogContainer.get();
     }
-    DBG_ERROR( "SfxBasicManagerHolder::getLibraryContainer: illegal container type!" );
+    OSL_FAIL( "SfxBasicManagerHolder::getLibraryContainer: illegal container type!" );
     return NULL;
 }
 

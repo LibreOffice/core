@@ -1123,7 +1123,7 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
 
             case SID_DOCPATH:
             {
-                DBG_ERROR( "Not supported anymore!" );
+                OSL_FAIL( "Not supported anymore!" );
                 break;
             }
 

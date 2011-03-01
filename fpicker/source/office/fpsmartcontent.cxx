@@ -165,7 +165,7 @@ namespace svt
             }
             catch( Exception& )
             {
-                DBG_ERROR( "SmartContent::bindTo: unexpected exception caught!" );
+                OSL_FAIL( "SmartContent::bindTo: unexpected exception caught!" );
             }
         }
         else

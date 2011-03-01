@@ -1219,7 +1219,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "FmFormShell::GetFormState: caught an exception while determining the state!" );
+            OSL_FAIL( "FmFormShell::GetFormState: caught an exception while determining the state!" );
         }
         if (!bEnable)
             rSet.DisableItem(nWhich);

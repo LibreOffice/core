@@ -655,7 +655,7 @@ sal_Bool SAL_CALL SfxBaseController::attachModel( const REFERENCE< XMODEL >& xMo
     if ( m_pData->m_pViewShell && xModel.is() && xModel != m_pData->m_pViewShell->GetObjectShell()->GetModel() )
     {
         // don't allow to reattach a model!
-        DBG_ERROR("Can't reattach model!");
+        OSL_FAIL("Can't reattach model!");
         return sal_False;
     }
 

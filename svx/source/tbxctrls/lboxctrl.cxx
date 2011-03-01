@@ -185,7 +185,7 @@ SvxListBoxControl::~SvxListBoxControl()
 
 SfxPopupWindow* SvxListBoxControl::CreatePopupWindow()
 {
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
     return 0;
 }
 

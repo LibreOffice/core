@@ -446,7 +446,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
             break;
 
             default:
-                DBG_ERROR( "Nicht unterstuetzter Flaechentyp" );
+                OSL_FAIL( "Nicht unterstuetzter Flaechentyp" );
             break;
         }
     }

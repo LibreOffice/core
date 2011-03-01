@@ -2864,7 +2864,7 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( const EditPaM& rPaM, BOOL bKeepEnding
 {
     if ( aEditDoc.Count() >= 0xFFFE )
     {
-        DBG_ERROR( "Can't process more than 64K paragraphs!" );
+        OSL_FAIL( "Can't process more than 64K paragraphs!" );
         return rPaM;
     }
 
@@ -3075,7 +3075,7 @@ Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, USHORT nFlags )
             return aEditCursor;
         }
     }
-    DBG_ERROR( "Portion not found!" );
+    OSL_FAIL( "Portion not found!" );
     return aEditCursor;
 }
 
@@ -4147,7 +4147,7 @@ long ImpEditEngine::GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT 
                 if( nPos >= pLine->GetCharPosArray().Count() )
                 {
                     nPos = pLine->GetCharPosArray().Count()-1;
-                    DBG_ERROR("svx::ImpEditEngine::GetXPos(), index out of range!");
+                    OSL_FAIL("svx::ImpEditEngine::GetXPos(), index out of range!");
                 }
 
                 // old code restored see #i112788 (which leaves #i74188 unfixed again)

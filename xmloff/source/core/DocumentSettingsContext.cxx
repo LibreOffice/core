@@ -684,7 +684,7 @@ void XMLConfigItemContext::EndElement()
             mrAny <<= maDecoded;
         }
         else {
-            DBG_ERROR("wrong type");
+            OSL_FAIL("wrong type");
         }
 
         ManipulateConfigItem();
@@ -692,7 +692,7 @@ void XMLConfigItemContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        DBG_ERROR("no BaseContext");
+        OSL_FAIL("no BaseContext");
     }
 }
 
@@ -781,7 +781,7 @@ void XMLConfigItemMapNamedContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        DBG_ERROR("no BaseContext");
+        OSL_FAIL("no BaseContext");
     }
 }
 
@@ -890,7 +890,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
                             }
                             catch( uno::Exception& )
                             {
-                                DBG_ERROR( "Exception while importing forbidden characters" );
+                                OSL_FAIL( "Exception while importing forbidden characters" );
                             }
                         }
                     }
@@ -898,7 +898,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
             }
             else
             {
-                DBG_ERROR( "could not get the XForbiddenCharacters from document!" );
+                OSL_FAIL( "could not get the XForbiddenCharacters from document!" );
                 mrAny <<= maProps.GetIndexContainer();
             }
         }
@@ -1003,7 +1003,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        DBG_ERROR("no BaseContext");
+        OSL_FAIL("no BaseContext");
     }
 }
 

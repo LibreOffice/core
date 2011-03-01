@@ -187,7 +187,7 @@ void SdXMLImplSetEffect( AnimationEffect eEffect, XMLEffect& eKind, XMLEffectDir
 {
     if( eEffect < AnimationEffect_NONE || eEffect > AnimationEffect_ZOOM_OUT_FROM_CENTER )
     {
-        DBG_ERROR( "unknown animation effect!" );
+        OSL_FAIL( "unknown animation effect!" );
         eEffect = AnimationEffect_NONE;
     }
 
@@ -308,7 +308,7 @@ void XMLAnimationsExporter::prepare( Reference< XShape > xShape, SvXMLExport& )
     }
     catch( Exception e )
     {
-        DBG_ERROR("exception catched while collection animation information!");
+        OSL_FAIL("exception catched while collection animation information!");
     }
 }
 
@@ -439,7 +439,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
     }
     catch( Exception e )
     {
-        DBG_ERROR("exception catched while collection animation information!");
+        OSL_FAIL("exception catched while collection animation information!");
     }
 }
 

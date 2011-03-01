@@ -1386,7 +1386,7 @@ SfxItemPresentation SvxTextLineItem::GetPresentation
 
 XubString SvxTextLineItem::GetValueTextByPos( USHORT /*nPos*/ ) const
 {
-    DBG_ERROR("SvxTextLineItem::GetValueTextByPos: Pure virtual method");
+    OSL_FAIL("SvxTextLineItem::GetValueTextByPos: Pure virtual method");
     return XubString();
 }
 
@@ -3390,7 +3390,7 @@ bool SvxCharScaleWidthItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
         return true;
     }
 
-    DBG_ERROR( "SvxCharScaleWidthItem::PutValue - Wrong type!" );
+    OSL_FAIL( "SvxCharScaleWidthItem::PutValue - Wrong type!" );
     return false;
 }
 

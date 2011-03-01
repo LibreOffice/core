@@ -1294,7 +1294,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                     delete pNewItem;
                 }
                 else {
-                    DBG_ERROR( "Toggle only for Enums and Bools allowed" );
+                    OSL_FAIL( "Toggle only for Enums and Bools allowed" );
                 }
             }
             else if ( SFX_ITEM_DONTCARE == eState )
@@ -1318,12 +1318,12 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                     aReq.AppendItem( *pNewItem );
                 }
                 else {
-                    DBG_ERROR( "Toggle only for Enums and Bools allowed" );
+                    OSL_FAIL( "Toggle only for Enums and Bools allowed" );
                 }
                 delete pNewItem;
             }
             else {
-                DBG_ERROR( "suspicious Toggle-Slot" );
+                OSL_FAIL( "suspicious Toggle-Slot" );
             }
         }
 
@@ -1770,7 +1770,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
     }
     catch (...)
     {
-        DBG_ERROR("C++ exception caught!");
+        OSL_FAIL("C++ exception caught!");
         pImp->bInNextJob = sal_False;
     }
 
@@ -1967,7 +1967,7 @@ void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
         {
             if ( pImp->pSubBindings && pImp->pSubBindings->pDispatcher != pOldDispat )
             {
-                DBG_ERROR( "SubBindings already set before activating!" );
+                OSL_FAIL( "SubBindings already set before activating!" );
                 pImp->pSubBindings->ENTERREGISTRATIONS();
             }
             LEAVEREGISTRATIONS();
@@ -1977,7 +1977,7 @@ void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
             ENTERREGISTRATIONS();
             if ( pImp->pSubBindings && pImp->pSubBindings->pDispatcher != pOldDispat )
             {
-                DBG_ERROR( "SubBindings still set even when deactivating!" );
+                OSL_FAIL( "SubBindings still set even when deactivating!" );
                 pImp->pSubBindings->LEAVEREGISTRATIONS();
             }
         }

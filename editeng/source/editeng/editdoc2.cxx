@@ -112,7 +112,7 @@ USHORT TextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart, BOO
             }
         }
     }
-    DBG_ERROR( "FindPortion: Not found!" );
+    OSL_FAIL( "FindPortion: Not found!" );
     return ( Count() - 1 );
 }
 
@@ -371,7 +371,7 @@ long ParaPortionList::GetYOffset( ParaPortion* pPPortion )
             return nHeight;
         nHeight += pTmpPortion->GetHeight();
     }
-    DBG_ERROR( "GetYOffset: Portion not found" );
+    OSL_FAIL( "GetYOffset: Portion not found" );
     return nHeight;
 }
 

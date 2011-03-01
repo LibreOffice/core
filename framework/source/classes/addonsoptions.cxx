@@ -502,7 +502,7 @@ void AddonsOptions_Impl::Notify( const Sequence< ::rtl::OUString >& /*lPropertyN
 //*****************************************************************************************************************
 void AddonsOptions_Impl::Commit()
 {
-    DBG_ERROR( "AddonsOptions_Impl::Commit()\nNot implemented yet!\n" );
+    OSL_FAIL( "AddonsOptions_Impl::Commit()\nNot implemented yet!\n" );
 }
 
 //*****************************************************************************************************************

@@ -2002,7 +2002,7 @@ ADD_DEBUG_TEXT("lLastLMargin: ", String::CreateFromInt32(pRuler_Imp->lLastLMargi
                 switch(GetDragType())
                 {
                 default: ;//prevent warning
-                    DBG_ERROR("svx::SvxRuler::DragBorders(), unknown drag type!" );
+                    OSL_FAIL("svx::SvxRuler::DragBorders(), unknown drag type!" );
                 case RULER_TYPE_BORDER:
                     if(pRuler_Imp->bIsTableRows)
                     {

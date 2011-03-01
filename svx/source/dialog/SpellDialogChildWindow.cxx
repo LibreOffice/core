@@ -93,7 +93,7 @@ void SpellDialogChildWindow::AddAutoCorrection(
         const String& /*rNew*/,
         LanguageType /*eLanguage*/)
 {
-    DBG_ERROR("AutoCorrection should have been overloaded - if available");
+    OSL_FAIL("AutoCorrection should have been overloaded - if available");
 }
 
 bool SpellDialogChildWindow::HasGrammarChecking()
@@ -103,13 +103,13 @@ bool SpellDialogChildWindow::HasGrammarChecking()
 
 bool SpellDialogChildWindow::IsGrammarChecking()
 {
-    DBG_ERROR("Grammar checking should have been overloaded - if available");
+    OSL_FAIL("Grammar checking should have been overloaded - if available");
     return false;
 }
 
 void SpellDialogChildWindow::SetGrammarChecking(bool )
 {
-    DBG_ERROR("Grammar checking should have been overloaded - if available");
+    OSL_FAIL("Grammar checking should have been overloaded - if available");
 }
 } // end of namespace ::svx
 

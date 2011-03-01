@@ -291,7 +291,7 @@ sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "Creation of a storage copy is failed!" );
+            OSL_FAIL( "Creation of a storage copy is failed!" );
             ::utl::UCBContentHelper::Kill( aTempURL );
 
             aTempURL = ::rtl::OUString();
@@ -1067,7 +1067,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     {
         // if no filter was set, use the default filter
         // this should be changed in the feature, it should be an error!
-        DBG_ERROR("No filter set!");
+        OSL_FAIL("No filter set!");
         pFilter = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT );
         rMedium.SetFilter(pFilter);
     }
@@ -1350,7 +1350,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             }
             catch( uno::Exception& )
             {
-                DBG_ERROR( "Setting of common encryption key failed!" );
+                OSL_FAIL( "Setting of common encryption key failed!" );
                 SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             }
         }
@@ -1439,7 +1439,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 catch( uno::Exception& )
                 {
                     AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Preserve versions has failed." ) ) );
-                    DBG_ERROR( "Couldn't copy versions!\n" );
+                    OSL_FAIL( "Couldn't copy versions!\n" );
                     bOk = sal_False;
                     // TODO/LATER: a specific error could be set
                 }
@@ -1936,7 +1936,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, BOOL bCommit )
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_ERROR( "The strotage was not commited on DoSaveAs!\n" );
+                    OSL_FAIL( "The strotage was not commited on DoSaveAs!\n" );
                 }
             }
         }
@@ -2817,7 +2817,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
 #ifdef DBG_UTIL
     if ( pMergedParams->GetItemState( SID_DOC_SALVAGE) >= SFX_ITEM_SET )
-        DBG_ERROR("Salvage item present in Itemset, check the parameters!");
+        OSL_FAIL("Salvage item present in Itemset, check the parameters!");
 #endif
 
     // should be unneccessary - too hot to handle!
@@ -2921,7 +2921,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
 sal_Bool SfxObjectShell::LoadFrom( SfxMedium& /*rMedium*/ )
 {
-    DBG_ERROR( "Base implementation, must not be called in general!" );
+    OSL_FAIL( "Base implementation, must not be called in general!" );
     return sal_True;
 }
 

@@ -868,7 +868,7 @@ BOOL SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
                   // names may differ, because explicitly given
                 if ( pKnownSlot->GetName() != GetName() )
                 {
-                    DBG_ERROR("Illegal definition!");
+                    OSL_FAIL("Illegal definition!");
                     rInStm.Seek( nTokPos );
                     return FALSE;
                 }
@@ -1022,7 +1022,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
 
             if ( m == rBase.GetAttrList().Count() )
             {
-                DBG_ERROR("Invalid EnumSlot!");
+                OSL_FAIL("Invalid EnumSlot!");
                 xEnumSlot = Clone();
                 ULONG nValue;
                 if ( rBase.FindId(aSId , &nValue) )

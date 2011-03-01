@@ -704,7 +704,7 @@ namespace svt
             break;
 
             default:
-                DBG_ERROR( "OControlAccess::implSetControlProperty: invalid property id!" );
+                OSL_FAIL( "OControlAccess::implSetControlProperty: invalid property id!" );
         }
     }
 
@@ -780,7 +780,7 @@ namespace svt
                 break;
 
             default:
-                DBG_ERROR( "OControlAccess::implGetControlProperty: invalid property id!" );
+                OSL_FAIL( "OControlAccess::implGetControlProperty: invalid property id!" );
         }
         return aReturn;
     }

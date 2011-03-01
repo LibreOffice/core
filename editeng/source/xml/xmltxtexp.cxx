@@ -428,7 +428,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 
             if( !xServiceFactory.is() )
             {
-                DBG_ERROR( "got no service manager" );
+                OSL_FAIL( "got no service manager" );
                 break;
             }
 
@@ -438,7 +438,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 
             if( !xWriter.is() )
             {
-                DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
+                OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
                 break;
             }
 
@@ -475,7 +475,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR("exception during xml export");
+        OSL_FAIL("exception during xml export");
     }
 }
 

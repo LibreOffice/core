@@ -255,7 +255,7 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
     }
     else
     {
-        DBG_ERROR("could not add XShape to group shape!");
+        OSL_FAIL("could not add XShape to group shape!");
     }
 }
 

@@ -236,7 +236,7 @@ bool SvxSizeItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_SIZE_SIZE:  rVal <<= aTmp; break;
         case MID_SIZE_WIDTH: rVal <<= aTmp.Width; break;
         case MID_SIZE_HEIGHT: rVal <<= aTmp.Height;  break;
-        default: DBG_ERROR("Wrong MemberId!"); return false;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     return true;
@@ -285,7 +285,7 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             aSize.Height() = bConvert ? MM100_TO_TWIP(nVal) : nVal;
         }
         break;
-        default: DBG_ERROR("Wrong MemberId!");
+        default: OSL_FAIL("Wrong MemberId!");
             return false;
     }
     return true;
@@ -470,7 +470,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
         default:
             bRet = false;
-            DBG_ERROR("unknown MemberId");
+            OSL_FAIL("unknown MemberId");
     }
     return bRet;
 }
@@ -527,7 +527,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             break;
 
         default:
-            DBG_ERROR("unknown MemberId");
+            OSL_FAIL("unknown MemberId");
             return false;
     }
     return true;
@@ -900,7 +900,7 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 
         default:
-            DBG_ERROR("unknown MemberId");
+            OSL_FAIL("unknown MemberId");
             return false;
     }
     return true;
@@ -1175,7 +1175,7 @@ bool SvxProtectItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_PROTECT_SIZE    :  bValue = bSize; break;
         case MID_PROTECT_POSITION:  bValue = bPos; break;
         default:
-            DBG_ERROR("Wrong MemberId");
+            OSL_FAIL("Wrong MemberId");
             return false;
     }
 
@@ -1193,7 +1193,7 @@ bool    SvxProtectItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_PROTECT_SIZE    :  bSize  = bVal;  break;
         case MID_PROTECT_POSITION:  bPos   = bVal;  break;
         default:
-            DBG_ERROR("Wrong MemberId");
+            OSL_FAIL("Wrong MemberId");
             return false;
     }
     return true;
@@ -1318,7 +1318,7 @@ bool SvxShadowItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_TRANSPARENT: rVal <<= aShadow.IsTransparent; break;
         case MID_BG_COLOR: rVal <<= aShadow.Color; break;
         case 0: rVal <<= aShadow; break;
-        default: DBG_ERROR("Wrong MemberId!"); return false;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     return true;
@@ -1351,7 +1351,7 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_TRANSPARENT: rVal >>= aShadow.IsTransparent; break;
         case MID_BG_COLOR: rVal >>= aShadow.Color; break;
         case 0: rVal >>= aShadow; break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
     }
 
     if ( bRet )
@@ -1426,7 +1426,7 @@ sal_uInt16 SvxShadowItem::CalcShadowSpace( sal_uInt16 nShadow ) const
             break;
 
         default:
-            DBG_ERROR( "wrong shadow" );
+            OSL_FAIL( "wrong shadow" );
     }
     return nSpace;
 }
@@ -2427,7 +2427,7 @@ const SvxBorderLine *SvxBoxItem::GetLine( sal_uInt16 nLine ) const
             pRet = pRight;
             break;
         default:
-            DBG_ERROR( "wrong line" );
+            OSL_FAIL( "wrong line" );
             break;
     }
 
@@ -2459,7 +2459,7 @@ void SvxBoxItem::SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine )
             pRight = pTmp;
             break;
         default:
-            DBG_ERROR( "wrong line" );
+            OSL_FAIL( "wrong line" );
     }
 }
 
@@ -2499,7 +2499,7 @@ sal_uInt16 SvxBoxItem::GetDistance( sal_uInt16 nLine ) const
             nDist = nRightDist;
             break;
         default:
-            DBG_ERROR( "wrong line" );
+            OSL_FAIL( "wrong line" );
     }
 
     return nDist;
@@ -2524,7 +2524,7 @@ void SvxBoxItem::SetDistance( sal_uInt16 nNew, sal_uInt16 nLine )
             nRightDist = nNew;
             break;
         default:
-            DBG_ERROR( "wrong line" );
+            OSL_FAIL( "wrong line" );
     }
 }
 
@@ -2553,7 +2553,7 @@ sal_uInt16 SvxBoxItem::CalcLineSpace( sal_uInt16 nLine, sal_Bool bIgnoreLine ) c
         nDist = nRightDist;
         break;
     default:
-        DBG_ERROR( "wrong line" );
+        OSL_FAIL( "wrong line" );
     }
 
     if( pTmp )
@@ -2656,7 +2656,7 @@ void SvxBoxInfoItem::SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine )
     }
     else
     {
-        DBG_ERROR( "wrong line" );
+        OSL_FAIL( "wrong line" );
     }
 }
 
@@ -2830,7 +2830,7 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
             bIntMember = sal_True;
             rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(GetDefDist()) : GetDefDist());
             break;
-        default: DBG_ERROR("Wrong MemberId!"); return false;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     if( !bIntMember )
@@ -2977,7 +2977,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             }
             break;
         }
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
     }
 
     return sal_True;
@@ -3249,7 +3249,7 @@ bool SvxLineItem::QueryValue( uno::Any& rVal, BYTE nMemId ) const
             case MID_INNER_WIDTH:   rVal <<= sal_Int32(pLine->GetInWidth( ));   break;
             case MID_DISTANCE:      rVal <<= sal_Int32(pLine->GetDistance());   break;
             default:
-                DBG_ERROR( "Wrong MemberId" );
+                OSL_FAIL( "Wrong MemberId" );
                 return false;
         }
     }
@@ -3290,7 +3290,7 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
             case MID_DISTANCE:      pLine->SetDistance((USHORT)nVal);   break;
             case MID_LINE_STYLE:    pLine->SetStyle((SvxBorderStyle)nVal); break;
             default:
-                DBG_ERROR( "Wrong MemberId" );
+                OSL_FAIL( "Wrong MemberId" );
                 return sal_False;
         }
 
@@ -3604,7 +3604,7 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
             rStream.ReadByteString(aRel);
 
             // TODO/MBA: how can we get a BaseURL here?!
-            DBG_ERROR("No BaseURL!");
+            OSL_FAIL("No BaseURL!");
             String aAbs = INetURLObject::GetAbsURL( String(), aRel );
             DBG_ASSERT( aAbs.Len(), "Invalid URL!" );
             pStrLink = new String( aAbs );
@@ -3787,7 +3787,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 if( 0 == sLink.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX,
                                   sizeof(UNO_NAME_GRAPHOBJ_URLPKGPREFIX)-1 ) )
                 {
-                    DBG_ERROR( "package urls aren't implemented" );
+                    OSL_FAIL( "package urls aren't implemented" );
                 }
                 else if( 0 == sLink.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX,
                                    sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1 ) )
@@ -3987,7 +3987,7 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
         rStream << pImpl->pGraphicObject->GetGraphic();
     if ( pStrLink )
     {
-        DBG_ERROR("No BaseURL!");
+        OSL_FAIL("No BaseURL!");
         // TODO/MBA: how to get a BaseURL?!
         String aRel = INetURLObject::GetRelURL( String(), *pStrLink );
         // UNICODE: rStream << aRel;
@@ -4109,7 +4109,7 @@ void SvxBrushItem::SetGraphic( const Graphic& rNew )
     }
     else
     {
-        DBG_ERROR( "SetGraphic() on linked graphic! :-/" );
+        OSL_FAIL( "SetGraphic() on linked graphic! :-/" );
     }
 }
 
@@ -4131,7 +4131,7 @@ void SvxBrushItem::SetGraphicObject( const GraphicObject& rNewObj )
     }
     else
     {
-        DBG_ERROR( "SetGraphic() on linked graphic! :-/" );
+        OSL_FAIL( "SetGraphic() on linked graphic! :-/" );
     }
 }
 
@@ -4395,7 +4395,7 @@ bool SvxFrameDirectionItem::QueryValue( com::sun::star::uno::Any& rVal,
             nVal = text::WritingMode2::PAGE;
             break;
         default:
-            DBG_ERROR("Unknown SvxFrameDirection value!");
+            OSL_FAIL("Unknown SvxFrameDirection value!");
             bRet = false;
             break;
     }

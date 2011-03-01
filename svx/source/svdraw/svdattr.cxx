@@ -1564,7 +1564,7 @@ const SdrCustomShapeAdjustmentValue& SdrCustomShapeAdjustmentItem::GetValue( sal
 {
 #ifdef DBG_UTIL
     if ( aAdjustmentValueList.Count() <= nIndex )
-        DBG_ERROR( "SdrCustomShapeAdjustemntItem::GetValue - nIndex out of range (SJ)" );
+        OSL_FAIL( "SdrCustomShapeAdjustemntItem::GetValue - nIndex out of range (SJ)" );
 #endif
     return *(SdrCustomShapeAdjustmentValue*)aAdjustmentValueList.GetObject( nIndex );
 }
@@ -1669,7 +1669,7 @@ bool SdrEdgeKindItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
         case SDREDGE_BEZIER :       eCT = drawing::ConnectorType_CURVE; break;
         case SDREDGE_ARC :          eCT = drawing::ConnectorType_CURVE; break;
         default:
-            DBG_ERROR( "SdrEdgeKindItem::QueryValue : unknown enum" );
+            OSL_FAIL( "SdrEdgeKindItem::QueryValue : unknown enum" );
     }
 
     rVal <<= eCT;
@@ -1697,7 +1697,7 @@ bool SdrEdgeKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
         case drawing::ConnectorType_LINE :       eEK = SDREDGE_ONELINE;     break;
         case drawing::ConnectorType_LINES :      eEK = SDREDGE_THREELINES;   break;
         default:
-            DBG_ERROR( "SdrEdgeKindItem::PuValue : unknown enum" );
+            OSL_FAIL( "SdrEdgeKindItem::PuValue : unknown enum" );
     }
     SetValue( sal::static_int_cast< USHORT >( eEK ) );
 

@@ -1825,12 +1825,12 @@ ErrCode SfxObjectShell::CallScript(
     }
     else if( rScriptType.EqualsAscii( "JavaScript" ) )
     {
-        DBG_ERROR( "JavaScript not allowed" );
+        OSL_FAIL( "JavaScript not allowed" );
         return 0;
     }
     else
     {
-        DBG_ERROR( "StarScript not allowed" );
+        OSL_FAIL( "StarScript not allowed" );
     }
     return nErr;
 }

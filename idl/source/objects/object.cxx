@@ -51,7 +51,7 @@ void SvClassElement::Load( SvPersistStream & rStm )
     if( nMask >= 0x08 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" );
+        OSL_FAIL( "wrong format" );
         return;
     }
     if( nMask & 0x01 ) rStm >> aAutomation;
@@ -94,7 +94,7 @@ void SvMetaClass::Load( SvPersistStream & rStm )
     if( nMask >= 0x20 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" );
+        OSL_FAIL( "wrong format" );
         return;
     }
     if( nMask & 0x01 ) rStm >> aAttrList;
@@ -324,7 +324,7 @@ BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
 {
     if ( !rAttr.GetRef() && rAttr.IsA( TYPE( SvMetaSlot ) ) )
     {
-        DBG_ERROR( "Neuer Slot : " );
+        OSL_FAIL( "Neuer Slot : " );
         DBG_ERROR( rAttr.GetSlotId().GetBuffer() );
     }
 
@@ -336,7 +336,7 @@ BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
             // values have to match
             if( pS->GetSlotId().GetValue() != rAttr.GetSlotId().GetValue() )
             {
-                DBG_ERROR( "Gleicher Name in MetaClass : " );
+                OSL_FAIL( "Gleicher Name in MetaClass : " );
                 DBG_ERROR( pS->GetName().GetBuffer() );
                 DBG_ERROR( pS->GetSlotId().GetBuffer() );
                 DBG_ERROR( rAttr.GetSlotId().GetBuffer() );
@@ -355,7 +355,7 @@ BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
             UINT32 nId2 = rAttr.GetSlotId().GetValue();
             if( nId1 == nId2 && nId1 != 0 )
             {
-                DBG_ERROR( "Gleiche Id in MetaClass : " );
+                OSL_FAIL( "Gleiche Id in MetaClass : " );
                 DBG_ERROR( ByteString::CreateFromInt32( pS->GetSlotId().GetValue() ).GetBuffer() );
                 DBG_ERROR( pS->GetSlotId().GetBuffer() );
                 DBG_ERROR( rAttr.GetSlotId().GetBuffer() );
@@ -397,13 +397,13 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     {
         case WRITE_ODL:
         {
-            DBG_ERROR( "Not supported anymore!" );
+            OSL_FAIL( "Not supported anymore!" );
             break;
         }
         case WRITE_C_SOURCE:
         case WRITE_C_HEADER:
         {
-            DBG_ERROR( "Not supported anymore!" );
+            OSL_FAIL( "Not supported anymore!" );
             break;
         }
         case WRITE_DOCU:

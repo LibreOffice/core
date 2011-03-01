@@ -1048,7 +1048,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                         bCompressedChars = FALSE;
                     }
                     break;
-                    default:    DBG_ERROR( "Was fuer ein Feature ?" );
+                    default:    OSL_FAIL( "Was fuer ein Feature ?" );
                 }
                 pNextFeature = pNode->GetCharAttribs().FindFeature( pNextFeature->GetStart() + 1  );
             }
@@ -1139,7 +1139,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 }
                 else
                 {
-                    DBG_ERROR( "CreateLines: Tab not handled!" );
+                    OSL_FAIL( "CreateLines: Tab not handled!" );
                 }
                 long nMaxW = aCurrentTab.nTabPos - aCurrentTab.nStartPosX - nStartX;
                 if ( nW >= nMaxW )
@@ -1806,7 +1806,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         }
         else if ( ( nBreakPos > nMaxBreakPos ) && !aUserOptions.allowPunctuationOutsideMargin )
         {
-            DBG_ERROR( "I18N: XBreakIterator::getLineBreak returns position > Max" );
+            OSL_FAIL( "I18N: XBreakIterator::getLineBreak returns position > Max" );
             nBreakPos = nMaxBreakPos;
         }
 

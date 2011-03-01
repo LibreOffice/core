@@ -1399,7 +1399,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         case SvtSaveOptions::ODFVER_010: break;
 
         default:
-            DBG_ERROR("xmloff::SvXMLExport::exportDoc(), unexpected odf default version!");
+            OSL_FAIL("xmloff::SvXMLExport::exportDoc(), unexpected odf default version!");
         }
 
         if( pVersion )

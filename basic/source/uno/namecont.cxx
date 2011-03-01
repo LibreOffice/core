@@ -1163,7 +1163,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
         // #i93163
         if( bCleanUp )
         {
-            DBG_ERROR( "Upgrade of Basic installation failed somehow" );
+            OSL_FAIL( "Upgrade of Basic installation failed somehow" );
 
             static char strErrorSavFolderName[] = "__basic_80_err";
             INetURLObject aPrevUserBasicInetObj_Err( aUserBasicInetObj );

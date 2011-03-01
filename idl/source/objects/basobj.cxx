@@ -146,7 +146,7 @@ void SvMetaName::Load( SvPersistStream & rStm )
     if( nMask >= 0x20 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" );
+        OSL_FAIL( "wrong format" );
         return;
     }
     if( nMask & 0x01 )  rStm >> aName;
@@ -429,7 +429,7 @@ void SvMetaReference::Load( SvPersistStream & rStm )
     if( nMask >= 0x2 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" );
+        OSL_FAIL( "wrong format" );
         return;
     }
     if( nMask & 0x01 )
@@ -472,7 +472,7 @@ void SvMetaExtern::Load( SvPersistStream & rStm )
     if( nMask >= 0x20 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" );
+        OSL_FAIL( "wrong format" );
         return;
     }
     if( nMask & 0x01 ) rStm >> pModule;

@@ -258,7 +258,7 @@ void Outliner::Init( USHORT nMode )
             nCtrl |= EE_CNTRL_OUTLINER;
             break;
 
-        default: DBG_ERROR( "Outliner::Init - Invalid Mode!" );
+        default: OSL_FAIL( "Outliner::Init - Invalid Mode!" );
     }
 
     pEditEngine->SetControlWord( nCtrl );

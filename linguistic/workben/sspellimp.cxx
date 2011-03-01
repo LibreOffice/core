@@ -376,7 +376,7 @@ void SAL_CALL
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
         else
-            DBG_ERROR( "wrong number of arguments in sequence" );
+            OSL_FAIL( "wrong number of arguments in sequence" );
     }
 }
 

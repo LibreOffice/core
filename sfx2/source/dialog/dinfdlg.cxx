@@ -558,7 +558,7 @@ bool SfxDocumentInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
             aValue = getTitle();
             break;
         default:
-            DBG_ERROR("Wrong MemberId!");
+            OSL_FAIL("Wrong MemberId!");
             return sal_False;
      }
 
@@ -632,7 +632,7 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, BYTE nMemberId )
                 setTitle(aValue);
             break;
         default:
-            DBG_ERROR("Wrong MemberId!");
+            OSL_FAIL("Wrong MemberId!");
             return false;
     }
 
@@ -1245,7 +1245,7 @@ void SfxInternetPage::ChangeState( STATE eNewState )
                 EnableReload( TRUE );
             break;
         default:
-            DBG_ERROR( "*SfxInternetPage::SetState(): unhandled state!" );
+            OSL_FAIL( "*SfxInternetPage::SetState(): unhandled state!" );
     }
 
     eState = eNewState;

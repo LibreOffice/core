@@ -154,7 +154,7 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
             xSupp->getFrames()->append( xFrame );
     }
     else {
-        DBG_ERROR("Bindings without Dispatcher!");
+        OSL_FAIL("Bindings without Dispatcher!");
     }
 }
 

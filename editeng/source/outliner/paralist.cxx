@@ -156,7 +156,7 @@ void ParagraphList::MoveParagraphs( ULONG nStart, ULONG nDest, ULONG _nCount )
     }
     else
     {
-        DBG_ERROR( "MoveParagraphs: Invalid Parameters" );
+        OSL_FAIL( "MoveParagraphs: Invalid Parameters" );
     }
 }
 

@@ -1307,7 +1307,7 @@ SvLBoxEntry* SfxOrganizeListBox_Impl::InsertEntryByBmpType(
             break;
 
         default:
-            DBG_ERROR( "SfxOrganizeListBox_Impl::InsertEntryByBmpType(): something forgotten?!" );
+            OSL_FAIL( "SfxOrganizeListBox_Impl::InsertEntryByBmpType(): something forgotten?!" );
     }
 
     pEntry = SvTreeListBox::InsertEntry( rText, *pExp, *pCol, pParent, bChildsOnDemand, nPos, pUserData );
@@ -1434,7 +1434,7 @@ const Image &SfxOrganizeListBox_Impl::GetClosedBmp(USHORT nLevel) const
 
     switch( nLevel )
     {
-        default:    DBG_ERROR( "Bitmaps ueberindiziert" );
+        default:    OSL_FAIL( "Bitmaps ueberindiziert" );
 
         case 0:     pRet = &aClosedFolderBmp;
             break;

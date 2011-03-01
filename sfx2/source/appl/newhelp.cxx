@@ -402,7 +402,7 @@ void ContentListBox_Impl::RequestingChilds( SvLBoxEntry* pParent )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "ContentListBox_Impl::RequestingChilds(): unexpected exception" );
+        OSL_FAIL( "ContentListBox_Impl::RequestingChilds(): unexpected exception" );
     }
 }
 
@@ -732,7 +732,7 @@ void IndexTabPage_Impl::InitializeIndex()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "IndexTabPage_Impl::InitializeIndex(): unexpected exception" );
+        OSL_FAIL( "IndexTabPage_Impl::InitializeIndex(): unexpected exception" );
     }
 
     aIndexCB.SetUpdateMode( TRUE );
@@ -2342,7 +2342,7 @@ Reference< XTextRange > SfxHelpTextWindow_Impl::getCursor() const
     }
     catch( Exception& )
     {
-        DBG_ERROR( "SfxHelpTextWindow_Impl::getCursor(): unexpected exception" );
+        OSL_FAIL( "SfxHelpTextWindow_Impl::getCursor(): unexpected exception" );
     }
 
     return xCursor;
@@ -2410,7 +2410,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, SelectHdl, Timer*, EMPTYARG )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
+        OSL_FAIL( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
     }
 
     return 1;
@@ -2506,7 +2506,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
+        OSL_FAIL( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
     }
 
     return 0;
@@ -3184,7 +3184,7 @@ void SfxHelpWindow_Impl::openDone(const ::rtl::OUString& sURL    ,
         }
         catch( Exception& )
         {
-            DBG_ERROR( "SfxHelpWindow_Impl::OpenDoneHdl(): unexpected exception" );
+            OSL_FAIL( "SfxHelpWindow_Impl::OpenDoneHdl(): unexpected exception" );
         }
 
         // When the SearchPage opens the help doc, then select all words, which are equal to its text
@@ -3395,7 +3395,7 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
                 }
                 catch( Exception& )
                 {
-                    DBG_ERROR( "SfxHelpWindow_Impl::DoAction(): unexpected exception" );
+                    OSL_FAIL( "SfxHelpWindow_Impl::DoAction(): unexpected exception" );
                 }
             }
             break;

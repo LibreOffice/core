@@ -743,7 +743,7 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
             case NUMBERFORMAT_OP_GT: aCondStr.append( (sal_Unicode) '>' );  break;
             case NUMBERFORMAT_OP_GE: aCondStr.appendAscii( ">=" );          break;
             default:
-                DBG_ERROR("unknown operator");
+                OSL_FAIL("unknown operator");
         }
         ::rtl::math::doubleToUStringBuffer( aCondStr, fLimit,
                 rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
@@ -1732,7 +1732,7 @@ OUString SvXMLNumFmtExport::GetStyleName( sal_uInt32 nKey )
         return lcl_CreateStyleName( nKey, 0, sal_True, sPrefix );
     else
     {
-        DBG_ERROR("There is no written Data-Style");
+        OSL_FAIL("There is no written Data-Style");
         return rtl::OUString();
     }
 }
@@ -1746,7 +1746,7 @@ void SvXMLNumFmtExport::SetUsed( sal_uInt32 nKey )
     if (pFormatter->GetEntry(nKey))
         pUsedList->SetUsed( nKey );
     else {
-        DBG_ERROR("no existing Numberformat found with this key");
+        OSL_FAIL("no existing Numberformat found with this key");
     }
 }
 

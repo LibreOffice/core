@@ -934,7 +934,7 @@ bool SvxMediaShape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sf
         break;
 
         default:
-            DBG_ERROR("SvxMediaShape::setPropertyValueImpl(), unknown argument!");
+            OSL_FAIL("SvxMediaShape::setPropertyValueImpl(), unknown argument!");
         }
 
         if( bOk )
@@ -983,7 +983,7 @@ bool SvxMediaShape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sf
                 break;
 
             default:
-                DBG_ERROR("SvxMediaShape::getPropertyValueImpl(), unknown property!");
+                OSL_FAIL("SvxMediaShape::getPropertyValueImpl(), unknown property!");
         }
         return true;
     }

@@ -402,7 +402,7 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, US
         break;
         default:
         {
-            DBG_ERROR( "Invalid Attribute!" );
+            OSL_FAIL( "Invalid Attribute!" );
         }
     }
     return pNew;
@@ -828,7 +828,7 @@ void ContentNode::ExpandAttribs( USHORT nIndex, USHORT nNew, SfxItemPool& rItemP
         DBG_ASSERT( ( pAttrib->GetEnd() <= Len() ), "Expand: Attribute larger than paragraph!" );
         if ( pAttrib->IsEmpty() )
         {
-            DBG_ERROR( "Empty Attribute after ExpandAttribs?" );
+            OSL_FAIL( "Empty Attribute after ExpandAttribs?" );
             bResort = TRUE;
             aCharAttribList.GetAttribs().Remove( nAttr );
             rItemPool.Remove( *pAttrib->GetItem() );
@@ -1379,7 +1379,7 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
         nLen += nNodes * nSepSize;
     if ( nLen > 0xFFFb / sizeof(xub_Unicode) )
     {
-        DBG_ERROR( "Text to large for String" );
+        OSL_FAIL( "Text to large for String" );
         return XubString();
     }
     xub_Unicode* pStr = new xub_Unicode[nLen+1];
@@ -1442,7 +1442,7 @@ XubString EditDoc::GetParaAsString( ContentNode* pNode, USHORT nStartPos, USHORT
                 case EE_FEATURE_FIELD:  if ( bResolveFields )
                                             aStr += ((EditCharAttribField*)pNextFeature)->GetFieldValue();
                 break;
-                default:    DBG_ERROR( "What feature?" );
+                default:    OSL_FAIL( "What feature?" );
             }
             pNextFeature = pNode->GetCharAttribs().FindFeature( ++nEnd );
         }
@@ -2185,12 +2185,12 @@ BOOL CharAttribList::DbgCheckAttribs()
         if ( pAttr->GetStart() > pAttr->GetEnd() )
         {
             bOK = FALSE;
-            DBG_ERROR( "Attribute is distorted" );
+            OSL_FAIL( "Attribute is distorted" );
         }
         else if ( pAttr->IsFeature() && ( pAttr->GetLen() != 1 ) )
         {
             bOK = FALSE;
-            DBG_ERROR( "Feature, Len != 1" );
+            OSL_FAIL( "Feature, Len != 1" );
         }
     }
     return bOK;

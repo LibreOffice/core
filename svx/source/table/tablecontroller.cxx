@@ -613,7 +613,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("svx::SvxTableController::onInsert(), exception caught!");
+        OSL_FAIL("svx::SvxTableController::onInsert(), exception caught!");
     }
 }
 
@@ -904,7 +904,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                 catch( Exception& e )
                 {
                     (void)e;
-                    DBG_ERROR( "svx::SvxTableController::SetTableStyle(), exception caught!" );
+                    OSL_FAIL( "svx::SvxTableController::SetTableStyle(), exception caught!" );
                 }
             }
 
@@ -915,7 +915,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "svx::SvxTableController::SetTableStyle(), exception caught!" );
+        OSL_FAIL( "svx::SvxTableController::SetTableStyle(), exception caught!" );
     }
 }
 
@@ -1641,7 +1641,7 @@ void SvxTableController::checkCell( CellPos& rPos )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sdr::table::SvxTableController::checkCell(), exception caught!" );
+        OSL_FAIL("sdr::table::SvxTableController::checkCell(), exception caught!" );
     }
 }
 
@@ -1660,7 +1660,7 @@ void SvxTableController::findMergeOrigin( CellPos& rPos )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sdr::table::SvxTableController::findMergeOrigin(), exception caught!" );
+        OSL_FAIL("sdr::table::SvxTableController::findMergeOrigin(), exception caught!" );
     }
 }
 
@@ -2430,7 +2430,7 @@ bool SvxTableController::GetMarkedObjModel( SdrPage* pNewPage )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "svx::SvxTableController::GetMarkedObjModel(), exception caught!" );
+        OSL_FAIL( "svx::SvxTableController::GetMarkedObjModel(), exception caught!" );
     }
     return false;
 }

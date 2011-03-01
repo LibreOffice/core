@@ -150,7 +150,7 @@ bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMember
             }
             break;
         default:
-            DBG_ERROR("svx::SvxZoomSliderItem::QueryValue(), Wrong MemberId!");
+            OSL_FAIL("svx::SvxZoomSliderItem::QueryValue(), Wrong MemberId!");
             return false;
     }
 
@@ -259,7 +259,7 @@ bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMe
                     return false;
             }
         default:
-            DBG_ERROR("svx::SvxZoomSliderItem::PutValue(), Wrong MemberId!");
+            OSL_FAIL("svx::SvxZoomSliderItem::PutValue(), Wrong MemberId!");
             return false;
     }
 

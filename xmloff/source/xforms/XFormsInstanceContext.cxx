@@ -143,7 +143,7 @@ void XFormsInstanceContext::HandleAttribute(
         msId = rValue;
         break;
     default:
-        DBG_ERROR( "should not happen" );
+        OSL_FAIL( "should not happen" );
         break;
     }
 }
@@ -154,7 +154,7 @@ SvXMLImportContext* XFormsInstanceContext::HandleChild(
     const OUString&,
     const Reference<XAttributeList>& )
 {
-    DBG_ERROR( "to be handled by CreateChildContext" );
+    OSL_FAIL( "to be handled by CreateChildContext" );
     return NULL;
 }
 

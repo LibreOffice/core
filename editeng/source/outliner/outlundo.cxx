@@ -132,7 +132,7 @@ void OutlinerUndoChangeDepth::Redo()
 
 void OutlinerUndoChangeDepth::Repeat()
 {
-    DBG_ERROR( "Repeat not implemented!" );
+    OSL_FAIL( "Repeat not implemented!" );
 }
 
 
@@ -158,7 +158,7 @@ void OutlinerUndoCheckPara::Redo()
 
 void OutlinerUndoCheckPara::Repeat()
 {
-    DBG_ERROR( "Repeat not implemented!" );
+    OSL_FAIL( "Repeat not implemented!" );
 }
 
 DBG_NAME(OLUndoExpand);
@@ -231,7 +231,7 @@ void OLUndoExpand::Redo()
 void OLUndoExpand::Repeat()
 {
     DBG_CHKTHIS(OLUndoExpand,0);
-    DBG_ERROR("Not implemented");
+    OSL_FAIL("Not implemented");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

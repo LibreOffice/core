@@ -1225,7 +1225,7 @@ void SvXMLNumFmtElementContext::EndElement()
             break;
 
         default:
-            DBG_ERROR("invalid element ID");
+            OSL_FAIL("invalid element ID");
     }
 }
 
@@ -1542,7 +1542,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
 {
     if (!pFormatter)
     {
-        DBG_ERROR("no number formatter");
+        OSL_FAIL("no number formatter");
         return -1;
     }
 
@@ -1672,7 +1672,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
 
     if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
-        DBG_ERROR("invalid number format");
+        OSL_FAIL("invalid number format");
         nIndex = pFormatter->GetStandardIndex( nFormatLang );
     }
 

@@ -72,7 +72,7 @@ sal_Bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValu
             rValue <<= (sal_Int8) nValue;
             break;
         default:
-            DBG_ERROR( "Wrong type for enum property handler!" );
+            OSL_FAIL( "Wrong type for enum property handler!" );
             return sal_False;
         }
         return sal_True;

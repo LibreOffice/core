@@ -923,7 +923,7 @@ ErrCode SfxViewShell::DoPrint( SfxPrinter* /*pPrinter*/,
                                PrintDialog* /*pPrintDlg*/,
                                BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
 {
-    DBG_ERROR( "DoPrint called, dead code !" );
+    OSL_FAIL( "DoPrint called, dead code !" );
     return ERRCODE_IO_NOTSUPPORTED;
 }
 

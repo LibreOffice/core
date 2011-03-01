@@ -500,7 +500,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
             }
 #ifdef DBG_UTIL
             if ( !bRet )
-                DBG_ERROR( "Putting options failed!" );
+                OSL_FAIL( "Putting options failed!" );
 #endif
         }
         pRanges++;
@@ -665,7 +665,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         BOOL bReset = ((const SfxBoolItem *)pItem)->GetValue();
         if ( bReset )
         {
-            DBG_ERROR( "Not implemented, may be EOL!" );
+            OSL_FAIL( "Not implemented, may be EOL!" );
         }                                                   }
 
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_HELP_STYLESHEET ), TRUE, &pItem))

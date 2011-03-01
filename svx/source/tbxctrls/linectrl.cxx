@@ -197,7 +197,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
             break;
 
             default:
-                DBG_ERROR( "Nicht unterstuetzter Linientyp" );
+                OSL_FAIL( "Nicht unterstuetzter Linientyp" );
                 break;
         }
     }

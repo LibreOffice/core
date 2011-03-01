@@ -337,7 +337,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
         }
         catch( uno::Exception& )
         {
-            DBG_ERROR( "exception during setting of glue points!");
+            OSL_FAIL( "exception during setting of glue points!");
         }
     }
 }
@@ -416,7 +416,7 @@ void SdXMLShapeContext::EndElement()
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::SdXMLShapeContext::EndElement(), exception caught while setting hyperlink!");
+        OSL_FAIL("xmloff::SdXMLShapeContext::EndElement(), exception caught while setting hyperlink!");
     }
 
     if( mxLockable.is() )
@@ -460,7 +460,7 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
         }
         catch( Exception& )
         {
-            DBG_ERROR( "SdXMLShapeContext::AddShape(), exception caught!" );
+            OSL_FAIL( "SdXMLShapeContext::AddShape(), exception caught!" );
         }
 
         // #107848#
@@ -688,7 +688,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_ERROR( "could not find style for shape!" );
+                    OSL_FAIL( "could not find style for shape!" );
                 }
             }
 
@@ -703,7 +703,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_ERROR( "could not find style for shape!" );
+                    OSL_FAIL( "could not find style for shape!" );
                 }
             }
 
@@ -991,7 +991,7 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_ERROR( "exception during setting of corner radius!");
+                    OSL_FAIL( "exception during setting of corner radius!");
                 }
             }
         }
@@ -1644,7 +1644,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_ERROR( "exception during setting of corner radius!");
+                    OSL_FAIL( "exception during setting of corner radius!");
                 }
             }
         }
@@ -2247,7 +2247,7 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_ERROR( "exception during setting of corner radius!");
+                    OSL_FAIL( "exception during setting of corner radius!");
                 }
             }
         }
@@ -3549,7 +3549,7 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
         }
         catch( uno::Exception& )
         {
-            DBG_ERROR( "could not set enhanced customshape geometry" );
+            OSL_FAIL( "could not set enhanced customshape geometry" );
         }
         SdXMLShapeContext::StartElement(xAttrList);
     }
@@ -3581,7 +3581,7 @@ void SdXMLCustomShapeContext::EndElement()
         }
         catch( uno::Exception& )
         {
-            DBG_ERROR( "could not set enhanced customshape geometry" );
+            OSL_FAIL( "could not set enhanced customshape geometry" );
         }
 
         sal_Int32 nUPD( 0 );
@@ -3692,7 +3692,7 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
             }
             catch( Exception& )
             {
-                DBG_ERROR("SdXMLTableShapeContext::StartElement(), exception caught!");
+                OSL_FAIL("SdXMLTableShapeContext::StartElement(), exception caught!");
             }
 
             const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0];
@@ -3705,7 +3705,7 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
                 }
                 catch( Exception& )
                 {
-                    DBG_ERROR("SdXMLTableShapeContext::StartElement(), exception caught!");
+                    OSL_FAIL("SdXMLTableShapeContext::StartElement(), exception caught!");
                 }
             }
         }

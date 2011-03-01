@@ -104,7 +104,7 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
                     nFamily = 4; break;
                 case SID_STYLE_FAMILY5:
                     nFamily = 5; break;
-                default: DBG_ERROR("unbekannte StyleFamily"); break;
+                default: OSL_FAIL("unbekannte StyleFamily"); break;
             }
             rTemplateDlg.EnableFamilyItem( nFamily, !bDisable );
             break;

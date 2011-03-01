@@ -1037,7 +1037,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
             SfxChildAlignment eAlign = CheckAlignment(GetAlignment(),GetAlignment());
             if ( eAlign != GetAlignment() )
             {
-                DBG_ERROR("Invalid Alignment!");
+                OSL_FAIL("Invalid Alignment!");
                 SetAlignment( eAlign );
                 aStr.Erase();
             }
@@ -1068,7 +1068,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
             }
         }
         else {
-            DBG_ERROR( "Information is missing!" );
+            OSL_FAIL( "Information is missing!" );
         }
     }
 

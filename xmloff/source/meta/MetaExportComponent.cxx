@@ -154,7 +154,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
         case SvtSaveOptions::ODFVER_010: break;
 
         default:
-            DBG_ERROR("xmloff::XMLMetaExportComponent::exportDoc(), unexpected odf default version!");
+            OSL_FAIL("xmloff::XMLMetaExportComponent::exportDoc(), unexpected odf default version!");
         }
 
         if( pVersion )

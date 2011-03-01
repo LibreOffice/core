@@ -277,7 +277,7 @@ sal_Bool FmSearchEngine::MoveCursor()
     }
     catch(...)
     {
-        DBG_ERROR("FmSearchEngine::MoveCursor : catched an unknown Exception !");
+        OSL_FAIL("FmSearchEngine::MoveCursor : catched an unknown Exception !");
         bSuccess = sal_False;
     }
 
@@ -913,7 +913,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
     }
     catch(Exception&)
     {
-        DBG_ERROR("Exception occurred!");
+        OSL_FAIL("Exception occurred!");
     }
 
 }
@@ -1023,7 +1023,7 @@ void FmSearchEngine::SearchNextImpl()
                 case MATCHING_WHOLETEXT :
                     break;
                 default :
-                    DBG_ERROR("FmSearchEngine::SearchNextImpl() : die Methoden-Listbox duerfte nur 4 Eintraege enthalten ...");
+                    OSL_FAIL("FmSearchEngine::SearchNextImpl() : die Methoden-Listbox duerfte nur 4 Eintraege enthalten ...");
             }
         }
     }

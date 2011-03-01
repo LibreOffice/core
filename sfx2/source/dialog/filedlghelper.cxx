@@ -408,7 +408,7 @@ sal_Bool FileDialogHelper_Impl::updateExtendedControl( sal_Int16 _nExtendedContr
         }
         catch( const IllegalArgumentException& )
         {
-            DBG_ERROR( "FileDialogHelper_Impl::updateExtendedControl: caught an exception!" );
+            OSL_FAIL( "FileDialogHelper_Impl::updateExtendedControl: caught an exception!" );
         }
     }
     return bIsEnabled;
@@ -1074,7 +1074,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "FileDialogHelper_Impl::FileDialogHelper_Impl: could not initialize the picker!" );
+            OSL_FAIL( "FileDialogHelper_Impl::FileDialogHelper_Impl: could not initialize the picker!" );
         }
     }
 
@@ -1197,7 +1197,7 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "FileDialogHelper_Impl::setControlHelpIds: caught an exception while setting the help ids!" );
+        OSL_FAIL( "FileDialogHelper_Impl::setControlHelpIds: caught an exception while setting the help ids!" );
     }
 }
 
@@ -1283,7 +1283,7 @@ void FileDialogHelper_Impl::implInitializeFileName( )
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "FileDialogHelper_Impl::implInitializeFileName: could not ask for the auto-extension current-value!" );
+                OSL_FAIL( "FileDialogHelper_Impl::implInitializeFileName: could not ask for the auto-extension current-value!" );
             }
         }
     }
@@ -1504,7 +1504,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             }
             catch( IllegalArgumentException )
             {
-                DBG_ERROR( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+                OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
             }
         }
 
@@ -1525,7 +1525,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                 }
                 catch( IllegalArgumentException )
                 {
-                    DBG_ERROR( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+                    OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
                 }
             }
         }
@@ -1690,7 +1690,7 @@ void FileDialogHelper_Impl::displayFolder( const ::rtl::OUString& _rPath )
         }
         catch( const IllegalArgumentException& )
         {
-            DBG_ERROR( "FileDialogHelper_Impl::displayFolder: caught an exception!" );
+            OSL_FAIL( "FileDialogHelper_Impl::displayFolder: caught an exception!" );
         }
     }
 }
@@ -1707,7 +1707,7 @@ void FileDialogHelper_Impl::setFileName( const ::rtl::OUString& _rFile )
         }
         catch( const IllegalArgumentException& )
         {
-            DBG_ERROR( "FileDialogHelper_Impl::setFileName: caught an exception!" );
+            OSL_FAIL( "FileDialogHelper_Impl::setFileName: caught an exception!" );
         }
     }
 }
@@ -2176,7 +2176,7 @@ void FileDialogHelper_Impl::setDefaultValues()
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "FileDialogHelper_Impl::setDefaultValues: caught an exception while setting the display directory!" );
+            OSL_FAIL( "FileDialogHelper_Impl::setDefaultValues: caught an exception while setting the display directory!" );
         }
     }
 }

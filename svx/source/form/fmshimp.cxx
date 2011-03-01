@@ -1254,7 +1254,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                             xIndexParent->replaceByIndex(nIndex, aNewModel);
                         else
                         {
-                            DBG_ERROR("FmXFormShell::executeControlConversionSlot: could not replace the model !");
+                            OSL_FAIL("FmXFormShell::executeControlConversionSlot: could not replace the model !");
                             Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
                             if (xNewComponent.is())
                                 xNewComponent->dispose();
@@ -1263,7 +1263,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FmXFormShell::executeControlConversionSlot: could not replace the model !");
+                        OSL_FAIL("FmXFormShell::executeControlConversionSlot: could not replace the model !");
                         Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
                         if (xNewComponent.is())
                             xNewComponent->dispose();
@@ -1766,7 +1766,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occurred!");
+                    OSL_FAIL("FmXFormShell::SetY2KState: Exception occurred!");
                 }
 
             }
@@ -1807,7 +1807,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occurred!");
+                    OSL_FAIL("FmXFormShell::SetY2KState: Exception occurred!");
                 }
 
             }
@@ -3194,7 +3194,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FmXFormShell::stopFiltering : could not get the original filter !");
+                        OSL_FAIL("FmXFormShell::stopFiltering : could not get the original filter !");
                         // put dummies into the arrays so the they have the right size
 
                         if (aOriginalFilters.size() == aOriginalApplyFlags.size())
@@ -3231,7 +3231,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::stopFiltering: Exception occurred!");
+                    OSL_FAIL("FmXFormShell::stopFiltering: Exception occurred!");
                 }
 
                 if (!isRowSetAlive(xFormSet))
@@ -3730,7 +3730,7 @@ void FmXFormShell::CreateExternalView()
 #ifdef DBG_UTIL
     else
     {
-        DBG_ERROR("FmXFormShell::CreateExternalView : could not create the external form view !");
+        OSL_FAIL("FmXFormShell::CreateExternalView : could not create the external form view !");
     }
 #endif
     InvalidateSlot( SID_FM_VIEW_AS_GRID, sal_False );
@@ -3940,7 +3940,7 @@ void FmXFormShell::smartControlReset( const Reference< XIndexAccess >& _rxModels
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::smartControlReset" );
     if (!_rxModels.is())
     {
-        DBG_ERROR("FmXFormShell::smartControlReset: invalid container!");
+        OSL_FAIL("FmXFormShell::smartControlReset: invalid container!");
         return;
     }
 
@@ -4324,7 +4324,7 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
     }
     else
     {
-        DBG_ERROR("ControlConversionMenuController::StateChanged : unknown id !");
+        OSL_FAIL("ControlConversionMenuController::StateChanged : unknown id !");
     }
 }
 

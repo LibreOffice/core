@@ -206,7 +206,7 @@ void SfxUnoControllerItem::GetNewDispatch()
     if ( !pBindings )
     {
         // Bindings released
-        DBG_ERROR( "Tried to get dispatch, but no Bindings!" );
+        OSL_FAIL( "Tried to get dispatch, but no Bindings!" );
         return;
     }
 

@@ -96,7 +96,7 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
                         nVal, (MapUnit)eSrcUnit, (MapUnit)eDestUnit ));
 
         default:
-            DBG_ERROR( "not supported mapunit" );
+            OSL_FAIL( "not supported mapunit" );
             return sRet;
     }
 
@@ -227,7 +227,7 @@ sal_uInt16 GetMetricId( SfxMapUnit eUnit )
             break;
 
         default:
-            DBG_ERROR( "not supported mapunit" );
+            OSL_FAIL( "not supported mapunit" );
     }
     return nId;
 }

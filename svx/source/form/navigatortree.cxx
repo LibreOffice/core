@@ -1319,7 +1319,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "NavigatorTree::doPaste: caught an exception!" );
+            OSL_FAIL( "NavigatorTree::doPaste: caught an exception!" );
         }
     }
 
@@ -1459,7 +1459,7 @@ namespace svxform
         }
         catch ( const Exception& )
         {
-            DBG_ERROR("NavigatorTree::NewForm : could not set esssential properties !");
+            OSL_FAIL("NavigatorTree::NewForm : could not set esssential properties !");
         }
 
 

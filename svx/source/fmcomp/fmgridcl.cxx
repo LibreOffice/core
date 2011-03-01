@@ -262,7 +262,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     sal_Bool bFieldDescriptor   = OColumnTransferable::canExtractColumnDescriptor(aDroppedData.GetDataFlavorExVector(), CTF_FIELD_DESCRIPTOR);
     if (!bColumnDescriptor && !bFieldDescriptor)
     {
-        DBG_ERROR("FmGridHeader::ExecuteDrop: should never have reached this (no extractable format)!");
+        OSL_FAIL("FmGridHeader::ExecuteDrop: should never have reached this (no extractable format)!");
         return DND_ACTION_NONE;
     }
 
@@ -292,7 +292,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
             )
         )
     {
-        DBG_ERROR( "FmGridHeader::ExecuteDrop: somebody started a nonsense drag operation!!" );
+        OSL_FAIL( "FmGridHeader::ExecuteDrop: somebody started a nonsense drag operation!!" );
         return DND_ACTION_NONE;
     }
 
@@ -311,12 +311,12 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
             }
             catch(Exception&)
             {
-                DBG_ERROR("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
+                OSL_FAIL("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
             }
 
             if (!xConnection.is())
             {
-                DBG_ERROR("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
+                OSL_FAIL("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
                 return DND_ACTION_NONE;
             }
         }
@@ -388,7 +388,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     }
     catch (Exception&)
     {
-        DBG_ERROR("FmGridHeader::ExecuteDrop: caught an exception while creatin' the column !");
+        OSL_FAIL("FmGridHeader::ExecuteDrop: caught an exception while creatin' the column !");
         ::comphelper::disposeComponent(xStatement);
         return sal_False;
     }
@@ -506,7 +506,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         }
         catch(Exception&)
         {
-            DBG_ERROR("FmGridHeader::ExecuteDrop: Exception occurred!");
+            OSL_FAIL("FmGridHeader::ExecuteDrop: Exception occurred!");
         }
 
         sal_Bool bDateNTimeCol = sal_False;
@@ -645,7 +645,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
     }
     catch (Exception&)
     {
-        DBG_ERROR("FmGridHeader::OnAsyncExecuteDrop: caught an exception while creatin' the column !");
+        OSL_FAIL("FmGridHeader::OnAsyncExecuteDrop: caught an exception while creatin' the column !");
         ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
         ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
         return 0L;
@@ -1836,7 +1836,7 @@ sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
 
     if ( !m_pSeekCursor )
     {
-        DBG_ERROR( "FmGridControl::selectBookmarks: no seek cursor!" );
+        OSL_FAIL( "FmGridControl::selectBookmarks: no seek cursor!" );
         return sal_False;
     }
 
@@ -1859,7 +1859,7 @@ sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
     }
     catch(Exception&)
     {
-        DBG_ERROR("FmGridControl::selectBookmarks: could not move to one of the bookmarks!");
+        OSL_FAIL("FmGridControl::selectBookmarks: could not move to one of the bookmarks!");
         return sal_False;
     }
 
@@ -1922,7 +1922,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
             }
     #ifdef DBG_UTIL
             else
-                DBG_ERROR("FmGridControl::DeleteSelectedRows : a bookmark could not be determined !");
+                OSL_FAIL("FmGridControl::DeleteSelectedRows : a bookmark could not be determined !");
     #endif
         }
     }

@@ -205,7 +205,7 @@ SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
     }
     else
     {
-        DBG_ERROR( "No valid XChartDocument given as XModel" );
+        OSL_FAIL( "No valid XChartDocument given as XModel" );
         pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
     }
 

@@ -161,7 +161,7 @@ BOOL GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
 
         if( 1 == nVersion )
         {
-            DBG_ERROR( "staroffice binary file formats are no longer supported inside the gallery!" );
+            OSL_FAIL( "staroffice binary file formats are no longer supported inside the gallery!" );
             bRet = false;
         }
         else if( 2 == nVersion )
@@ -529,7 +529,7 @@ void GalleryTransferable::InitData( bool bLazy )
         break;
 
         default:
-            DBG_ERROR( "GalleryTransferable::GalleryTransferable: invalid object type" );
+            OSL_FAIL( "GalleryTransferable::GalleryTransferable: invalid object type" );
         break;
     }
 }

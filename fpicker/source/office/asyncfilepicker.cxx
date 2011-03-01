@@ -143,7 +143,7 @@ namespace svt
             break;
 
         default:
-            DBG_ERROR( "AsyncPickerAction::execute: unknown action!" );
+            OSL_FAIL( "AsyncPickerAction::execute: unknown action!" );
             break;
         }
 
@@ -208,7 +208,7 @@ namespace svt
             break;
 
         default:
-            DBG_ERROR( "AsyncPickerAction::OnActionDone: unknown action!" );
+            OSL_FAIL( "AsyncPickerAction::OnActionDone: unknown action!" );
             break;
         }
 

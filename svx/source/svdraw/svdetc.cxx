@@ -478,10 +478,10 @@ void SdrLinkList::InsertLink(const Link& rLink, unsigned nPos)
         if (rLink.IsSet()) {
             aList.Insert(new Link(rLink),nPos);
         } else {
-            DBG_ERROR("SdrLinkList::InsertLink(): Versuch, einen nicht gesetzten Link einzufuegen");
+            OSL_FAIL("SdrLinkList::InsertLink(): Versuch, einen nicht gesetzten Link einzufuegen");
         }
     } else {
-        DBG_ERROR("SdrLinkList::InsertLink(): Link schon vorhanden");
+        OSL_FAIL("SdrLinkList::InsertLink(): Link schon vorhanden");
     }
 }
 
@@ -492,7 +492,7 @@ void SdrLinkList::RemoveLink(const Link& rLink)
         Link* pLink=(Link*)aList.Remove(nFnd);
         delete pLink;
     } else {
-        DBG_ERROR("SdrLinkList::RemoveLink(): Link nicht gefunden");
+        OSL_FAIL("SdrLinkList::RemoveLink(): Link nicht gefunden");
     }
 }
 

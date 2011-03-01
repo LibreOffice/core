@@ -324,7 +324,7 @@ SbiInstance::~SbiInstance()
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "SbiInstance::~SbiInstance: caught an exception while disposing the components!" );
+        OSL_FAIL( "SbiInstance::~SbiInstance: caught an exception while disposing the components!" );
     }
 
     ComponentVector.clear();

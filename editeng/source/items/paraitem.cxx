@@ -184,7 +184,7 @@ bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case 0 :                rVal <<= aLSp; break;
         case MID_LINESPACE :    rVal <<= aLSp.Mode; break;
         case MID_HEIGHT :       rVal <<= aLSp.Height; break;
-        default: DBG_ERROR("Wrong MemberId!"); break;
+        default: OSL_FAIL("Wrong MemberId!"); break;
     }
 
     return true;
@@ -206,7 +206,7 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case 0 :                bRet = (rVal >>= aLSp); break;
         case MID_LINESPACE :    bRet = (rVal >>= aLSp.Mode); break;
         case MID_HEIGHT :       bRet = (rVal >>= aLSp.Height); break;
-        default: DBG_ERROR("Wrong MemberId!"); break;
+        default: OSL_FAIL("Wrong MemberId!"); break;
     }
 
     if( bRet )
@@ -1347,7 +1347,7 @@ bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberI
     {
         case MID_AUTO: rVal <<= (sal_Bool) bAuto; break;
         case MID_NAME: rVal <<= ::rtl::OUString( GetValue() ); break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
     }
 
     return sal_True;
@@ -1362,7 +1362,7 @@ bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMem
     {
         case MID_AUTO: bRet = ( rVal >>= bAuto ); break;
         case MID_NAME: bRet = ( rVal >>= aStr ); if ( bRet ) SetValue(aStr); break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
     }
 
     return bRet;

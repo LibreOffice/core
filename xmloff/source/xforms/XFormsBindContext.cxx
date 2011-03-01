@@ -128,7 +128,7 @@ void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
                                        rValue ) ) );
         break;
     default:
-        DBG_ERROR( "should not happen" );
+        OSL_FAIL( "should not happen" );
         break;
     }
 }
@@ -156,7 +156,7 @@ SvXMLImportContext* XFormsBindContext::HandleChild(
     const OUString&,
     const Reference<XAttributeList>& )
 {
-    DBG_ERROR( "no children supported" );
+    OSL_FAIL( "no children supported" );
     return NULL;
 }
 

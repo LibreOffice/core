@@ -1430,7 +1430,7 @@ void OutlinerView::StartTextConversion(
     }
     else
     {
-        DBG_ERROR( "unexpected language" );
+        OSL_FAIL( "unexpected language" );
     }
 }
 

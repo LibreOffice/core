@@ -167,7 +167,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
             case LOG_ASSERTION: AddAssertion( aUILogMsg, LogMsg->aDebugData ); break;
             case LOG_ASSERTION_STACK:   AddAssertionStack( aUILogMsg, LogMsg->aDebugData ); break;
             case LOG_QA_ERROR:  AddQAError( aUILogMsg, LogMsg->aDebugData ); break;
-            default:DBG_ERROR("Unbekannter Typ in ResultFile. Speichern des ResultFile resultiert in Informationsverlust");
+            default:OSL_FAIL("Unbekannter Typ in ResultFile. Speichern des ResultFile resultiert in Informationsverlust");
         }
 
         if ( !bFileLoading )
@@ -486,7 +486,7 @@ String MsgEdit::Impl_MakeText( SvLBoxEntry *pEntry ) const
         case LOG_ASSERTION: break;
         case LOG_ASSERTION_STACK:aRet.AppendAscii("--> ");  break;
         case LOG_QA_ERROR:  break;
-        default:DBG_ERROR("Unknown type in ResultWindow!");
+        default:OSL_FAIL("Unknown type in ResultWindow!");
     }
     aRet += aEditTree.GetEntryText( pEntry );
     return aRet;
@@ -584,7 +584,7 @@ void MsgEdit::ReplaceSelected( const String& rStr )
 {
     (void) rStr; /* avoid warning about unused parameter */
     Sound::Beep();
-    DBG_ERROR("Not Implemented");
+    OSL_FAIL("Not Implemented");
 }
 
 BOOL MsgEdit::IsModified(){ return bModified; }
@@ -608,7 +608,7 @@ void MsgEdit::SetText( const String& rStr )
 {
     (void) rStr; /* avoid warning about unused parameter */
     Sound::Beep();
-    DBG_ERROR("Not Implemented");
+    OSL_FAIL("Not Implemented");
 }
 
 BOOL MsgEdit::HasText() const
@@ -916,7 +916,7 @@ TTFeatures TTTreeListBox::GetFeatures( SvLBoxEntry* pEntry )
         case LOG_QA_ERROR:
                 return HasQAError;
         default:
-            DBG_ERROR("Unknown type in ResultWindow");
+            OSL_FAIL("Unknown type in ResultWindow");
     }
     return HasNothing;
 }

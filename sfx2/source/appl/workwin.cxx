@@ -660,7 +660,7 @@ void SfxWorkWindow::Lock_Impl( BOOL bLock )
         --m_nLock;
     if ( m_nLock<0 )
     {
-        DBG_ERROR("Lock count underflow!");
+        OSL_FAIL("Lock count underflow!");
         m_nLock = 0;
     }
 
@@ -1066,7 +1066,7 @@ void SfxWorkWindow::AlignChild_Impl( Window& rWindow,
         pChild->bResize = TRUE;
     }
     else {
-        DBG_ERROR( "aligning unregistered child" );
+        OSL_FAIL( "aligning unregistered child" );
     }
 }
 
@@ -1094,7 +1094,7 @@ void SfxWorkWindow::ReleaseChild_Impl( Window& rWindow )
         delete pChild;
     }
     else {
-        DBG_ERROR( "releasing unregistered child" );
+        OSL_FAIL( "releasing unregistered child" );
     }
 }
 
@@ -2256,11 +2256,11 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId, BOOL bSetFocus)
 
     if ( n < nCount )
     {
-        DBG_ERROR("The ChildWindow is not in context!");
+        OSL_FAIL("The ChildWindow is not in context!");
     }
     else
     {
-        DBG_ERROR("The ChildWindow is not registered!");
+        OSL_FAIL("The ChildWindow is not registered!");
     }
 #endif
 }
@@ -2501,11 +2501,11 @@ void SfxWorkWindow::ShowChildWindow_Impl(USHORT nId, BOOL bVisible, BOOL bSetFoc
 
     if ( n<nCount )
     {
-        DBG_ERROR("The ChildWindow is not in context!");
+        OSL_FAIL("The ChildWindow is not in context!");
     }
     else
     {
-        DBG_ERROR("The ChildWindow is not registered");
+        OSL_FAIL("The ChildWindow is not registered");
     }
 #endif
 }

@@ -925,7 +925,7 @@ void SdrOle2Obj::Connect()
     {
         // mba: currently there are situations where it seems to be unavoidable to have multiple connects
         // changing this would need a larger code rewrite, so for now I remove the assertion
-        // DBG_ERROR("Connect() called on connected object!");
+        // OSL_FAIL("Connect() called on connected object!");
         return;
     }
 
@@ -1214,7 +1214,7 @@ void SdrOle2Obj::Disconnect()
 
     if( !mpImpl->mbConnected )
     {
-        DBG_ERROR("Disconnect() called on disconnected object!");
+        OSL_FAIL("Disconnect() called on disconnected object!");
         return;
     }
 
@@ -1674,7 +1674,7 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
                     catch( uno::Exception& e )
                     {
                         (void)e;
-                        DBG_ERROR( "SdrOle2Obj::operator=(), unexpected exception caught!" );
+                        OSL_FAIL( "SdrOle2Obj::operator=(), unexpected exception caught!" );
                     }
                 }                                                                            */
             }

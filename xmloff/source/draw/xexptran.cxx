@@ -361,7 +361,7 @@ void SdXMLImExTransform2D::EmptyList()
             }
             default :
             {
-                DBG_ERROR("SdXMLImExTransform2D: impossible entry!");
+                OSL_FAIL("SdXMLImExTransform2D: impossible entry!");
                 break;
             }
         }
@@ -494,7 +494,7 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
             }
             default :
             {
-                DBG_ERROR("SdXMLImExTransform2D: impossible entry!");
+                OSL_FAIL("SdXMLImExTransform2D: impossible entry!");
                 break;
             }
         }
@@ -704,7 +704,7 @@ void SdXMLImExTransform2D::GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans)
             }
             default :
             {
-                DBG_ERROR("SdXMLImExTransform2D: impossible entry!");
+                OSL_FAIL("SdXMLImExTransform2D: impossible entry!");
                 break;
             }
         }
@@ -817,7 +817,7 @@ void SdXMLImExTransform3D::EmptyList()
             }
             default :
             {
-                DBG_ERROR("SdXMLImExTransform3D: impossible entry!");
+                OSL_FAIL("SdXMLImExTransform3D: impossible entry!");
                 break;
             }
         }
@@ -998,7 +998,7 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
             }
             default :
             {
-                DBG_ERROR("SdXMLImExTransform3D: impossible entry!");
+                OSL_FAIL("SdXMLImExTransform3D: impossible entry!");
                 break;
             }
         }
@@ -1268,7 +1268,7 @@ void SdXMLImExTransform3D::GetFullTransform(::basegfx::B3DHomMatrix& rFullTrans)
             }
             default :
             {
-                DBG_ERROR("SdXMLImExTransform3D: impossible entry!");
+                OSL_FAIL("SdXMLImExTransform3D: impossible entry!");
                 break;
             }
         }
@@ -2532,7 +2532,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'A' :
                 case 'a' :
                 {
-                    DBG_ERROR("XMLIMP: non-interpreted tags in svg:d element (elliptical arc)!");
+                    OSL_FAIL("XMLIMP: non-interpreted tags in svg:d element (elliptical arc)!");
                     nPos++;
                     Imp_SkipSpaces(aStr, nPos, nLen);
 
@@ -2552,7 +2552,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 default:
                 {
                     nPos++;
-                    DBG_ERROR("XMLIMP: non-interpreted tags in svg:d element (unknown)!");
+                    OSL_FAIL("XMLIMP: non-interpreted tags in svg:d element (unknown)!");
                     break;
                 }
             }
@@ -2988,7 +2988,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'A' :
                 case 'a' :
                 {
-                    DBG_ERROR("XMLIMP: non-interpreted tags in svg:d element (elliptical arc)!");
+                    OSL_FAIL("XMLIMP: non-interpreted tags in svg:d element (elliptical arc)!");
                     nPos++;
                     Imp_SkipSpaces(aStr, nPos, nLen);
 
@@ -3008,7 +3008,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 default:
                 {
                     nPos++;
-                    DBG_ERROR("XMLIMP: non-interpreted tags in svg:d element (unknown)!");
+                    OSL_FAIL("XMLIMP: non-interpreted tags in svg:d element (unknown)!");
                     break;
                 }
             }

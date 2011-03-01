@@ -1200,7 +1200,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
     }
     catch( Exception& )
     {
-        DBG_ERROR( "SvxXMLListStyleContext::FillUnoNumRule - Exception catched" );
+        OSL_FAIL( "SvxXMLListStyleContext::FillUnoNumRule - Exception catched" );
     }
 }
 

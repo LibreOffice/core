@@ -366,7 +366,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
             SvXMLStyleIndex_Impl* pStyleIndex = new SvXMLStyleIndex_Impl( aStyles[ i ] );
             if (!pIndices->Insert( pStyleIndex ))
             {
-                DBG_ERROR("Here is a double Style");
+                OSL_FAIL("Here is a double Style");
                 delete pStyleIndex;
             }
         }

@@ -455,7 +455,7 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
         }
         else
         {
-            DBG_ERROR( "SvXMLGraphicHelper::ImplInsertGraphicURL: invalid scheme" );
+            OSL_FAIL( "SvXMLGraphicHelper::ImplInsertGraphicURL: invalid scheme" );
         }
     }
 

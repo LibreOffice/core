@@ -964,7 +964,7 @@ void SdXMLImport::SetStatistics(
                 if (i_rStats[i].Value >>= val) {
                     nCount = val;
                 } else {
-                    DBG_ERROR("SdXMLImport::SetStatistics: invalid entry");
+                    OSL_FAIL("SdXMLImport::SetStatistics: invalid entry");
                 }
             }
         }

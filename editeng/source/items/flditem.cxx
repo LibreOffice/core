@@ -276,12 +276,12 @@ String SvxDateField::GetFormatted( Date& aDate, SvxDateFormat eFormat, SvNumberF
 {
     if ( eFormat == SVXDATEFORMAT_SYSTEM )
     {
-        DBG_ERROR( "SVXDATEFORMAT_SYSTEM not implemented!" );
+        OSL_FAIL( "SVXDATEFORMAT_SYSTEM not implemented!" );
         eFormat = SVXDATEFORMAT_STDSMALL;
     }
     else if ( eFormat == SVXDATEFORMAT_APPDEFAULT )
     {
-        DBG_ERROR( "SVXDATEFORMAT_APPDEFAULT: take them from where? ");
+        OSL_FAIL( "SVXDATEFORMAT_APPDEFAULT: take them from where? ");
         eFormat = SVXDATEFORMAT_STDSMALL;
     }
 
@@ -423,7 +423,7 @@ void SvxURLField::Load( SvPersistStream & rStm )
     eFormat= (SvxURLFormat)nFormat;
 
     // Relative save => make it absolute for loading
-    DBG_ERROR("No BaseURL!");
+    OSL_FAIL("No BaseURL!");
     // TODO/MBA: no BaseURL
     aURL = INetURLObject::GetAbsURL( String(), aTmpURL );
 }
@@ -433,7 +433,7 @@ void SvxURLField::Load( SvPersistStream & rStm )
 void SvxURLField::Save( SvPersistStream & rStm )
 {
     // Relative save of the URL
-    DBG_ERROR("No BaseURL!");
+    OSL_FAIL("No BaseURL!");
     // TODO/MBA: no BaseURL
     String aTmpURL = INetURLObject::GetRelURL( String(), aURL );
 
@@ -662,11 +662,11 @@ String SvxExtTimeField::GetFormatted( Time& aTime, SvxTimeFormat eFormat, SvNumb
     switch( eFormat )
     {
         case SVXTIMEFORMAT_SYSTEM :
-            DBG_ERROR( "SVXTIMEFORMAT_SYSTEM: not implemented" );
+            OSL_FAIL( "SVXTIMEFORMAT_SYSTEM: not implemented" );
             eFormat = SVXTIMEFORMAT_STANDARD;
         break;
         case SVXTIMEFORMAT_APPDEFAULT :
-            DBG_ERROR( "SVXTIMEFORMAT_APPDEFAULT: not implemented" );
+            OSL_FAIL( "SVXTIMEFORMAT_APPDEFAULT: not implemented" );
             eFormat = SVXTIMEFORMAT_STANDARD;
         break;
         default: ;//prevent warning

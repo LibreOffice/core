@@ -130,7 +130,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "lcl_initProperty: caught an exception!" );
+            OSL_FAIL( "lcl_initProperty: caught an exception!" );
         }
     }
 }

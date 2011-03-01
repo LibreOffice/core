@@ -111,14 +111,14 @@ BOOL lcl_CreateBulletItem( const SvxNumBulletItem& rNumBullet, USHORT nLevel, Sv
                 rBullet.SetStyle( BS_BULLET );
                 break;
             case SVX_NUM_PAGEDESC:
-                DBG_ERROR( "Unknown: SVX_NUM_PAGEDESC" );
+                OSL_FAIL( "Unknown: SVX_NUM_PAGEDESC" );
                 rBullet.SetStyle( BS_BULLET );
                 break;
             case SVX_NUM_BITMAP:
                 rBullet.SetStyle( BS_BMP );
                 break;
             default:
-                DBG_ERROR( "Unknown NumType" );
+                OSL_FAIL( "Unknown NumType" );
         }
 
         switch ( pFmt->GetNumAdjust() )
@@ -133,7 +133,7 @@ BOOL lcl_CreateBulletItem( const SvxNumBulletItem& rNumBullet, USHORT nLevel, Sv
                 rBullet.SetJustification( BJ_VCENTER|BJ_HCENTER );
                 break;
             default:
-                DBG_ERROR( "Unknown or invalid NumAdjust" );
+                OSL_FAIL( "Unknown or invalid NumAdjust" );
         }
     }
     return pFmt ? TRUE : FALSE;
@@ -287,172 +287,172 @@ EditTextObject::~EditTextObject()
 
 USHORT EditTextObject::GetParagraphCount() const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
 XubString EditTextObject::GetText( USHORT /* nParagraph */ ) const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return XubString();
 }
 
 void EditTextObject::Insert( const EditTextObject& /* rObj */, USHORT /* nPara */)
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
 EditTextObject* EditTextObject::CreateTextObject( USHORT /*nPara*/, USHORT /*nParas*/ ) const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
 void EditTextObject::RemoveParagraph( USHORT /*nPara*/ )
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
 BOOL EditTextObject::HasPortionInfo() const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 void EditTextObject::ClearPortionInfo()
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
 BOOL EditTextObject::HasOnlineSpellErrors() const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 BOOL EditTextObject::HasCharAttribs( USHORT ) const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 void EditTextObject::GetCharAttribs( USHORT /*nPara*/, EECharAttribArray& /*rLst*/ ) const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
 void EditTextObject::MergeParaAttribs( const SfxItemSet& /*rAttribs*/, USHORT /*nStart*/, USHORT /*nEnd*/ )
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
 BOOL EditTextObject::IsFieldObject() const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 const SvxFieldItem* EditTextObject::GetField() const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
 BOOL EditTextObject::HasField( TypeId /*aType*/ ) const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 SfxItemSet EditTextObject::GetParaAttribs( USHORT /*nPara*/ ) const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return SfxItemSet( *(SfxItemPool*)NULL );
 }
 
 void EditTextObject::SetParaAttribs( USHORT /*nPara*/, const SfxItemSet& /*rAttribs*/ )
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
 BOOL EditTextObject::RemoveCharAttribs( USHORT /*nWhich*/ )
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 BOOL EditTextObject::RemoveParaAttribs( USHORT /*nWhich*/ )
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 BOOL EditTextObject::HasStyleSheet( const XubString& /*rName*/, SfxStyleFamily /*eFamily*/ ) const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 void EditTextObject::GetStyleSheet( USHORT /*nPara*/, XubString& /*rName*/, SfxStyleFamily& /*eFamily*/ ) const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
 void EditTextObject::SetStyleSheet( USHORT /*nPara*/, const XubString& /*rName*/, const SfxStyleFamily& /*eFamily*/ )
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
 BOOL EditTextObject::ChangeStyleSheets( const XubString&, SfxStyleFamily,
                                             const XubString&, SfxStyleFamily )
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 void EditTextObject::ChangeStyleSheetName( SfxStyleFamily /*eFamily*/,
                 const XubString& /*rOldName*/, const XubString& /*rNewName*/ )
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
 USHORT EditTextObject::GetUserType() const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
 void EditTextObject::SetUserType( USHORT )
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
 ULONG EditTextObject::GetObjectSettings() const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
 void EditTextObject::SetObjectSettings( ULONG )
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
 BOOL EditTextObject::IsVertical() const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 void EditTextObject::SetVertical( BOOL bVertical )
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     ((BinTextObject*)this)->SetVertical( bVertical );
 }
 
 USHORT EditTextObject::GetScriptType() const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return ((const BinTextObject*)this)->GetScriptType();
 }
 
@@ -534,17 +534,17 @@ void EditTextObject::Skip( SvStream& rIStream )
 
 void EditTextObject::StoreData( SvStream& ) const
 {
-    DBG_ERROR( "StoreData: Base class!" );
+    OSL_FAIL( "StoreData: Base class!" );
 }
 
 void EditTextObject::CreateData( SvStream& )
 {
-    DBG_ERROR( "CreateData: Base class!" );
+    OSL_FAIL( "CreateData: Base class!" );
 }
 
 USHORT EditTextObject::GetVersion() const
 {
-    DBG_ERROR( "Virtual method direct from EditTextObject!" );
+    OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
@@ -1314,7 +1314,7 @@ void BinTextObject::CreateData( SvStream& rIStream )
     if ( bOwnerOfCurrent && !bOwnerOfPool )
     {
         // A global Pool was used, but not handed over to me, but I need it!
-        DBG_ERROR( "Give me the global TextObjectPool!" );
+        OSL_FAIL( "Give me the global TextObjectPool!" );
         return;
     }
     else if ( !bOwnerOfCurrent && bOwnerOfPool )

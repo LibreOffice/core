@@ -234,7 +234,7 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
     }
     else
     {
-        DBG_ERROR( "ConvStart_impl: Unknown Area!" );
+        OSL_FAIL( "ConvStart_impl: Unknown Area!" );
     }
 }
 
@@ -373,10 +373,10 @@ void TextConvWrapper::ReplaceUnit(
         case eOriginalAbove :
         case eReplacementBelow :
         case eOriginalBelow :
-            DBG_ERROR( "Rubies not supported" );
+            OSL_FAIL( "Rubies not supported" );
             break;
         default:
-            DBG_ERROR( "unexpected case" );
+            OSL_FAIL( "unexpected case" );
     }
     nUnitOffset = sal::static_int_cast< USHORT >(
         nUnitOffset + nUnitStart + aNewTxt.getLength());

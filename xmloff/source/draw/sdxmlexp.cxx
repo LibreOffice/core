@@ -1284,7 +1284,7 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                     }
                     default:
                     {
-                        DBG_ERROR("XMLEXP: unknown autolayout export");
+                        OSL_FAIL("XMLEXP: unknown autolayout export");
                         break;
                     }
                 }
@@ -1633,7 +1633,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "SdXMLExport::ImpPrepDrawPageHeaderFooterDecls(), unexpected exception cought!" );
+        OSL_FAIL( "SdXMLExport::ImpPrepDrawPageHeaderFooterDecls(), unexpected exception cought!" );
     }
 
     return aSettings;
@@ -2238,7 +2238,7 @@ void SdXMLExport::exportPresentationSettings()
     }
     catch( uno::Exception )
     {
-        DBG_ERROR( "uno::Exception while exporting <presentation:settings>" );
+        OSL_FAIL( "uno::Exception while exporting <presentation:settings>" );
     }
 }
 
@@ -2617,7 +2617,7 @@ void SdXMLExport::exportFormsElement( Reference< XDrawPage > xDrawPage )
 
         if(! GetFormExport()->seekPage( xDrawPage ) )
         {
-            DBG_ERROR( "OFormLayerXMLExport::seekPage failed!" );
+            OSL_FAIL( "OFormLayerXMLExport::seekPage failed!" );
         }
     }
 }
@@ -2772,7 +2772,7 @@ void SdXMLExport::collectAnnotationAutoStyles( const Reference<XDrawPage>& xDraw
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdXMLExport::collectAnnotationAutoStyles(), exception caught during export of annotation auto styles");
+        OSL_FAIL("SdXMLExport::collectAnnotationAutoStyles(), exception caught during export of annotation auto styles");
     }
 }
 
@@ -2839,7 +2839,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdXMLExport::exportAnnotations(), exception caught during export of annotations");
+        OSL_FAIL("SdXMLExport::exportAnnotations(), exception caught during export of annotations");
     }
 }
 

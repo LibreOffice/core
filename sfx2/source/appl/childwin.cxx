@@ -504,7 +504,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
 
     if ( !pCon )
     {
-        DBG_ERROR( "Kein geeigneter Context gefunden!" );
+        OSL_FAIL( "Kein geeigneter Context gefunden!" );
         return;
     }
 
@@ -539,7 +539,7 @@ FloatingWindow* SfxChildWindowContext::GetFloatingWindow() const
     }
     else
     {
-        DBG_ERROR("Kein FloatingWindow-Context!");
+        OSL_FAIL("Kein FloatingWindow-Context!");
         return NULL;
     }
 }

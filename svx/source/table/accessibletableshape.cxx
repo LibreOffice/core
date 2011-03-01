@@ -236,7 +236,7 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
     }
     catch( Exception& )
     {
-        DBG_ERROR("svx::AccessibleTableShape::modified(), exception caught!");
+        OSL_FAIL("svx::AccessibleTableShape::modified(), exception caught!");
     }
 }
 
@@ -277,7 +277,7 @@ void AccessibleTableShape::Init()
     }
     catch( Exception& )
     {
-        DBG_ERROR("AccessibleTableShape::init(), exception caught?");
+        OSL_FAIL("AccessibleTableShape::init(), exception caught?");
     }
 
     AccessibleTableShape_Base::Init();

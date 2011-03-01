@@ -390,7 +390,7 @@ BOOL AppWin::DiskFileChanged( USHORT nWhat )
 // uncomment to avoid compiler warning
 //          break;
         default:
-            DBG_ERROR("Not Implemented in AppWin::DiskFileChanged");
+            OSL_FAIL("Not Implemented in AppWin::DiskFileChanged");
     }
     return TRUE;
 }
@@ -415,7 +415,7 @@ void AppWin::UpdateFileInfo( USHORT nWhat )
             }
             break;
         default:
-            DBG_ERROR("Not Implemented in AppWin::UpdateFileInfo");
+            OSL_FAIL("Not Implemented in AppWin::UpdateFileInfo");
     }
 }
 
@@ -590,7 +590,7 @@ USHORT AppWin::QuerySave( QueryBits nBits )
             nReturn = SAVE_RES_CANCEL;
             break;
         default:
-            DBG_ERROR("switch default where no default should be: Internal error");
+            OSL_FAIL("switch default where no default should be: Internal error");
             nReturn = SAVE_RES_CANCEL;
     }
     SkipReload( FALSE );
@@ -619,7 +619,7 @@ BOOL AppWin::Close()
 // uncomment to avoid compiler warning
 //      break;
     default:
-        DBG_ERROR("Not Implemented in AppWin::Close");
+        OSL_FAIL("Not Implemented in AppWin::Close");
         return FALSE;
     }
 }

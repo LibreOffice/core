@@ -847,7 +847,7 @@ USHORT SfxCommonTemplateDialog_Impl::InfoOffsetToStyleNr(USHORT nId)
     for ( size_t i = 0; i < pStyleFamilies->size(); i++ )
         if ( SfxFamilyIdToNId(pStyleFamilies->at( i )->GetFamily()) == nId+1 )
             return i;
-    DBG_ERROR("Style Nummer nicht gefunden");
+    OSL_FAIL("Style Nummer nicht gefunden");
     return 0;
 }
 
@@ -893,7 +893,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
             case SFX_STYLE_FAMILY_FRAME:nSlot = SID_STYLE_FAMILY3; break;
             case SFX_STYLE_FAMILY_PAGE: nSlot = SID_STYLE_FAMILY4; break;
             case SFX_STYLE_FAMILY_PSEUDO: nSlot = SID_STYLE_FAMILY5; break;
-            default: DBG_ERROR("unbekannte StyleFamily"); break;
+            default: OSL_FAIL("unbekannte StyleFamily"); break;
         }
         pBoundItems[i] =
             new SfxTemplateControllerItem(nSlot, *this, *pBindings);
@@ -1892,7 +1892,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(USHORT nEntry)
         case SID_TEMPLATE_LOAD:
             SFX_APP()->GetDispatcher_Impl()->Execute(nEntry);
         break;
-        default: DBG_ERROR("not implemented"); break;
+        default: OSL_FAIL("not implemented"); break;
     }
 }
 
@@ -2306,7 +2306,7 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(USHORT nId,const SfxStyleFamilyIte
         case SFX_STYLE_FAMILY_FRAME:nHelpId = SID_STYLE_FAMILY3; break;
         case SFX_STYLE_FAMILY_PAGE: nHelpId = SID_STYLE_FAMILY4; break;
         case SFX_STYLE_FAMILY_PSEUDO: nHelpId = SID_STYLE_FAMILY5; break;
-        default: DBG_ERROR("unknown StyleFamily"); break;
+        default: OSL_FAIL("unknown StyleFamily"); break;
     }
     m_aActionTbL.InsertItem( nId, pItem->GetImage(), pItem->GetText(), 0, 0);
     m_aActionTbL.SetHelpId( nId, nHelpId );

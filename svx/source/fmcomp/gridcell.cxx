@@ -207,7 +207,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
             case TYPE_TIMEFIELD: pCellControl = new DbTimeField(*this); break;
             case TYPE_FORMATTEDFIELD: pCellControl = new DbFormattedField(*this); break;
             default:
-                DBG_ERROR("DbGridColumn::CreateControl: Unknown Column");
+                OSL_FAIL("DbGridColumn::CreateControl: Unknown Column");
                 return;
         }
 
@@ -598,7 +598,7 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn, sal_Bool /*_bText*/ )
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "DbCellControl::doPropertyListening: caught an exception!" );
+            OSL_FAIL( "DbCellControl::doPropertyListening: caught an exception!" );
         }
     }
 }
@@ -622,7 +622,7 @@ void DbCellControl::implDoPropertyListening( const ::rtl::OUString& _rPropertyNa
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "DbCellControl::doPropertyListening: caught an exception!" );
+        OSL_FAIL( "DbCellControl::doPropertyListening: caught an exception!" );
     }
 }
 
@@ -1481,7 +1481,7 @@ void DbFormattedField::Init( Window& rParent, const Reference< XRowSet >& xCurso
                 }
             }
             default:
-                DBG_ERROR( "DbFormattedField::Init: unexpected value type!" );
+                OSL_FAIL( "DbFormattedField::Init: unexpected value type!" );
                 break;
         }
     }
@@ -3187,7 +3187,7 @@ XubString DbFilterField::GetFormatText(const Reference< XColumn >& /*_rxField*/,
 //------------------------------------------------------------------
 void DbFilterField::UpdateFromField(const Reference< XColumn >& /*_rxField*/, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
-    DBG_ERROR( "DbFilterField::UpdateFromField: cannot update a filter control from a field!" );
+    OSL_FAIL( "DbFilterField::UpdateFromField: cannot update a filter control from a field!" );
 }
 
 //------------------------------------------------------------------

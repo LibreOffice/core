@@ -531,7 +531,7 @@ Reference < XContent > SfxMedium::GetContent() const
         }
         else
         {
-            // TODO: DBG_ERROR("SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why its used.");
+            // TODO: OSL_FAIL("SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why its used.");
             String aURL;
             if ( aName.Len() )
                 ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
@@ -768,7 +768,7 @@ sal_Bool SfxMedium::IsStorage()
         String aURL;
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL ) )
         {
-            DBG_ERROR("Physical name not convertable!");
+            OSL_FAIL("Physical name not convertable!");
         }
         pImp->bIsStorage = SotStorage::IsStorageFile( aURL ) && !SotStorage::IsOLEStorage( aURL);
         if ( !pImp->bIsStorage )
@@ -1869,7 +1869,7 @@ void SfxMedium::Transfer_Impl()
                }
             else
             {
-                DBG_ERROR( "Illegal Output stream parameter!\n" );
+                OSL_FAIL( "Illegal Output stream parameter!\n" );
                 SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             }
 
@@ -2182,7 +2182,7 @@ void SfxMedium::ClearBackup_Impl()
             else
             {
 
-                DBG_ERROR("Couldn't remove backup file!");
+                OSL_FAIL("Couldn't remove backup file!");
             }
         }
     }
@@ -2262,7 +2262,7 @@ void SfxMedium::GetMedium_Impl()
             {
                 if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aFileName ) )
                 {
-                    DBG_ERROR("Physical name not convertable!");
+                    OSL_FAIL("Physical name not convertable!");
                 }
             }
             else
@@ -2434,7 +2434,7 @@ void SfxMedium::Init_Impl()
         INetProtocol eProt = aUrl.GetProtocol();
         if ( eProt == INET_PROT_NOT_VALID )
         {
-            DBG_ERROR ( "Unknown protocol!" );
+            OSL_FAIL( "Unknown protocol!" );
         }
         else
         {
@@ -2469,7 +2469,7 @@ void SfxMedium::Init_Impl()
           || !aLogicName.CompareToAscii( "private:stream", 14 ) == COMPARE_EQUAL ) )
     {
         pSet->ClearItem( SID_OUTPUTSTREAM );
-        DBG_ERROR( "Unexpected Output stream parameter!\n" );
+        OSL_FAIL( "Unexpected Output stream parameter!\n" );
     }
 
     if ( aLogicName.Len() )
@@ -2831,7 +2831,7 @@ sal_Bool SfxMedium::IsTemporary() const
 
 sal_Bool SfxMedium::Exists( sal_Bool /*bForceSession*/ )
 {
-    DBG_ERROR( "Not implemented!" );
+    OSL_FAIL( "Not implemented!" );
     return sal_True;
 }
 
@@ -2995,12 +2995,12 @@ SfxMedium::~SfxMedium()
         String aTemp;
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp ))
         {
-            DBG_ERROR("Physical name not convertable!");
+            OSL_FAIL("Physical name not convertable!");
         }
 
         if ( !::utl::UCBContentHelper::Kill( aTemp ) )
         {
-            DBG_ERROR("Couldn't remove temporary file!");
+            OSL_FAIL("Couldn't remove temporary file!");
         }
     }
 

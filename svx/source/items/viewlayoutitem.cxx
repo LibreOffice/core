@@ -131,7 +131,7 @@ bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMember
         case MID_VIEWLAYOUT_COLUMNS : rVal <<= (sal_Int32) GetValue(); break;
         case MID_VIEWLAYOUT_BOOKMODE: rVal <<= (sal_Bool) mbBookMode; break;
         default:
-            DBG_ERROR("svx::SvxViewLayoutItem::QueryValue(), Wrong MemberId!");
+            OSL_FAIL("svx::SvxViewLayoutItem::QueryValue(), Wrong MemberId!");
             return false;
     }
 
@@ -203,7 +203,7 @@ bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMe
         }
 
         default:
-            DBG_ERROR("svx::SvxViewLayoutItem::PutValue(), Wrong MemberId!");
+            OSL_FAIL("svx::SvxViewLayoutItem::PutValue(), Wrong MemberId!");
             return false;
     }
 

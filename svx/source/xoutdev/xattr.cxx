@@ -1111,7 +1111,7 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId
             break;
         }
 
-        default: DBG_ERROR("Wrong MemberId!"); return false;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     return true;
@@ -3500,7 +3500,7 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemb
         case MID_GRADIENT_ENDINTENSITY: rVal <<= GetGradientValue().GetEndIntens(); break;
         case MID_GRADIENT_STEPCOUNT: rVal <<= GetGradientValue().GetSteps(); break;
 
-        default: DBG_ERROR("Wrong MemberId!"); return false;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     return true;
@@ -4145,7 +4145,7 @@ bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberI
         case MID_HATCH_ANGLE:
             rVal <<= aHatch.GetAngle(); break;
 
-        default: DBG_ERROR("Wrong MemberId!"); return false;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     return true;
@@ -4242,7 +4242,7 @@ bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMem
             break;
         }
 
-        default: DBG_ERROR("Wrong MemberId!"); return false;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     return true;

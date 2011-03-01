@@ -592,7 +592,7 @@ void SfxShell::Invalidate
 {
     if ( !GetViewShell() )
     {
-        DBG_ERROR( "wrong Invalidate method called!" );
+        OSL_FAIL( "wrong Invalidate method called!" );
         return;
     }
 

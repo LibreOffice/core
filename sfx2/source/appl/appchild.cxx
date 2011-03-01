@@ -134,7 +134,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nI
         return;
     }
 
-    DBG_ERROR( "Kein ChildWindow fuer diesen Context!" );
+    OSL_FAIL( "Kein ChildWindow fuer diesen Context!" );
 }
 
 //--------------------------------------------------------------------

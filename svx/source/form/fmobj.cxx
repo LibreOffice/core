@@ -507,7 +507,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
         }
         catch(Exception&)
         {
-            DBG_ERROR("FmFormObj::ensureModelEnv : could not retrieve a source DSS !");
+            OSL_FAIL("FmFormObj::ensureModelEnv : could not retrieve a source DSS !");
         }
 
 
@@ -536,7 +536,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FmFormObj::ensureModelEnv : exception while getting a sibling's DSS !");
+                        OSL_FAIL("FmFormObj::ensureModelEnv : exception while getting a sibling's DSS !");
                     }
 
                 }
@@ -567,7 +567,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FmFormObj::ensureModelEnv : exception while getting a destination DSS !");
+                        OSL_FAIL("FmFormObj::ensureModelEnv : exception while getting a destination DSS !");
                     }
 
                 }
@@ -593,7 +593,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmFormObj::ensureModelEnv : something went seriously wrong while creating a new form !");
+                    OSL_FAIL("FmFormObj::ensureModelEnv : something went seriously wrong while creating a new form !");
                     // no more options anymore ...
                     return Reference< XInterface > ();
                 }

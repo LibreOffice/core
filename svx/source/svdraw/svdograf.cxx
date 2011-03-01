@@ -892,7 +892,7 @@ bool SdrGrafObj::HasGDIMetaFile() const
 
 const GDIMetaFile* SdrGrafObj::GetGDIMetaFile() const
 {
-    DBG_ERROR( "Invalid return value! Don't use it! (KA)" );
+    OSL_FAIL( "Invalid return value! Don't use it! (KA)" );
     return &GetGraphic().GetGDIMetaFile();
 }
 

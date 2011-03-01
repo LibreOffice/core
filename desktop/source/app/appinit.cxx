@@ -103,7 +103,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
         xServiceFactory( comphelper::getProcessServiceFactory() );
     if (!xServiceFactory.is())
     {
-        DBG_ERROR("configureUcb(): No XMultiServiceFactory");
+        OSL_FAIL("configureUcb(): No XMultiServiceFactory");
         return false;
     }
 
@@ -277,7 +277,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
         pCmdLine->GetPortalConnectString( aPortalConnect );
         if ( !configureUcb( bServer, aPortalConnect ) )
         {
-            DBG_ERROR( "Can't configure UCB" );
+            OSL_FAIL( "Can't configure UCB" );
             throw com::sun::star::uno::Exception(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RegisterServices, configureUcb")), NULL);
         }
 

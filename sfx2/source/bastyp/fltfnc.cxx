@@ -770,7 +770,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
     USHORT nIndex = aName.SearchAscii(": ");
     if (  nIndex != STRING_NOTFOUND )
     {
-        DBG_ERROR("Old filter name used!");
+        OSL_FAIL("Old filter name used!");
         aName = rName.Copy( nIndex + 2 );
     }
 
@@ -1038,7 +1038,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         sal_Int32 nStartRealName = sFilterName.indexOf( DEFINE_CONST_UNICODE(": "), 0 );
         if( nStartRealName != -1 )
         {
-            DBG_ERROR("Old format, not supported!");
+            OSL_FAIL("Old format, not supported!");
             sFilterName = sFilterName.copy( nStartRealName+2 );
         }
 

@@ -295,7 +295,7 @@ SfxModule* SfxApplication::GetModule_Impl()
         return pModule;
     else
     {
-        DBG_ERROR( "No module!" );
+        OSL_FAIL( "No module!" );
         return NULL;
     }
 }

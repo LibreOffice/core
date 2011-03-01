@@ -366,7 +366,7 @@ void SvxRubyDialog::Activate()
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("exception in style access");
+                    OSL_FAIL("exception in style access");
                 }
                 if(sCharStyleSelect.Len())
                     aCharStyleLB.SelectEntry(sCharStyleSelect);
@@ -563,7 +563,7 @@ IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
         }
         catch(Exception& )
         {
-            DBG_ERROR("Exception caught");
+            OSL_FAIL("Exception caught");
         }
     }
     return 0;

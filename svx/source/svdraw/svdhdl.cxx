@@ -142,7 +142,7 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UIN
     {
         default:
         {
-            DBG_ERROR( "unknown kind of marker" );
+            OSL_FAIL( "unknown kind of marker" );
             // no break here, return Rect_7x7 as default
         }
         case Rect_7x7:

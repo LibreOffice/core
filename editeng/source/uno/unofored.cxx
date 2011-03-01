@@ -91,7 +91,7 @@ SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, BOOL bOnl
             nFlags = GETATTRIBS_CHARATTRIBS;
             break;
         default:
-            DBG_ERROR("unknown flags for SvxOutlinerForwarder::GetAttribs");
+            OSL_FAIL("unknown flags for SvxOutlinerForwarder::GetAttribs");
         }
 
         return rEditEngine.GetAttribs( rSel.nStartPara, rSel.nStartPos, rSel.nEndPos, nFlags );

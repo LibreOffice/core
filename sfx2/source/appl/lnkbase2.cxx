@@ -623,7 +623,7 @@ DdeData* ImplDdeItem::Get( ULONG nFormat )
 
 BOOL ImplDdeItem::Put( const DdeData*  )
 {
-    DBG_ERROR( "ImplDdeItem::Put not implemented" );
+    OSL_FAIL( "ImplDdeItem::Put not implemented" );
     return FALSE;
 }
 

@@ -258,7 +258,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
     }
     catch (Exception&)
     {
-        DBG_ERROR("FmPropBrw::FmPropBrw: could not create/initialize my frame!");
+        OSL_FAIL("FmPropBrw::FmPropBrw: could not create/initialize my frame!");
         m_xMeAsFrame.clear();
     }
 
@@ -719,7 +719,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
     }
     catch (Exception&)
     {
-        DBG_ERROR("FmPropBrw::StateChanged: Exception occurred!");
+        OSL_FAIL("FmPropBrw::StateChanged: Exception occurred!");
     }
     m_bInStateChange = false;
 }

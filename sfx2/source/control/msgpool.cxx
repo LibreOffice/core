@@ -219,7 +219,7 @@ String SfxSlotPool::SeekGroup( USHORT nNo )
         aResId.SetRT(RSC_STRING);
         if ( !aResId.GetResMgr()->IsAvailable(aResId) )
         {
-            DBG_ERROR( "GroupId-Name not defined in SFX!" );
+            OSL_FAIL( "GroupId-Name not defined in SFX!" );
             return String();
         }
 

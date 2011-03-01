@@ -476,7 +476,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     }
 
-    DBG_ERROR( "xmloff::getAnimationsEnumMap(), invalid map!" );
+    OSL_FAIL( "xmloff::getAnimationsEnumMap(), invalid map!" );
     return NULL;
 }
 
@@ -555,7 +555,7 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Refe
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::AnimationsExporterImpl(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::AnimationsExporterImpl(), RuntimeException catched!" );
     }
 }
 
@@ -671,7 +671,7 @@ void AnimationsExporterImpl::prepareTransitionNode()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::prepareNode(), Exception caught!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::prepareNode(), Exception caught!" );
     }
 
 }
@@ -752,7 +752,7 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
     }
     catch( Exception& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::prepareNode(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::prepareNode(), RuntimeException catched!" );
     }
 }
 
@@ -994,12 +994,12 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         }
         break;
         default:
-            DBG_ERROR( "xmloff::AnimationsExporterImpl::exportNode(), invalid AnimationNodeType!" );
+            OSL_FAIL( "xmloff::AnimationsExporterImpl::exportNode(), invalid AnimationNodeType!" );
         }
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportNode(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportNode(), RuntimeException catched!" );
     }
 
     // if something goes wrong, its always a good idea to clear the attribute list
@@ -1064,7 +1064,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
         case AnimationNodeType::SEQ:    eElementToken = XML_SEQ; break;
         case AnimationNodeType::ITERATE:eElementToken = XML_ITERATE; break;
         default:
-            DBG_ERROR( "xmloff::AnimationsExporterImpl::exportContainer(), invalid TimeContainerType!" );
+            OSL_FAIL( "xmloff::AnimationsExporterImpl::exportContainer(), invalid TimeContainerType!" );
             return;
         }
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, eElementToken, sal_True, sal_True );
@@ -1082,7 +1082,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportContainer(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportContainer(), RuntimeException catched!" );
     }
 }
 
@@ -1347,7 +1347,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportAnimate(), Exception cought!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportAnimate(), Exception cought!" );
     }
 }
 
@@ -1380,7 +1380,7 @@ void AnimationsExporterImpl::exportAudio( const Reference< XAudio >& xAudio )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportAudio(), exception caught!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportAudio(), exception caught!" );
     }
 }
 
@@ -1408,7 +1408,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportCommand(), exception caught!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportCommand(), exception caught!" );
     }
 }
 
@@ -1430,7 +1430,7 @@ Reference< XInterface > AnimationsExporterImpl::getParagraphTarget( const Paragr
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::getParagraphTarget(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::getParagraphTarget(), RuntimeException catched!" );
     }
 
     Reference< XInterface > xRef;
@@ -1500,7 +1500,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
             }
             else
             {
-                DBG_ERROR( "xmloff::AnimationsExporterImpl::convertValue(), invalid value type!" );
+                OSL_FAIL( "xmloff::AnimationsExporterImpl::convertValue(), invalid value type!" );
             }
             return;
         }
@@ -1522,7 +1522,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         case XML_OPACITY:
         case XML_TRANSITIONFILTER:  nType = XML_TYPE_DOUBLE;                    break;
         default:
-            DBG_ERROR( "xmloff::AnimationsExporterImpl::convertValue(), invalid AttributeName!" );
+            OSL_FAIL( "xmloff::AnimationsExporterImpl::convertValue(), invalid AttributeName!" );
             nType = XML_TYPE_STRING;
         }
 
@@ -1598,7 +1598,7 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
     }
     else
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::convertTiming(), invalid value type!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::convertTiming(), invalid value type!" );
     }
 }
 
@@ -1694,7 +1694,7 @@ void AnimationsExporter::prepare( Reference< XAnimationNode > xRootNode )
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporter::prepare(), exception catched" );
+        OSL_FAIL( "xmloff::AnimationsExporter::prepare(), exception catched" );
     }
 }
 
@@ -1730,7 +1730,7 @@ void AnimationsExporter::exportAnimations( Reference< XAnimationNode > xRootNode
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporter::exportAnimations(), exception catched" );
+        OSL_FAIL( "xmloff::AnimationsExporter::exportAnimations(), exception catched" );
     }
 }
 

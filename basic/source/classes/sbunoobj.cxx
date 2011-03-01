@@ -1743,7 +1743,7 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj,
             Reference<XIdlClass> xClass = TypeToIdlClass( rType );
             if( !xClass.is() )
             {
-                DBG_ERROR("failed to get XIdlClass for type");
+                OSL_FAIL("failed to get XIdlClass for type");
                 break;
             }
             ::rtl::OUString sClassName = xClass->getName();
@@ -1839,7 +1839,7 @@ String Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
         else if( xClassProvider.is() )
         {
 
-            DBG_ERROR( "XClassProvider not supported in UNO3" );
+            OSL_FAIL( "XClassProvider not supported in UNO3" );
         }
     }
     return aRet;

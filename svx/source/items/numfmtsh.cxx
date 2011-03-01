@@ -281,7 +281,7 @@ sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
         }
         else
         {
-            DBG_ERROR( "Doppeltes Format!" );
+            OSL_FAIL( "Doppeltes Format!" );
         }
     }
     else // neues Format
@@ -311,7 +311,7 @@ sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
     }
     else // Doppelt einfuegen nicht moeglich
     {
-        DBG_ERROR( "Doppeltes Format!" ); // oder doch?
+        OSL_FAIL( "Doppeltes Format!" ); // oder doch?
     }
 
     return bInserted;
@@ -1487,7 +1487,7 @@ short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx)
     }
     else
     {
-        DBG_ERROR("svx::SvxNumberFormatShell::GetListPos4Entry(), list got to large!" );
+        OSL_FAIL("svx::SvxNumberFormatShell::GetListPos4Entry(), list got to large!" );
     }
     return nSelP;
 }

@@ -402,7 +402,7 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
                 break;
             }
             default:
-                DBG_ERROR("xmloff::SvXMLExportHelper::GetConversionFactor(), illegal eCoreUnit value!");
+                OSL_FAIL("xmloff::SvXMLExportHelper::GetConversionFactor(), illegal eCoreUnit value!");
                 break;
         }
 

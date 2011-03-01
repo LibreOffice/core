@@ -1037,7 +1037,7 @@ const sal_uInt16* SfxSingleTabDialog::GetInputRanges( const SfxItemPool& rPool )
 {
     if ( GetInputItemSet() )
     {
-        DBG_ERROR( "Set bereits vorhanden!" );
+        OSL_FAIL( "Set bereits vorhanden!" );
         return GetInputItemSet()->GetRanges();
     }
 

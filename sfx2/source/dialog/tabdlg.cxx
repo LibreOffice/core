@@ -127,7 +127,7 @@ SfxPoolItem* SfxTabDialogItem::Clone(SfxItemPool* pToPool) const
 
 SfxPoolItem* SfxTabDialogItem::Create(SvStream& /*rStream*/, USHORT /*nVersion*/) const
 {
-    DBG_ERROR( "Use it only in UI!" );
+    OSL_FAIL( "Use it only in UI!" );
     return NULL;
 }
 

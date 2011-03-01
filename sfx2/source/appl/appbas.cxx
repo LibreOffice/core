@@ -109,7 +109,7 @@ String lcl_GetVersionString()
 
     if ( aVersion.Len() == 0 )
     {
-        DBG_ERROR( "No BUILDID in bootstrap file found" );
+        OSL_FAIL( "No BUILDID in bootstrap file found" );
     }
 
     aVersion.Erase( 0, aVersion.Search( ':' ) + 1 );

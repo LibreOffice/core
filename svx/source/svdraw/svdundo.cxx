@@ -971,7 +971,7 @@ void SdrUndoReplaceObj::Undo()
     }
     else
     {
-        DBG_ERROR("SdrUndoReplaceObj::Undo(): IsMine-Flags stehen verkehrt. Doppelter Undo-Aufruf?");
+        OSL_FAIL("SdrUndoReplaceObj::Undo(): IsMine-Flags stehen verkehrt. Doppelter Undo-Aufruf?");
     }
 }
 
@@ -990,7 +990,7 @@ void SdrUndoReplaceObj::Redo()
     }
     else
     {
-        DBG_ERROR("SdrUndoReplaceObj::Redo(): IsMine-Flags stehen verkehrt. Doppelter Redo-Aufruf?");
+        OSL_FAIL("SdrUndoReplaceObj::Redo(): IsMine-Flags stehen verkehrt. Doppelter Redo-Aufruf?");
     }
 
     // #94278# Trigger PageChangeCall
@@ -1054,7 +1054,7 @@ void SdrUndoObjOrdNum::Undo()
 
     SdrObjList* pOL=pObj->GetObjList();
     if (pOL==NULL) {
-        DBG_ERROR("UndoObjOrdNum: pObj hat keine ObjList");
+        OSL_FAIL("UndoObjOrdNum: pObj hat keine ObjList");
         return;
     }
     pOL->SetObjectOrdNum(nNewOrdNum,nOldOrdNum);
@@ -1064,7 +1064,7 @@ void SdrUndoObjOrdNum::Redo()
 {
     SdrObjList* pOL=pObj->GetObjList();
     if (pOL==NULL) {
-        DBG_ERROR("RedoObjOrdNum: pObj hat keine ObjList");
+        OSL_FAIL("RedoObjOrdNum: pObj hat keine ObjList");
         return;
     }
     pOL->SetObjectOrdNum(nOldOrdNum,nNewOrdNum);

@@ -224,7 +224,7 @@ namespace sfx2
             if ( m_aClassReferrer.end() == aClassRef )
             {
                 // we do not know this global class
-                DBG_ERROR( "ReadGlobalFilter::operator(): unknown filter name!" );
+                OSL_FAIL( "ReadGlobalFilter::operator(): unknown filter name!" );
                 // TODO: perhaps we should be more tolerant - at the moment, the filter is dropped
                 // We could silently push_back it to the container ....
             }

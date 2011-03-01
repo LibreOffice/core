@@ -723,7 +723,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
 
     if ( !m_pView )
     {
-        DBG_ERROR( "FmXFormView::OnActivate: well .... seems we have a timing problem (the view already died)!" );
+        OSL_FAIL( "FmXFormView::OnActivate: well .... seems we have a timing problem (the view already died)!" );
         return 0;
     }
 
@@ -1182,7 +1182,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
             )
         )
     {
-        DBG_ERROR( "FmXFormView::implCreateFieldControl: nonsense!" );
+        OSL_FAIL( "FmXFormView::implCreateFieldControl: nonsense!" );
     }
 
     Reference< XDataSource > xDataSource;
@@ -1223,7 +1223,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     // need a data source and a connection here
     if (!xDataSource.is() || !xConnection.is())
     {
-        DBG_ERROR("FmXFormView::implCreateFieldControl : could not retrieve the data source or the connection!");
+        OSL_FAIL("FmXFormView::implCreateFieldControl : could not retrieve the data source or the connection!");
         return NULL;
     }
 
@@ -1509,7 +1509,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
     }
     catch(const Exception&)
     {
-        DBG_ERROR("FmXFormView::implCreateXFormsControl: caught an exception while creating the control !");
+        OSL_FAIL("FmXFormView::implCreateXFormsControl: caught an exception while creating the control !");
     }
 
 
@@ -1763,7 +1763,7 @@ void FmXFormView::startMarkListWatching()
     }
     else
     {
-        DBG_ERROR( "FmXFormView::startMarkListWatching: already listening!" );
+        OSL_FAIL( "FmXFormView::startMarkListWatching: already listening!" );
     }
 }
 
@@ -1810,7 +1810,7 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
     }
     else
     {
-        DBG_ERROR( "FmXFormView::saveMarkList: invalid view!" );
+        OSL_FAIL( "FmXFormView::saveMarkList: invalid view!" );
         m_aMark = SdrMarkList();
     }
 }

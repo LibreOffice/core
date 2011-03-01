@@ -313,7 +313,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "lcl_getHomeDirectory: caught an exception!" );
+            OSL_FAIL( "lcl_getHomeDirectory: caught an exception!" );
         }
         return 0 < _rHomeDir.Len();
     }
@@ -1299,7 +1299,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         break;
 
         default:
-            DBG_ERROR("SvtFileDialog, OpenHdl_Impl: invalid mode!");
+            OSL_FAIL("SvtFileDialog, OpenHdl_Impl: invalid mode!");
     }
 
     // Interessenten benachrichtigen.
@@ -1994,7 +1994,7 @@ void SvtFileDialog::displayIOException( const String& _rURL, IOErrorCode _eCode 
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "iodlg::displayIOException: caught an exception!" );
+        OSL_FAIL( "iodlg::displayIOException: caught an exception!" );
     }
 }
 

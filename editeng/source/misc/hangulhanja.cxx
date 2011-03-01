@@ -279,7 +279,7 @@ namespace editeng
             m_eConvType = HHC::eConvSimplifiedTraditional;
         else
         {
-            DBG_ERROR( "failed to determine conversion type from languages" );
+            OSL_FAIL( "failed to determine conversion type from languages" );
         }
 
         // set remaining conversion parameters to their default values
@@ -450,7 +450,7 @@ namespace editeng
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "HangulHanjaConversion_Impl::implNextConvertibleUnit: caught an exception!" );
+            OSL_FAIL( "HangulHanjaConversion_Impl::implNextConvertibleUnit: caught an exception!" );
 
             //!!! at least we want to move on in the text in order
             //!!! to avoid an endless loop...
@@ -652,7 +652,7 @@ namespace editeng
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "HangulHanjaConversion_Impl::implGetConversionDirectionForCurrentPortion: caught an exception!" );
+                OSL_FAIL( "HangulHanjaConversion_Impl::implGetConversionDirectionForCurrentPortion: caught an exception!" );
             }
         }
 
@@ -755,7 +755,7 @@ namespace editeng
                 case HHC::eRubyHangulAbove:  eAction = bOriginalIsHangul ? HHC::eOriginalAbove : HHC::eReplacementAbove; break;
                 case HHC::eRubyHangulBelow:  eAction = bOriginalIsHangul ? HHC::eOriginalBelow : HHC::eReplacementBelow; break;
                 default:
-                    DBG_ERROR( "HangulHanjaConversion_Impl::implChange: invalid/unexpected conversion format!" );
+                    OSL_FAIL( "HangulHanjaConversion_Impl::implChange: invalid/unexpected conversion format!" );
             }
         }
 
@@ -808,7 +808,7 @@ namespace editeng
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "HangulHanjaConversion_Impl::implChange: caught unexpected exception!" );
+                OSL_FAIL( "HangulHanjaConversion_Impl::implChange: caught unexpected exception!" );
                 aOffsets.realloc(0);
             }
         }
@@ -988,7 +988,7 @@ namespace editeng
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "HangulHanjaConversion_Impl::OnFind: caught an exception!" );
+                OSL_FAIL( "HangulHanjaConversion_Impl::OnFind: caught an exception!" );
             }
         }
         return 0L;
@@ -1053,7 +1053,7 @@ namespace editeng
 
     void HangulHanjaConversion::GetNextPortion( ::rtl::OUString&, LanguageType&, sal_Bool )
     {
-        DBG_ERROR( "HangulHanjaConversion::GetNextPortion: to be overridden!" );
+        OSL_FAIL( "HangulHanjaConversion::GetNextPortion: to be overridden!" );
     }
 
     void HangulHanjaConversion::ReplaceUnit(
@@ -1064,12 +1064,12 @@ namespace editeng
             ReplacementAction,
             LanguageType * )
     {
-        DBG_ERROR( "HangulHanjaConversion::ReplaceUnit: to be overridden!" );
+        OSL_FAIL( "HangulHanjaConversion::ReplaceUnit: to be overridden!" );
     }
 
     sal_Bool HangulHanjaConversion::HasRubySupport() const
     {
-        DBG_ERROR( "HangulHanjaConversion::HasRubySupport: to be overridden!" );
+        OSL_FAIL( "HangulHanjaConversion::HasRubySupport: to be overridden!" );
         return sal_False;
     }
 

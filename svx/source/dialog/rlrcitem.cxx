@@ -117,7 +117,7 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
                 if(pItem->IsConsistent())
                     rRuler.Update(pItem, nSID);
                 else
-                    DBG_ERROR("Column item corrupted");
+                    OSL_FAIL("Column item corrupted");
             }
             else
                 rRuler.Update(pItem, nSID);

@@ -287,7 +287,7 @@ void XMLTableImport::finishStyles()
             }
             catch( Exception& )
             {
-                DBG_ERROR("xmloff::XMLTableImport::finishStyles(), exception caught!");
+                OSL_FAIL("xmloff::XMLTableImport::finishStyles(), exception caught!");
             }
 
             if( xTemplate.is() )
@@ -301,12 +301,12 @@ void XMLTableImport::finishStyles()
         }
         catch( Exception& )
         {
-            DBG_ERROR("xmloff::XMLTableImport::finishStyles(), exception caught!");
+            OSL_FAIL("xmloff::XMLTableImport::finishStyles(), exception caught!");
         }
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::XMLTableImport::finishStyles(), exception caught!");
+        OSL_FAIL("xmloff::XMLTableImport::finishStyles(), exception caught!");
     }
 }
 
@@ -389,7 +389,7 @@ SvXMLImportContext * XMLTableImportContext::ImportColumn( USHORT nPrefix, const 
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::XMLTableImportContext::ImportTableColumn(), exception caught!");
+        OSL_FAIL("xmloff::XMLTableImportContext::ImportTableColumn(), exception caught!");
     }
 
     return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList);
@@ -429,7 +429,7 @@ void XMLTableImportContext::InitColumns()
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::XMLTableImportContext::ImportTableColumn(), exception caught!");
+        OSL_FAIL("xmloff::XMLTableImportContext::ImportTableColumn(), exception caught!");
     }
 }
 
@@ -536,7 +536,7 @@ SvXMLImportContext * XMLTableImportContext::ImportCell( USHORT nPrefix, const OU
         const sal_Int32 nRepeated = pCellContext->getRepeated();
         if( nRepeated > 1 )
         {
-            DBG_ERROR("xmloff::XMLTableImportContext::ImportCell(), import of repeated Cells not implemented (TODO)");
+            OSL_FAIL("xmloff::XMLTableImportContext::ImportCell(), import of repeated Cells not implemented (TODO)");
             mnCurrentColumn  += nRepeated - 1;
         }
 
@@ -544,7 +544,7 @@ SvXMLImportContext * XMLTableImportContext::ImportCell( USHORT nPrefix, const OU
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::XMLTableImportContext::ImportCell(), exception caught!");
+        OSL_FAIL("xmloff::XMLTableImportContext::ImportCell(), exception caught!");
     }
 
     return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList);
@@ -597,7 +597,7 @@ void XMLTableImportContext::EndElement()
             }
             catch( Exception& )
             {
-                DBG_ERROR("XMLTableImportContext::EndElement(), exception caught while merging cells!");
+                OSL_FAIL("XMLTableImportContext::EndElement(), exception caught while merging cells!");
             }
         }
     }

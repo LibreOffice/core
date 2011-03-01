@@ -599,7 +599,7 @@ BOOL SvxIMapDlg::DoSave()
 
         if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
-            DBG_ERROR( "invalid URL" );
+            OSL_FAIL( "invalid URL" );
         }
         else
         {

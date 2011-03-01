@@ -163,7 +163,7 @@ namespace svxform
             }
             else
             {
-                DBG_ERROR( "OControlTransferData::OControlTransferData: invalid data for the control path format (2)!" );
+                OSL_FAIL( "OControlTransferData::OControlTransferData: invalid data for the control path format (2)!" );
             }
         }
         if ( OControlExchange::hasHiddenControlModelsFormat( aExchangedData.GetDataFlavorExVector() ) )

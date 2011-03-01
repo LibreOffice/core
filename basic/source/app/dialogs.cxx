@@ -301,7 +301,7 @@ IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
             case RID_TP_FON:
                 pNewTabPage = new FontOptions( pTabCtrl, aConfig );
                 break;
-            default:    DBG_ERROR( "PageHdl: Unbekannte ID!" );
+            default:    OSL_FAIL( "PageHdl: Unbekannte ID!" );
         }
         DBG_ASSERT( pNewTabPage, "Keine Page!" );
         pTabCtrl->SetTabPage( nId, pNewTabPage );

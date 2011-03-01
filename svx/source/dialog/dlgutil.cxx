@@ -50,7 +50,7 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
         eUnit = (FieldUnit)( (const SfxUInt16Item*)pItem )->GetValue();
     else
     {
-        DBG_ERROR("Using fallback for field unit - field unit should be provided in ItemSet");
+        OSL_FAIL("Using fallback for field unit - field unit should be provided in ItemSet");
         return SfxModule::GetCurrentFieldUnit();
     }
 

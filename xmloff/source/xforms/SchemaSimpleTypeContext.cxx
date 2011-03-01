@@ -107,7 +107,7 @@ SvXMLImportContext* SchemaSimpleTypeContext::HandleChild(
                                                  mxRepository, msTypeName );
         break;
     default:
-        DBG_ERROR( "Booo!" );
+        OSL_FAIL( "Booo!" );
     }
 
     return ( pContext != NULL )

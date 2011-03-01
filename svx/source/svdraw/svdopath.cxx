@@ -602,7 +602,7 @@ bool ImpPathForDragAndCreate::beginPathDrag( SdrDragStat& rDrag )  const
 
     if(!mpSdrPathDragData || !mpSdrPathDragData->bValid)
     {
-        DBG_ERROR("ImpPathForDragAndCreate::BegDrag(): ImpSdrPathDragData ist ungueltig");
+        OSL_FAIL("ImpPathForDragAndCreate::BegDrag(): ImpSdrPathDragData ist ungueltig");
         delete mpSdrPathDragData;
         ((ImpPathForDragAndCreate*)this)->mpSdrPathDragData = 0;
         return false;
@@ -615,7 +615,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
 {
     if(!mpSdrPathDragData || !mpSdrPathDragData->bValid)
     {
-        DBG_ERROR("ImpPathForDragAndCreate::MovDrag(): ImpSdrPathDragData ist ungueltig");
+        OSL_FAIL("ImpPathForDragAndCreate::MovDrag(): ImpSdrPathDragData ist ungueltig");
         return false;
     }
 
@@ -860,7 +860,7 @@ bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat& rDrag)
 
     if(!mpSdrPathDragData || !mpSdrPathDragData->bValid)
     {
-        DBG_ERROR("ImpPathForDragAndCreate::MovDrag(): ImpSdrPathDragData ist ungueltig");
+        OSL_FAIL("ImpPathForDragAndCreate::MovDrag(): ImpSdrPathDragData ist ungueltig");
         return false;
     }
 
@@ -1024,7 +1024,7 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
 
         if(!pDragData)
         {
-            DBG_ERROR("ImpPathForDragAndCreate::MovDrag(): ImpSdrPathDragData ist ungueltig");
+            OSL_FAIL("ImpPathForDragAndCreate::MovDrag(): ImpSdrPathDragData ist ungueltig");
             return String();
         }
 
@@ -1169,7 +1169,7 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::getSpecialDragPoly(const SdrDra
 {
     if(!mpSdrPathDragData || !mpSdrPathDragData->bValid)
     {
-        DBG_ERROR("ImpPathForDragAndCreate::MovDrag(): ImpSdrPathDragData ist ungueltig");
+        OSL_FAIL("ImpPathForDragAndCreate::MovDrag(): ImpSdrPathDragData ist ungueltig");
         return basegfx::B2DPolyPolygon();
     }
 
@@ -2985,7 +2985,7 @@ sal_Bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
             }
             default:
             {
-                DBG_ERROR("TRGetBaseGeometry: Missing unit translation to 100th mm!");
+                OSL_FAIL("TRGetBaseGeometry: Missing unit translation to 100th mm!");
             }
         }
     }
@@ -3055,7 +3055,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
             }
             default:
             {
-                DBG_ERROR("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
+                OSL_FAIL("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
             }
         }
     }

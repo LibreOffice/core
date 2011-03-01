@@ -207,7 +207,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
                             if (pDstNode1!=NULL) { // Sonst grober Fehler!
                                 pDstEdge->ConnectToNode(TRUE,pDstNode1);
                             } else {
-                                DBG_ERROR("SdrObjList::operator=(): pDstNode1==NULL!");
+                                OSL_FAIL("SdrObjList::operator=(): pDstNode1==NULL!");
                             }
                         }
                         if (pSrcNode2!=NULL) {
@@ -216,11 +216,11 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
                             if (pDstNode2!=NULL) { // Node war sonst wohl nicht markiert
                                 pDstEdge->ConnectToNode(FALSE,pDstNode2);
                             } else {
-                                DBG_ERROR("SdrObjList::operator=(): pDstNode2==NULL!");
+                                OSL_FAIL("SdrObjList::operator=(): pDstNode2==NULL!");
                             }
                         }
                     } else {
-                        DBG_ERROR("SdrObjList::operator=(): pDstEdge==NULL!");
+                        OSL_FAIL("SdrObjList::operator=(): pDstEdge==NULL!");
                     }
                 }
             }
@@ -869,7 +869,7 @@ void SdrObjList::UnGroupObj( ULONG nObjNum )
     }
 #ifdef DBG_UTIL
     else
-        DBG_ERROR("SdrObjList::UnGroupObj: object index invalid");
+        OSL_FAIL("SdrObjList::UnGroupObj: object index invalid");
 #endif
 }
 

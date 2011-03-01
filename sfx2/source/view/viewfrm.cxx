@@ -1112,7 +1112,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
     }
 #ifdef DBG_UTIL
     else
-        DBG_ERROR("Keine Shell");
+        OSL_FAIL("Keine Shell");
 #endif
 
     if ( xObjSh.Is() )
@@ -3222,7 +3222,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_FORMATMENUSTATE :
                 {
-                    DBG_ERROR("Outdated slot!");
+                    OSL_FAIL("Outdated slot!");
                     rSet.DisableItem( nWhich );
                     break;
                 }

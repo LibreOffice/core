@@ -344,7 +344,7 @@ SfxObjectShellLock SfxFrameLoader_Impl::impl_findObjectShell( const Reference< X
         }
     }
 
-    DBG_ERROR( "SfxFrameLoader_Impl::impl_findObjectShell: model is not based on SfxObjectShell - wrong frame loader usage!" );
+    OSL_FAIL( "SfxFrameLoader_Impl::impl_findObjectShell: model is not based on SfxObjectShell - wrong frame loader usage!" );
     return NULL;
 }
 

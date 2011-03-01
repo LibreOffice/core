@@ -121,7 +121,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 
                         if (bFoundControlShapeDataStyle)
                         {
-                            DBG_ERROR("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the ControlShapeDataStyle context id!");
+                            OSL_FAIL("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the ControlShapeDataStyle context id!");
                             // already added the attribute for the first occurrence
                             break;
                         }
@@ -136,7 +136,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
                     {
                         if (bFoundNumberingRulesName)
                         {
-                            DBG_ERROR("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the numbering rules name context id!");
+                            OSL_FAIL("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the numbering rules name context id!");
                             // already added the attribute for the first occurrence
                             break;
                         }
@@ -279,7 +279,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
 
 SvXMLAutoStylePoolP::SvXMLAutoStylePoolP()
 {
-    DBG_ERROR("This constuctor is obsoleted and should not be used!");
+    OSL_FAIL("This constuctor is obsoleted and should not be used!");
     pImpl = NULL;
 }
 

@@ -124,7 +124,7 @@ OSystemParseContext::~OSystemParseContext()
         case KEY_FUSION:    nIndex = 22; break;
         case KEY_INTERSECTION: nIndex = 23; break;
         case KEY_NONE:
-            DBG_ERROR( "OSystemParseContext::getIntlKeywordAscii: illegal argument!" );
+            OSL_FAIL( "OSystemParseContext::getIntlKeywordAscii: illegal argument!" );
             break;
     }
 

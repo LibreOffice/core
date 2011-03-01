@@ -116,7 +116,7 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
     }
     else
     {
-        DBG_ERROR( "SpellStart: Unknown Area!" );
+        OSL_FAIL( "SpellStart: Unknown Area!" );
     }
 }
 

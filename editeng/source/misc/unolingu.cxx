@@ -161,7 +161,7 @@ Sequence< OUString > lcl_GetLastFoundSvcs(
                 aRes = aSvcImplNames;
             else
             {
-                DBG_ERROR( "type mismatch" );
+                OSL_FAIL( "type mismatch" );
             }
         }
     }
@@ -393,7 +393,7 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
                     if (!bRes)
                     {
 #if OSL_DEBUG_LEVEL > 1
-                        DBG_ERROR( "failed to set new configuration values" );
+                        OSL_FAIL( "failed to set new configuration values" );
 #endif
                     }
                 }

@@ -98,7 +98,7 @@ SvStream& operator >> (SvStream & rStm, SvBOOL & rb )
     if( n & ~0x03 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "format error" );
+        OSL_FAIL( "format error" );
     }
     return rStm;
 }

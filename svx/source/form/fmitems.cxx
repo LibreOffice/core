@@ -54,14 +54,14 @@ SfxPoolItem* FmInterfaceItem::Clone( SfxItemPool* ) const
 //------------------------------------------------------------------------------
 SvStream& FmInterfaceItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    DBG_ERROR( "FmInterfaceItem::Store: not implemented!" );
+    OSL_FAIL( "FmInterfaceItem::Store: not implemented!" );
     return rStrm;
 }
 
 //------------------------------------------------------------------------------
 SfxPoolItem* FmInterfaceItem::Create( SvStream& /*rStrm*/, sal_uInt16 ) const
 {
-    DBG_ERROR( "FmInterfaceItem::Create: not implemented!" );
+    OSL_FAIL( "FmInterfaceItem::Create: not implemented!" );
     return new FmInterfaceItem( *this );
 }
 

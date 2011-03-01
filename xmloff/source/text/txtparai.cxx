@@ -1190,7 +1190,7 @@ void XMLIndexMarkImportContext_Impl::StartElement(
         }
 
         default:
-            DBG_ERROR("unknown index mark type!");
+            OSL_FAIL("unknown index mark type!");
             break;
     }
 }
@@ -1250,7 +1250,7 @@ void XMLIndexMarkImportContext_Impl::ProcessAttribute(
             break;
 
         default:
-            DBG_ERROR("unknown index mark type!");
+            OSL_FAIL("unknown index mark type!");
             break;
     }
 }
@@ -1301,7 +1301,7 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
 
         default:
         {
-            DBG_ERROR("unknown index mark type!");
+            OSL_FAIL("unknown index mark type!");
             OUString sTmp;
             sServiceName = sTmp;
             break;

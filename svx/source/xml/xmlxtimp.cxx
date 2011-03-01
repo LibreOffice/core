@@ -263,7 +263,7 @@ void SvxXMLTableImportContext::importMarker( USHORT nPrfx, const OUString& rLoca
     }
     catch( Exception& )
     {
-        DBG_ERROR("SvxXMLTableImportContext::importMarker(), exception caught!");
+        OSL_FAIL("SvxXMLTableImportContext::importMarker(), exception caught!");
     }
 }
 
@@ -279,7 +279,7 @@ void SvxXMLTableImportContext::importDash( USHORT nPrfx, const OUString& rLocalN
     }
     catch( Exception& )
     {
-        DBG_ERROR("SvxXMLTableImportContext::importDash(), exception caught!");
+        OSL_FAIL("SvxXMLTableImportContext::importDash(), exception caught!");
     }
 }
 
@@ -295,7 +295,7 @@ void SvxXMLTableImportContext::importHatch( USHORT nPrfx, const OUString& rLocal
     }
     catch( Exception& )
     {
-        DBG_ERROR("SvxXMLTableImportContext::importHatch(), exception caught!");
+        OSL_FAIL("SvxXMLTableImportContext::importHatch(), exception caught!");
     }
 }
 
@@ -311,7 +311,7 @@ void SvxXMLTableImportContext::importGradient( USHORT nPrfx, const OUString& rLo
     }
     catch( Exception& )
     {
-        DBG_ERROR("SvxXMLTableImportContext::importGradient(), exception caught!");
+        OSL_FAIL("SvxXMLTableImportContext::importGradient(), exception caught!");
     }
 }
 
@@ -327,7 +327,7 @@ void SvxXMLTableImportContext::importBitmap( USHORT nPrfx, const OUString& rLoca
     }
     catch( Exception& )
     {
-        DBG_ERROR("SvxXMLTableImportContext::importBitmap(), exception caught!");
+        OSL_FAIL("SvxXMLTableImportContext::importBitmap(), exception caught!");
     }
 }
 
@@ -377,7 +377,7 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< X
             uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
             if( !xServiceFactory.is() )
             {
-                DBG_ERROR( "SvxXMLXTableImport::load: got no service manager" );
+                OSL_FAIL( "SvxXMLXTableImport::load: got no service manager" );
                 break;
             }
 
@@ -396,7 +396,7 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< X
                 xIStm.set( xStorage->openStreamElement( aContentStmName, embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
                 if( !xIStm.is() )
                 {
-                    DBG_ERROR( "could not open Content stream" );
+                    OSL_FAIL( "could not open Content stream" );
                     break;
                 }
 
@@ -435,7 +435,7 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< X
 //          each time you load a document with property tables that are not
 //          on the current machine. Maybe a better fix would be to place
 //          a file exists check before importing...
-//      DBG_ERROR("svx::SvxXMLXTableImport::load(), exception caught!");
+//      OSL_FAIL("svx::SvxXMLXTableImport::load(), exception caught!");
         bRet = sal_False;
     }
 

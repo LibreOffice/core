@@ -175,7 +175,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
             m_aCodeList.push_back(new OOp_AND());
         else
         {
-            DBG_ERROR("OPredicateCompiler: Fehler im Parse Tree");
+            OSL_FAIL("OPredicateCompiler: Fehler im Parse Tree");
         }
     }
     else if (SQL_ISRULE(pPredicateNode,boolean_factor))
@@ -211,7 +211,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
             m_aCodeList.push_back(new OOp_SUB());
         else
         {
-            DBG_ERROR("OPredicateCompiler: Fehler im Parse Tree num_value_exp");
+            OSL_FAIL("OPredicateCompiler: Fehler im Parse Tree num_value_exp");
         }
     }
     else if(SQL_ISRULE(pPredicateNode,term))
@@ -226,7 +226,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
             m_aCodeList.push_back(new OOp_DIV());
         else
         {
-            DBG_ERROR("OPredicateCompiler: Fehler im Parse Tree num_value_exp");
+            OSL_FAIL("OPredicateCompiler: Fehler im Parse Tree num_value_exp");
         }
     }
     else

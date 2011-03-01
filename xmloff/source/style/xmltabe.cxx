@@ -118,7 +118,7 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny )
     uno::Sequence< ::com::sun::star::style::TabStop> aSeq;
     if(!(rAny >>= aSeq))
     {
-        DBG_ERROR( "SvxXMLTabStopExport needs a Sequence ::com::sun::star::style::TabStop>" );
+        OSL_FAIL( "SvxXMLTabStopExport needs a Sequence ::com::sun::star::style::TabStop>" );
     }
     else
     {

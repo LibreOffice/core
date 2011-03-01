@@ -1863,7 +1863,7 @@ namespace accessibility
                 }
                 catch( const uno::Exception& )
                 {
-                    DBG_ERROR("AccessibleEditableTextPara::setAttributes exception in setPropertyValue");
+                    OSL_FAIL("AccessibleEditableTextPara::setAttributes exception in setPropertyValue");
                 }
 
                 ++pPropArray;

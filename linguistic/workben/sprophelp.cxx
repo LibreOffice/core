@@ -316,7 +316,7 @@ void SAL_CALL
                 break;
             }
             default:
-                DBG_ERROR( "unknown property" );
+                OSL_FAIL( "unknown property" );
         }
         if (pbVal)
             rEvt.NewValue >>= *pbVal;
@@ -361,7 +361,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
                 case UPH_IS_SPELL_WITH_DIGITS         : pbResVal = &bResIsSpellWithDigits; break;
                 case UPH_IS_SPELL_CAPITALIZATION      : pbResVal = &bResIsSpellCapitalization; break;
                 default:
-                    DBG_ERROR( "unknown property" );
+                    OSL_FAIL( "unknown property" );
             }
             if (pbResVal)
                 pVal[i].Value >>= *pbResVal;

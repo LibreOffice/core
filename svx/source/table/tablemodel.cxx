@@ -728,7 +728,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sdr::table::TableModel::insertColumns(), exception caught!");
+            OSL_FAIL("sdr::table::TableModel::insertColumns(), exception caught!");
         }
         updateColumns();
         setModified(sal_True);
@@ -837,7 +837,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sdr::table::TableModel::removeColumns(), exception caught!");
+            OSL_FAIL("sdr::table::TableModel::removeColumns(), exception caught!");
         }
 
         updateColumns();
@@ -895,7 +895,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sdr::table::TableModel::insertRows(), exception caught!");
+            OSL_FAIL("sdr::table::TableModel::insertRows(), exception caught!");
         }
         if( bUndo )
             pModel->EndUndo();
@@ -996,7 +996,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sdr::table::TableModel::removeRows(), exception caught!");
+            OSL_FAIL("sdr::table::TableModel::removeRows(), exception caught!");
         }
 
         updateRows();
@@ -1062,7 +1062,7 @@ void TableModel::optimize()
                 catch( Exception& e )
                 {
                     (void)e;
-                    DBG_ERROR("svx::TableModel::optimize(), exception caught!");
+                    OSL_FAIL("svx::TableModel::optimize(), exception caught!");
                 }
 
                 removeColumns( nCol, 1 );
@@ -1099,7 +1099,7 @@ void TableModel::optimize()
                 catch( Exception& e )
                 {
                     (void)e;
-                    DBG_ERROR("svx::TableModel::optimize(), exception caught!");
+                    OSL_FAIL("svx::TableModel::optimize(), exception caught!");
                 }
 
                 removeRows( nRow, 1 );
@@ -1126,7 +1126,7 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
 
     if( (nLastRow > getRowCount()) || (nLastCol > getRowCount() ) )
     {
-        DBG_ERROR("TableModel::merge(), merge beyound the table!");
+        OSL_FAIL("TableModel::merge(), merge beyound the table!");
     }
 
     // merge first cell

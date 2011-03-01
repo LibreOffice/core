@@ -1336,7 +1336,7 @@ void FmUndoModelReplaceAction::Undo()
     }
     catch(Exception&)
     {
-        DBG_ERROR("FmUndoModelReplaceAction::Undo : could not replace the model !");
+        OSL_FAIL("FmUndoModelReplaceAction::Undo : could not replace the model !");
     }
 }
 

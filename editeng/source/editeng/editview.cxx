@@ -808,7 +808,7 @@ sal_Bool EditView::Drop( const DropEvent& )
 
 ESelection EditView::GetDropPos()
 {
-    DBG_ERROR( "GetDropPos - Why?!" );
+    OSL_FAIL( "GetDropPos - Why?!" );
     return ESelection();
 }
 
@@ -1084,7 +1084,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             }
             else
             {
-                DBG_ERROR( "content node is NULL" );
+                OSL_FAIL( "content node is NULL" );
             }
 
             nGuessLangWord = lcl_CheckLanguage( xSpellAlt->getWord(), xSpeller, xLangGuesser, sal_False );

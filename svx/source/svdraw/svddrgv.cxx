@@ -820,7 +820,7 @@ BOOL SdrDragView::BegInsGluePoint(const Point& rPnt)
             }
             else
             {
-                DBG_ERROR("BegInsGluePoint(): GluePoint-Handle nicht gefunden");
+                OSL_FAIL("BegInsGluePoint(): GluePoint-Handle nicht gefunden");
             }
         }
         else

@@ -1863,7 +1863,7 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             if ( m_pData->m_pObjectShell->GetMedium() != pMedium )
             {
                 // for whatever reason document now has another medium
-                DBG_ERROR("Document has rejected the medium?!");
+                OSL_FAIL("Document has rejected the medium?!");
                 delete pMedium;
             }
 

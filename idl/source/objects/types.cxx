@@ -376,7 +376,7 @@ void SvMetaAttribute::WriteParam( SvIdlDataBase & rBase,
                      pBaseType->GetType() == TYPE_STRUCT ||
                     pBaseType->GetType() == TYPE_ENUM )
                 {
-                    DBG_ERROR( "Falscher Parametertyp!" );
+                    OSL_FAIL( "Falscher Parametertyp!" );
                 }
                 else
                     rOutStm << pBaseType->GetBasicPostfix().GetBuffer();
@@ -1784,7 +1784,7 @@ void SvMetaEnumValue::Load( SvPersistStream & rStm )
     if( nMask >= 0x02 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" );
+        OSL_FAIL( "wrong format" );
         return;
     }
     if( nMask & 0x01 ) rStm.ReadByteString( aEnumValue );
@@ -1842,7 +1842,7 @@ void SvMetaTypeEnum::Load( SvPersistStream & rStm )
     if( nMask >= 0x04 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" );
+        OSL_FAIL( "wrong format" );
         return;
     }
     if( nMask & 0x01 ) rStm >> aEnumValueList;

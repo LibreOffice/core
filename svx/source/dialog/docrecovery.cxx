@@ -1320,7 +1320,7 @@ short RecoveryDialog::execute()
     }
 
     // should never be reached .-)
-    DBG_ERROR("Should never be reached!");
+    OSL_FAIL("Should never be reached!");
     return DLG_RET_OK;
 }
 

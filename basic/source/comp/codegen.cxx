@@ -237,7 +237,7 @@ void SbiCodeGen::Save()
                             ePropType = SbxOBJECT;
                             break;
                         case PROPERTY_MODE_NONE:
-                            DBG_ERROR( "Illegal PropertyMode PROPERTY_MODE_NONE" );
+                            OSL_FAIL( "Illegal PropertyMode PROPERTY_MODE_NONE" );
                             break;
                     }
                     String aPropName = pProc->GetPropName();

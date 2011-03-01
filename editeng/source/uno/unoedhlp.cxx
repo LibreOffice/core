@@ -124,7 +124,7 @@ void SvxEditSourceHint::SetEndValue( ULONG n )
                 return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_INPUT_END, 0 ) );
 
             default:
-                DBG_ERROR( "SvxEditSourceHelper::EENotification2Hint unknown notification" );
+                OSL_FAIL( "SvxEditSourceHelper::EENotification2Hint unknown notification" );
                 break;
         }
     }

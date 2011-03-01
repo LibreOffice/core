@@ -1649,7 +1649,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuff
             case svSep:
                 break;      // Opcodes
             default:
-                DBG_ERROR("FormulaCompiler:: GetStringFromToken errUnknownVariable");
+                OSL_FAIL("FormulaCompiler:: GetStringFromToken errUnknownVariable");
             } // of switch
         }
     }

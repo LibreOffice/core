@@ -65,13 +65,13 @@ SfxPoolItem* SvxWritingModeItem::Clone( SfxItemPool * ) const
 
 SfxPoolItem* SvxWritingModeItem::Create( SvStream & , USHORT  ) const
 {
-    DBG_ERROR("SvxWritingModeItem should not be streamed!");
+    OSL_FAIL("SvxWritingModeItem should not be streamed!");
     return NULL;
 }
 
 SvStream& SvxWritingModeItem::Store( SvStream & rStrm, USHORT  ) const
 {
-    DBG_ERROR("SvxWritingModeItem should not be streamed!");
+    OSL_FAIL("SvxWritingModeItem should not be streamed!");
     return rStrm;
 }
 

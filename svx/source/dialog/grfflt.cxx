@@ -287,7 +287,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
 
             default:
             {
-                DBG_ERROR( "SvxGraphicFilter: selected filter slot not yet implemented" );
+                OSL_FAIL( "SvxGraphicFilter: selected filter slot not yet implemented" );
                 nRet = SVX_GRAPHICFILTER_UNSUPPORTED_SLOT;
             }
             break;

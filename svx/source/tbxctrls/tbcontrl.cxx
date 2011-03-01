@@ -1846,7 +1846,7 @@ struct SvxStyleToolBoxControl::Impl
         }
         catch(const uno::Exception& )
         {
-            DBG_ERROR("error while initializing style names");
+            OSL_FAIL("error while initializing style names");
         }
     }
 };
@@ -1963,7 +1963,7 @@ SfxStyleFamily SvxStyleToolBoxControl::GetActFamily()
         case SID_STYLE_FAMILY4: return SFX_STYLE_FAMILY_PAGE;
         case SID_STYLE_FAMILY5: return SFX_STYLE_FAMILY_PSEUDO;
         default:
-            DBG_ERROR( "unknown style family" );
+            OSL_FAIL( "unknown style family" );
             break;
     }
     return SFX_STYLE_FAMILY_PARA;

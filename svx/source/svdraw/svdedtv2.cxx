@@ -146,7 +146,7 @@ void SdrEditView::MovMarkedToTop()
                 SdrObject* pCmpObj=pOL->GetObj(nCmpPos);
                 if (pCmpObj==NULL)
                 {
-                    DBG_ERROR("MovMarkedToTop(): Vergleichsobjekt nicht gefunden");
+                    OSL_FAIL("MovMarkedToTop(): Vergleichsobjekt nicht gefunden");
                     bEnd=TRUE;
                 }
                 else if (pCmpObj==pMaxObj)
@@ -235,7 +235,7 @@ void SdrEditView::MovMarkedToBtm()
                 SdrObject* pCmpObj=pOL->GetObj(nCmpPos);
                 if (pCmpObj==NULL)
                 {
-                    DBG_ERROR("MovMarkedToBtm(): Vergleichsobjekt nicht gefunden");
+                    OSL_FAIL("MovMarkedToBtm(): Vergleichsobjekt nicht gefunden");
                     bEnd=TRUE;
                 }
                 else if (pCmpObj==pMaxObj)
