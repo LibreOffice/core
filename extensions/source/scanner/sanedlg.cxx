@@ -41,7 +41,6 @@
 #include <sal/macros.h>
 
 #define USE_SAVE_STATE
-#undef  SAVE_ALL_STATES
 
 ResId SaneResId( sal_uInt32 nID )
 {
@@ -1256,59 +1255,6 @@ void SaneDlg::SaveState()
     aConfig.SetGroup( "SANE" );
     aConfig.WriteKey( "SO_LastSANEDevice", ByteString( maDeviceBox.GetSelectEntry(), RTL_TEXTENCODING_UTF8 ) );
 
-#ifdef SAVE_ALL_STATES
-    for( int i = 1; i < mrSane.CountOptions(); i++ )
-    {
-        String aOption=mrSane.GetOptionName( i );
-        SANE_Value_Type nType = mrSane.GetOptionType( i );
-        switch( nType )
-        {
-            case SANE_TYPE_BOOL:
-            {
-                BOOL bValue;
-                if( mrSane.GetOptionValue( i, bValue ) )
-                {
-                    ByteString aString( "BOOL=" );
-                    aString += (ULONG)bValue;
-                    aConfig.WriteKey( aOption, aString );
-                }
-            }
-            break;
-            case SANE_TYPE_STRING:
-            {
-                String aString( "STRING=" );
-                String aValue;
-                if( mrSane.GetOptionValue( i, aValue ) )
-                {
-                    aString += aValue;
-                    aConfig.WriteKey( aOption, aString );
-                }
-            }
-            break;
-            case SANE_TYPE_FIXED:
-            case SANE_TYPE_INT:
-            {
-                String aString( "NUMERIC=" );
-                double fValue;
-                char buf[256];
-                for( int n = 0; n < mrSane.GetOptionElements( i ); n++ )
-                {
-                    if( ! mrSane.GetOptionValue( i, fValue, n ) )
-                        break;
-                    if( n > 0 )
-                        aString += ":";
-                    sprintf( buf, "%lg", fValue );
-                    aString += buf;
-                }
-                if( n >= mrSane.GetOptionElements( i ) )
-                    aConfig.WriteKey( aOption, aString );
-            }
-            break;
-            default:
-                break;
-        }
-     }
-#else
     static char const* pSaveOptions[] = {
         "resolution",
         "tl-x",
@@ -1373,7 +1319,6 @@ void SaneDlg::SaveState()
             }
         }
     }
-#endif
 #endif
 }
 
