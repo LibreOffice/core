@@ -65,9 +65,30 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
         rtl_uString_assign(&Module, strModuleName);
 
     hInstance = LoadLibraryW(reinterpret_cast<LPCWSTR>(Module->buffer));
+
     if (hInstance == NULL)
         hInstance = LoadLibraryExW(reinterpret_cast<LPCWSTR>(Module->buffer), NULL,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
+
+    //In case of long path names (\\?\c:\...) try to shorten the filename.
+    //LoadLibrary cannot handle file names which exceed 260 letters.
+    if (hInstance == NULL && GetLastError() == ERROR_FILENAME_EXCED_RANGE)
+    {
+        wchar_t * buff = new wchar_t[Module->length + 1];
+        DWORD len = GetShortPathNameW(reinterpret_cast<LPCWSTR>(Module->buffer),
+            buff, Module->length + 1);
+        if (len )
+        {
+            hInstance = LoadLibraryW(buff);
+
+            if (hInstance == NULL)
+                hInstance = LoadLibraryExW(buff, NULL,
+                                  LOAD_WITH_ALTERED_SEARCH_PATH);
+
+        }
+        delete[] buff;
+    }
+
 
     if (hInstance <= (HINSTANCE)HINSTANCE_ERROR)
         hInstance = 0;
