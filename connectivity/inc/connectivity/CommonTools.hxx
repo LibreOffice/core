@@ -54,6 +54,10 @@ namespace connectivity
 {
     //------------------------------------------------------------------------------
     OOO_DLLPUBLIC_DBTOOLS sal_Bool match(const sal_Unicode* pWild, const sal_Unicode* pStr, const sal_Unicode cEscape);
+    inline sal_Bool match(const ::rtl::OUString &rWild, const ::rtl::OUString &rStr, const sal_Unicode cEscape)
+    {
+        return match(rWild.getStr(), rStr.getStr(), cEscape);
+    }
     //------------------------------------------------------------------------------
     OOO_DLLPUBLIC_DBTOOLS rtl::OUString toString(const ::com::sun::star::uno::Any& rValue);
     OOO_DLLPUBLIC_DBTOOLS rtl::OUString toDateString(const ::com::sun::star::util::Date& rDate);
