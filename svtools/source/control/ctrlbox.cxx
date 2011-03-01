@@ -898,6 +898,7 @@ void FontNameBox::ImplCalcUserItemSize()
 #define JAPANESE            0x04000000
 #define KOREAN              0x08000000
 #define HEBREW_MINIMAL      0x10000000
+#define GREEK_MINIMAL       0x20000000
 
 namespace
 {
@@ -906,6 +907,22 @@ namespace
         rtl::OUString sSampleText;
         switch (nScript)
         {
+            case vcl::UnicodeCoverage::GREEK_AND_COPTIC:
+            {
+                const sal_Unicode aGrek[] = {
+                    0x0391, 0x03BB, 0x03C6, 0x03AC, 0x03B2, 0x03B7, 0x03C4, 0x03BF
+                };
+                sSampleText = rtl::OUString(aGrek, SAL_N_ELEMENTS(aGrek));
+                break;
+            }
+            case GREEK_MINIMAL:
+            {
+                const sal_Unicode aGrek[] = {
+                    0x0391, 0x0392
+                };
+                sSampleText = rtl::OUString(aGrek, SAL_N_ELEMENTS(aGrek));
+                break;
+            }
             case vcl::UnicodeCoverage::HEBREW:
             {
                 const sal_Unicode aHebr[] = {
@@ -1549,9 +1566,6 @@ namespace
         }
 
         aMasked.set(vcl::UnicodeCoverage::GREEK_EXTENDED, false);
-        if (aMasked.count() == 1)
-            return aMasked.find_first();
-
         aMasked.set(vcl::UnicodeCoverage::GREEK_AND_COPTIC, false);
         if (aMasked.count() == 1)
             return aMasked.find_first();
@@ -1573,7 +1587,6 @@ namespace
         aCJKMask.set(vcl::UnicodeCoverage::BOPOMOFO, false);
         aCJKMask.set(vcl::UnicodeCoverage::SMALL_FORM_VARIANTS, false);
         aCJKMask.set(vcl::UnicodeCoverage::PHAGS_PA, false);
-        aCJKMask.set(vcl::UnicodeCoverage::GREEK_AND_COPTIC, false);
         aCJKMask.set(vcl::UnicodeCoverage::CYRILLIC, false);
         aCJKMask.set(vcl::UnicodeCoverage::THAI, false);
         aCJKMask.set(vcl::UnicodeCoverage::DESERET, false);
@@ -1802,6 +1815,10 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         {
             const bool bNameBeginsWithLatinText = rInfo.GetName().GetChar(0) <= 'z';
             vcl::FontCapabilities aFontCapabilities;
+#if OSL_DEBUG_LEVEL > 2
+            lcl_dump_unicode_coverage(aFontCapabilities.maUnicodeRange);
+            lcl_dump_codepage_coverage(aFontCapabilities.maCodePageRange);
+#endif
             if (bNameBeginsWithLatinText && rUDEvt.GetDevice()->GetFontCapabilities(aFontCapabilities))
             {
                 //If this font is probably tuned to display a single non-Latin
@@ -1877,7 +1894,10 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                 JAPANESE,
                 TRADITIONAL_CHINESE|SIMPLIFIED_CHINESE,
 
-                HEBREW_MINIMAL
+                vcl::UnicodeCoverage::GREEK_AND_COPTIC,
+
+                HEBREW_MINIMAL,
+                GREEK_MINIMAL
             };
 
             for (size_t i = 0; i < SAL_N_ELEMENTS(aScripts); ++i)
