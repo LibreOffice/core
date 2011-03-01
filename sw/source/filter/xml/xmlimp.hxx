@@ -25,13 +25,17 @@
  *
  ************************************************************************/
 
-#ifndef _XMLIMP_HXX
-#define _XMLIMP_HXX
+#ifndef SW_XMLIMP_HXX
+#define SW_XMLIMP_HXX
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <sot/storage.hxx>
+
 #include <xmloff/xmlictxt.hxx>
-#include "xmlitmap.hxx"
 #include <xmloff/xmlimp.hxx>
+
+#include "xmlitmap.hxx"
 
 class SwDoc;
 class SwPaM;
@@ -211,6 +215,11 @@ public:
 
     // initialize XForms
     virtual void initXForms();
+
+    // get the document properties, but only if they actually need importing
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::document::XDocumentProperties>
+            GetDocumentProperties() const;
 };
 
 inline const SvXMLUnitConverter& SwXMLImport::GetTwipUnitConverter() const
