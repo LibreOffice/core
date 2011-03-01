@@ -789,7 +789,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         case mso_sptCurvedLeftArrow :
         case mso_sptCurvedRightArrow :
         case mso_sptCurvedUpArrow :
-        case mso_sptCurvedDownArrow :           nColorData = 0x2d000000; break;
+        case mso_sptCurvedDownArrow :           nColorData = 0x20d00000; break;
         case mso_sptRibbon2 :                   nColorData = 0x30ee0000; break;
         case mso_sptRibbon :                    nColorData = 0x30ee0000; break;
 
