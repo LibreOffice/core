@@ -35,13 +35,13 @@ ModalDialog RID_SCDLG_DAPITYPE
     OutputSize = TRUE ;
     HelpId = HID_DATAPILOT_TYPE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 241 , 83 ) ;
+    Size = MAP_APPFONT ( 241 , 76 ) ;
     Moveable = TRUE ;
     Closeable = FALSE ;
 
     FixedLine FL_FRAME
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
         Text [ en-US ] = "Selection";
     };
@@ -66,35 +66,35 @@ ModalDialog RID_SCDLG_DAPITYPE
     };
     RadioButton BTN_SELECTION
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 18 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Current selection";
     };
     RadioButton BTN_NAMED_RANGE
     {
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Named range";
     };
     ListBox LB_NAMED_RANGE
     {
-        Pos = MAP_APPFONT ( 90 , 27 ) ;
+        Pos = MAP_APPFONT ( 90 , 31 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     RadioButton BTN_DATABASE
     {
-        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Data source registered in %PRODUCTNAME";
     };
     RadioButton BTN_EXTERNAL
     {
-        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~External source/interface";
