@@ -65,6 +65,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 
 
 .IF "$(OS)"=="MACOSX"
+EXTRPATH=LOADER
 OUT2LIB+=gio/.libs/libgio-2.0.0.dylib
 OUT2LIB+=glib/.libs/libglib-2.0.0.dylib
 OUT2LIB+=gmodule/.libs/libgmodule-2.0.0.dylib

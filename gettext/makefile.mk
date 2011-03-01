@@ -57,6 +57,7 @@ BUILD_ACTION=$(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 
 .IF "$(OS)"=="MACOSX"
+EXTRPATH=LOADER
 OUT2LIB+=gettext-tools$/intl$/.libs$/libintl.*.dylib
 OUT2LIB+=gettext-runtime$/libasprintf$/.libs$/libasprintf.*.dylib
 OUT2LIB+=gettext-tools$/gnulib-lib$/.libs$/libgettextlib-*.dylib

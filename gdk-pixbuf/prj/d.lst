@@ -1,0 +1,18 @@
+mkdir: %_DEST%\inc%_EXT%\external
+mkdir: %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0
+mkdir: %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf
+
+..\%__SRC%\inc\gdk-pixbuf-animation.h %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf\gdk-pixbuf-animation.h
+..\%__SRC%\inc\gdk-pixbuf-features.h %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf\gdk-pixbuf-features.h
+..\%__SRC%\inc\gdk-pixbuf-marshal.h %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf\gdk-pixbuf-marshal.h
+..\%__SRC%\inc\gdk-pixbuf.h %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf\gdk-pixbuf.h
+..\%__SRC%\inc\gdk-pixbuf-core.h %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf\gdk-pixbuf-core.h
+..\%__SRC%\inc\gdk-pixbuf-io.h %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf\gdk-pixbuf-io.h
+..\%__SRC%\inc\gdk-pixbuf-simple-anim.h %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf\gdk-pixbuf-simple-anim.h
+..\%__SRC%\inc\gdk-pixdata.h %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf\gdk-pixdata.h
+..\%__SRC%\inc\gdk-pixbuf-enum-types.h %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf\gdk-pixbuf-enum-types.h
+..\%__SRC%\inc\gdk-pixbuf-loader.h %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf\gdk-pixbuf-loader.h
+..\%__SRC%\inc\gdk-pixbuf-transform.h %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf\gdk-pixbuf-transform.h
+
+..\%__SRC%\lib\libgdk_pixbuf-2.0.0.dylib %_DEST%\lib%_EXT%\libgdk_pixbuf-2.0.0.dylib
+
