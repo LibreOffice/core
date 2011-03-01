@@ -2384,7 +2384,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     }
 
     // wenn das Feld sich in einem GridControl befindet, muss ich dort noch in die entsprechende Spalte gehen
-    sal_Int32 nGridColumn = m_arrRelativeGridColumn.GetObject(pfriWhere->nFieldPos);
+    sal_Int32 nGridColumn = m_arrRelativeGridColumn[pfriWhere->nFieldPos];
     if (nGridColumn != -1)
     {   // dummer weise muss ich mir das Control erst wieder besorgen
         Reference< XControl> xControl( impl_getControl( xControlModel, *pFormObject ) );
@@ -2460,7 +2460,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     // die Liste der zu involvierenden Felder zusammenstellen (sind die ControlSources aller Felder, die eine solche Eigenschaft habe)
     UniString strFieldList, sFieldDisplayNames;
     m_arrSearchedControls.Remove(0, m_arrSearchedControls.Count());
-    m_arrRelativeGridColumn.Remove(0, m_arrRelativeGridColumn.Count());
+    m_arrRelativeGridColumn.clear();
 
     // folgendes kleines Problem : Ich brauche, um gefundene Felder zu markieren, SdrObjekte. Um hier festzustellen, welche Controls
     // ich in die Suche einbeziehen soll, brauche ich Controls (also XControl-Interfaces). Ich muss also ueber eines von beiden
@@ -2569,7 +2569,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                             // und das SdrObjekt zum Feld
                             m_arrSearchedControls.C40_INSERT(SdrObject, pCurrent, m_arrSearchedControls.Count());
                             // die Nummer der Spalte
-                            m_arrRelativeGridColumn.Insert(nViewPos, m_arrRelativeGridColumn.Count());
+                            m_arrRelativeGridColumn.push_back(nViewPos);
                         }
                     }
                 } while (sal_False);
@@ -2598,7 +2598,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         m_arrSearchedControls.C40_INSERT(SdrObject, pCurrent, m_arrSearchedControls.Count());
 
                         // die Nummer der Spalte (hier ein Dummy, nur fuer GridControls interesant)
-                        m_arrRelativeGridColumn.Insert(-1, m_arrRelativeGridColumn.Count());
+                        m_arrRelativeGridColumn.push_back(-1);
 
                         // und fuer die formatierte Suche ...
                         pfmscContextInfo->arrFields.push_back(Reference< XInterface>(xControl, UNO_QUERY));

@@ -56,8 +56,6 @@
 #include <svl/svarray.hxx>
 #include <svl/lstner.hxx>
 
-#define _SVSTDARR_BOOLS
-#define _SVSTDARR_LONGS
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
@@ -198,7 +196,7 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
         // da ich beim Suchen fuer die Behandlung des "gefunden" ein SdrObject markieren will, besorge ich mir vor dem
         // Hochreissen des Suchen-Dialoges alle relevanten Objekte
         // (das Array ist damit auch nur waehrend des Suchvorganges gueltig)
-    SvLongs             m_arrRelativeGridColumn;
+    std::vector<long> m_arrRelativeGridColumn;
 
     ::osl::Mutex    m_aMutex;
     ULONG           m_nInvalidationEvent;
