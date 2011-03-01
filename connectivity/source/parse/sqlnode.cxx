@@ -1582,7 +1582,7 @@ OSQLParseNode::OSQLParseNode(const ::rtl::OString &_rNewValue,
                              SQLNodeType eNewNodeType,
                              sal_uInt32 nNewNodeID)
         :m_pParent(NULL)
-        ,m_aNodeValue(_rNewValue,_rNewValue.getLength(),RTL_TEXTENCODING_UTF8)
+        ,m_aNodeValue(rtl::OStringToOUString(_rNewValue,RTL_TEXTENCODING_UTF8))
         ,m_eNodeType(eNewNodeType)
         ,m_nNodeID(nNewNodeID)
 {
@@ -2471,7 +2471,7 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
                 rString.appendAscii(" ");
 
             const ::rtl::OString sT = OSQLParser::TokenIDToStr(m_nNodeID, &rParam.m_rContext);
-            rString.append(::rtl::OUString(sT,sT.getLength(),RTL_TEXTENCODING_UTF8));
+            rString.append(::rtl::OStringToOUString(sT,RTL_TEXTENCODING_UTF8));
         }   break;
         case SQL_NODE_STRING:
             if (rString.getLength())
@@ -2556,7 +2556,7 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
 sal_Int32 OSQLParser::getFunctionReturnType(const ::rtl::OUString& _sFunctionName, const IParseContext* pContext)
 {
     sal_Int32 nType = DataType::VARCHAR;
-    ::rtl::OString sFunctionName(_sFunctionName,_sFunctionName.getLength(),RTL_TEXTENCODING_UTF8);
+    ::rtl::OString sFunctionName(::rtl::OUStringToOString(_sFunctionName,RTL_TEXTENCODING_UTF8));
 
     if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_ASCII,pContext)))                     nType = DataType::INTEGER;
     else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_BIT_LENGTH,pContext)))           nType = DataType::INTEGER;

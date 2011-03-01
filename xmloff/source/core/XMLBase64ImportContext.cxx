@@ -70,7 +70,7 @@ void XMLBase64ImportContext::Characters( const ::rtl::OUString& rChars )
     if( sTrimmedChars.getLength() )
     {
         OUString sChars;
-        if( sBase64CharsLeft )
+        if( sBase64CharsLeft.getLength() )
         {
             sChars = sBase64CharsLeft;
             sChars += sTrimmedChars;

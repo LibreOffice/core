@@ -285,7 +285,7 @@ namespace connectivity
             {
                 ::rtl::OString sClassName = ::rtl::OUStringToOString(_sClassName, RTL_TEXTENCODING_ASCII_US);
                 sClassName = sClassName.replace('.','/');
-                jobject out = pEnv->FindClass(sClassName);
+                jobject out = pEnv->FindClass(sClassName.getStr());
                 bRet = out != NULL;
                 pEnv->DeleteLocalRef( out );
             }

@@ -1276,7 +1276,7 @@ void SdXMLStylesContext::EndElement()
 //
 void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) const
 {
-    UniString sPrefix(rMaster.GetDisplayName(), (sal_uInt16)rMaster.GetDisplayName().getLength());
+    UniString sPrefix(rMaster.GetDisplayName());
     sPrefix += sal_Unicode('-');
 
     if(GetSdImport().GetLocalDocStyleFamilies().is() && GetSdImport().GetLocalDocStyleFamilies()->hasByName(rMaster.GetDisplayName())) try
