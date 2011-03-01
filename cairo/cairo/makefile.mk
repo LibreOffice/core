@@ -181,6 +181,7 @@ OUT2INC+=cairo-version.h \
      src$/cairo.h
 
 .IF "$(OS)"=="MACOSX"
+EXTRPATH=LOADER
 OUT2LIB+=src$/.libs$/libcairo*.dylib
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
