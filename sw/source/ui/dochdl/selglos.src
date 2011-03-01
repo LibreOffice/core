@@ -37,7 +37,6 @@ ModalDialog DLG_SEL_GLOS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 100 ) ;
-    /* ### ATTENTION: new text in resource? insert AutoText : insert AutoText */
     Text [ en-US ] = "Insert AutoText" ;
     Moveable = TRUE ;
     OKButton BT_OK
@@ -63,7 +62,6 @@ ModalDialog DLG_SEL_GLOS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        /* ### ATTENTION: new text in resource? AutoTexts for shortcut : AutoTexts for shortcut */
         Text [ en-US ] = "AutoTexts for shortcut " ;
     };
     ListBox LB_GLOS
