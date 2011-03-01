@@ -122,10 +122,9 @@ private:
     long                        mnCacheId;
 
 public:
-    inline void SetRefresh() { bRefresh = TRUE; }
-                ScDPObject( ScDocument* pD );
-                ScDPObject(const ScDPObject& r);
-                ~ScDPObject();
+    ScDPObject(ScDocument* pD);
+    ScDPObject(const ScDPObject& r);
+    ~ScDPObject();
 
     /**
      * When a DP object is "alive", it has table output on a sheet.  This flag

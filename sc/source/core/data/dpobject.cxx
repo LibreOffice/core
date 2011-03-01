@@ -172,8 +172,7 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     mnAutoFormatIndex( 65535 ),
     bAllowMove( FALSE ),
     nHeaderRows( 0 ),
-    mbHeaderLayout(false),
-    bRefresh( FALSE )
+    mbHeaderLayout(false)
 {
 }
 
@@ -193,8 +192,7 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     mnAutoFormatIndex( r.mnAutoFormatIndex ),
     bAllowMove( FALSE ),
     nHeaderRows( r.nHeaderRows ),
-    mbHeaderLayout( r.mbHeaderLayout ),
-    bRefresh( r.bRefresh )
+    mbHeaderLayout( r.mbHeaderLayout )
 {
     if (r.pSaveData)
         pSaveData = new ScDPSaveData(*r.pSaveData);
@@ -459,17 +457,11 @@ void ScDPObject::CreateObjects()
         {
             DBG_ASSERT( !pServDesc, "DPSource could not be created" );
             ScDPTableData* pData = GetTableData();
-
             ScDPSource* pSource = new ScDPSource( pData );
             xSource = pSource;
-
-            if ( pSaveData && bRefresh )
-            {
-                pSaveData->Refresh( xSource );
-                bRefresh = FALSE;
-            }
         }
-        if (pSaveData  )
+
+        if (pSaveData)
             pSaveData->WriteToSource( xSource );
     }
     else if (bSettingsChanged)

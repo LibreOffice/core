@@ -400,7 +400,6 @@ bool ScDPTableDataCache::operator== ( const ScDPTableDataCache& r ) const
 
 ScDPTableDataCache::ScDPTableDataCache(ScDocument* pDoc) :
     mpDoc( pDoc ),
-    mnID(-1),
     mnColumnCount ( 0 )
 {
 }
@@ -1037,11 +1036,5 @@ long ScDPTableDataCache::GetColumnCount() const
 {
     return mnColumnCount;
 }
-
-long ScDPTableDataCache::GetId() const
-{
-    return mnID;
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

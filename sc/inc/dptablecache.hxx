@@ -52,9 +52,7 @@ private:
     typedef ::boost::ptr_vector< ::std::vector<SCROW> > RowGridType;
 
     ScDocument* mpDoc;
-
-    long    mnID;
-    long    mnColumnCount;
+    long mnColumnCount;
 
     DataGridType                maTableDataValues; // Data Pilot Table's index - value map
     RowGridType                 maSourceData;      // Data Pilot Table's source data
@@ -82,7 +80,6 @@ public:
 
     SCROW GetSortedItemDataId( SCCOL nDim, SCROW nOrder ) const;
     const DataListType& GetDimMemberValues( SCCOL nDim ) const;
-    void SetId( long nId ){ mnID = nId;}
     bool InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
     bool InitFromDataBase(const  ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xRowSet, const Date& rNullDate);
 
@@ -96,7 +93,6 @@ public:
 
     ScDocument* GetDoc() const;//ms-cache-core
     long GetColumnCount() const;
-    long GetId() const;
 
     const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
 

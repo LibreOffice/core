@@ -1306,8 +1306,6 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
     {
         ScDPSource* pTabSource = static_cast<ScDPSource*>( xSource.get() );
         const ScDPTableDataCache*  pCache = pTabSource->GetCache();
-        if ( pCache->GetId() == -1 )
-            return;
 
         SCCOL nSrcDim = pCache->GetDimensionIndex( GetName() );
 
