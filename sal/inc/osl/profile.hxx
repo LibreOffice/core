@@ -80,17 +80,17 @@ namespace osl {
         {
             sal_Char aBuf[1024];
             return osl_readProfileString( profile,
-                                          rSection,
-                                          rEntry,
+                                          rSection.getStr(),
+                                          rEntry.getStr(),
                                           aBuf,
                                           sizeof( aBuf ),
-                                          rDefault ) ? rtl::OString( aBuf ) : rtl::OString();
+                                          rDefault.getStr() ) ? rtl::OString( aBuf ) : rtl::OString();
 
         }
 
         sal_Bool readBool( const rtl::OString& rSection, const rtl::OString& rEntry, sal_Bool bDefault )
         {
-            return osl_readProfileBool( profile, rSection, rEntry, bDefault );
+            return osl_readProfileBool( profile, rSection.getStr(), rEntry.getStr(), bDefault );
         }
 
         sal_uInt32 readIdent(const rtl::OString& rSection, const rtl::OString& rEntry,
@@ -103,11 +103,11 @@ namespace osl {
             nItems = 0;
             while( it != rStrings.end() )
             {
-                pStrings[ nItems++ ] = *it;
+                pStrings[ nItems++ ] = it->getStr();
                 ++it;
             }
             pStrings[ nItems ] = NULL;
-            sal_uInt32 nRet = osl_readProfileIdent(profile, rSection, rEntry, nFirstId, pStrings, nDefault);
+            sal_uInt32 nRet = osl_readProfileIdent(profile, rSection.getStr(), rEntry.getStr(), nFirstId, pStrings, nDefault);
             delete pStrings;
             return nRet;
         }
@@ -115,12 +115,12 @@ namespace osl {
         sal_Bool writeString(const rtl::OString& rSection, const rtl::OString& rEntry,
                              const rtl::OString& rString)
         {
-            return osl_writeProfileString(profile, rSection, rEntry, rString);
+            return osl_writeProfileString(profile, rSection.getStr(), rEntry.getStr(), rString.getStr());
         }
 
         sal_Bool writeBool(const rtl::OString& rSection, const rtl::OString& rEntry, sal_Bool Value)
         {
-            return osl_writeProfileBool(profile, rSection, rEntry, Value);
+            return osl_writeProfileBool(profile, rSection.getStr(), rEntry.getStr(), Value);
         }
 
         sal_Bool writeIdent(const rtl::OString& rSection, const rtl::OString& rEntry,
@@ -133,12 +133,12 @@ namespace osl {
             nItems = 0;
             while( it != rStrings.end() )
             {
-                pStrings[ nItems++ ] = *it;
+                pStrings[ nItems++ ] = it->getStr();
                 ++it;
             }
             pStrings[ nItems ] = NULL;
             sal_Bool bRet =
-                osl_writeProfileIdent(profile, rSection, rEntry, nFirstId, pStrings, nValue );
+                osl_writeProfileIdent(profile, rSection.getStr(), rEntry.getStr(), nFirstId, pStrings, nValue );
             delete pStrings;
             return bRet;
         }
@@ -149,7 +149,7 @@ namespace osl {
         */
         sal_Bool removeEntry(const rtl::OString& rSection, const rtl::OString& rEntry)
         {
-            return osl_removeProfileEntry(profile, rSection, rEntry);
+            return osl_removeProfileEntry(profile, rSection.getStr(), rEntry.getStr());
         }
 
         /** Get all entries belonging to the specified section.
@@ -161,11 +161,11 @@ namespace osl {
             std::list< rtl::OString > aEntries;
 
             // count buffer size necessary
-            int n = osl_getProfileSectionEntries( profile, rSection, NULL, 0 );
+            int n = osl_getProfileSectionEntries( profile, rSection.getStr(), NULL, 0 );
             if( n > 1 )
             {
                 sal_Char* pBuf = new sal_Char[ n+1 ];
-                osl_getProfileSectionEntries( profile, rSection, pBuf, n+1 );
+                osl_getProfileSectionEntries( profile, rSection.getStr(), pBuf, n+1 );
                 int nLen;
                 for( n = 0; ( nLen = strlen( pBuf+n ) ); n += nLen+1 )
                     aEntries.push_back( rtl::OString( pBuf+n ) );

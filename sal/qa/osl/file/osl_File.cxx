@@ -2609,7 +2609,7 @@ namespace osl_FileStatus
                     break;
             };
 
-            fd = remove( strLinkFileName );
+            fd = remove( strLinkFileName.getStr() );
             CPPUNIT_ASSERT( fd == 0 );
 
             CPPUNIT_ASSERT_MESSAGE("test for isValid function: link file, check for LinkTargetURL",
