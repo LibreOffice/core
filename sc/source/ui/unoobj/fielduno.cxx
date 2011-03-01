@@ -277,8 +277,6 @@ void ScCellFieldsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
-
         //! Ref-Update
     }
     else if ( rHint.ISA( SfxSimpleHint ) &&
@@ -329,7 +327,6 @@ uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xField);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScCellFieldsObj::getElementType() throw(uno::RuntimeException)
@@ -395,7 +392,6 @@ void SAL_CALL ScCellFieldsObj::refresh(  )
                     }
                     catch(uno::RuntimeException&)
                     {
-//                      DBG_ERROR("a object is gone without to remove from Broadcaster");
                         ++pInterfaces;
                         ++i;
                     }
@@ -542,8 +538,6 @@ void ScCellFieldObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
-
         //! Ref-Update
     }
     else if ( rHint.ISA( SfxSimpleHint ) &&
@@ -574,7 +568,6 @@ void ScCellFieldObj::DeleteField()
     if (pEditSource)
     {
         SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
-//      pEditEngine->QuickDelete( aSelection );
         pForwarder->QuickInsertText( String(), aSelection );
         pEditSource->UpdateData();
 
@@ -976,7 +969,6 @@ uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xField);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScHeaderFieldsObj::getElementType() throw(uno::RuntimeException)
@@ -1042,7 +1034,6 @@ void SAL_CALL ScHeaderFieldsObj::refresh(  )
                     }
                     catch(uno::RuntimeException&)
                     {
-//                      DBG_ERROR("a object is gone without to remove from Broadcaster");
                         ++pInterfaces;
                         ++i;
                     }
@@ -1084,7 +1075,6 @@ SvxFileFormat lcl_UnoToSvxFileFormat( sal_Int16 nUnoValue )
         case text::FilenameDisplayFormat::FULL: return SVXFILEFORMAT_FULLPATH;
         case text::FilenameDisplayFormat::PATH: return SVXFILEFORMAT_PATH;
         case text::FilenameDisplayFormat::NAME: return SVXFILEFORMAT_NAME;
-//      case text::FilenameDisplayFormat::NAME_AND_EXT:
         default:
             return SVXFILEFORMAT_NAME_EXT;
     }
@@ -1097,7 +1087,6 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
         case SVXFILEFORMAT_NAME_EXT:    return text::FilenameDisplayFormat::NAME_AND_EXT;
         case SVXFILEFORMAT_FULLPATH:    return text::FilenameDisplayFormat::FULL;
         case SVXFILEFORMAT_PATH:        return text::FilenameDisplayFormat::PATH;
-//      case SVXFILEFORMAT_NAME:
         default:
             return text::FilenameDisplayFormat::NAME;
     }
@@ -1264,7 +1253,6 @@ void ScHeaderFieldObj::DeleteField()
     if (pEditSource)
     {
         SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
-//      pEditEngine->QuickDelete( aSelection );
         pForwarder->QuickInsertText( String(), aSelection );
         pEditSource->UpdateData();
 

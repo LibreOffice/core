@@ -941,8 +941,6 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFunctionListObj::getById( sal_Int
     }
     else
         throw uno::RuntimeException();                  // should not happen
-
-//    return uno::Sequence<beans::PropertyValue>(0);
 }
 
 // XNameAccess
@@ -973,8 +971,6 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const rtl::OUString& aName )
     }
     else
         throw uno::RuntimeException();                  // should not happen
-
-//    return uno::Any();
 }
 
 // XIndexAccess
@@ -1012,8 +1008,6 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
     }
     else
         throw uno::RuntimeException();                  // should not happen
-
-//    return uno::Any();
 }
 
 // XEnumerationAccess

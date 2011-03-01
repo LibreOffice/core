@@ -4350,9 +4350,6 @@ void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::uno::RuntimeException)
 {
-    // with this implementation not needed
-//  SolarMutexGuard aGuard;
-
     // use sometimes a better/faster implementation
     sal_uInt32 nCount(rRangeSeq.getLength());
     if (nCount)
@@ -5718,7 +5715,6 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
         //! Test, ob xObject im selben Dokument ist
 
         ScFilterDescriptor* pNew = new ScFilterDescriptor(pDocSh);  //! stattdessen vom Objekt?
-        //XSheetFilterDescriptorRef xNew = xObject->createFilterDescriptor(TRUE);
 
         ScQueryParam aParam = pNew->GetParam();
         aParam.bHasHeader = TRUE;
@@ -9706,7 +9702,6 @@ uno::Any SAL_CALL ScUniqueCellFormatsObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(uno::Reference<sheet::XSheetCellRangeContainer>(new ScCellRangesObj(pDocShell, aRangeLists[nIndex])));
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScUniqueCellFormatsObj::getElementType() throw(uno::RuntimeException)

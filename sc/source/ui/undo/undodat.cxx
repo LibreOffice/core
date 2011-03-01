@@ -699,11 +699,6 @@ void ScUndoSubTotals::Undo()
     ScDocument* pDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    //  um einzelnen DB-Bereich anzupassen
-/*  ScDBData* pOldDBData = ScUndoUtil::GetOldDBData( pUndoDBData, pDoc, nTab,
-                                        aParam.nCol1, aParam.nRow1, aParam.nCol2, nNewEndRow );
-*/
-
     if (nNewEndRow > aParam.nRow2)
     {
         pDoc->DeleteRow( 0,nTab, MAXCOL,nTab, aParam.nRow2+1, static_cast<SCSIZE>(nNewEndRow-aParam.nRow2) );
@@ -752,9 +747,6 @@ void ScUndoSubTotals::Undo()
     ScUndoUtil::MarkSimpleBlock( pDocShell, aParam.nCol1,aParam.nRow1,nTab,
                                             aParam.nCol2,aParam.nRow2,nTab );
 
-/*  if (pUndoDBData)
-        *pOldDBData = *pUndoDBData;
-*/
     if (pUndoRange)
         pDoc->SetRangeName( new ScRangeName( *pUndoRange ) );
     if (pUndoDB)
@@ -896,10 +888,6 @@ void ScUndoSort::Redo()
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
-//  pViewShell->DoneBlockMode();
-//  pViewShell->InitOwnBlockMode();
-//  pViewShell->GetViewData()->GetMarkData() = aMarkData;   // CopyMarksTo
-
     pViewShell->MarkRange( ScRange( aSortParam.nCol1, aSortParam.nRow1, nTab,
                                       aSortParam.nCol2, aSortParam.nRow2, nTab ) );
 
@@ -935,7 +923,6 @@ ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQuery
     nTab( nNewTab ),
     aQueryParam( rParam ),
     pUndoDoc( pNewUndoDoc ),
-//  pUndoDBData( pNewData )
     pUndoDB( pNewUndoDB ),
     bIsAdvanced( FALSE ),
     bDestArea( FALSE ),
@@ -958,7 +945,6 @@ ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQuery
 ScUndoQuery::~ScUndoQuery()
 {
     delete pUndoDoc;
-//  delete pUndoDBData;
     delete pUndoDB;
     DeleteSdrUndoAction( pDrawUndo );
 }
@@ -2139,9 +2125,6 @@ void ScUndoDataForm::DoChange( const BOOL bUndo )
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    // marking is in ScBlockUndo...
-    //ScUndoUtil::MarkSimpleBlock( pDocShell, aBlockRange );
-
     SCTAB nTabCount = pDoc->GetTableCount();
     if ( bUndo && !bRedoFilled )
     {
@@ -2171,8 +2154,6 @@ void ScUndoDataForm::DoChange( const BOOL bUndo )
         pUndoDoc->GetString( aBlockRange.aStart.Col()+i , aBlockRange.aStart.Row() , aBlockRange.aStart.Tab() , aOldString );
         pDoc->SetString( aBlockRange.aStart.Col()+i , aBlockRange.aStart.Row() , aBlockRange.aStart.Tab() , aOldString );
     }
-
-    //ScRange aTabSelectRange = aBlockRange;
 
     if (pWorkRefData)
     {

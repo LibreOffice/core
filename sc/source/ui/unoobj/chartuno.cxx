@@ -299,10 +299,6 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
 
             pPage->InsertObject( pObj );
             pModel->AddUndo( new SdrUndoInsertObj( *pObj ) );       //! Undo-Kommentar?
-
-            // Dies veranlaesst Chart zum sofortigen Update
-            //SvData aEmpty;
-            //aIPObj->SendDataChanged( aEmpty );
     }
 }
 
@@ -374,7 +370,6 @@ uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xChart);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScChartsObj::getElementType() throw(uno::RuntimeException)
@@ -399,7 +394,6 @@ uno::Any SAL_CALL ScChartsObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xChart);
     else
         throw container::NoSuchElementException();
-//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::RuntimeException)
@@ -600,8 +594,6 @@ void ScChartObj::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno:
             }
             break;
         default:
-            {
-            }
             break;
     }
 }
@@ -645,8 +637,6 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
             }
             break;
         default:
-            {
-            }
             break;
     }
 }

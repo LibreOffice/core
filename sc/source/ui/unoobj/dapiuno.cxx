@@ -1069,7 +1069,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotDescriptorBase::getDataLayoutFi
     {
         if( ScDPSaveData* pSaveData = pDPObject->GetSaveData() )
         {
-            if( /*ScDPSaveDimension* pDataDim =*/ pSaveData->GetDataLayoutDimension() )
+            if( pSaveData->GetDataLayoutDimension() )
             {
                 ScFieldIdentifier aFieldId( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_DATALAYOUT_NAME ) ), 0, true );
                 return new ScDataPilotFieldObj( *this, aFieldId );

@@ -1730,7 +1730,6 @@ void ScUndoRefreshLink::Undo()
                     pRedoDoc->AddUndoTab( nTab, nTab, TRUE, TRUE );
                 bFirst = FALSE;
                 pDoc->CopyToDocument(aRange, IDF_ALL, FALSE, pRedoDoc);
-//              pRedoDoc->TransferDrawPage( pDoc, nTab, nTab );
                 pRedoDoc->SetLink( nTab,
                                    pDoc->GetLinkMode(nTab),
                                    pDoc->GetLinkDoc(nTab),
@@ -1742,7 +1741,6 @@ void ScUndoRefreshLink::Undo()
 
             pDoc->DeleteAreaTab( aRange,IDF_ALL );
             pUndoDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pDoc );
-//          pDoc->TransferDrawPage( pUndoDoc, nTab, nTab );
             pDoc->SetLink( nTab, pUndoDoc->GetLinkMode(nTab), pUndoDoc->GetLinkDoc(nTab),
                                  pUndoDoc->GetLinkFlt(nTab),  pUndoDoc->GetLinkOpt(nTab),
                                  pUndoDoc->GetLinkTab(nTab),
@@ -1772,7 +1770,6 @@ void ScUndoRefreshLink::Redo()
 
             pDoc->DeleteAreaTab( aRange, IDF_ALL );
             pRedoDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pDoc );
-//          pDoc->TransferDrawPage( pRedoDoc, nTab, nTab );
             pDoc->SetLink( nTab,
                            pRedoDoc->GetLinkMode(nTab),
                            pRedoDoc->GetLinkDoc(nTab),

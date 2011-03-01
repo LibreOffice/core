@@ -407,16 +407,6 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput(rKEvt);
 }
 
-//BOOL ScContentTree::Drop( const DropEvent& rEvt )
-//{
-//  return pParentWindow->Drop(rEvt);           // Drop auf Navigator
-//}
-
-//BOOL ScContentTree::QueryDrop( DropEvent& rEvt )
-//{
-//  return pParentWindow->QueryDrop(rEvt);      // Drop auf Navigator
-//}
-
 sal_Int8 ScContentTree::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
 {
     return DND_ACTION_NONE;
@@ -447,8 +437,6 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
             //  (beim Umschalten auf einen anderen Dokument-Typ), das wuerde aber
             //  den StarView MouseMove-Handler, der Command() aufruft, umbringen.
             //  Deshalb Drag&Drop asynchron:
-
-//          DoDrag();
 
             Application::PostUserEvent( STATIC_LINK( this, ScContentTree, ExecDragHdl ) );
 
@@ -1298,7 +1286,6 @@ BOOL ScContentTree::LoadFile( const String& rUrl )
         Refresh();                      // Inhalte aus geladenem Dokument holen
 
         pHiddenDocument = NULL;
-//      AdjustTitle();
 
         pParentWindow->GetDocNames( &aHiddenTitle );            // Liste fuellen
     }
@@ -1415,8 +1402,6 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
     xub_StrLen nNotActiveStart = nLen - pParentWindow->aStrNotActive.Len();
     if ( rName.Copy( nNotActiveStart ) == pParentWindow->aStrNotActive )
         aRealName = rName.Copy( 0, nNotActiveStart );
-
-    //
 
     BOOL bLoaded = FALSE;
 

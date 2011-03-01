@@ -131,7 +131,6 @@ namespace calc
         EventObject aDisposeEvent( *this );
         m_aListEntryListeners.disposeAndClear( aDisposeEvent );
 
-//        OCellListSource_Base::disposing();
         WeakAggComponentImplHelperBase::disposing();
 
         // TODO: clean up here whatever you need to clean up (e.g. revoking listeners etc.)

@@ -136,7 +136,6 @@ namespace calc
             xBroadcaster->removeModifyListener( this );
         }
 
-//        OCellValueBinding_Base::disposing();
         WeakAggComponentImplHelperBase::disposing();
 
         // TODO: clean up here whatever you need to clean up (e.g. deregister as XEventListener

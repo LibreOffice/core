@@ -724,7 +724,6 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xField);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScSubTotalDescriptorBase::getElementType() throw(uno::RuntimeException)
@@ -2273,7 +2272,6 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xRange);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScDatabaseRangesObj::getElementType() throw(uno::RuntimeException)

@@ -376,8 +376,6 @@ void ScUndoDeleteTab::Undo()
         bDrawIsInUndo = FALSE;
         if (bOk)
         {
-            //  Ref-Undo passiert in EndUndo
-    //      pUndoDoc->UndoToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, IDF_ALL,FALSE, pDoc );
             pRefUndoDoc->CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, IDF_ALL,FALSE, pDoc );
 
             String aOldName;
@@ -408,9 +406,6 @@ void ScUndoDeleteTab::Undo()
 
             if ( pRefUndoDoc->IsTabProtected( nTab ) )
                 pDoc->SetTabProtection(nTab, pRefUndoDoc->GetTabProtection(nTab));
-
-            //  Drawing-Layer passiert beim MoveUndo::EndUndo
-    //      pDoc->TransferDrawPage(pRefUndoDoc, nTab,nTab);
         }
     }
     if (bLink)
@@ -439,8 +434,6 @@ void ScUndoDeleteTab::Undo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->SetTabNo( lcl_GetVisibleTabBefore( *pDoc, theTabs[0] ), TRUE );
-
-//  EndUndo();
 }
 
 void ScUndoDeleteTab::Redo()

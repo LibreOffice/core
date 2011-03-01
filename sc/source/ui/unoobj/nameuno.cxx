@@ -701,7 +701,6 @@ uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xRange);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScNamedRangesObj::getElementType() throw(uno::RuntimeException)
@@ -761,7 +760,6 @@ uno::Any SAL_CALL ScNamedRangesObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xRange);
     else
         throw container::NoSuchElementException();
-//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangesObj::getElementNames()
@@ -785,7 +783,6 @@ uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangesObj::getElementNames()
                 if ( lcl_UserVisibleName(pData) )
                     pAry[nVisPos++] = pData->GetName();
             }
-//          DBG_ASSERT(nVisPos == nVisCount, "huch, verzaehlt?");
             return aSeq;
         }
     }
@@ -1161,7 +1158,6 @@ uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xRange);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScLabelRangesObj::getElementType() throw(uno::RuntimeException)
