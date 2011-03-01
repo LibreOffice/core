@@ -57,10 +57,10 @@
 #include <sys/types.h>
 
 using namespace psp;
-using namespace rtl;
 using namespace basebmp;
 using namespace basegfx;
-
+using ::rtl::OUString;
+using ::rtl::OString;
 // ----- Implementation of PrinterBmp by means of SalBitmap/BitmapBuffer ---------------
 
 class SalPrinterBmp : public psp::PrinterBmp

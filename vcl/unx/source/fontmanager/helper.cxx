@@ -42,7 +42,12 @@
 #include "osl/process.h"
 #include "rtl/bootstrap.hxx"
 
-using namespace rtl;
+using ::rtl::Bootstrap;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringToOString;
 
 namespace psp {
 

@@ -139,7 +139,13 @@ public:
 
 using namespace psp;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringHash;
+using ::rtl::OString;
 
 /*
  *  CUPSWrapper class

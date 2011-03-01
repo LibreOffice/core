@@ -84,7 +84,9 @@ typedef std::set<int> IntSet;
 
 #define DROPPED_OUTGLYPH 0xFFFF
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 // =======================================================================
 

@@ -52,8 +52,7 @@
 #include <postwin.h>
 #endif
 
-using namespace rtl;
-
+using ::rtl::OUString;
 // =======================================================================
 
 DBG_NAME( AllSettings )

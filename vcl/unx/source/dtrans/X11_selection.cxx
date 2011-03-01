@@ -89,9 +89,12 @@ using namespace com::sun::star::awt;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
 using namespace cppu;
-using namespace rtl;
 
 using namespace x11;
+
+using ::rtl::OUString;
+using ::rtl::OUStringHash;
+using ::rtl::OStringToOUString;
 
 // stubs to satisfy solaris compiler's rather rigid linking warning
 extern "C"

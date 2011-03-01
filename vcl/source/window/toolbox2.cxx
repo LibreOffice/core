@@ -48,7 +48,8 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace vcl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 // =======================================================================
 

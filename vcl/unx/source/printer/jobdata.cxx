@@ -37,7 +37,6 @@
 #include "sal/alloca.h"
 
 using namespace psp;
-using namespace rtl;
 
 JobData& JobData::operator=(const JobData& rRight)
 {

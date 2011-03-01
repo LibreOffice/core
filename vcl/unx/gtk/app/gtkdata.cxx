@@ -64,8 +64,9 @@
 
 #include <vcl/svapp.hxx>
 
-using namespace rtl;
 using namespace vcl_sal;
+
+using ::rtl::OUString;
 
 /***************************************************************************
  * class GtkDisplay                                                        *

@@ -40,12 +40,13 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/compbase1.hxx>
 
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::awt;
 using namespace x11;
+
+using ::rtl::OUString;
 
 Sequence< OUString > SAL_CALL x11::X11Clipboard_getSupportedServiceNames()
 {

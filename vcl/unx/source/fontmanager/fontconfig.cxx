@@ -90,7 +90,9 @@ using namespace psp;
 #include <algorithm>
 
 using namespace osl;
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
 
 namespace
 {

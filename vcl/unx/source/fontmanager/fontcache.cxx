@@ -51,9 +51,12 @@
 #define CACHE_MAGIC "PspFontCacheFile format 4"
 
 using namespace std;
-using namespace rtl;
 using namespace psp;
 using namespace utl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 /*
  *  static helpers

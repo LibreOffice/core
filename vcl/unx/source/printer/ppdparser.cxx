@@ -269,7 +269,11 @@ namespace psp
 }
 
 using namespace psp;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringHash;
+
 
 #undef DBG_ASSERT
 #if defined DBG_UTIL || (OSL_DEBUG_LEVEL > 1)

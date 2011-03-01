@@ -59,11 +59,17 @@
 #include <netinet/in.h>
 
 
-using namespace rtl;
 using namespace cppu;
 using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OStringBuffer;
 // -----------------------------------------------------------------------
 
 // Forward declaration

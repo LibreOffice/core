@@ -47,9 +47,11 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 // -----------------------------------------------------------------------
 
 // Forward declaration

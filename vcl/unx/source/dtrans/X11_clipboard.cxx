@@ -53,8 +53,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace x11;
+
+using ::rtl::OUString;
 
 X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
         ::cppu::WeakComponentImplHelper4<

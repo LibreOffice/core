@@ -59,8 +59,7 @@ GtkSalGraphics::~GtkSalGraphics()
 {
 }
 
-
-using namespace rtl;
+using ::rtl::OUString;
 
 /*************************************
  * Cached native widget objects

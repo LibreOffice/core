@@ -61,8 +61,12 @@
 #include <boost/unordered_set.hpp>
 
 using namespace psp;
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringHash;
 
 namespace psp
 {

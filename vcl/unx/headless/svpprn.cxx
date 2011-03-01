@@ -45,7 +45,9 @@
 #include <sys/wait.h>
 
 using namespace psp;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 /*
  *  static helpers

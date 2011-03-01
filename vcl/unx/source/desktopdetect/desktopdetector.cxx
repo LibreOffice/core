@@ -44,8 +44,8 @@
 #include <unistd.h>
 #include <string.h>
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OString;
 enum {
     DESKTOP_NONE = 0,
     DESKTOP_UNKNOWN,

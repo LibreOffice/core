@@ -94,10 +94,18 @@ using namespace vcl;
 using namespace utl;
 using namespace psp;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringHash;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringHash;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringToOString;
 
 /*
  *  static helpers

@@ -35,13 +35,14 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-using namespace rtl;
 using namespace utl;
 using namespace vcl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
 
 #define SETTINGS_CONFIGNODE "VCL/Settings"
 

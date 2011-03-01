@@ -70,7 +70,14 @@
 #include <vcl/lineinfo.hxx>
 
 using namespace vcl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
+using ::rtl::OStringHash;
+using ::rtl::OUStringHash;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringBuffer;
 
 #if (OSL_DEBUG_LEVEL < 2)
 #define COMPRESS_PAGES

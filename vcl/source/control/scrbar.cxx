@@ -39,9 +39,8 @@
 #include "rtl/string.hxx"
 #include "tools/rc.h"
 
+using ::rtl::OUString;
 
-
-using namespace rtl;
 
 /*  #i77549#
     HACK: for scrollbars in case of thumb rect, page up and page down rect we

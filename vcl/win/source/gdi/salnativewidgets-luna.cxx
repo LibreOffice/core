@@ -45,8 +45,9 @@
 #include <map>
 #include <string>
 
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
 
 typedef map< wstring, HTHEME > ThemeMap;
 static ThemeMap aThemeMap;
