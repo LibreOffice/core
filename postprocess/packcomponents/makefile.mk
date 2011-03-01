@@ -170,6 +170,7 @@ my_components = \
     updchk.uno \
     utl \
     uui \
+    vbaevents \
     vbaobj \
     vcl \
     vclcanvas \
@@ -229,10 +230,6 @@ my_components += ogltrans
 
 .IF "$(ENABLE_SVCTAGS)" == "YES"
 my_components += productregistration.jar
-.END
-
-.IF "$(ENABLE_VBA)" == "YES"
-my_components += vbaevents
 .END
 
 .IF "$(SOLAR_JAVA)" == "TRUE"
