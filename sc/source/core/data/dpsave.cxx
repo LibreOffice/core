@@ -1154,7 +1154,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
     }
     catch(uno::Exception&)
     {
-        DBG_ERROR("exception in WriteToSource");
+        OSL_FAIL("exception in WriteToSource");
     }
 }
 
@@ -1294,7 +1294,7 @@ void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xS
     }
     catch(uno::Exception&)
     {
-        DBG_ERROR("error in ScDPSaveData::Refresh");
+        OSL_FAIL("error in ScDPSaveData::Refresh");
     }
 }
 

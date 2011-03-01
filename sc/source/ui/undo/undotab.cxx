@@ -1053,7 +1053,7 @@ void ScUndoImportTab::Redo()
 {
     if (!pRedoDoc)
     {
-        DBG_ERROR("wo ist mein Redo-Document?");
+        OSL_FAIL("wo ist mein Redo-Document?");
         return;
     }
 
@@ -1588,7 +1588,7 @@ SdrObject* ScUndoRenameObject::GetObject()
             }
         }
     }
-    DBG_ERROR("Object not found");
+    OSL_FAIL("Object not found");
     return NULL;
 }
 

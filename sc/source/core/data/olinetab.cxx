@@ -73,7 +73,7 @@ void ScOutlineEntry::Move( SCsCOLROW nDelta )
     SCCOLROW nNewPos = nStart + nDelta;
     if (nNewPos<0)
     {
-        DBG_ERROR("OutlineEntry < 0");
+        OSL_FAIL("OutlineEntry < 0");
         nNewPos = 0;
     }
     nStart = nNewPos;
@@ -85,7 +85,7 @@ void ScOutlineEntry::SetSize( SCSIZE nNewSize )
         nSize = nNewSize;
     else
     {
-        DBG_ERROR("ScOutlineEntry Size == 0");
+        OSL_FAIL("ScOutlineEntry Size == 0");
     }
 }
 
@@ -333,7 +333,7 @@ void ScOutlineArray::PromoteSub( SCCOLROW nStartPos, SCCOLROW nEndPos, USHORT nS
 {
     if (nStartLevel==0)
     {
-        DBG_ERROR("PromoteSub mit Level 0");
+        OSL_FAIL("PromoteSub mit Level 0");
         return;
     }
 
@@ -751,7 +751,7 @@ USHORT ScSubOutlineIterator::LastEntry() const
 {
     if (nSubEntry == 0)
     {
-        DBG_ERROR("ScSubOutlineIterator::LastEntry vor GetNext");
+        OSL_FAIL("ScSubOutlineIterator::LastEntry vor GetNext");
         return 0;
     }
     return nSubEntry-1;
@@ -761,12 +761,12 @@ void ScSubOutlineIterator::DeleteLast()
 {
     if (nSubLevel >= nDepth)
     {
-        DBG_ERROR("ScSubOutlineIterator::DeleteLast nach Ende");
+        OSL_FAIL("ScSubOutlineIterator::DeleteLast nach Ende");
         return;
     }
     if (nSubEntry == 0)
     {
-        DBG_ERROR("ScSubOutlineIterator::DeleteLast vor GetNext");
+        OSL_FAIL("ScSubOutlineIterator::DeleteLast vor GetNext");
         return;
     }
 

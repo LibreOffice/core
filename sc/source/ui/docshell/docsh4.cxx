@@ -297,7 +297,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             }
             else
             {
-                DBG_ERROR( "arguments expected" );
+                OSL_FAIL( "arguments expected" );
             }
         }
         break;
@@ -433,13 +433,13 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    DBG_ERROR("UpdateChartArea: keine ViewShell oder falsche Daten");
+                    OSL_FAIL("UpdateChartArea: keine ViewShell oder falsche Daten");
                 }
                 rReq.Done();
             }
             else
             {
-                DBG_ERROR("SID_CHART_SOURCE ohne Argumente");
+                OSL_FAIL("SID_CHART_SOURCE ohne Argumente");
             }
             break;
 
@@ -591,7 +591,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
 
         case SID_AUTO_STYLE:
-            DBG_ERROR("use ScAutoStyleHint instead of SID_AUTO_STYLE");
+            OSL_FAIL("use ScAutoStyleHint instead of SID_AUTO_STYLE");
             break;
 
         case SID_GET_COLORTABLE:
@@ -1110,7 +1110,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             }
                             catch ( uno::Exception& )
                             {
-                                DBG_ERROR( "SID_SHARE_DOC: caught exception\n" );
+                                OSL_FAIL( "SID_SHARE_DOC: caught exception\n" );
                                 SC_MOD()->SetInSharedDocSaving( false );
 
                                 try
@@ -2672,7 +2672,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
     }
     catch ( uno::Exception& )
     {
-        DBG_ERROR( "ScDocShell::LoadSharedDocument(): caught exception\n" );
+        OSL_FAIL( "ScDocShell::LoadSharedDocument(): caught exception\n" );
         SC_MOD()->SetInSharedDocLoading( false );
         try
         {

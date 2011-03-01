@@ -349,7 +349,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                         }
                         else if( aSymbol.Style == chart2::SymbolStyle_AUTO )
                         {
-                            DBG_ERROR("the given parameter is not allowed to contain an automatic symbol style");
+                            OSL_FAIL("the given parameter is not allowed to contain an automatic symbol style");
                         }
                     }
                 }

@@ -1100,7 +1100,7 @@ ScBaseCell* ScTable::GetCell( SCCOL nCol, SCROW nRow ) const
     if (ValidColRow( nCol, nRow ))
         return aCol[nCol].GetCell( nRow );
 
-    DBG_ERROR("GetCell ausserhalb");
+    OSL_FAIL("GetCell ausserhalb");
     return NULL;
 }
 
@@ -1306,7 +1306,7 @@ const ScPatternAttr* ScTable::GetPattern( SCCOL nCol, SCROW nRow ) const
         return aCol[nCol].GetPattern( nRow );
     else
     {
-        DBG_ERROR("wrong column or row");
+        OSL_FAIL("wrong column or row");
         return pDocument->GetDefPattern();      // for safety
     }
 }
@@ -1443,7 +1443,7 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
 {
     if ( !pColWidth || !mpRowHeights || !pColFlags || !pRowFlags )
     {
-        DBG_ERROR( "Spalten-/Zeileninfo fehlt" );
+        OSL_FAIL( "Spalten-/Zeileninfo fehlt" );
         return;
     }
 
@@ -1765,7 +1765,7 @@ void ScTable::UnlockTable()
         --nLockCount;
     else
     {
-        DBG_ERROR("UnlockTable ohne LockTable");
+        OSL_FAIL("UnlockTable ohne LockTable");
     }
 }
 
@@ -2077,7 +2077,7 @@ void ScTable::SetColWidth( SCCOL nCol, USHORT nNewWidth )
     }
     else
     {
-        DBG_ERROR("Falsche Spaltennummer oder keine Breiten");
+        OSL_FAIL("Falsche Spaltennummer oder keine Breiten");
     }
 }
 
@@ -2099,7 +2099,7 @@ void ScTable::SetRowHeight( SCROW nRow, USHORT nNewHeight )
     {
         if (!nNewHeight)
         {
-            DBG_ERROR("Zeilenhoehe 0 in SetRowHeight");
+            OSL_FAIL("Zeilenhoehe 0 in SetRowHeight");
             nNewHeight = ScGlobal::nStdRowHeight;
         }
 
@@ -2112,7 +2112,7 @@ void ScTable::SetRowHeight( SCROW nRow, USHORT nNewHeight )
     }
     else
     {
-        DBG_ERROR("Falsche Zeilennummer oder keine Hoehen");
+        OSL_FAIL("Falsche Zeilennummer oder keine Hoehen");
     }
 }
 
@@ -2158,7 +2158,7 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
     {
         if (!nNewHeight)
         {
-            DBG_ERROR("Zeilenhoehe 0 in SetRowHeight");
+            OSL_FAIL("Zeilenhoehe 0 in SetRowHeight");
             nNewHeight = ScGlobal::nStdRowHeight;
         }
 
@@ -2207,7 +2207,7 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
     }
     else
     {
-        DBG_ERROR("Falsche Zeilennummer oder keine Hoehen");
+        OSL_FAIL("Falsche Zeilennummer oder keine Hoehen");
     }
 
     return bChanged;
@@ -2235,7 +2235,7 @@ void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, BOOL bManual )
     }
     else
     {
-        DBG_ERROR("Falsche Zeilennummer oder keine Zeilenflags");
+        OSL_FAIL("Falsche Zeilennummer oder keine Zeilenflags");
     }
 }
 
@@ -2273,7 +2273,7 @@ USHORT ScTable::GetCommonWidth( SCCOL nEndCol )
 
     if ( !ValidCol(nEndCol) )
     {
-        DBG_ERROR("wrong column");
+        OSL_FAIL("wrong column");
         nEndCol = MAXCOL;
     }
 
@@ -2459,7 +2459,7 @@ void ScTable::ShowCol(SCCOL nCol, bool bShow)
     }
     else
     {
-        DBG_ERROR("Falsche Spaltennummer oder keine Flags");
+        OSL_FAIL("Falsche Spaltennummer oder keine Flags");
     }
 }
 
@@ -2483,7 +2483,7 @@ void ScTable::ShowRow(SCROW nRow, bool bShow)
     }
     else
     {
-        DBG_ERROR("Falsche Zeilennummer oder keine Flags");
+        OSL_FAIL("Falsche Zeilennummer oder keine Flags");
     }
 }
 
@@ -2510,7 +2510,7 @@ void ScTable::DBShowRow(SCROW nRow, bool bShow)
     }
     else
     {
-        DBG_ERROR("Falsche Zeilennummer oder keine Flags");
+        OSL_FAIL("Falsche Zeilennummer oder keine Flags");
     }
 }
 
@@ -2601,7 +2601,7 @@ void ScTable::SetColFlags( SCCOL nCol, BYTE nNewFlags )
         pColFlags[nCol] = nNewFlags;
     else
     {
-        DBG_ERROR("Falsche Spaltennummer oder keine Flags");
+        OSL_FAIL("Falsche Spaltennummer oder keine Flags");
     }
 }
 
@@ -2612,7 +2612,7 @@ void ScTable::SetRowFlags( SCROW nRow, BYTE nNewFlags )
         pRowFlags->SetValue( nRow, nNewFlags);
     else
     {
-        DBG_ERROR("Falsche Zeilennummer oder keine Flags");
+        OSL_FAIL("Falsche Zeilennummer oder keine Flags");
     }
 }
 
@@ -2623,7 +2623,7 @@ void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, BYTE nNewFlags )
         pRowFlags->SetValue( nStartRow, nEndRow, nNewFlags);
     else
     {
-        DBG_ERROR("Falsche Zeilennummer(n) oder keine Flags");
+        OSL_FAIL("Falsche Zeilennummer(n) oder keine Flags");
     }
 }
 
@@ -3007,7 +3007,7 @@ ULONG ScTable::GetRowOffset( SCROW nRow ) const
     }
     else
     {
-        DBG_ERROR("GetRowOffset: Daten fehlen");
+        OSL_FAIL("GetRowOffset: Daten fehlen");
     }
     return n;
 }
@@ -3051,7 +3051,7 @@ ULONG ScTable::GetColOffset( SCCOL nCol ) const
     }
     else
     {
-        DBG_ERROR("GetColumnOffset: Daten fehlen");
+        OSL_FAIL("GetColumnOffset: Daten fehlen");
     }
     return n;
 }

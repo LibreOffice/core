@@ -112,7 +112,7 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
         }
         else
         {
-            DBG_ERROR("no selection supplier in the beamer!");
+            OSL_FAIL("no selection supplier in the beamer!");
         }
     }
 }
@@ -230,7 +230,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                                             rParam.nCol2, rParam.nRow2 );
         if (!pDBData)
         {
-            DBG_ERROR( "DoImport: no DBData" );
+            OSL_FAIL( "DoImport: no DBData" );
             return FALSE;
         }
     }
@@ -457,7 +457,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     }
     catch ( uno::Exception& )
     {
-        DBG_ERROR("Unexpected exception in database");
+        OSL_FAIL("Unexpected exception in database");
     }
 
     pImportDoc->DoColResize( nTab, rParam.nCol1,nEndCol, 0 );

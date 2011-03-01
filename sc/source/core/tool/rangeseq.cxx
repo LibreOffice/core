@@ -250,7 +250,7 @@ double lcl_GetValueFromCell( ScBaseCell& rCell )
     else if ( eType == CELLTYPE_FORMULA )
         return ((ScFormulaCell&)rCell).GetValue();      // called only if result is value
 
-    DBG_ERROR( "GetValueFromCell: wrong type" );
+    OSL_FAIL( "GetValueFromCell: wrong type" );
     return 0;
 }
 

@@ -575,7 +575,7 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
                         }
                         else
                         {
-                            DBG_ERROR( "Missing StyleSheet :-/" );
+                            OSL_FAIL( "Missing StyleSheet :-/" );
                         }
                     }
 

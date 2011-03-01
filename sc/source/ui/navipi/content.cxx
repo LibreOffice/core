@@ -198,7 +198,7 @@ void ScContentTree::InsertContent( USHORT nType, const String& rValue )
 {
     if (nType >= SC_CONTENT_COUNT)
     {
-        DBG_ERROR("ScContentTree::InsertContent mit falschem Typ");
+        OSL_FAIL("ScContentTree::InsertContent mit falschem Typ");
         return;
     }
 
@@ -207,7 +207,7 @@ void ScContentTree::InsertContent( USHORT nType, const String& rValue )
         InsertEntry( rValue, pParent );
     else
     {
-        DBG_ERROR("InsertContent ohne Parent");
+        OSL_FAIL("InsertContent ohne Parent");
     }
 }
 
@@ -741,7 +741,7 @@ bool ScContentTree::IsPartOfType( USHORT nContentType, USHORT nObjIdentifier )
             bRet = ( nObjIdentifier != OBJ_GRAF && nObjIdentifier != OBJ_OLE2 );    // everything else
             break;
         default:
-            DBG_ERROR("unknown content type");
+            OSL_FAIL("unknown content type");
     }
     return bRet;
 }
@@ -847,7 +847,7 @@ const ScAreaLink* ScContentTree::GetLink( ULONG nIndex )
         }
     }
 
-    DBG_ERROR("Link nicht gefunden");
+    OSL_FAIL("Link nicht gefunden");
     return NULL;
 }
 
@@ -903,7 +903,7 @@ ScAddress ScContentTree::GetNotePos( ULONG nIndex )
         }
     }
 
-    DBG_ERROR("Notiz nicht gefunden");
+    OSL_FAIL("Notiz nicht gefunden");
     return ScAddress();
 }
 
@@ -1428,7 +1428,7 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
     }
     else
     {
-        DBG_ERROR("SelectDoc: nicht gefunden");
+        OSL_FAIL("SelectDoc: nicht gefunden");
     }
 }
 

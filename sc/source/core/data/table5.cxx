@@ -87,7 +87,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
                                     Find( aPageStyle, SFX_STYLE_FAMILY_PAGE );
     if ( !pStyle )
     {
-        DBG_ERROR("UpdatePageBreaks: Style nicht gefunden");
+        OSL_FAIL("UpdatePageBreaks: Style nicht gefunden");
         return;
     }
     SfxItemSet* pStyleSet = &pStyle->GetItemSet();

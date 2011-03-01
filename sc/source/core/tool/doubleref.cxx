@@ -177,7 +177,7 @@ bool lcl_createExcelQuery(
         SCSIZE nVisible = pQueryRef->getVisibleDataCellCount();
         if ( nVisible > SCSIZE_MAX / sizeof(void*) )
         {
-            DBG_ERROR("zu viele Filterkritierien");
+            OSL_FAIL("zu viele Filterkritierien");
             nVisible = 0;
         }
 

@@ -1982,7 +1982,7 @@ void ScXMLImport::SetStatistics(
                 if (i_rStats[i].Value >>= val) {
                     nCount += val;
                 } else {
-                    DBG_ERROR("ScXMLImport::SetStatistics: invalid entry");
+                    OSL_FAIL("ScXMLImport::SetStatistics: invalid entry");
                 }
             }
         }
@@ -2375,7 +2375,7 @@ sal_Bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl:
             }
             catch ( uno::Exception& )
             {
-                DBG_ERROR("Numberformat not found");
+                OSL_FAIL("Numberformat not found");
             }
         }
     }
@@ -2439,7 +2439,7 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
                 }
                 catch ( uno::Exception& )
                 {
-                    DBG_ERROR("Numberformat not found");
+                    OSL_FAIL("Numberformat not found");
                 }
             }
         }
@@ -2803,7 +2803,7 @@ void ScXMLImport::SetNamedRanges()
         }
         catch( uno::RuntimeException& )
         {
-            DBG_ERROR("here are some Named Ranges with the same name");
+            OSL_FAIL("here are some Named Ranges with the same name");
             uno::Reference < container::XIndexAccess > xIndex(xNamedRanges, uno::UNO_QUERY);
             if (xIndex.is())
             {

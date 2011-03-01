@@ -495,7 +495,7 @@ double lcl_CalcData( ScSubTotalFunc eFunc,
             break;
         default:
         {
-            DBG_ERROR("unbekannte Funktion bei Consoli::CalcData");
+            OSL_FAIL("unbekannte Funktion bei Consoli::CalcData");
             fCount = -MAXDOUBLE;
         }
             break;

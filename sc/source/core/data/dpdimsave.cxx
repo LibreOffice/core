@@ -187,7 +187,7 @@ String ScDPSaveGroupDimension::CreateGroupName( const String& rPrefix )
         ++nAdd;                         // continue with higher number
     }
 
-    DBG_ERROR("CreateGroupName: no valid name found");
+    OSL_FAIL("CreateGroupName: no valid name found");
     return EMPTY_STRING;
 }
 
@@ -558,7 +558,7 @@ String ScDPDimensionSaveData::CreateGroupDimName( const String& rSourceName,
         else
             ++nAdd;                     // continue with higher number
     }
-    DBG_ERROR("CreateGroupDimName: no valid name found");
+    OSL_FAIL("CreateGroupDimName: no valid name found");
     return EMPTY_STRING;
 }
 

@@ -803,7 +803,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
         }
         else
         {
-            DBG_ERROR("Object is NO text object");
+            OSL_FAIL("Object is NO text object");
         }
     }
 

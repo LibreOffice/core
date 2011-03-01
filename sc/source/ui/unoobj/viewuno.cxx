@@ -213,7 +213,7 @@ sal_Int32 SAL_CALL ScViewPaneBase::getFirstVisibleColumn() throw(uno::RuntimeExc
 
         return pViewData->GetPosX( eWhichH );
     }
-    DBG_ERROR("keine View ?!?");    //! Exception?
+    OSL_FAIL("keine View ?!?"); //! Exception?
     return 0;
 }
 
@@ -247,7 +247,7 @@ sal_Int32 SAL_CALL ScViewPaneBase::getFirstVisibleRow() throw(uno::RuntimeExcept
 
         return pViewData->GetPosY( eWhichV );
     }
-    DBG_ERROR("keine View ?!?");    //! Exception?
+    OSL_FAIL("keine View ?!?"); //! Exception?
     return 0;
 }
 

@@ -354,7 +354,7 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
                 return sec == matchSec;
             }
             default:
-                DBG_ERROR("invalid time part");
+                OSL_FAIL("invalid time part");
         }
         return false;
     }
@@ -393,7 +393,7 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
             return days == matchDays;
         }
         default:
-            DBG_ERROR("invalid date part");
+            OSL_FAIL("invalid date part");
     }
 
     return false;
@@ -457,7 +457,7 @@ String lcl_GetDateGroupName( sal_Int32 nDatePart, sal_Int32 nValue, SvNumberForm
             aRet.Append( lcl_GetTwoDigitString( nValue ) );
             break;
         default:
-            DBG_ERROR("invalid date part");
+            OSL_FAIL("invalid date part");
     }
     return aRet;
 }
@@ -527,7 +527,7 @@ sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberForm
                 }
                 break;
             default:
-                DBG_ERROR("invalid date part");
+                OSL_FAIL("invalid date part");
         }
     }
 
@@ -661,7 +661,7 @@ void ScDPDateGroupHelper::FillColumnEntries(
         case com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES:  nStart = 0; nEnd = 59;  break;
         case com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS:  nStart = 0; nEnd = 59;  break;
         default:
-            DBG_ERROR("invalid date part");
+            OSL_FAIL("invalid date part");
     }
 
     for ( sal_Int32 nValue = nStart; nValue <= nEnd; nValue++ )
@@ -1461,7 +1461,7 @@ BOOL ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupI
                 // date group information, too.
                 if ( !pBaseDateHelper )
                 {
-                    DBG_ERROR( "mix of date and non-date groups" );
+                    OSL_FAIL( "mix of date and non-date groups" );
                     return TRUE;
                 }
 
@@ -1481,7 +1481,7 @@ BOOL ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupI
         }
     }
 
-    DBG_ERROR("IsInGroup: no group dimension found");
+    OSL_FAIL("IsInGroup: no group dimension found");
     return TRUE;
 }
 
@@ -1507,7 +1507,7 @@ BOOL ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long 
             // If one is a date group dimension, the other one must be, too.
             if ( !pFirstDateHelper || !pSecondDateHelper )
             {
-                DBG_ERROR( "mix of date and non-date groups" );
+                OSL_FAIL( "mix of date and non-date groups" );
                 return TRUE;
             }
 
@@ -1540,7 +1540,7 @@ BOOL ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long 
         }
     }
 
-    DBG_ERROR("HasCommonElement: no group dimension found");
+    OSL_FAIL("HasCommonElement: no group dimension found");
     return TRUE;
 }
 

@@ -482,7 +482,7 @@ void ScDPAggData::Update( const ScDPValueData& rNext, ScSubTotalFunc eFunc, cons
             }
             break;
         default:
-            DBG_ERROR("invalid function");
+            OSL_FAIL("invalid function");
     }
 }
 
@@ -530,7 +530,7 @@ void ScDPAggData::Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSub
             break;
 
         default:
-            DBG_ERROR("invalid function");
+            OSL_FAIL("invalid function");
     }
 
     //  calculate the selected function
@@ -577,7 +577,7 @@ void ScDPAggData::Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSub
                     fResult = (fAux - fVal*fVal/(double)(nCount)) / (double)nCount;
                 break;
             default:
-                DBG_ERROR("invalid function");
+                OSL_FAIL("invalid function");
         }
     }
 
@@ -907,7 +907,7 @@ String ScDPResultData::GetMeasureDimensionName(long nMeasure) const
 {
     if ( nMeasure < 0 )
     {
-        DBG_ERROR("GetMeasureDimensionName: negative");
+        OSL_FAIL("GetMeasureDimensionName: negative");
         return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("***"));
     }
 
@@ -2516,7 +2516,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                                         fThisResult = ( fThisResult - fOtherResult ) / fOtherResult;
                                                     break;
                                                 default:
-                                                    DBG_ERROR("invalid calculation type");
+                                                    OSL_FAIL("invalid calculation type");
                                             }
                                             if ( bError )
                                             {
@@ -2750,7 +2750,7 @@ ScDPResultMember *ScDPResultDimension::FindMember(  SCROW  iData ) const
     if( aRes != maMemberHash.end()) {
            if ( aRes->second->IsNamedItem( iData ) )
             return aRes->second;
-        DBG_ERROR("problem!  hash result is not the same as IsNamedItem");
+        OSL_FAIL("problem!  hash result is not the same as IsNamedItem");
     }
 
     unsigned int i;
@@ -3010,7 +3010,7 @@ void ScDPResultDimension::ProcessData( const vector< SCROW >& aMembers,
         return;
     }
 
-    DBG_ERROR("ProcessData: Member not found");
+    OSL_FAIL("ProcessData: Member not found");
 }
 
 void ScDPResultDimension::FillMemberResults( uno::Sequence<sheet::MemberResult>* pSequences,
@@ -3560,7 +3560,7 @@ void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const 
         }
     }
 
-    DBG_ERROR("ProcessData: Member not found");
+    OSL_FAIL("ProcessData: Member not found");
 }
 
 void ScDPDataDimension::FillDataRow( const ScDPResultDimension* pRefDim,

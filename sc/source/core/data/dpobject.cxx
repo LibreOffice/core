@@ -414,7 +414,7 @@ ScDPTableData* ScDPObject::GetTableData()
             // cell data
             if (!pSheetDesc)
             {
-                DBG_ERROR("no source descriptor");
+                OSL_FAIL("no source descriptor");
                 pSheetDesc = new ScSheetSourceDesc(pDoc);     // dummy defaults
             }
             pData.reset(new ScSheetDPData(pDoc, *pSheetDesc));
@@ -477,7 +477,7 @@ void ScDPObject::CreateObjects()
             }
             catch(uno::Exception&)
             {
-                DBG_ERROR("exception in refresh");
+                OSL_FAIL("exception in refresh");
             }
         }
 
@@ -728,7 +728,7 @@ BOOL ScDPObject::RefsEqual( const ScDPObject& r ) const
     }
     else if ( pSheetDesc || r.pSheetDesc )
     {
-        DBG_ERROR("RefsEqual: SheetDesc set at only one object");
+        OSL_FAIL("RefsEqual: SheetDesc set at only one object");
         return FALSE;
     }
 
@@ -1653,7 +1653,7 @@ USHORT lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& xDimProp ) 
         }
     }
 
-    DBG_ERROR("FirstSubTotal: NULL");
+    OSL_FAIL("FirstSubTotal: NULL");
     return 0;
 }
 

@@ -147,7 +147,7 @@ ScDPCache* ScImportSourceDesc::CreateCache() const
     {
         delete pCache;
         pCache = NULL;
-        DBG_ERROR("Unexpected exception in database");
+        OSL_FAIL("Unexpected exception in database");
     }
 
 

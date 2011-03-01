@@ -307,7 +307,7 @@ namespace calc
             break;
 
         default:
-            DBG_ERROR( "OCellValueBinding::getValue: unreachable code!" );
+            OSL_FAIL( "OCellValueBinding::getValue: unreachable code!" );
                 // a type other than double and string should never have survived the checkValueType
                 // above
         }
@@ -393,7 +393,7 @@ namespace calc
             break;
 
         default:
-            DBG_ERROR( "OCellValueBinding::setValue: unreachable code!" );
+            OSL_FAIL( "OCellValueBinding::setValue: unreachable code!" );
                 // a type other than double and string should never have survived the checkValueType
                 // above
         }
@@ -546,7 +546,7 @@ namespace calc
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "OCellValueBinding::notifyModified: caught a (non-runtime) exception!" );
+                OSL_FAIL( "OCellValueBinding::notifyModified: caught a (non-runtime) exception!" );
             }
         }
     }
@@ -629,7 +629,7 @@ namespace calc
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "OCellValueBinding::initialize: caught an exception while retrieving the cell object!" );
+            OSL_FAIL( "OCellValueBinding::initialize: caught an exception while retrieving the cell object!" );
         }
 
         if ( !m_xCell.is() )

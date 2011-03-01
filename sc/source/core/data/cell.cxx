@@ -127,7 +127,7 @@ ScBaseCell* lclCloneCell( const ScBaseCell& rSrcCell, ScDocument& rDestDoc, cons
             return new ScNoteCell;
         default:;
     }
-    DBG_ERROR( "lclCloneCell - unknown cell type" );
+    OSL_FAIL( "lclCloneCell - unknown cell type" );
     return 0;
 }
 
@@ -181,7 +181,7 @@ void ScBaseCell::Delete()
             delete (ScNoteCell*) this;
             break;
         default:
-            DBG_ERROR("Unbekannter Zellentyp");
+            OSL_FAIL("Unbekannter Zellentyp");
             break;
     }
 }
@@ -553,7 +553,7 @@ BOOL ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
                 return FALSE;       // unterschiedlich lang oder unterschiedliche Tokens
             }
         default:
-            DBG_ERROR("huch, was fuer Zellen???");
+            OSL_FAIL("huch, was fuer Zellen???");
     }
     return FALSE;
 }
@@ -880,7 +880,7 @@ void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
         }
         else
         {
-            DBG_ERROR("ScFormulaCell::GetFormula: not a matrix");
+            OSL_FAIL("ScFormulaCell::GetFormula: not a matrix");
         }
     }
     else

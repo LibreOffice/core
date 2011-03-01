@@ -529,7 +529,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         //  View aufgerufen, um auf der sichtbaren View zu markieren/umzuschalten:
 
         case SID_TABLE_ACTIVATE:
-            DBG_ERROR("old slot SID_TABLE_ACTIVATE");
+            OSL_FAIL("old slot SID_TABLE_ACTIVATE");
             break;
 
         case SID_REPAINT:
@@ -1150,7 +1150,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
 
         default:
-            DBG_ERROR("Unbekannter Slot bei ScTabViewShell::Execute");
+            OSL_FAIL("Unbekannter Slot bei ScTabViewShell::Execute");
             break;
     }
 }

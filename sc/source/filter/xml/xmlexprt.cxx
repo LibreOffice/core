@@ -1657,7 +1657,7 @@ void ScXMLExport::_ExportContent()
         sal_Int32 nShapesCount(0);
         sal_Int32 nCellCount(pDoc ? pDoc->GetCellCount() : 0);
         CollectSharedData(nTableCount, nShapesCount, nCellCount);
-        DBG_ERROR("no shared data setted");
+        OSL_FAIL("no shared data setted");
     }
     ScXMLExportDatabaseRanges aExportDatabaseRanges(*this);
     if (!GetModel().is())

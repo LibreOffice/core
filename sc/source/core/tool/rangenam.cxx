@@ -411,7 +411,7 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
                 break;
             default:
             {
-                DBG_ERROR("ScRangeName::UpdateTabRef: Unknown Flag");
+                OSL_FAIL("ScRangeName::UpdateTabRef: Unknown Flag");
             }
                 break;
         }

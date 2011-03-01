@@ -341,7 +341,7 @@ BOOL ScRangeUtil::MakeRangeFromName (
     }
     else
     {
-        DBG_ERROR( "ScRangeUtil::MakeRangeFromName" );
+        OSL_FAIL( "ScRangeUtil::MakeRangeFromName" );
     }
 
     if( bResult )

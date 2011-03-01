@@ -852,7 +852,7 @@ BOOL ScConditionEntry::IsValid( double nArg, const ScAddress& rAddr ) const
             bValid = !::rtl::math::approxEqual( nComp1, 0.0 );
             break;
         default:
-            DBG_ERROR("unbekannte Operation bei ScConditionEntry");
+            OSL_FAIL("unbekannte Operation bei ScConditionEntry");
             break;
     }
     return bValid;
@@ -936,7 +936,7 @@ BOOL ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rAddr ) 
                     break;
                 //  SC_COND_DIRECT schon oben abgefragt
                 default:
-                    DBG_ERROR("unbekannte Operation bei ScConditionEntry");
+                    OSL_FAIL("unbekannte Operation bei ScConditionEntry");
                     bValid = FALSE;
                     break;
             }
@@ -1003,7 +1003,7 @@ String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
     }
     else
     {
-        DBG_ERROR("GetExpression: falscher Index");
+        OSL_FAIL("GetExpression: falscher Index");
     }
 
     return aRet;
@@ -1042,7 +1042,7 @@ ScTokenArray* ScConditionEntry::CreateTokenArry( USHORT nIndex ) const
     }
     else
     {
-        DBG_ERROR("GetExpression: falscher Index");
+        OSL_FAIL("GetExpression: falscher Index");
     }
 
     return pRet;
@@ -1621,7 +1621,7 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
         if ((*this)[i]->GetKey() == nKey)
             return (*this)[i];
 
-    DBG_ERROR("ScConditionalFormatList: Eintrag nicht gefunden");
+    OSL_FAIL("ScConditionalFormatList: Eintrag nicht gefunden");
     return NULL;
 }
 

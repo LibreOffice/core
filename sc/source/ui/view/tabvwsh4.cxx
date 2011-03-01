@@ -984,7 +984,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                     }
                     break;
             default:
-                    DBG_ERROR("Falsche Shell angefordert");
+                    OSL_FAIL("Falsche Shell angefordert");
                     break;
         }
 
@@ -1074,7 +1074,7 @@ void ScTabViewShell::SetDrawTextUndo( SfxUndoManager* pNewUndoMgr )
     }
     else
     {
-        DBG_ERROR("SetDrawTextUndo ohne DrawTextShell");
+        OSL_FAIL("SetDrawTextUndo ohne DrawTextShell");
     }
 }
 
@@ -1996,7 +1996,7 @@ void ScTabViewShell::ExecTbx( SfxRequest& rReq )
                 nInsObjCtrlState = ((const SfxUInt16Item*)pItem)->GetValue();
             break;
         default:
-            DBG_ERROR("Slot im Wald");
+            OSL_FAIL("Slot im Wald");
     }
     GetViewFrame()->GetBindings().Invalidate( nSlot );
 }

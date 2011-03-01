@@ -868,7 +868,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 break;
 
             case FID_INPUTLINE_STATUS:
-                DBG_ERROR( "Old update method. Use ScTabViewShell::UpdateInputHandler()." );
+                OSL_FAIL( "Old update method. Use ScTabViewShell::UpdateInputHandler()." );
                 break;
 
             case SID_SCENARIOS:                                     // Szenarios:

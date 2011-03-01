@@ -427,7 +427,7 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
                                                     rSortParam.nCol2, rSortParam.nRow2 );
     if (!pDBData)
     {
-        DBG_ERROR( "Sort: keine DBData" );
+        OSL_FAIL( "Sort: keine DBData" );
         return FALSE;
     }
 
@@ -606,7 +606,7 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         }
         else
         {
-            DBG_ERROR("Zielbereich nicht da");
+            OSL_FAIL("Zielbereich nicht da");
         }
     }
 
@@ -663,7 +663,7 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                                                     rQueryParam.nCol2, rQueryParam.nRow2 );
     if (!pDBData)
     {
-        DBG_ERROR( "Query: keine DBData" );
+        OSL_FAIL( "Query: keine DBData" );
         return FALSE;
     }
 
@@ -935,7 +935,7 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         }
         else
         {
-            DBG_ERROR("Zielbereich nicht da");
+            OSL_FAIL("Zielbereich nicht da");
         }
     }
 
@@ -1002,7 +1002,7 @@ BOOL ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                                                 rParam.nCol2, rParam.nRow2 );
     if (!pDBData)
     {
-        DBG_ERROR( "SubTotals: keine DBData" );
+        OSL_FAIL( "SubTotals: keine DBData" );
         return FALSE;
     }
 
@@ -1289,7 +1289,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 pDestObj->SetAlive(TRUE);
                 if ( !pDoc->GetDPCollection()->InsertNewTable(pDestObj) )
                 {
-                    DBG_ERROR("cannot insert DPObject");
+                    OSL_FAIL("cannot insert DPObject");
                     DELETEZ( pDestObj );
                 }
             }

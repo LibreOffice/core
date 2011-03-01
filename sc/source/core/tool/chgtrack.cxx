@@ -653,7 +653,7 @@ ScChangeActionIns::ScChangeActionIns( const ScRange& rRange )
     }
     else
     {
-        DBG_ERROR( "ScChangeActionIns: Block not supported!" );
+        OSL_FAIL( "ScChangeActionIns: Block not supported!" );
     }
 }
 
@@ -766,7 +766,7 @@ ScChangeActionDel::ScChangeActionDel( const ScRange& rRange,
     }
     else
     {
-        DBG_ERROR( "ScChangeActionDel: Block not supported!" );
+        OSL_FAIL( "ScChangeActionDel: Block not supported!" );
     }
 }
 
@@ -1777,7 +1777,7 @@ void ScChangeActionContent::GetFormulaString( String& rStr,
         pCell->GetFormula( rStr );
     else
     {
-        DBG_ERROR( "ScChangeActionContent::GetFormulaString: aPos != pCell->aPos" );
+        OSL_FAIL( "ScChangeActionContent::GetFormulaString: aPos != pCell->aPos" );
         ScFormulaCell* pNew = new ScFormulaCell( *pCell, *pCell->GetDocument(), aPos );
         pNew->GetFormula( rStr );
         delete pNew;
@@ -2466,7 +2466,7 @@ void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
             }
             else
             {
-                DBG_ERROR( "ScChangeTrack::AppendDeleteRange: Block not supported!" );
+                OSL_FAIL( "ScChangeTrack::AppendDeleteRange: Block not supported!" );
             }
             SetInDeleteTop( FALSE );
         }
@@ -3132,7 +3132,7 @@ void ScChangeTrack::Undo( ULONG nStartAction, ULONG nEndAction, bool bMerge )
                                 }
                                 else
                                 {
-                                    DBG_ERROR( "ScChangeTrack::Undo: nCut not found" );
+                                    OSL_FAIL( "ScChangeTrack::Undo: nCut not found" );
                                 }
                             }
                             EndBlockModify( nEnd );
@@ -3323,7 +3323,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
             ((ScChangeActionMove*)pAct)->GetDelta( nDx, nDy, nDz );
         break;
         default:
-            DBG_ERROR( "ScChangeTrack::UpdateReference: unknown Type" );
+            OSL_FAIL( "ScChangeTrack::UpdateReference: unknown Type" );
     }
     if ( bUndo )
     {
@@ -4330,7 +4330,7 @@ BOOL ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionTable* pTable,
     }
     else
     {
-        DBG_ERROR( "ScChangeTrack::Reject: say what?" );
+        OSL_FAIL( "ScChangeTrack::Reject: say what?" );
     }
 
     return bRejected;

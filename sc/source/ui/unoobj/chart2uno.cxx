@@ -2425,7 +2425,7 @@ void ScChart2DataSequence::BuildDataCache()
 
     if (!m_pTokens.get())
     {
-        DBG_ERROR("m_pTokens == NULL!  Something is wrong.");
+        OSL_FAIL("m_pTokens == NULL!  Something is wrong.");
         return;
     }
 
@@ -2576,7 +2576,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
 
         if (p->GetType() != svMatrix)
         {
-            DBG_ERROR("Cached array is not a matrix token.");
+            OSL_FAIL("Cached array is not a matrix token.");
             continue;
         }
 
@@ -2678,7 +2678,7 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
 {
     if (!m_pDocument)
     {
-        DBG_ERROR("document instance is NULL!?");
+        OSL_FAIL("document instance is NULL!?");
         return;
     }
 
@@ -2802,7 +2802,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
             if (!m_pRangeIndices.get() || m_pRangeIndices->empty())
             {
-                DBG_ERROR(" faulty range indices");
+                OSL_FAIL(" faulty range indices");
                 break;
             }
 
@@ -2811,7 +2811,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             size_t nCount = rRanges.size();
             if (nCount != m_pRangeIndices->size())
             {
-                DBG_ERROR("range count and range index count differ.");
+                OSL_FAIL("range count and range index count differ.");
                 break;
             }
 

@@ -1476,7 +1476,7 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
 {
     if ( !pColFlags || !pRowFlags )
     {
-        DBG_ERROR("keine ColInfo oder RowInfo in ExtendPrintArea");
+        OSL_FAIL("keine ColInfo oder RowInfo in ExtendPrintArea");
         return;
     }
 

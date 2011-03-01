@@ -1343,7 +1343,7 @@ void SAL_CALL ScModelObj::calculate() throw(uno::RuntimeException)
         pDocShell->DoRecalc(TRUE);
     else
     {
-        DBG_ERROR("keine DocShell");        //! Exception oder so?
+        OSL_FAIL("keine DocShell");     //! Exception oder so?
     }
 }
 
@@ -1354,7 +1354,7 @@ void SAL_CALL ScModelObj::calculateAll() throw(uno::RuntimeException)
         pDocShell->DoHardRecalc(TRUE);
     else
     {
-        DBG_ERROR("keine DocShell");        //! Exception oder so?
+        OSL_FAIL("keine DocShell");     //! Exception oder so?
     }
 }
 
@@ -1364,7 +1364,7 @@ sal_Bool SAL_CALL ScModelObj::isAutomaticCalculationEnabled() throw(uno::Runtime
     if (pDocShell)
         return pDocShell->GetDocument()->GetAutoCalc();
 
-    DBG_ERROR("keine DocShell");        //! Exception oder so?
+    OSL_FAIL("keine DocShell");     //! Exception oder so?
     return FALSE;
 }
 
@@ -1383,7 +1383,7 @@ void SAL_CALL ScModelObj::enableAutomaticCalculation( sal_Bool bEnabled )
     }
     else
     {
-        DBG_ERROR("keine DocShell");        //! Exception oder so?
+        OSL_FAIL("keine DocShell");     //! Exception oder so?
     }
 }
 
@@ -1423,7 +1423,7 @@ sal_Bool SAL_CALL ScModelObj::isProtected() throw(uno::RuntimeException)
     if (pDocShell)
         return pDocShell->GetDocument()->IsDocProtected();
 
-    DBG_ERROR("keine DocShell");        //! Exception oder so?
+    OSL_FAIL("keine DocShell");     //! Exception oder so?
     return FALSE;
 }
 
@@ -1435,7 +1435,7 @@ uno::Reference<drawing::XDrawPages> SAL_CALL ScModelObj::getDrawPages() throw(un
     if (pDocShell)
         return new ScDrawPagesObj(pDocShell);
 
-    DBG_ERROR("keine DocShell");        //! Exception oder so?
+    OSL_FAIL("keine DocShell");     //! Exception oder so?
     return NULL;
 }
 

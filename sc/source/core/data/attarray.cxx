@@ -508,7 +508,7 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
         SCROW nStart=0;
         if (!Search( nStartRow, nPos ))
         {
-            DBG_ERROR("Search Failure");
+            OSL_FAIL("Search Failure");
             return;
         }
 
@@ -603,7 +603,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
         SCROW nStart=0;
         if (!Search( nStartRow, nPos ))
         {
-            DBG_ERROR("Search failure");
+            OSL_FAIL("Search failure");
             return;
         }
 
@@ -733,7 +733,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
         SCROW nStart=0;
         if (!Search( nStartRow, nPos ))
         {
-            DBG_ERROR("Search Failure");
+            OSL_FAIL("Search Failure");
             return;
         }
 
@@ -872,7 +872,7 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
         SCROW nStart=0;
         if (!Search( nStartRow, nPos ))
         {
-            DBG_ERROR("Search failure");
+            OSL_FAIL("Search failure");
             return;
         }
 

@@ -325,7 +325,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
         case SID_SBA_BRW_INSERT:
             {
-                DBG_ERROR( "Deprecated Slot" );
+                OSL_FAIL( "Deprecated Slot" );
             }
             break;
 
@@ -615,7 +615,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 if ( pArgs )
                 {
-                    DBG_ERROR("SID_FILTER with arguments?");
+                    OSL_FAIL("SID_FILTER with arguments?");
                     pTabViewShell->Query( ((const ScQueryItem&)
                             pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), NULL, TRUE );
                     rReq.Done();
@@ -636,7 +636,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 if ( pArgs )
                 {
-                    DBG_ERROR("SID_SPECIAL_FILTER with arguments?");
+                    OSL_FAIL("SID_SPECIAL_FILTER with arguments?");
                     pTabViewShell->Query( ((const ScQueryItem&)
                             pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), NULL, TRUE );
                     rReq.Done();
@@ -770,7 +770,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     }
                     else
                     {
-                        DBG_ERROR("NULL");
+                        OSL_FAIL("NULL");
                     }
                 }
                 else
@@ -838,7 +838,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 if ( pArgs )
                 {
-                    DBG_ERROR("spaeter...");
+                    OSL_FAIL("spaeter...");
                 }
                 else
                 {

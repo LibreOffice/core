@@ -319,7 +319,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                     }
                     else
                     {
-                        DBG_ERROR("Invalid URL!");
+                        OSL_FAIL("Invalid URL!");
                         //! error message
                         //! can this happen???
                     }
@@ -654,7 +654,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                 }
                 else
                 {
-                    DBG_ERROR( "Could not create new table :-/" );
+                    OSL_FAIL( "Could not create new table :-/" );
                 }
             }
             else if ( nToTable != pData->GetTabNo() )

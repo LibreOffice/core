@@ -618,7 +618,7 @@ sal_Int32 XMLTableStyleContext::GetNumberFormat()
                     pMyStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
             else
             {
-                DBG_ERROR("not possible to get style");
+                OSL_FAIL("not possible to get style");
             }
         }
         if (pStyle)

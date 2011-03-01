@@ -168,7 +168,7 @@ ScSubTotalFunc ScDataUnoConversion::GeneralToSubTotal( sheet::GeneralFunction eS
         case sheet::GeneralFunction_VARP:       eSubTotal = SUBTOTAL_FUNC_VARP; break;
         case sheet::GeneralFunction_AUTO:
         default:
-            DBG_ERROR("GeneralToSubTotal: falscher enum");
+            OSL_FAIL("GeneralToSubTotal: falscher enum");
             eSubTotal = SUBTOTAL_FUNC_NONE;
     }
     return eSubTotal;
@@ -192,7 +192,7 @@ sheet::GeneralFunction  ScDataUnoConversion::SubTotalToGeneral( ScSubTotalFunc e
         case SUBTOTAL_FUNC_VAR:  eGeneral = sheet::GeneralFunction_VAR;       break;
         case SUBTOTAL_FUNC_VARP: eGeneral = sheet::GeneralFunction_VARP;      break;
         default:
-            DBG_ERROR("SubTotalToGeneral: falscher enum");
+            OSL_FAIL("SubTotalToGeneral: falscher enum");
             eGeneral = sheet::GeneralFunction_NONE;
             break;
     }
@@ -300,7 +300,7 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
                     rParam.nType   = ScDbQuery;
                     break;
                 default:
-                    DBG_ERROR("falscher Mode");
+                    OSL_FAIL("falscher Mode");
                     rParam.bImport = FALSE;
             }
         }
@@ -421,7 +421,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                 INT32 i;
                 if ( nCount > MAXSORT )
                 {
-                    DBG_ERROR("Zu viele Sortierfelder");
+                    OSL_FAIL("Zu viele Sortierfelder");
                     nCount = MAXSORT;
                 }
                 const util::SortField* pFieldArray = aSeq.getConstArray();
@@ -442,7 +442,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                 INT32 i;
                 if ( nCount > MAXSORT )
                 {
-                    DBG_ERROR("Zu viele Sortierfelder");
+                    OSL_FAIL("Zu viele Sortierfelder");
                     nCount = MAXSORT;
                 }
                 const table::TableSortField* pFieldArray = aNewSeq.getConstArray();
@@ -609,12 +609,12 @@ ScSubTotalDescriptorBase::~ScSubTotalDescriptorBase()
 
 void ScSubTotalDescriptorBase::GetData( ScSubTotalParam& /* rParam */ ) const
 {
-    DBG_ERROR("ScSubTotalDescriptorBase::GetData soll nicht gerufen werden");
+    OSL_FAIL("ScSubTotalDescriptorBase::GetData soll nicht gerufen werden");
 }
 
 void ScSubTotalDescriptorBase::PutData( const ScSubTotalParam& /* rParam */ )
 {
-    DBG_ERROR("ScSubTotalDescriptorBase::PutData soll nicht gerufen werden");
+    OSL_FAIL("ScSubTotalDescriptorBase::PutData soll nicht gerufen werden");
 }
 
 // XSubTotalDesctiptor
@@ -1153,7 +1153,7 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
             case SC_TOPPERC:        aField.Operator = sheet::FilterOperator_TOP_PERCENT;      break;
             case SC_BOTPERC:        aField.Operator = sheet::FilterOperator_BOTTOM_PERCENT; break;
             default:
-                DBG_ERROR("Falscher Filter-enum");
+                OSL_FAIL("Falscher Filter-enum");
                 aField.Operator = sheet::FilterOperator_EMPTY;
         }
         pAry[i] = aField;
@@ -1227,7 +1227,7 @@ throw(uno::RuntimeException)
         case SC_ENDS_WITH:              aField.Operator = sheet::FilterOperator2::ENDS_WITH;            break;
         case SC_DOES_NOT_END_WITH:      aField.Operator = sheet::FilterOperator2::DOES_NOT_END_WITH;    break;
         default:
-            DBG_ERROR("Falscher Filter-enum");
+            OSL_FAIL("Falscher Filter-enum");
             aField.Operator = sheet::FilterOperator2::EMPTY;
         }
         pAry[i] = aField;
@@ -1297,7 +1297,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
                 }
                 break;
             default:
-                DBG_ERROR("Falscher Query-enum");
+                OSL_FAIL("Falscher Query-enum");
                 rEntry.eOp = SC_EQUAL;
         }
     }
@@ -1377,7 +1377,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields2(
             }
             break;
         default:
-            DBG_ERROR("Falscher Query-enum");
+            OSL_FAIL("Falscher Query-enum");
             rEntry.eOp = SC_EQUAL;
         }
     }

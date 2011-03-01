@@ -253,7 +253,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                 }
                 else
                 {
-                    DBG_ERROR("Object is NO line object");
+                    OSL_FAIL("Object is NO line object");
                 }
 
                 break;
@@ -287,7 +287,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                 }
                 else
                 {
-                    DBG_ERROR("Object is NO caption object");
+                    OSL_FAIL("Object is NO caption object");
                 }
 
                 break;

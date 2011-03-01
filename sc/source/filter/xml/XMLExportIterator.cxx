@@ -353,7 +353,7 @@ void ScMyAreaLinksContainer::SetCellData( ScMyCell& rMyCell )
                 ScUnoConversion::FillApiStartAddress( aAddress, aItr->aDestRange );
                 if (aAddress == rMyCell.aCellAddress)
                 {
-                    DBG_ERROR("more than one linked range on one cell");
+                    OSL_FAIL("more than one linked range on one cell");
                     aItr = aAreaLinkList.erase( aItr );
                 }
                 else
@@ -676,7 +676,7 @@ void ScMyNotEmptyCellsIterator::Clear()
         delete pCellItr;
     if (!aAnnotations.empty())
     {
-        DBG_ERROR("not all Annotations saved");
+        OSL_FAIL("not all Annotations saved");
         aAnnotations.clear();
     }
     pCellItr = NULL;

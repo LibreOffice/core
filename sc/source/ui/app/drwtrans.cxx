@@ -249,12 +249,12 @@ ScDrawTransferObj::~ScDrawTransferObj()
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetClipData().pDrawClipboard == this )
     {
-        DBG_ERROR("ScDrawTransferObj wasn't released");
+        OSL_FAIL("ScDrawTransferObj wasn't released");
         pScMod->SetClipObject( NULL, NULL );
     }
     if ( pScMod->GetDragData().pDrawTransfer == this )
     {
-        DBG_ERROR("ScDrawTransferObj wasn't released");
+        OSL_FAIL("ScDrawTransferObj wasn't released");
         pScMod->ResetDragObject();
     }
 
@@ -613,7 +613,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
             break;
 
         default:
-            DBG_ERROR("unknown object id");
+            OSL_FAIL("unknown object id");
     }
     return bRet;
 }

@@ -122,7 +122,7 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange,
         break;
         default:
         {
-            DBG_ERROR("wrong type");
+            OSL_FAIL("wrong type");
         }
         break;
     }
@@ -347,7 +347,7 @@ ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString*
         aStyle.sStyleName = *pStyleNameP;
     else
     {
-        DBG_ERROR("here is no stylename given");
+        OSL_FAIL("here is no stylename given");
     }
     ScMyStylesSet::iterator aItr(aCellStyles.find(aStyle));
     if (aItr == aCellStyles.end())
@@ -357,7 +357,7 @@ ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString*
             aItr = aPair.first;
         else
         {
-            DBG_ERROR("not possible to insert style");
+            OSL_FAIL("not possible to insert style");
             return aCellStyles.end();
         }
     }

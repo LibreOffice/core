@@ -3287,7 +3287,7 @@ void ScInterpreter::ScPercentrank()
 
                 if ( nOldCount == 0 )
                 {
-                    DBG_ERROR("should not happen");
+                    OSL_FAIL("should not happen");
                     fRes = 0.0;
                 }
                 else

@@ -781,7 +781,7 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
 {
     if ( _nCategoryNumber > SC_FUNCGROUP_COUNT )
     {
-        DBG_ERROR("Invalid category number!");
+        OSL_FAIL("Invalid category number!");
         return ::rtl::OUString();
     }
 

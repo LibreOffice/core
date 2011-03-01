@@ -285,7 +285,7 @@ void ScDrawView::UpdateWorkArea()
     }
     else
     {
-        DBG_ERROR("Page nicht gefunden");
+        OSL_FAIL("Page nicht gefunden");
     }
 }
 
@@ -488,7 +488,7 @@ void ScDrawView::MarkListHasChanged()
             pViewSh->SetVerbs( xObj->getSupportedVerbs() );
         else
         {
-            DBG_ERROR("SdrOle2Obj ohne ObjRef");
+            OSL_FAIL("SdrOle2Obj ohne ObjRef");
             pViewSh->SetVerbs( 0 );
         }
     }

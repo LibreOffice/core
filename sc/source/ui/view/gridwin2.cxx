@@ -247,7 +247,7 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
     }
     else
     {
-        DBG_ERROR("Da is ja garnix");
+        OSL_FAIL("Da is ja garnix");
     }
 }
 

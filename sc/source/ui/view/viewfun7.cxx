@@ -307,7 +307,7 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
 
             if( aSize.Height() == 0 || aSize.Width() == 0 )
             {
-                DBG_ERROR("SvObjectDescriptor::GetSize == 0");
+                OSL_FAIL("SvObjectDescriptor::GetSize == 0");
                 aSize.Width() = 5000;
                 aSize.Height() = 5000;
                 aSize = OutputDevice::LogicToLogic( aSize, aMap100, aMapObj );

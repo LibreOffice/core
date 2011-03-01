@@ -136,7 +136,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         }
         else
         {
-            DBG_ERROR("pSearchText == NULL");
+            OSL_FAIL("pSearchText == NULL");
             return bFound;
         }
 
@@ -612,7 +612,7 @@ BOOL ScTable::ReplaceStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW&
             ApplyStyle( rCol, rRow, *pReplaceStyle );
         else
         {
-            DBG_ERROR("pReplaceStyle==0");
+            OSL_FAIL("pReplaceStyle==0");
         }
     }
 
@@ -676,7 +676,7 @@ BOOL ScTable::ReplaceAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& rMar
         }
         else
         {
-            DBG_ERROR("pReplaceStyle==0");
+            OSL_FAIL("pReplaceStyle==0");
         }
     }
 

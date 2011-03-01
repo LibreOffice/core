@@ -121,7 +121,7 @@ String ScSheetDPData::getDimensionName(long nColumn)
     }
     else if (nColumn >= aCacheTable.getColSize())
     {
-        DBG_ERROR("getDimensionName: invalid dimension");
+        OSL_FAIL("getDimensionName: invalid dimension");
         return String();
     }
     else
@@ -140,7 +140,7 @@ BOOL ScSheetDPData::IsDateDimension(long nDim)
     }
     else if (nDim >= nColCount)
     {
-        DBG_ERROR("IsDateDimension: invalid dimension");
+        OSL_FAIL("IsDateDimension: invalid dimension");
         return FALSE;
     }
     else
@@ -158,7 +158,7 @@ ULONG ScSheetDPData::GetNumberFormat(long nDim)
     }
     else if (nDim >= GetCacheTable().getColSize())
     {
-        DBG_ERROR("GetNumberFormat: invalid dimension");
+        OSL_FAIL("GetNumberFormat: invalid dimension");
         return 0;
     }
     else
@@ -316,7 +316,7 @@ ScDPCache* ScSheetSourceDesc::CreateCache() const
     ULONG nErrId = CheckSourceRange();
     if (nErrId)
     {
-        DBG_ERROR( "Error Create Cache\n" );
+        OSL_FAIL( "Error Create Cache\n" );
         return NULL;
     }
 

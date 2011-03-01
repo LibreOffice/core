@@ -992,7 +992,7 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
     {
         if ( nFieldIndex >= pArr->size() )
         {
-            DBG_ERROR("invalid selection");
+            OSL_FAIL("invalid selection");
             return;
         }
 

@@ -93,7 +93,7 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
                 case 2: nRet = aDate.GetMonth();                break;
                 case 3: nRet = aDate.GetDay();                  break;
                 default:
-                    DBG_ERROR("GetDatePart: wrong level");
+                    OSL_FAIL("GetDatePart: wrong level");
             }
             break;
         case SC_DAPI_HIERARCHY_WEEK:
@@ -104,11 +104,11 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
                 case 1: nRet = aDate.GetWeekOfYear();           break;
                 case 2: nRet = (long)aDate.GetDayOfWeek();      break;
                 default:
-                    DBG_ERROR("GetDatePart: wrong level");
+                    OSL_FAIL("GetDatePart: wrong level");
             }
             break;
         default:
-            DBG_ERROR("GetDatePart: wrong hierarchy");
+            OSL_FAIL("GetDatePart: wrong hierarchy");
     }
 
     nLastDateVal = nDateVal;
@@ -147,14 +147,14 @@ BOOL ScDPTableData::IsNumOrDateGroup(long) const
 BOOL ScDPTableData::IsInGroup( const ScDPItemData&, long,
                                const ScDPItemData&, long ) const
 {
-    DBG_ERROR("IsInGroup shouldn't be called for non-group data");
+    OSL_FAIL("IsInGroup shouldn't be called for non-group data");
     return FALSE;
 }
 
 BOOL ScDPTableData::HasCommonElement( const ScDPItemData&, long,
                                       const ScDPItemData&, long ) const
 {
-    DBG_ERROR("HasCommonElement shouldn't be called for non-group data");
+    OSL_FAIL("HasCommonElement shouldn't be called for non-group data");
     return FALSE;
 }
 void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTable& rCacheTable,

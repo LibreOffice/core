@@ -81,7 +81,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
     ScTabViewShell* pVisibleSh = this;
     if ( nSlotId == SID_OLE_SELECT || nSlotId == SID_OLE_ACTIVATE || nSlotId == SID_OLE_DEACTIVATE )
     {
-        DBG_ERROR("old slot SID_OLE...");
+        OSL_FAIL("old slot SID_OLE...");
     }
 
     switch (nSlotId)
@@ -258,7 +258,7 @@ void ScTabViewShell::RemoveAccessibilityObject( SfxListener& rObject )
     }
     else
     {
-        DBG_ERROR("kein Accessibility-Broadcaster?");
+        OSL_FAIL("kein Accessibility-Broadcaster?");
     }
 }
 

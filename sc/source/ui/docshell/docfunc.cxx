@@ -518,7 +518,7 @@ BOOL ScDocFunc::DetectiveRefresh( BOOL bAutomatic )
                         aFunc.ShowError( nCol, nRow );
                         break;
                     default:
-                        DBG_ERROR("falsche Op bei DetectiveRefresh");
+                        OSL_FAIL("falsche Op bei DetectiveRefresh");
                 }
             }
         }
@@ -589,7 +589,7 @@ BOOL ScDocFunc::DeleteContents( const ScMarkData& rMark, USHORT nFlags,
 
     if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
     {
-        DBG_ERROR("ScDocFunc::DeleteContents ohne Markierung");
+        OSL_FAIL("ScDocFunc::DeleteContents ohne Markierung");
         return FALSE;
     }
 
@@ -1359,7 +1359,7 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     if ( !ValidRow(nStartRow) || !ValidRow(nEndRow) )
     {
-        DBG_ERROR("invalid row in InsertCells");
+        OSL_FAIL("invalid row in InsertCells");
         return FALSE;
     }
 
@@ -1638,7 +1638,7 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             nPaintFlags |= PAINT_TOP;
             break;
         default:
-            DBG_ERROR("Falscher Code beim Einfuegen");
+            OSL_FAIL("Falscher Code beim Einfuegen");
             bSuccess = FALSE;
             break;
     }
@@ -1794,7 +1794,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     if ( !ValidRow(nStartRow) || !ValidRow(nEndRow) )
     {
-        DBG_ERROR("invalid row in DeleteCells");
+        OSL_FAIL("invalid row in DeleteCells");
         return FALSE;
     }
 
@@ -2100,7 +2100,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             nPaintFlags |= PAINT_TOP;
             break;
         default:
-            DBG_ERROR("Falscher Code beim Loeschen");
+            OSL_FAIL("Falscher Code beim Loeschen");
             break;
     }
 
@@ -2280,7 +2280,7 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     if ( !ValidRow(nStartRow) || !ValidRow(nEndRow) || !ValidRow(nDestRow) )
     {
-        DBG_ERROR("invalid row in MoveBlock");
+        OSL_FAIL("invalid row in MoveBlock");
         return FALSE;
     }
 
@@ -4195,7 +4195,7 @@ BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
         case FILL_TO_TOP:
             if (nCount > sal::static_int_cast<ULONG>( aSourceArea.aStart.Row() ))
             {
-                DBG_ERROR("FillAuto: Row < 0");
+                OSL_FAIL("FillAuto: Row < 0");
                 nCount = aSourceArea.aStart.Row();
             }
             aDestArea.aStart.SetRow( sal::static_int_cast<SCROW>( aSourceArea.aStart.Row() - nCount ) );
@@ -4206,13 +4206,13 @@ BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
         case FILL_TO_LEFT:
             if (nCount > sal::static_int_cast<ULONG>( aSourceArea.aStart.Col() ))
             {
-                DBG_ERROR("FillAuto: Col < 0");
+                OSL_FAIL("FillAuto: Col < 0");
                 nCount = aSourceArea.aStart.Col();
             }
             aDestArea.aStart.SetCol( sal::static_int_cast<SCCOL>( aSourceArea.aStart.Col() - nCount ) );
             break;
         default:
-            DBG_ERROR("Falsche Richtung bei FillAuto");
+            OSL_FAIL("Falsche Richtung bei FillAuto");
             break;
     }
 
@@ -4584,7 +4584,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                         ScAddress( nPosX, nPosY, nTab));
                 if (!rList.Insert(pData))
                 {
-                    DBG_ERROR("nanu?");
+                    OSL_FAIL("nanu?");
                     delete pData;
                 }
             }

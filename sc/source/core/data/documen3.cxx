@@ -708,7 +708,7 @@ BOOL ScDocument::TestCopyScenario( SCTAB nSrcTab, SCTAB nDestTab ) const
     if (ValidTab(nSrcTab) && ValidTab(nDestTab))
         return pTab[nSrcTab]->TestCopyScenarioTo( pTab[nDestTab] );
 
-    DBG_ERROR("falsche Tabelle bei TestCopyScenario");
+    OSL_FAIL("falsche Tabelle bei TestCopyScenario");
     return FALSE;
 }
 
@@ -760,7 +760,7 @@ void ScDocument::RemoveUnoObject( SfxListener& rObject )
     }
     else
     {
-        DBG_ERROR("No Uno broadcaster");
+        OSL_FAIL("No Uno broadcaster");
     }
 }
 
@@ -1179,7 +1179,7 @@ BOOL ScDocument::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, B
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->UpdateOutlineCol( nStartCol, nEndCol, bShow );
 
-    DBG_ERROR("missing tab");
+    OSL_FAIL("missing tab");
     return FALSE;
 }
 
@@ -1188,7 +1188,7 @@ BOOL ScDocument::UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, B
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->UpdateOutlineRow( nStartRow, nEndRow, bShow );
 
-    DBG_ERROR("missing tab");
+    OSL_FAIL("missing tab");
     return FALSE;
 }
 
@@ -1208,7 +1208,7 @@ SCSIZE ScDocument::Query(SCTAB nTab, const ScQueryParam& rQueryParam, BOOL bKeep
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->Query((ScQueryParam&)rQueryParam, bKeepSub);
 
-    DBG_ERROR("missing tab");
+    OSL_FAIL("missing tab");
     return 0;
 }
 
@@ -1226,7 +1226,7 @@ BOOL ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->CreateQueryParam(nCol1, nRow1, nCol2, nRow2, rQueryParam);
 
-    DBG_ERROR("missing tab");
+    OSL_FAIL("missing tab");
     return FALSE;
 }
 
@@ -1482,7 +1482,7 @@ Rectangle ScDocument::GetEmbeddedRect() const                       // 1/100 mm
     ScTable* pTable = pTab[aEmbedRange.aStart.Tab()];
     if (!pTable)
     {
-        DBG_ERROR("GetEmbeddedRect ohne Tabelle");
+        OSL_FAIL("GetEmbeddedRect ohne Tabelle");
     }
     else
     {
@@ -1570,7 +1570,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect ) const
     ScTable* pTable = pTab[nTab];
     if (!pTable)
     {
-        DBG_ERROR("GetRange ohne Tabelle");
+        OSL_FAIL("GetRange ohne Tabelle");
         return ScRange();
     }
 
@@ -1704,7 +1704,7 @@ void ScDocument::SnapVisArea( Rectangle& rRect ) const
     ScTable* pTable = pTab[nVisibleTab];
     if (!pTable)
     {
-        DBG_ERROR("SetEmbedded ohne Tabelle");
+        OSL_FAIL("SetEmbedded ohne Tabelle");
         return;
     }
 
@@ -1755,7 +1755,7 @@ BOOL ScDocument::IsTabProtected( SCTAB nTab ) const
     if (VALIDTAB(nTab) && pTab[nTab])
         return pTab[nTab]->IsProtected();
 
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return FALSE;
 }
 
@@ -1869,7 +1869,7 @@ Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol
 {
     if (!ValidTab(nTab) || !pTab[nTab])
     {
-        DBG_ERROR("GetMMRect: falsche Tabelle");
+        OSL_FAIL("GetMMRect: falsche Tabelle");
         return Rectangle(0,0,0,0);
     }
 

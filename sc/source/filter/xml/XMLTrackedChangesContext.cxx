@@ -1821,7 +1821,7 @@ SvXMLImportContext *ScXMLDeletionContext::CreateChildContext( USHORT nPrefix,
             pContext = new ScXMLCutOffsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
         else
         {
-            DBG_ERROR("don't know this");
+            OSL_FAIL("don't know this");
         }
     }
 

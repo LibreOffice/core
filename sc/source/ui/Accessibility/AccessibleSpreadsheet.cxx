@@ -332,7 +332,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 }
                 else
                 {
-                    DBG_ERROR("is it a deletion or a insertion?");
+                    OSL_FAIL("is it a deletion or a insertion?");
                 }
 
                 CommitTableModelChange(rRef.GetRange().aStart.Row(),
@@ -779,14 +779,14 @@ void ScAccessibleSpreadsheet::CreateSortedMarkedCells()
             }
             else
             {
-                DBG_ERROR("Range of wrong table");
+                OSL_FAIL("Range of wrong table");
             }
         }
         else if(pRange->aStart.Tab() == maActiveCell.Tab())
             AddMarkedRange(*pRange);
         else
         {
-            DBG_ERROR("Range of wrong table");
+            OSL_FAIL("Range of wrong table");
         }
     }
     std::sort(mpSortedMarkedCells->begin(), mpSortedMarkedCells->end());

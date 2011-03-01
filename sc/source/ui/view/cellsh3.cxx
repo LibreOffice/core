@@ -900,7 +900,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
         //  ----------------------------------------------------------------
 
         case FID_INPUTLINE_STATUS:
-            DBG_ERROR("Execute von InputLine-Status");
+            OSL_FAIL("Execute von InputLine-Status");
             break;
 
         case SID_STATUS_DOCPOS:
@@ -911,11 +911,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_MARKAREA:
             // called from Basic at the hidden view to select a range in the visible view
-            DBG_ERROR("old slot SID_MARKAREA");
+            OSL_FAIL("old slot SID_MARKAREA");
             break;
 
         default:
-            DBG_ERROR("Unbekannter Slot bei ScCellShell::Execute");
+            OSL_FAIL("Unbekannter Slot bei ScCellShell::Execute");
             break;
     }
 }

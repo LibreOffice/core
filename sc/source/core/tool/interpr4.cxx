@@ -1446,7 +1446,7 @@ void ScInterpreter::PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, S
 
     if (aData.IsTabRel())
     {
-        DBG_ERROR("ScCompiler::GetToken: external single reference must have an absolute table reference!");
+        OSL_FAIL("ScCompiler::GetToken: external single reference must have an absolute table reference!");
         SetError(errNoRef);
         return;
     }
@@ -1515,7 +1515,7 @@ void ScInterpreter::PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArr
     }
     if (aData.Ref1.IsTabRel() || aData.Ref2.IsTabRel())
     {
-        DBG_ERROR("ScCompiler::GetToken: external double reference must have an absolute table reference!");
+        OSL_FAIL("ScCompiler::GetToken: external double reference must have an absolute table reference!");
         SetError(errNoRef);
         return;
     }

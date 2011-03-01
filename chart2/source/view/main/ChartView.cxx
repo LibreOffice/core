@@ -191,7 +191,7 @@ void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& aArguments
     uno::Reference< frame::XModel > xNewChartModel;
     if( !(aArguments[0] >>= xNewChartModel) )
     {
-        DBG_ERROR( "need a Reference to frame::XModel as first parameter for view initialization" );
+        OSL_FAIL( "need a Reference to frame::XModel as first parameter for view initialization" );
     }
     impl_setChartModel( xNewChartModel );
 
@@ -2560,7 +2560,7 @@ void ChartView::createShapes()
         pPage->SetSize(Size(aPageSize.Width,aPageSize.Height));
     else
     {
-        DBG_ERROR("could not set page size correctly");
+        OSL_FAIL("could not set page size correctly");
     }
 
     {

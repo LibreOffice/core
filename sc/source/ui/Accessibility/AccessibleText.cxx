@@ -115,7 +115,7 @@ Rectangle ScViewForwarder::GetVisArea() const
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return aVisArea;
 }
@@ -130,7 +130,7 @@ Point ScViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMod
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return Point();
 }
@@ -145,7 +145,7 @@ Point ScViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMod
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return Point();
 }
@@ -205,7 +205,7 @@ Rectangle ScEditObjectViewForwarder::GetVisArea() const
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return aVisArea;
 }
@@ -226,7 +226,7 @@ Point ScEditObjectViewForwarder::LogicToPixel( const Point& rPoint, const MapMod
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return Point();
 }
@@ -247,7 +247,7 @@ Point ScEditObjectViewForwarder::PixelToLogic( const Point& rPoint, const MapMod
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return Point();
 }
@@ -299,7 +299,7 @@ BOOL ScPreviewViewForwarder::IsValid() const
 Rectangle ScPreviewViewForwarder::GetVisArea() const
 {
     Rectangle aVisArea;
-    DBG_ERROR("should be implemented in an abrevated class");
+    OSL_FAIL("should be implemented in an abrevated class");
     return aVisArea;
 }
 
@@ -317,7 +317,7 @@ Point ScPreviewViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& 
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return Point();
 }
@@ -340,7 +340,7 @@ Point ScPreviewViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& 
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return Point();
 }
@@ -426,7 +426,7 @@ Rectangle ScPreviewHeaderFooterViewForwarder::GetVisArea() const
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return aVisArea;
 }
@@ -466,7 +466,7 @@ Rectangle ScPreviewCellViewForwarder::GetVisArea() const
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return aVisArea;
 }
@@ -512,7 +512,7 @@ Rectangle ScPreviewHeaderCellViewForwarder::GetVisArea() const
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return aVisArea;
 }
@@ -556,7 +556,7 @@ Rectangle ScPreviewNoteViewForwarder::GetVisArea() const
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return aVisArea;
 }
@@ -616,7 +616,7 @@ Rectangle ScEditViewForwarder::GetVisArea() const
     }
     else
     {
-        DBG_ERROR("this EditViewForwarder is no longer valid");
+        OSL_FAIL("this EditViewForwarder is no longer valid");
     }
     return aVisArea;
 }
@@ -627,7 +627,7 @@ Point ScEditViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMa
         return mpWindow->LogicToPixel( rPoint, rMapMode );
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return Point();
 }
@@ -638,7 +638,7 @@ Point ScEditViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMa
         return mpWindow->PixelToLogic( rPoint, rMapMode );
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return Point();
 }
@@ -653,7 +653,7 @@ sal_Bool ScEditViewForwarder::GetSelection( ESelection& rSelection ) const
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return bResult;
 }
@@ -668,7 +668,7 @@ sal_Bool ScEditViewForwarder::SetSelection( const ESelection& rSelection )
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return bResult;
 }
@@ -683,7 +683,7 @@ sal_Bool ScEditViewForwarder::Copy()
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return bResult;
 }
@@ -698,7 +698,7 @@ sal_Bool ScEditViewForwarder::Cut()
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return bResult;
 }
@@ -713,7 +713,7 @@ sal_Bool ScEditViewForwarder::Paste()
     }
     else
     {
-        DBG_ERROR("this ViewForwarder is not valid");
+        OSL_FAIL("this ViewForwarder is not valid");
     }
     return bResult;
 }

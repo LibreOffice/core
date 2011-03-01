@@ -515,7 +515,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     case EXC_BIFF4: aIn.Ignore( 8 );    break;
                     case EXC_BIFF5: aIn.Ignore( 12 );   break;
                     default:
-                        DBG_ERROR(
+                        OSL_FAIL(
                         "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
                 const XclImpName* pName = GetNameManager().GetName( nUINT16 );
@@ -1042,7 +1042,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                     case EXC_BIFF3:
                     case EXC_BIFF4: nIgnore = 10;   break;
                     case EXC_BIFF5: nIgnore = 14;   break;
-                    default:        DBG_ERROR( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
+                    default:        OSL_FAIL( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
                 break;
             case 0x44:
@@ -1701,7 +1701,7 @@ const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
         case xlErrFalse:    eOc = ocFalse;      nError = 0;                     break;
         case xlErrUnknown:  eOc = ocStop;       nError = errUnknownState;       break;
         default:
-            DBG_ERROR( "ExcelToSc::GetBoolErr - wrong enum!" );
+            OSL_FAIL( "ExcelToSc::GetBoolErr - wrong enum!" );
             eOc = ocNoName;
             nError = errUnknownState;
     }

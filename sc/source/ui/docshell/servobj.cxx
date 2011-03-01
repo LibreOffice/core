@@ -113,7 +113,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
         }
         else
         {
-            DBG_ERROR("ScServerObject: invalid item");
+            OSL_FAIL("ScServerObject: invalid item");
         }
     }
 

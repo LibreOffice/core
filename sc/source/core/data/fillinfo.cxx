@@ -258,7 +258,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
             ++nArrY;
             if (nArrY >= ROWINFO_MAX)
             {
-                DBG_ERROR("Zu grosser Bereich bei FillInfo" );
+                OSL_FAIL("Zu grosser Bereich bei FillInfo" );
                 nYExtra = nSignedY;                                 // Ende
                 nY2 = nYExtra - 1;                                  // Bereich anpassen
             }
@@ -880,7 +880,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                             break;
 
                         default:
-                            DBG_ERROR("falscher Shadow-Enum");
+                            OSL_FAIL("falscher Shadow-Enum");
                     }
                 }
             }

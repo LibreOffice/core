@@ -1630,7 +1630,7 @@ void ScUndoSelectionStyle::DoChange( const BOOL bUndo )
             (ScStyleSheet*) pStlPool->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
         if (!pStyleSheet)
         {
-            DBG_ERROR("StyleSheet not found");
+            OSL_FAIL("StyleSheet not found");
             return;
         }
         pDoc->ApplySelectionStyle( *pStyleSheet, aMarkData );
@@ -1668,7 +1668,7 @@ void ScUndoSelectionStyle::Repeat(SfxRepeatTarget& rTarget)
                                             Find( aStyleName, SFX_STYLE_FAMILY_PARA );
         if (!pStyleSheet)
         {
-            DBG_ERROR("StyleSheet not found");
+            OSL_FAIL("StyleSheet not found");
             return;
         }
 

@@ -275,7 +275,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
             }
             else
             {
-                DBG_ERROR("SID_SEARCH_ITEM ohne Parameter");
+                OSL_FAIL("SID_SEARCH_ITEM ohne Parameter");
             }
             break;
         case FID_SEARCH:

@@ -298,7 +298,7 @@ void ScDPSource::SetOrientation(long nColumn, USHORT nNew)
         case sheet::DataPilotFieldOrientation_HIDDEN:
             break;
         default:
-            DBG_ERROR( "ScDPSource::SetOrientation: unexpected orientation" );
+            OSL_FAIL( "ScDPSource::SetOrientation: unexpected orientation" );
             break;
     }
 }
@@ -378,7 +378,7 @@ long ScDPSource::GetSourceDim(long nDim)
         }
     }
 
-    DBG_ERROR("GetSourceDim: wrong dim");
+    OSL_FAIL("GetSourceDim: wrong dim");
     return nDim;
 }
 
@@ -422,13 +422,13 @@ void SAL_CALL ScDPSource::refresh() throw(uno::RuntimeException)
 void SAL_CALL ScDPSource::addRefreshListener( const uno::Reference<util::XRefreshListener >& )
                                                 throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");   //! exception?
+    OSL_FAIL("not implemented");    //! exception?
 }
 
 void SAL_CALL ScDPSource::removeRefreshListener( const uno::Reference<util::XRefreshListener >& )
                                                 throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");   //! exception?
+    OSL_FAIL("not implemented");    //! exception?
 }
 
 Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<sheet::DataPilotFieldFilter>& aFilters)
@@ -594,7 +594,7 @@ long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vector<ScDPL
 
         if ( nPos+1 < nLevels && ppDim[nPos] == ppDim[nPos+1] )
         {
-            DBG_ERROR("lcl_CountMinMembers: multiple levels from one dimension not implemented");
+            OSL_FAIL("lcl_CountMinMembers: multiple levels from one dimension not implemented");
             return 0;
         }
 
@@ -1023,12 +1023,12 @@ void ScDPSource::FillLevelList( USHORT nOrientation, std::vector<ScDPLevel*> &rL
             nDimCount = nPageDimCount;
             break;
         default:
-            DBG_ERROR( "ScDPSource::FillLevelList: unexpected orientation" );
+            OSL_FAIL( "ScDPSource::FillLevelList: unexpected orientation" );
             break;
     }
     if (!pDimIndex)
     {
-        DBG_ERROR("invalid orientation");
+        OSL_FAIL("invalid orientation");
         return;
     }
 
@@ -1166,7 +1166,7 @@ void SAL_CALL ScDPSource::setPropertyValue( const rtl::OUString& aPropertyName, 
     }
     else
     {
-        DBG_ERROR("unknown property");
+        OSL_FAIL("unknown property");
         //! THROW( UnknownPropertyException() );
     }
 }
@@ -1200,7 +1200,7 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const rtl::OUString& aPropertyNa
     }
     else
     {
-        DBG_ERROR("unknown property");
+        OSL_FAIL("unknown property");
         //! THROW( UnknownPropertyException() );
     }
     return aRet;
@@ -1604,7 +1604,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
         }
         if ( !bDone )
         {
-            DBG_ERROR("Filter property is not a single string");
+            OSL_FAIL("Filter property is not a single string");
             throw lang::IllegalArgumentException();
         }
         DELETEZ( pSelectedData );       // invalid after changing aSelectedPage
@@ -1625,7 +1625,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
         aValue >>= mbHasHiddenMember;
     else
     {
-        DBG_ERROR("unknown property");
+        OSL_FAIL("unknown property");
         //! THROW( UnknownPropertyException() );
     }
 }
@@ -1712,7 +1712,7 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
     }
     else
     {
-        DBG_ERROR("unknown property");
+        OSL_FAIL("unknown property");
         //! THROW( UnknownPropertyException() );
     }
     return aRet;
@@ -1878,7 +1878,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPHierarchy::getLevels()
             aRet = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Week"));
             break;  //! name ???????
         default:
-            DBG_ERROR( "ScDPHierarchy::getName: unexpected hierarchy" );
+            OSL_FAIL( "ScDPHierarchy::getName: unexpected hierarchy" );
             break;
     }
     return aRet;
@@ -1886,7 +1886,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPHierarchy::getLevels()
 
 void SAL_CALL ScDPHierarchy::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");       //! exception?
+    OSL_FAIL("not implemented");        //! exception?
 }
 
 // -----------------------------------------------------------------------
@@ -1910,7 +1910,7 @@ ScDPLevels::ScDPLevels( ScDPSource* pSrc, long nD, long nH ) :
             case SC_DAPI_HIERARCHY_QUARTER: nLevCount = SC_DAPI_QUARTER_LEVELS; break;
             case SC_DAPI_HIERARCHY_WEEK:    nLevCount = SC_DAPI_WEEK_LEVELS;    break;
             default:
-                DBG_ERROR("wrong hierarchy");
+                OSL_FAIL("wrong hierarchy");
                 nLevCount = 0;
         }
     }
@@ -2177,7 +2177,7 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
                     aRet = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Day"));
                     break;
                 default:
-                    DBG_ERROR( "ScDPLevel::getName: unexpected level" );
+                    OSL_FAIL( "ScDPLevel::getName: unexpected level" );
                     break;
             }
         }
@@ -2195,7 +2195,7 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
                     aRet = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Weekday"));
                     break;
                 default:
-                    DBG_ERROR( "ScDPLevel::getName: unexpected level" );
+                    OSL_FAIL( "ScDPLevel::getName: unexpected level" );
                     break;
             }
         }
@@ -2212,7 +2212,7 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
 
 void SAL_CALL ScDPLevel::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");       //! exception?
+    OSL_FAIL("not implemented");        //! exception?
 }
 
 uno::Sequence<sheet::GeneralFunction> ScDPLevel::getSubTotals() const
@@ -2286,7 +2286,7 @@ void SAL_CALL ScDPLevel::setPropertyValue( const rtl::OUString& aPropertyName, c
         aValue >>= aLayoutInfo;
     else
     {
-        DBG_ERROR("unknown property");
+        OSL_FAIL("unknown property");
     }
 }
 
@@ -2325,7 +2325,7 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const rtl::OUString& aPropertyNam
     }
     else
     {
-        DBG_ERROR("unknown property");
+        OSL_FAIL("unknown property");
     }
     return aRet;
 }
@@ -2388,7 +2388,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
                 case SC_DAPI_LEVEL_MONTH:   nMbrCount = 12; break;
                 case SC_DAPI_LEVEL_DAY:     nMbrCount = 31; break;
                 default:
-                    DBG_ERROR( "ScDPMembers::ScDPMembers: unexpected level" );
+                    OSL_FAIL( "ScDPMembers::ScDPMembers: unexpected level" );
                     break;
             }
         }
@@ -2400,7 +2400,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
                 case SC_DAPI_LEVEL_WEEK:    nMbrCount = 53; break;
                 case SC_DAPI_LEVEL_WEEKDAY: nMbrCount = 7;  break;
                 default:
-                    DBG_ERROR( "ScDPMembers::ScDPMembers: unexpected level" );
+                    OSL_FAIL( "ScDPMembers::ScDPMembers: unexpected level" );
                     break;
             }
         }
@@ -2689,7 +2689,7 @@ String ScDPMember::GetNameStr() const
 
 void SAL_CALL ScDPMember::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");       //! exception?
+    OSL_FAIL("not implemented");        //! exception?
 }
 
 BOOL ScDPMember::getIsVisible() const
@@ -2768,7 +2768,7 @@ void SAL_CALL ScDPMember::setPropertyValue( const rtl::OUString& aPropertyName, 
     }
     else
     {
-        DBG_ERROR("unknown property");
+        OSL_FAIL("unknown property");
     }
 }
 
@@ -2788,7 +2788,7 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const rtl::OUString& aPropertyNa
         aRet <<= mpLayoutName.get() ? *mpLayoutName : rtl::OUString();
     else
     {
-        DBG_ERROR("unknown property");
+        OSL_FAIL("unknown property");
     }
     return aRet;
 }

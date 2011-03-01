@@ -904,7 +904,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     }
     else
     {
-        DBG_ERROR( "Unknown slot (ScViewShell::ExecuteStyle)" );
+        OSL_FAIL( "Unknown slot (ScViewShell::ExecuteStyle)" );
     }
 }
 
@@ -1045,7 +1045,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             break;
 
         default:
-            DBG_ERROR("falscher Slot bei ExecuteEdit");
+            OSL_FAIL("falscher Slot bei ExecuteEdit");
             break;
     }
 }
@@ -1127,7 +1127,7 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
                             pTabViewShell->ApplyAttr( SvxVerJustifyItem( (SvxCellVerJustify)((const SvxVerJustifyItem*)pItem)->GetValue(), ATTR_VER_JUSTIFY ) );
                         break;
                         default:
-                            DBG_ERROR( "ExecuteAlignment: invalid slot" );
+                            OSL_FAIL( "ExecuteAlignment: invalid slot" );
                             return;
                     }
                 }

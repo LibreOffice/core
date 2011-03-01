@@ -845,7 +845,7 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
         CloseEntry( pInfo );
     if ( !nTableLevel )
     {
-        DBG_ERROR( "Dummbatz-Dok! <TH> oder <TD> ohne vorheriges <TABLE>" );
+        OSL_FAIL( "Dummbatz-Dok! <TH> oder <TD> ohne vorheriges <TABLE>" );
         TableOn( pInfo );
     }
     bInCell = TRUE;
@@ -1074,7 +1074,7 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
         TableRowOff( pInfo );      // das optionale TableRowOff war nicht
     if ( !nTableLevel )
     {
-        DBG_ERROR( "Dummbatz-Dok! </TABLE> ohne oeffnendes <TABLE>" );
+        OSL_FAIL( "Dummbatz-Dok! </TABLE> ohne oeffnendes <TABLE>" );
         return ;
     }
     if ( --nTableLevel > 0 )

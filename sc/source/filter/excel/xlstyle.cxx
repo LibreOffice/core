@@ -1647,7 +1647,7 @@ void XclCellAlign::SetScHorAlign( SvxCellHorJustify eHorJust )
         case SVX_HOR_JUSTIFY_BLOCK:     mnHorAlign = EXC_XF_HOR_JUSTIFY;    break;
         case SVX_HOR_JUSTIFY_REPEAT:    mnHorAlign = EXC_XF_HOR_FILL;       break;
         default:                        mnHorAlign = EXC_XF_HOR_GENERAL;
-            DBG_ERROR( "XclCellAlign::SetScHorAlign - unknown horizontal alignment" );
+            OSL_FAIL( "XclCellAlign::SetScHorAlign - unknown horizontal alignment" );
     }
 }
 
@@ -1660,7 +1660,7 @@ void XclCellAlign::SetScVerAlign( SvxCellVerJustify eVerJust )
         case SVX_VER_JUSTIFY_CENTER:    mnVerAlign = EXC_XF_VER_CENTER; break;
         case SVX_VER_JUSTIFY_BOTTOM:    mnVerAlign = EXC_XF_VER_BOTTOM; break;
         default:                        mnVerAlign = EXC_XF_VER_BOTTOM;
-            DBG_ERROR( "XclCellAlign::SetScVerAlign - unknown vertical alignment" );
+            OSL_FAIL( "XclCellAlign::SetScVerAlign - unknown vertical alignment" );
     }
 }
 

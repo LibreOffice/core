@@ -123,7 +123,7 @@ rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(const ScQueryOp aFilterOper
         case SC_TOPVAL :
             return GetXMLToken(XML_TOP_VALUES);
         default:
-            DBG_ERROR("This FilterOperator is not supported.");
+            OSL_FAIL("This FilterOperator is not supported.");
     }
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
 }

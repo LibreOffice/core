@@ -99,7 +99,7 @@ void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
     if (!pViewSh)
     {
-        DBG_ERROR("Wrong ViewShell");
+        OSL_FAIL("Wrong ViewShell");
         return;
     }
 
@@ -161,7 +161,7 @@ void ScClient::ObjectAreaChanged()
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
     if (!pViewSh)
     {
-        DBG_ERROR("Wrong ViewShell");
+        OSL_FAIL("Wrong ViewShell");
         return;
     }
 
@@ -202,7 +202,7 @@ void ScClient::ViewChanged()
         aSz = xObj->getVisualAreaSize( GetAspect() );
     } catch ( embed::NoVisualAreaSizeException& )
     {
-        DBG_ERROR("The visual area size must be available!\n");
+        OSL_FAIL("The visual area size must be available!\n");
     }
 
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );

@@ -252,7 +252,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
             }
             break;
         default:
-            DBG_ERROR("falscher Slot");
+            OSL_FAIL("falscher Slot");
     }
 }
 
@@ -376,7 +376,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_PASTE:
-            DBG_ERROR( "SdrView::PasteClipboard not supported anymore" );
+            OSL_FAIL( "SdrView::PasteClipboard not supported anymore" );
             break;
 
         case SID_SELECTALL:

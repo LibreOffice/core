@@ -182,7 +182,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAtP
         const awt::Point& /* rPoint */ )
         throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
     return uno::Reference<XAccessible>();
 }
 
@@ -246,7 +246,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::isVisible(  )
 void SAL_CALL ScAccessibleContextBase::grabFocus(  )
         throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 sal_Int32 SAL_CALL ScAccessibleContextBase::getForeground(  )
@@ -267,7 +267,7 @@ sal_Int32 SAL_CALL
        ScAccessibleContextBase::getAccessibleChildCount(void)
     throw (uno::RuntimeException)
 {
-    DBG_ERROR("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abrevated class");
     return 0;
 }
 
@@ -275,7 +275,7 @@ uno::Reference<XAccessible> SAL_CALL
     ScAccessibleContextBase::getAccessibleChild(sal_Int32 /* nIndex */)
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    DBG_ERROR("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abrevated class");
     return uno::Reference<XAccessible>();
 }
 
@@ -544,7 +544,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    DBG_ERROR("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abrevated class");
     return rtl::OUString();
 }
 
@@ -552,7 +552,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    DBG_ERROR("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abrevated class");
     return rtl::OUString();
 }
 
@@ -604,14 +604,14 @@ void ScAccessibleContextBase::CommitFocusLost() const
 Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen(void) const
         throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
     return Rectangle();
 }
 
 Rectangle ScAccessibleContextBase::GetBoundingBox(void) const
         throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
     return Rectangle();
 }
 

@@ -2775,7 +2775,7 @@ void ScViewFunc::ChangeNumFmtDecimals( BOOL bIncrement )
     const SvNumberformat* pOldEntry = pFormatter->GetEntry( nOldFormat );
     if (!pOldEntry)
     {
-        DBG_ERROR("Zahlformat nicht gefunden !!!");
+        OSL_FAIL("Zahlformat nicht gefunden !!!");
         return;
     }
 

@@ -107,7 +107,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     }
     catch(uno::Exception&)
     {
-        DBG_ERROR("exception in database");
+        OSL_FAIL("exception in database");
     }
 
     aLbDatabase.SelectEntryPos( 0 );

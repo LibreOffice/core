@@ -1047,7 +1047,7 @@ struct ConventionOOO_A1 : public Convention_A1
 
                 if (!lcl_getLastTabName(aLastTabName, rTabName, aTabNames, aRef))
                 {
-                    DBG_ERROR( "ConventionOOO_A1::makeExternalRefStrImpl: sheet name not found");
+                    OSL_FAIL( "ConventionOOO_A1::makeExternalRefStrImpl: sheet name not found");
                     // aLastTabName contains #REF!, proceed.
                 }
             }
@@ -3980,7 +3980,7 @@ BOOL ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
             return GetToken();
         }
         default:
-            DBG_ERROR("Wrong type for external reference!");
+            OSL_FAIL("Wrong type for external reference!");
             return FALSE;
     }
     return TRUE;

@@ -1882,7 +1882,7 @@ sal_Bool XmlScPropHdl_IsEqual::importXML( const ::rtl::OUString& /* rStrImpValue
     ::com::sun::star::uno::Any& /* rValue */,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
-    DBG_ERROR("should never be called");
+    OSL_FAIL("should never be called");
     return sal_False;
 }
 
@@ -1890,7 +1890,7 @@ sal_Bool XmlScPropHdl_IsEqual::exportXML( ::rtl::OUString& /* rStrExpValue */,
     const ::com::sun::star::uno::Any& /* rValue */,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
-    DBG_ERROR("should never be called");
+    OSL_FAIL("should never be called");
     return sal_False;
 }
 

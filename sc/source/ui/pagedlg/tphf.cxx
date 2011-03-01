@@ -212,7 +212,7 @@ IMPL_LINK( ScHFPage, HFEditHdl, void*, EMPTYARG )
 
     if ( !pViewSh )
     {
-        DBG_ERROR( "Current ViewShell not found." );
+        OSL_FAIL( "Current ViewShell not found." );
         return 0;
     }
 

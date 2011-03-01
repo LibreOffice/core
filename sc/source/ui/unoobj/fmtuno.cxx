@@ -382,7 +382,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         }
         else
         {
-            DBG_ERROR("falsche Property");
+            OSL_FAIL("falsche Property");
             //! Exception...
         }
     }

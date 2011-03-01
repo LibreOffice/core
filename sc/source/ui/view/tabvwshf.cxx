@@ -823,7 +823,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             break;
 
         default:
-            DBG_ERROR("Unbekannte Message bei ViewShell");
+            OSL_FAIL("Unbekannte Message bei ViewShell");
             break;
     }
 }

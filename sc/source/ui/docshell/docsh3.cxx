@@ -274,7 +274,7 @@ void ScDocShell::UnlockPaint_Impl(BOOL bDoc)
     }
     else
     {
-        DBG_ERROR("UnlockPaint ohne LockPaint");
+        OSL_FAIL("UnlockPaint ohne LockPaint");
     }
 }
 
@@ -347,7 +347,7 @@ void ScDocShell::UnlockDocument()
     }
     else
     {
-        DBG_ERROR("UnlockDocument without LockDocument");
+        OSL_FAIL("UnlockDocument without LockDocument");
     }
 }
 
@@ -407,7 +407,7 @@ void ScDocShell::CalcOutputFactor()
         nPrtToScreenFactor = nPrinterWidth / (double) nWindowWidth;
     else
     {
-        DBG_ERROR("GetTextSize gibt 0 ??");
+        OSL_FAIL("GetTextSize gibt 0 ??");
         nPrtToScreenFactor = 1.0;
     }
 }
@@ -800,7 +800,7 @@ bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument
             pA->GetDescription( aADesc, pSearchDoc, TRUE );
             if ( aActionDesc.Equals( aADesc ) )
             {
-                DBG_ERROR( "lcl_FindAction(): found equal action!" );
+                OSL_FAIL( "lcl_FindAction(): found equal action!" );
                 return true;
             }
         }
@@ -1064,7 +1064,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                     pViewSh->EnterData( aPos.Col(), aPos.Row(), aPos.Tab(), aValue );
                                 break;
                                 default:
-                                    DBG_ERROR( "MergeDocument: unknown MatrixFlag" );
+                                    OSL_FAIL( "MergeDocument: unknown MatrixFlag" );
                             }
                         }
                         break;
@@ -1136,7 +1136,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         pAct->SetComment( rComment );
 #ifdef DBG_UTIL
                     else
-                        DBG_ERROR( "MergeDocument: wohin mit dem Kommentar?!?" );
+                        OSL_FAIL( "MergeDocument: wohin mit dem Kommentar?!?" );
 #endif
                 }
 

@@ -214,7 +214,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
     if (!bIsBlockMode)
     {
-        DBG_ERROR( "MarkCursor nicht im BlockMode" );
+        OSL_FAIL( "MarkCursor nicht im BlockMode" );
         InitBlockMode( nCurX, nCurY, nCurZ, FALSE, bCols, bRows );
     }
 
@@ -1189,7 +1189,7 @@ USHORT ScTabView::CalcZoom( SvxZoomType eType, USHORT nOldZoom )
                 break;
 
         default:
-            DBG_ERROR("Unknown Zoom-Revision");
+            OSL_FAIL("Unknown Zoom-Revision");
             nZoom = 0;
     }
 

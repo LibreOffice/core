@@ -235,7 +235,7 @@ Size ScPreviewShell::GetOptimalSizePixel() const
     }
     else
     {
-        DBG_ERROR( "TabViewShell not found :-/" );
+        OSL_FAIL( "TabViewShell not found :-/" );
     }
 
     return aOptSize;
@@ -1204,7 +1204,7 @@ void ScPreviewShell::RemoveAccessibilityObject( SfxListener& rObject )
         rObject.EndListening( *pAccessibilityBroadcaster );
     else
     {
-        DBG_ERROR("kein Accessibility-Broadcaster?");
+        OSL_FAIL("kein Accessibility-Broadcaster?");
     }
 }
 

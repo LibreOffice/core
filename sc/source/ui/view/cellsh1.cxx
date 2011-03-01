@@ -648,7 +648,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SvNumberformat* pPrivEntry = pFormatter->GetEntry( nPrivFormat );
                     if (!pPrivEntry)
                     {
-                        DBG_ERROR("Zahlformat nicht gefunden !!!");
+                        OSL_FAIL("Zahlformat nicht gefunden !!!");
                     }
                     else
                     {
@@ -921,7 +921,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else
                     {
-                        DBG_ERROR( "Richtung nicht eindeutig fuer AutoFill" );
+                        OSL_FAIL( "Richtung nicht eindeutig fuer AutoFill" );
                     }
                 }
             }
@@ -1977,7 +1977,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else
                     {
-                        DBG_ERROR("NULL");
+                        OSL_FAIL("NULL");
                     }
                 }
             }
@@ -2073,7 +2073,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         //
 
         default:
-            DBG_ERROR("falscher Slot bei ExecuteEdit");
+            OSL_FAIL("falscher Slot bei ExecuteEdit");
             break;
     }
 }

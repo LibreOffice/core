@@ -103,7 +103,7 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
                 if ( pColorTable )
                     pDlg->SetColorTable( pColorTable );
                 else
-                    { DBG_ERROR( "ColorList not found :-/" ); }
+                    { OSL_FAIL( "ColorList not found :-/" ); }
             }
         }
         SfxItemSet aViewAttr(pDrView->GetModel()->GetItemPool());

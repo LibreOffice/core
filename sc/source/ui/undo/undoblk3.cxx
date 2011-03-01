@@ -1484,7 +1484,7 @@ void ScUndoConversion::SetChangeTrack()
                 nStartChangeAction, nEndChangeAction );
         else
         {
-            DBG_ERROR( "ScUndoConversion::SetChangeTrack: kein UndoDoc" );
+            OSL_FAIL( "ScUndoConversion::SetChangeTrack: kein UndoDoc" );
             nStartChangeAction = nEndChangeAction = 0;
         }
     }
@@ -1532,7 +1532,7 @@ void ScUndoConversion::DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPo
     }
     else
     {
-        DBG_ERROR("Kein Un-/RedoDoc bei Un-/RedoSpelling");
+        OSL_FAIL("Kein Un-/RedoDoc bei Un-/RedoSpelling");
     }
 }
 
@@ -1817,7 +1817,7 @@ ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const String& rDo
                 return (ScAreaLink*)pBase;
     }
 
-    DBG_ERROR("ScAreaLink nicht gefunden");
+    OSL_FAIL("ScAreaLink nicht gefunden");
     return NULL;
 }
 

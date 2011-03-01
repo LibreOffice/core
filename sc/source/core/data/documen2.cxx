@@ -575,7 +575,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
     }
     else
     {
-        DBG_ERROR("ResetClip");
+        OSL_FAIL("ResetClip");
     }
 }
 
@@ -593,7 +593,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
     }
     else
     {
-        DBG_ERROR("ResetClip");
+        OSL_FAIL("ResetClip");
     }
 }
 
@@ -1005,7 +1005,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                             pData->SetIndex(0);     // need new index, done in Insert
                         if (!pRangeName->Insert(pData))
                         {
-                            DBG_ERROR("can't insert name");     // shouldn't happen
+                            OSL_FAIL("can't insert name");     // shouldn't happen
                             delete pData;
                         }
                         else

@@ -505,7 +505,7 @@ USHORT lcl_DocShellNr( ScDocument* pDoc )
         pShell = SfxObjectShell::GetNext( *pShell );
     }
 
-    DBG_ERROR("Dokument nicht gefunden");
+    OSL_FAIL("Dokument nicht gefunden");
     return 0;
 }
 
@@ -602,7 +602,7 @@ long ScTabControl::AllowRenaming()
             //  if the error message from this TabControl is currently visible,
             //  don't end edit mode now, to avoid problems when returning to
             //  the other call (showing the error) - this should not happen
-            DBG_ERROR("ScTabControl::AllowRenaming: nested calls");
+            OSL_FAIL("ScTabControl::AllowRenaming: nested calls");
             nRet = TABBAR_RENAMING_NO;
         }
         else if ( Application::IsInModalMode() )

@@ -352,14 +352,14 @@ void SAL_CALL ScCellFieldsObj::addContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
                                     throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL ScCellFieldsObj::removeContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
                                     throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 // XRefreshable
@@ -994,14 +994,14 @@ void SAL_CALL ScHeaderFieldsObj::addContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
                                     throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL ScHeaderFieldsObj::removeContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
                                     throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 // XRefreshable
@@ -1034,6 +1034,10 @@ void SAL_CALL ScHeaderFieldsObj::refresh(  )
                     }
                     catch(uno::RuntimeException&)
                     {
+<<<<<<< HEAD
+=======
+//                      OSL_FAIL("a object is gone without to remove from Broadcaster");
+>>>>>>> Move DBG_ERROR to OSL_FAIL
                         ++pInterfaces;
                         ++i;
                     }

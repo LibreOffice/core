@@ -290,7 +290,7 @@ void ScInputHandler::UpdateRange( USHORT nIndex, const ScRange& rNew )
     }
     else
     {
-        DBG_ERROR("UpdateRange: da fehlt was");
+        OSL_FAIL("UpdateRange: da fehlt was");
     }
 }
 
@@ -1679,7 +1679,7 @@ void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh)     // wird synchron
 
     if ( pActiveViewSh && pActiveViewSh == pViewSh )
     {
-        DBG_ERROR("pActiveViewSh weg");
+        OSL_FAIL("pActiveViewSh weg");
         pActiveViewSh = NULL;
     }
 
@@ -2220,7 +2220,7 @@ void ScInputHandler::ShowRefFrame()
         }
         else
         {
-            DBG_ERROR("ViewFrame fuer Referenzeingabe ist nicht mehr da");
+            OSL_FAIL("ViewFrame fuer Referenzeingabe ist nicht mehr da");
         }
     }
 }
@@ -2891,7 +2891,7 @@ void ScInputHandler::InsertFunction( const String& rFuncName, BOOL bAddPar )
 {
     if ( eMode == SC_INPUT_NONE )
     {
-        DBG_ERROR("InsertFunction, nicht im Eingabemodus");
+        OSL_FAIL("InsertFunction, nicht im Eingabemodus");
         return;
     }
 
@@ -2938,7 +2938,7 @@ void ScInputHandler::ClearText()
 {
     if ( eMode == SC_INPUT_NONE )
     {
-        DBG_ERROR("ClearText, nicht im Eingabemodus");
+        OSL_FAIL("ClearText, nicht im Eingabemodus");
         return;
     }
 

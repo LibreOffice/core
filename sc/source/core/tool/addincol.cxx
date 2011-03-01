@@ -1473,14 +1473,14 @@ void ScUnoAddInCall::SetParam( long nPos, const uno::Any& rValue )
                 aVarArg.getArray()[nVarPos] = rValue;
             else
             {
-                DBG_ERROR("wrong argument number");
+                OSL_FAIL("wrong argument number");
             }
         }
         else if ( nPos < aArgs.getLength() )
             aArgs.getArray()[nPos] = rValue;
         else
         {
-            DBG_ERROR("wrong argument number");
+            OSL_FAIL("wrong argument number");
         }
     }
 }
@@ -1510,7 +1510,7 @@ void ScUnoAddInCall::ExecuteCall()
         long nCallPos = pFuncData->GetCallerPos();
         if (nCallPos>nUserLen)                          // should not happen
         {
-            DBG_ERROR("wrong CallPos");
+            OSL_FAIL("wrong CallPos");
             nCallPos = nUserLen;
         }
 

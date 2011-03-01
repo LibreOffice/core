@@ -344,7 +344,7 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
         }
         else
         {
-            DBG_ERROR("Object is NO path object");
+            OSL_FAIL("Object is NO path object");
         }
 
         pObj->SetLogicRect(rRectangle);

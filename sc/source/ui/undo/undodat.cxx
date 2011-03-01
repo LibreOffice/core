@@ -1720,7 +1720,7 @@ void ScUndoDataPilot::Undo()
         pDestObj->SetAlive(TRUE);
         if ( !pDoc->GetDPCollection()->InsertNewTable(pDestObj) )
         {
-            DBG_ERROR("cannot insert DPObject");
+            OSL_FAIL("cannot insert DPObject");
             DELETEZ( pDestObj );
         }
     }
@@ -1897,7 +1897,7 @@ void ScUndoConsolidate::Undo()
             }
             else
             {
-                DBG_ERROR("alte DB-Daten nicht gefunden");
+                OSL_FAIL("alte DB-Daten nicht gefunden");
             }
         }
     }

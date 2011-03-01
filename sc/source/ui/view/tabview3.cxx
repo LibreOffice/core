@@ -797,7 +797,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
             case SC_FOLLOW_NONE:
                 break;
             default:
-                DBG_ERROR("Falscher Cursormodus");
+                OSL_FAIL("Falscher Cursormodus");
                 break;
         }
 
@@ -1431,7 +1431,7 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
 {
     if ( !ValidTab(nTab) )
     {
-        DBG_ERROR("SetTabNo: falsche Tabelle");
+        OSL_FAIL("SetTabNo: falsche Tabelle");
         return;
     }
 
@@ -1482,7 +1482,7 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
                     --nTab;
                 else
                 {
-                    DBG_ERROR("keine sichtbare Tabelle");
+                    OSL_FAIL("keine sichtbare Tabelle");
                     pDoc->SetVisible( 0, TRUE );
                 }
             }

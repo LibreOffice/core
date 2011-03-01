@@ -258,7 +258,7 @@ void ScInputCfg::Commit()
 
 void ScInputCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
 {
-    DBG_ERROR("properties have been changed");
+    OSL_FAIL("properties have been changed");
 }
 
 void ScInputCfg::SetOptions( const ScInputOptions& rNew )

@@ -417,7 +417,7 @@ BOOL ScDetectiveFunc::HasArrow( const ScAddress& rStart,
 
     if (bStartAlien && bEndAlien)
     {
-        DBG_ERROR("bStartAlien && bEndAlien");
+        OSL_FAIL("bStartAlien && bEndAlien");
         return TRUE;
     }
 
@@ -1316,7 +1316,7 @@ BOOL ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
                         bDoThis = !bCaption && !bCircle;    // don't include circles
                     else
                     {
-                        DBG_ERROR("wat?");
+                        OSL_FAIL("wat?");
                     }
                 }
                 if ( bDoThis )

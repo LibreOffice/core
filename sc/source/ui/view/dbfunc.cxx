@@ -262,7 +262,7 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam, BOOL bRecord )
                                                     rSortParam.nCol2, rSortParam.nRow2 );
     if (!pDBData)
     {
-        DBG_ERROR( "Sort: keine DBData" );
+        OSL_FAIL( "Sort: keine DBData" );
         return;
     }
 

@@ -331,7 +331,7 @@ void ScTpUserLists::UpdateEntries( USHORT nList )
     }
     else
     {
-        DBG_ERROR( "Invalid ListIndex :-/" );
+        OSL_FAIL( "Invalid ListIndex :-/" );
     }
 }
 
@@ -395,7 +395,7 @@ void ScTpUserLists::AddNewList( const String& rEntriesStr )
 
     if ( !pUserLists->Insert( new ScUserListData( theEntriesStr ) ) )
     {
-        DBG_ERROR( "Entry could not be inserted :-/" );
+        OSL_FAIL( "Entry could not be inserted :-/" );
     }
 }
 

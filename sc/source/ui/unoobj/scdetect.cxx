@@ -692,7 +692,7 @@ static BOOL lcl_MayBeDBase( SvStream& rStream )
                                 }
                                 else
                                 { //                                         Tabellenfehler
-                                    DBG_ERROR( "-ScApplication::DetectFilter(): Fehler in Mustertabelle");
+                                    OSL_FAIL( "-ScApplication::DetectFilter(): Fehler in Mustertabelle");
                                 }
 
                                 pSearch++;

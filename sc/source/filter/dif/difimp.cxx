@@ -222,7 +222,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                 case D_SYNT_ERROR:
                     break;
                 default:
-                    DBG_ERROR( "ScImportDif - missing enum" );
+                    OSL_FAIL( "ScImportDif - missing enum" );
             }
         }
 

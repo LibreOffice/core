@@ -2501,7 +2501,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const
 
     if (!pDestShell)
     {
-        DBG_ERROR("Dest-Doc nicht gefunden !!!");
+        OSL_FAIL("Dest-Doc nicht gefunden !!!");
         return;
     }
 

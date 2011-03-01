@@ -1179,7 +1179,7 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                         else
                         {
                             // can also be part of DataPilot table
-                            // DBG_ERROR("Auto-Filter-Button ohne DBData");
+                            // OSL_FAIL("Auto-Filter-Button ohne DBData");
                         }
                     }
 
@@ -1325,7 +1325,7 @@ BOOL ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
         pDBData->GetQueryParam( aQueryParam );
     else
     {
-        DBG_ERROR("Auto-Filter-Button ohne DBData");
+        OSL_FAIL("Auto-Filter-Button ohne DBData");
     }
 
     BOOL    bSimpleQuery = TRUE;

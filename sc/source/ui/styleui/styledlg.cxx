@@ -122,7 +122,7 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
             break;
 
         default:
-            DBG_ERROR( "Family not supported" );
+            OSL_FAIL( "Family not supported" );
     }
 
     //--------------------------------------------------------------------

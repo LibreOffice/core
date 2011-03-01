@@ -162,7 +162,7 @@ sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
             break;
         default:
             {
-                DBG_ERROR( "ChartTransferable::WriteObject: unknown object id" );
+                OSL_FAIL( "ChartTransferable::WriteObject: unknown object id" );
             }
             break;
     }

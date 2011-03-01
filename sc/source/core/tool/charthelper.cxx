@@ -278,7 +278,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
     catch ( uno::Exception& ex )
     {
         (void)ex;
-        DBG_ERROR("Exception in ScChartHelper::SetChartRanges - invalid range string?");
+        OSL_FAIL("Exception in ScChartHelper::SetChartRanges - invalid range string?");
     }
 
     if( xModel.is() )

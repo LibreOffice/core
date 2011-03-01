@@ -570,7 +570,7 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, bool& 
     rFound = false;
     if (!rMark.IsMultiMarked())
     {
-        DBG_ERROR("ScColumn::GetSelectionStyle ohne Selektion");
+        OSL_FAIL("ScColumn::GetSelectionStyle ohne Selektion");
         return NULL;
     }
 
@@ -1279,7 +1279,7 @@ void ScColumn::CopyToColumn(SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bM
         }
         else
         {
-            DBG_ERROR("CopyToColumn: bMarked, aber keine Markierung");
+            OSL_FAIL("CopyToColumn: bMarked, aber keine Markierung");
         }
         return;
     }

@@ -355,7 +355,7 @@ ScSubTotalFunc ScTpSubTotalGroup::LbPosToFunc( USHORT nPos )
         case  9:    return SUBTOTAL_FUNC_VAR;
         case 10:    return SUBTOTAL_FUNC_VARP;
         default:
-            DBG_ERROR( "ScTpSubTotalGroup::LbPosToFunc" );
+            OSL_FAIL( "ScTpSubTotalGroup::LbPosToFunc" );
             return SUBTOTAL_FUNC_NONE;
     }
 }
@@ -379,7 +379,7 @@ USHORT ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
         case SUBTOTAL_FUNC_VAR:     return 9;
         case SUBTOTAL_FUNC_VARP:    return 10;
         default:
-            DBG_ERROR( "ScTpSubTotalGroup::FuncToLbPos" );
+            OSL_FAIL( "ScTpSubTotalGroup::FuncToLbPos" );
             return 0;
     }
 }

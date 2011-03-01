@@ -213,7 +213,7 @@ SCTAB ScMarkData::GetFirstSelected() const
         if (bTabMarked[i])
             return i;
 
-    DBG_ERROR("GetFirstSelected: keine markiert");
+    OSL_FAIL("GetFirstSelected: keine markiert");
     return 0;
 }
 

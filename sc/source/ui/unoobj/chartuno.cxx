@@ -735,7 +735,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges() throw(un
         return aSeq;
     }
 
-    DBG_ERROR("ScChartObj::getRanges: keine Ranges");
+    OSL_FAIL("ScChartObj::getRanges: keine Ranges");
     return uno::Sequence<table::CellRangeAddress>();
 }
 

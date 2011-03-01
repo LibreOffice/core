@@ -393,7 +393,7 @@ sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
             DBG_ASSERT( aOldNames[i], "ScServiceProvider::GetProviderType: no oldname => crash");
             if (rServiceName.EqualsAscii( aOldNames[i] ))
             {
-                DBG_ERROR("old service name used");
+                OSL_FAIL("old service name used");
                 return i;
             }
         }

@@ -90,7 +90,7 @@ Any WrappedNumberFormatProperty::getPropertyValue( const Reference< beans::XProp
 {
     if( !xInnerPropertySet.is() )
     {
-        DBG_ERROR("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
+        OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
         return Any();
     }
     Any aRet( xInnerPropertySet->getPropertyValue( m_aInnerName ));
@@ -142,7 +142,7 @@ void WrappedLinkNumberFormatProperty::setPropertyValue( const Any& rOuterValue, 
 {
     if( !xInnerPropertySet.is() )
     {
-        DBG_ERROR("missing xInnerPropertySet in WrappedNumberFormatProperty::setPropertyValue");
+        OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::setPropertyValue");
         return;
     }
 
@@ -178,7 +178,7 @@ Any WrappedLinkNumberFormatProperty::getPropertyValue( const Reference< beans::X
 {
     if( !xInnerPropertySet.is() )
     {
-        DBG_ERROR("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
+        OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
         return getPropertyDefault(0);
     }
     bool bLink = ! xInnerPropertySet->getPropertyValue( C2U("NumberFormat" )).hasValue();

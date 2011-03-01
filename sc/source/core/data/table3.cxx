@@ -1767,7 +1767,7 @@ BOOL ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
 
         if ( nVisible > SCSIZE_MAX / sizeof(void*) )
         {
-            DBG_ERROR("zu viele Filterkritierien");
+            OSL_FAIL("zu viele Filterkritierien");
             nVisible = 0;
         }
 

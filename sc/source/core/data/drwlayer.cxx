@@ -1165,7 +1165,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
             }
             else
             {
-                DBG_ERROR("pPage?");
+                OSL_FAIL("pPage?");
             }
         }
 }
@@ -1282,7 +1282,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
     if (bDrawIsInUndo)      //! can this happen?
     {
-        DBG_ERROR("CopyFromClip, bDrawIsInUndo");
+        OSL_FAIL("CopyFromClip, bDrawIsInUndo");
         return;
     }
 

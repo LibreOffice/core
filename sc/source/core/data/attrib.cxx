@@ -265,7 +265,7 @@ bool ScProtectionAttr::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_4 :
             rVal <<= (sal_Bool ) bHidePrint; break;
         default:
-            DBG_ERROR("Wrong MemberID!");
+            OSL_FAIL("Wrong MemberID!");
             return false;
     }
 
@@ -292,7 +292,7 @@ bool ScProtectionAttr::PutValue( const uno::Any& rVal, BYTE nMemberId )
             }
             else
             {
-                DBG_ERROR("exception - wrong argument");
+                OSL_FAIL("exception - wrong argument");
             }
             break;
         }
@@ -305,7 +305,7 @@ bool ScProtectionAttr::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_4 :
             bRet = (rVal >>= bVal); if (bRet) bHidePrint=bVal; break;
         default:
-            DBG_ERROR("Wrong MemberID!");
+            OSL_FAIL("Wrong MemberID!");
     }
 
     return bRet;
@@ -714,7 +714,7 @@ bool ScPageHFItem::PutValue( const uno::Any& rVal, BYTE /* nMemberId */ )
 
     if (!bRet)
     {
-        DBG_ERROR("exception - wrong argument");
+        OSL_FAIL("exception - wrong argument");
     }
 
     return true;
@@ -924,7 +924,7 @@ void ScPageHFItem::SetArea( EditTextObject *pNew, int nArea )
         case SC_HF_CENTERAREA:  delete pCenterArea; pCenterArea = pNew; break;
         case SC_HF_RIGHTAREA:   delete pRightArea;  pRightArea  = pNew; break;
         default:
-            DBG_ERROR( "New Area?" );
+            OSL_FAIL( "New Area?" );
     }
 }
 

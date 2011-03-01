@@ -197,12 +197,12 @@ ScTransferObj::~ScTransferObj()
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetClipData().pCellClipboard == this )
     {
-        DBG_ERROR("ScTransferObj wasn't released");
+        OSL_FAIL("ScTransferObj wasn't released");
         pScMod->SetClipObject( NULL, NULL );
     }
     if ( pScMod->GetDragData().pCellTransfer == this )
     {
-        DBG_ERROR("ScTransferObj wasn't released");
+        OSL_FAIL("ScTransferObj wasn't released");
         pScMod->ResetDragObject();
     }
 
@@ -228,7 +228,7 @@ ScTransferObj* ScTransferObj::GetOwnClipboard( Window* pUIWin )
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pUIWin ) );
         if ( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_DIF ) )
         {
-//          DBG_ERROR("ScTransferObj wasn't released");
+//          OSL_FAIL("ScTransferObj wasn't released");
             pObj = NULL;
         }
     }
@@ -335,7 +335,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             }
             else
             {
-                DBG_ERROR("unknown DataType");
+                OSL_FAIL("unknown DataType");
             }
         }
         else if ( nFormat == SOT_FORMAT_BITMAP )
@@ -474,7 +474,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
             break;
 
         default:
-            DBG_ERROR("unknown object id");
+            OSL_FAIL("unknown object id");
     }
     return bRet;
 }
@@ -768,7 +768,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
 
     if (!pDoc->HasTable(nSrcTab) || !pDestDoc->HasTable(nDestTab))
     {
-        DBG_ERROR("Sheet not found in ScTransferObj::StripRefs");
+        OSL_FAIL("Sheet not found in ScTransferObj::StripRefs");
         return;
     }
 

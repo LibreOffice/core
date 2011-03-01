@@ -413,7 +413,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
                                                 rParam.nCol2, rParam.nRow2 );
     if (!pDBData)
     {
-        DBG_ERROR( "SubTotals: keine DBData" );
+        OSL_FAIL( "SubTotals: keine DBData" );
         return;
     }
 
@@ -1004,7 +1004,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                 if ( pExistingGroup && pExistingGroup->GetGroupDimName() == aGroupDimName )
                 {
                     // still get the same group dimension?
-                    DBG_ERROR("couldn't remove group dimension");
+                    OSL_FAIL("couldn't remove group dimension");
                     pExistingGroup = NULL;      // avoid endless loop
                 }
             }

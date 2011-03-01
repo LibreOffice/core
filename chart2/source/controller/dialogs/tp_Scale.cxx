@@ -342,7 +342,7 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
 {
     if( !pNumFormatter )
     {
-        DBG_ERROR( "No NumberFormatter available" );
+        OSL_FAIL( "No NumberFormatter available" );
         return LEAVE_PAGE;
     }
 

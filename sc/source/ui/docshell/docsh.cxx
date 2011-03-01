@@ -224,7 +224,7 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
     }
     else
     {
-        DBG_ERROR("wat fuer ne Version?");
+        OSL_FAIL("wat fuer ne Version?");
     }
 }
 
@@ -400,7 +400,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
     }
     else
     {
-        DBG_ERROR("The Modificator should exist");
+        OSL_FAIL("The Modificator should exist");
     }
 
     aDocument.DisableIdle( FALSE );
@@ -902,7 +902,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             }
                             catch ( uno::Exception& )
                             {
-                                DBG_ERROR( "SFX_EVENT_SAVEDOC: caught exception\n" );
+                                OSL_FAIL( "SFX_EVENT_SAVEDOC: caught exception\n" );
                                 SC_MOD()->SetInSharedDocSaving( false );
 
                                 try
@@ -1200,7 +1200,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
                 else
                 {
-                    DBG_ERROR( "No Stream" );
+                    OSL_FAIL( "No Stream" );
                 }
             }
 
@@ -1312,7 +1312,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
                 else
                 {
-                    DBG_ERROR( "No Stream" );
+                    OSL_FAIL( "No Stream" );
                 }
             }
 
@@ -1370,7 +1370,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
                 else
                 {
-                    DBG_ERROR( "No Stream" );
+                    OSL_FAIL( "No Stream" );
                 }
             }
 
@@ -1419,7 +1419,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
                 else
                 {
-                    DBG_ERROR( "No Stream" );
+                    OSL_FAIL( "No Stream" );
                 }
             }
 
@@ -1437,7 +1437,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
     }
     else
     {
-        DBG_ERROR("Kein Filter bei ConvertFrom");
+        OSL_FAIL("Kein Filter bei ConvertFrom");
     }
 
     InitItems();
@@ -1887,7 +1887,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 }
                 break;
             default:
-                DBG_ERROR( "ScDocShell::AsciiSave: unknown CellType" );
+                OSL_FAIL( "ScDocShell::AsciiSave: unknown CellType" );
                 aString.Erase();
                 bString = FALSE;
         }
@@ -2055,7 +2055,7 @@ BOOL ScDocShell::ConvertTo( SfxMedium &rMed )
     if (aFltName.EqualsAscii(pFilterXML))
     {
         //TODO/LATER: this shouldn't happen!
-        DBG_ERROR("XML filter in ConvertFrom?!");
+        OSL_FAIL("XML filter in ConvertFrom?!");
         bRet = SaveXML( &rMed, NULL );
     }
     else if (aFltName.EqualsAscii(pFilterExcel5) || aFltName.EqualsAscii(pFilterExcel95) ||
@@ -2576,7 +2576,7 @@ ScDocShell::~ScDocShell()
 
     if (pModificator)
     {
-        DBG_ERROR("The Modificator should not exist");
+        OSL_FAIL("The Modificator should not exist");
         delete pModificator;
     }
 }

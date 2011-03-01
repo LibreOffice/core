@@ -116,7 +116,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
         else
         {
 #if OSL_DEBUG_LEVEL > 1
-            DBG_ERROR("found no inner property set to map to");
+            OSL_FAIL("found no inner property set to map to");
 #endif
         }
     }
@@ -165,7 +165,7 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
         else
         {
 #if OSL_DEBUG_LEVEL > 1
-            DBG_ERROR("found no inner property set to map to");
+            OSL_FAIL("found no inner property set to map to");
 #endif
         }
     }

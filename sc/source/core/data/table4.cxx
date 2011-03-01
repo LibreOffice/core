@@ -1087,7 +1087,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
         }
         else
         {
-            DBG_ERROR("GetAutoFillPreview: falscher Modus");
+            OSL_FAIL("GetAutoFillPreview: falscher Modus");
         }
     }
 

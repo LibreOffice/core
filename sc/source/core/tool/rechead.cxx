@@ -56,7 +56,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     rStream >> nID;
     if (nID != SCID_SIZES)
     {
-        DBG_ERROR("SCID_SIZES nicht gefunden");
+        OSL_FAIL("SCID_SIZES nicht gefunden");
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
 
@@ -121,7 +121,7 @@ ULONG ScMultipleReadHeader::BytesLeft() const
     if (nReadEnd <= nEntryEnd)
         return nEntryEnd-nReadEnd;
 
-    DBG_ERROR("Fehler bei ScMultipleReadHeader::BytesLeft");
+    OSL_FAIL("Fehler bei ScMultipleReadHeader::BytesLeft");
     return 0;
 }
 

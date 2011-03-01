@@ -92,7 +92,7 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
         }
         else
         {
-            DBG_ERROR( "ScProgress: there can be only one!" );
+            OSL_FAIL( "ScProgress: there can be only one!" );
             pProgress = NULL;
         }
     }

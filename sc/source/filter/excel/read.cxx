@@ -745,9 +745,9 @@ FltError ImportExcel::Read( void )
                 break;
             // ----------------------------------------------------------------
             case Z_Ende:        // ----------------------------------- Z_Ende -
-                DBG_ERROR( "*ImportExcel::Read(): Not possible state!" );
+                OSL_FAIL( "*ImportExcel::Read(): Not possible state!" );
                 break;
-            default: DBG_ERROR( "-ImportExcel::Read(): Zustand vergessen!" );
+            default: OSL_FAIL( "-ImportExcel::Read(): Zustand vergessen!" );
         }
     }
 

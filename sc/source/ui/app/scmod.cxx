@@ -639,7 +639,7 @@ void ScModule::Execute( SfxRequest& rReq )
         break;
 
         default:
-            DBG_ERROR( "ScApplication: Unknown Message." );
+            OSL_FAIL( "ScApplication: Unknown Message." );
             break;
     }
 }
@@ -1807,7 +1807,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
             pHdl->SetReference( aNew, pDoc );
         else
         {
-            DBG_ERROR("SetReference ohne Empfaenger");
+            OSL_FAIL("SetReference ohne Empfaenger");
         }
     }
 }
@@ -2182,7 +2182,7 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
         }
         else
         {
-            DBG_ERROR("unbekannter Feldbefehl");
+            OSL_FAIL("unbekannter Feldbefehl");
             pInfo->SetRepresentation(String('?'));
         }
     }

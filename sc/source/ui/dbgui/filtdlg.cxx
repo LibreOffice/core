@@ -541,13 +541,13 @@ void ScFilterDlg::UpdateHdrInValueList( USHORT nList )
                     }
                     else
                     {
-                        DBG_ERROR("Eintag in Liste nicht gefunden");
+                        OSL_FAIL("Eintag in Liste nicht gefunden");
                     }
                 }
             }
             else
             {
-                DBG_ERROR("Spalte noch nicht initialisiert");
+                OSL_FAIL("Spalte noch nicht initialisiert");
             }
         }
     }

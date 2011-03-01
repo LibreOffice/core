@@ -240,7 +240,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             case SC_TAB_HIDDEN:
                 break;
             default:
-                DBG_ERROR("unbekannter ScTablesHint");
+                OSL_FAIL("unbekannter ScTablesHint");
         }
 
         //  hier keine Abfrage auf IsActive() mehr, weil die Aktion von Basic ausgehen

@@ -376,7 +376,7 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
             bRotated = FALSE;
             break;
         default:
-            DBG_ERROR("Falscher SvxCellOrientation Wert");
+            OSL_FAIL("Falscher SvxCellOrientation Wert");
             nRot = 0;
             bRotated = FALSE;
             break;
@@ -2670,7 +2670,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     }
                                     else
                                     {
-                                        DBG_ERROR("pData == 0");
+                                        OSL_FAIL("pData == 0");
                                     }
                                 }
                                 else
@@ -2698,7 +2698,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             }
                             else
                             {
-                                DBG_ERROR("pCell == NULL");
+                                OSL_FAIL("pCell == NULL");
                             }
 
                             pEngine->SetUpdateMode( TRUE );     // after SetText, before CalcTextWidth/GetTextHeight
@@ -3438,7 +3438,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                         pEngine->SetText(*pData);
                                     else
                                     {
-                                        DBG_ERROR("pData == 0");
+                                        OSL_FAIL("pData == 0");
                                     }
                                 }
                                 else
@@ -3466,7 +3466,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                             }
                             else
                             {
-                                DBG_ERROR("pCell == NULL");
+                                OSL_FAIL("pCell == NULL");
                             }
 
                             pEngine->SetUpdateMode( TRUE );     // after SetText, before CalcTextWidth/GetTextHeight

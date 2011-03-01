@@ -951,7 +951,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
 {
     if (!pClipDoc)
     {
-        DBG_ERROR("PasteFromClip: pClipDoc=0 not allowed");
+        OSL_FAIL("PasteFromClip: pClipDoc=0 not allowed");
         return FALSE;
     }
 

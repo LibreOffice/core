@@ -778,7 +778,7 @@ void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
     }
     else
     {
-        DBG_ERROR("LimitChartIfAll: Ref==0");
+        OSL_FAIL("LimitChartIfAll: Ref==0");
     }
     rRangeList = aNew;
 }
@@ -1415,7 +1415,7 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
     }
     else
         {
-        DBG_ERROR("InitUndo");
+        OSL_FAIL("InitUndo");
         }
 }
 
@@ -1437,7 +1437,7 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
     }
     else
     {
-        DBG_ERROR("InitUndo");
+        OSL_FAIL("InitUndo");
     }
 }
 
@@ -1456,7 +1456,7 @@ void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, BOOL bColInfo, BOOL bRowI
     }
     else
     {
-        DBG_ERROR("InitUndo");
+        OSL_FAIL("InitUndo");
     }
 }
 
@@ -1467,7 +1467,7 @@ void ScDocument::SetCutMode( BOOL bVal )
         GetClipParam().mbCutMode = bVal;
     else
     {
-        DBG_ERROR("SetCutMode without bIsClip");
+        OSL_FAIL("SetCutMode without bIsClip");
     }
 }
 
@@ -1478,7 +1478,7 @@ BOOL ScDocument::IsCutMode()
         return GetClipParam().mbCutMode;
     else
     {
-        DBG_ERROR("IsCutMode ohne bIsClip");
+        OSL_FAIL("IsCutMode ohne bIsClip");
         return FALSE;
     }
 }
@@ -2141,7 +2141,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     {
         if (!pClipDoc)
         {
-            DBG_ERROR("CopyFromClip: no ClipDoc");
+            OSL_FAIL("CopyFromClip: no ClipDoc");
             pClipDoc = SC_MOD()->GetClipDoc();
         }
         if (pClipDoc->bIsClip && pClipDoc->GetTableCount())
@@ -2472,7 +2472,7 @@ void ScDocument::SetClipArea( const ScRange& rArea, BOOL bCut )
     }
     else
     {
-        DBG_ERROR("SetClipArea: kein Clip");
+        OSL_FAIL("SetClipArea: kein Clip");
     }
 }
 
@@ -2481,7 +2481,7 @@ void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, BOOL bIncludeFiltered
 {
     if (!bIsClip)
     {
-        DBG_ERROR("GetClipArea: kein Clip");
+        OSL_FAIL("GetClipArea: kein Clip");
         return;
     }
 
@@ -2543,7 +2543,7 @@ void ScDocument::GetClipStart(SCCOL& nClipX, SCROW& nClipY)
     }
     else
     {
-        DBG_ERROR("GetClipStart: kein Clip");
+        OSL_FAIL("GetClipStart: kein Clip");
     }
 }
 
@@ -2636,7 +2636,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
     }
     else
     {
-        DBG_ERROR("falsche Tabelle");
+        OSL_FAIL("falsche Tabelle");
     }
 }
 
@@ -2695,7 +2695,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
     }
     else
     {
-        DBG_ERROR("falsche Tabelle");
+        OSL_FAIL("falsche Tabelle");
     }
 }
 
@@ -2896,7 +2896,7 @@ void ScDocument::GetCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
         rpCell = pTab[nTab]->GetCell( nCol, nRow );
     else
     {
-        DBG_ERROR("GetCell ohne Tabelle");
+        OSL_FAIL("GetCell ohne Tabelle");
         rpCell = NULL;
     }
 }
@@ -2908,7 +2908,7 @@ ScBaseCell* ScDocument::GetCell( const ScAddress& rPos ) const
     if (ValidTab(nTab) && pTab[nTab])
         return pTab[nTab]->GetCell( rPos );
 
-    DBG_ERROR("GetCell ohne Tabelle");
+    OSL_FAIL("GetCell ohne Tabelle");
     return NULL;
 }
 
@@ -3251,7 +3251,7 @@ USHORT ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetColWidth( nCol );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3260,7 +3260,7 @@ USHORT ScDocument::GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetOriginalWidth( nCol );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3269,7 +3269,7 @@ USHORT ScDocument::GetCommonWidth( SCCOL nEndCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetCommonWidth( nEndCol );
-    DBG_ERROR("Wrong table number");
+    OSL_FAIL("Wrong table number");
     return 0;
 }
 
@@ -3278,7 +3278,7 @@ USHORT ScDocument::GetOriginalHeight( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetOriginalHeight( nRow );
-    DBG_ERROR("Wrong table number");
+    OSL_FAIL("Wrong table number");
     return 0;
 }
 
@@ -3287,7 +3287,7 @@ USHORT ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero ) co
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowHeight( nRow, NULL, NULL, bHiddenAsZero );
-    DBG_ERROR("Wrong sheet number");
+    OSL_FAIL("Wrong sheet number");
     return 0;
 }
 
@@ -3296,7 +3296,7 @@ USHORT ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowHeight( nRow, pStartRow, pEndRow, bHiddenAsZero );
-    DBG_ERROR("Wrong sheet number");
+    OSL_FAIL("Wrong sheet number");
     return 0;
 }
 
@@ -3313,7 +3313,7 @@ ULONG ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) con
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowHeight( nStartRow, nEndRow);
 
-    DBG_ERROR("wrong sheet number");
+    OSL_FAIL("wrong sheet number");
     return 0;
 }
 
@@ -3336,7 +3336,7 @@ ULONG ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetScaledRowHeight( nStartRow, nEndRow, fScale);
 
-    DBG_ERROR("wrong sheet number");
+    OSL_FAIL("wrong sheet number");
     return 0;
 }
 
@@ -3344,7 +3344,7 @@ SCROW ScDocument::GetHiddenRowCount( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetHiddenRowCount( nRow );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3353,7 +3353,7 @@ ULONG ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetColOffset( nCol );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3362,7 +3362,7 @@ ULONG ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowOffset( nRow );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3376,7 +3376,7 @@ USHORT ScDocument::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice* pDe
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetOptimalColWidth( nCol, pDev, nPPTX, nPPTY,
             rZoomX, rZoomY, bFormula, pMarkData, pParam );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3390,7 +3390,7 @@ long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetNeededSize
                 ( nCol, nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bWidth, bTotalSize );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3405,7 +3405,7 @@ BOOL ScDocument::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, U
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->SetOptimalHeight( nStartRow, nEndRow, nExtra,
                                                 pDev, nPPTX, nPPTY, rZoomX, rZoomY, bShrink );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return FALSE;
 }
 
@@ -3477,7 +3477,7 @@ BYTE ScDocument::GetColFlags( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetColFlags( nCol );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3485,7 +3485,7 @@ BYTE ScDocument::GetRowFlags( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowFlags( nRow );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3504,12 +3504,12 @@ const ScBitMaskCompressedArray< SCROW, BYTE> & ScDocument::GetRowFlagsArray(
         pFlags = pTab[nTab]->GetRowFlagsArray();
     else
     {
-        DBG_ERROR("wrong sheet number");
+        OSL_FAIL("wrong sheet number");
         pFlags = 0;
     }
     if (!pFlags)
     {
-        DBG_ERROR("no row flags at sheet");
+        OSL_FAIL("no row flags at sheet");
         static ScBitMaskCompressedArray< SCROW, BYTE> aDummy( MAXROW, 0);
         pFlags = &aDummy;
     }
@@ -3908,7 +3908,7 @@ const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, USHO
             return pTemp;
         else
         {
-            DBG_ERROR( "Attribut Null" );
+            OSL_FAIL( "Attribut Null" );
         }
     }
     return &xPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
@@ -4164,7 +4164,7 @@ BOOL ScDocument::ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
         if (pTab[nTab])
             return pTab[nTab]->ApplyFlags( nStartCol, nStartRow, nEndCol, nEndRow, nFlags );
 
-    DBG_ERROR("ApplyFlags: falsche Tabelle");
+    OSL_FAIL("ApplyFlags: falsche Tabelle");
     return FALSE;
 }
 
@@ -4176,7 +4176,7 @@ BOOL ScDocument::RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
         if (pTab[nTab])
             return pTab[nTab]->RemoveFlags( nStartCol, nStartRow, nEndCol, nEndRow, nFlags );
 
-    DBG_ERROR("RemoveFlags: falsche Tabelle");
+    OSL_FAIL("RemoveFlags: falsche Tabelle");
     return FALSE;
 }
 
@@ -4438,7 +4438,7 @@ BOOL ScDocument::IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         if (pTab[nTab])
             return pTab[nTab]->IsBlockEmpty( nStartCol, nStartRow, nEndCol, nEndRow, bIgnoreNotes );
 
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return FALSE;
 }
 
@@ -4449,7 +4449,7 @@ void ScDocument::LockTable(SCTAB nTab)
         pTab[nTab]->LockTable();
     else
     {
-        DBG_ERROR("Falsche Tabellennummer");
+        OSL_FAIL("Falsche Tabellennummer");
     }
 }
 
@@ -4460,7 +4460,7 @@ void ScDocument::UnlockTable(SCTAB nTab)
         pTab[nTab]->UnlockTable();
     else
     {
-        DBG_ERROR("Falsche Tabellennummer");
+        OSL_FAIL("Falsche Tabellennummer");
     }
 }
 
@@ -4482,7 +4482,7 @@ BOOL ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
             return pTab[nTab]->IsBlockEditable( nStartCol, nStartRow, nEndCol,
                 nEndRow, pOnlyNotBecauseOfMatrix );
 
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     if ( pOnlyNotBecauseOfMatrix )
         *pOnlyNotBecauseOfMatrix = FALSE;
     return FALSE;
@@ -4656,7 +4656,7 @@ BOOL ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
     }
     else
     {
-        DBG_ERROR("ExtendOverlapped: falscher Bereich");
+        OSL_FAIL("ExtendOverlapped: falscher Bereich");
     }
 
     return bFound;
@@ -4705,7 +4705,7 @@ BOOL ScDocument::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
     }
     else
     {
-        DBG_ERROR("ExtendMerge: falscher Bereich");
+        OSL_FAIL("ExtendMerge: falscher Bereich");
     }
 
     return bFound;
@@ -4856,7 +4856,7 @@ BOOL ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
         return pAttr->IsHorOverlapped();
     else
     {
-        DBG_ERROR("Overlapped: Attr==0");
+        OSL_FAIL("Overlapped: Attr==0");
         return FALSE;
     }
 }
@@ -4870,7 +4870,7 @@ BOOL ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
         return pAttr->IsVerOverlapped();
     else
     {
-        DBG_ERROR("Overlapped: Attr==0");
+        OSL_FAIL("Overlapped: Attr==0");
         return FALSE;
     }
 }
@@ -4974,7 +4974,7 @@ void ScDocument::DeleteSelectionTab( SCTAB nTab, USHORT nDelFlag, const ScMarkDa
         pTab[nTab]->DeleteSelection( nDelFlag, rMark );
     else
     {
-        DBG_ERROR("Falsche Tabelle");
+        OSL_FAIL("Falsche Tabelle");
     }
 }
 
@@ -5142,7 +5142,7 @@ Size ScDocument::GetPageSize( SCTAB nTab ) const
     if ( ValidTab(nTab)  && pTab[nTab] )
         return pTab[nTab]->GetPageSize();
 
-    DBG_ERROR("falsche Tab");
+    OSL_FAIL("falsche Tab");
     return Size();
 }
 
@@ -5176,7 +5176,7 @@ BOOL ScDocument::HasManualBreaks( SCTAB nTab ) const
     if ( ValidTab(nTab)  && pTab[nTab] )
         return pTab[nTab]->HasManualBreaks();
 
-    DBG_ERROR("falsche Tab");
+    OSL_FAIL("falsche Tab");
     return FALSE;
 }
 

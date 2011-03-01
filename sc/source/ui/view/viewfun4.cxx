@@ -402,7 +402,7 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     }
     else
     {
-        DBG_ERROR("DoThesaurus: Keine String oder Editzelle");
+        OSL_FAIL("DoThesaurus: Keine String oder Editzelle");
     }
     pEditView = GetViewData()->GetEditView(GetViewData()->GetActivePart());;
     if (pEditSel)

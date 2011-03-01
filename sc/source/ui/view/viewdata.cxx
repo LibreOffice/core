@@ -430,7 +430,7 @@ ScDocument* ScViewData::GetDocument() const
     else if (pDocShell)
         return pDocShell->GetDocument();
 
-    DBG_ERROR("kein Document an ViewData");
+    OSL_FAIL("kein Document an ViewData");
     return NULL;
 }
 
@@ -496,7 +496,7 @@ void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
 
     if (nDestTab > MAXTAB)
     {
-        DBG_ERROR("Zuviele Tabellen");
+        OSL_FAIL("Zuviele Tabellen");
         return;
     }
 
@@ -915,7 +915,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         if (pEditView[eWhich]->GetWindow() != pWin)
         {
             pEditView[eWhich]->SetWindow(pWin);
-            DBG_ERROR("EditView Window geaendert");
+            OSL_FAIL("EditView Window geaendert");
         }
     }
     else
@@ -1433,7 +1433,7 @@ void ScViewData::SetTabNo( SCTAB nNewTab )
 {
     if (!ValidTab(nNewTab))
     {
-        DBG_ERROR("falsche Tabellennummer");
+        OSL_FAIL("falsche Tabellennummer");
         return;
     }
 
@@ -1815,7 +1815,7 @@ BOOL ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
             if ( ( bHOver && pMerge->GetColMerge() <= 1 ) ||
                  ( bVOver && pMerge->GetRowMerge() <= 1 ) )
             {
-                DBG_ERROR("Merge-Fehler gefunden");
+                OSL_FAIL("Merge-Fehler gefunden");
 
                 pDoc->RemoveFlagsTab( 0,0, MAXCOL,MAXROW, nTabNo, SC_MF_HOR | SC_MF_VER );
                 SCCOL nEndCol = MAXCOL;
@@ -2234,7 +2234,7 @@ void ScViewData::ReadUserData(const String& rData)
     {
         //  #45208# beim Reload in der Seitenansicht sind evtl. die Preview-UserData
         //  stehengelassen worden. Den Zoom von der Preview will man hier nicht...
-        DBG_ERROR("ReadUserData: das sind nicht meine Daten");
+        OSL_FAIL("ReadUserData: das sind nicht meine Daten");
         return;
     }
 
@@ -2331,7 +2331,7 @@ void ScViewData::ReadUserData(const String& rData)
             {
                 //  dann wieder auf Default (unten links)
                 pTabData[nPos]->eWhichActive = SC_SPLIT_BOTTOMLEFT;
-                DBG_ERROR("SplitPos musste korrigiert werden");
+                OSL_FAIL("SplitPos musste korrigiert werden");
             }
         }
         ++nPos;

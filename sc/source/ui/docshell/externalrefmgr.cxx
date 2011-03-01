@@ -1304,7 +1304,7 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
             }
         }
         default:
-            DBG_ERROR("attempted to convert an unknown cell type.");
+            OSL_FAIL("attempted to convert an unknown cell type.");
     }
 
     return NULL;
@@ -1408,7 +1408,7 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
                         }
                         break;
                         default:
-                            DBG_ERROR("attempted to convert an unknown cell type.");
+                            OSL_FAIL("attempted to convert an unknown cell type.");
                     }
                 }
             }
@@ -2456,7 +2456,7 @@ void ScExternalRefManager::addLinkListener(sal_uInt16 nFileId, LinkListener* pLi
             LinkListenerMap::value_type(nFileId, LinkListeners()));
         if (!r.second)
         {
-            DBG_ERROR("insertion of new link listener list failed");
+            OSL_FAIL("insertion of new link listener list failed");
             return;
         }
 

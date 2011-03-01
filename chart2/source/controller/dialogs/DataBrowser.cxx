@@ -1096,7 +1096,7 @@ void DataBrowser::InitController(
     }
     else
     {
-        DBG_ERROR( "Invalid Controller" );
+        OSL_FAIL( "Invalid Controller" );
     }
 }
 

@@ -2127,7 +2127,7 @@ void ScTabView::SnapSplitPos( Point& rScreenPosPixel )
     Window* pWin = pGridWin[ePos];
     if (!pWin)
     {
-        DBG_ERROR("Window NULL");
+        OSL_FAIL("Window NULL");
         return;
     }
 

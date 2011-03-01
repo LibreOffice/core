@@ -417,7 +417,7 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream) :
   }
   else
   {
-    DBG_ERROR( "FontID" );
+    OSL_FAIL( "FontID" );
     nError = errUnknownID;
   }
 }
@@ -458,7 +458,7 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
   }
   else
   {
-    DBG_ERROR( "NameID" );
+    OSL_FAIL( "NameID" );
     nError = errUnknownID;
   }
 }
@@ -503,7 +503,7 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream) :
   }
   else
   {
-    DBG_ERROR( "PatternID" );
+    OSL_FAIL( "PatternID" );
     nError = errUnknownID;
   }
 }
@@ -567,7 +567,7 @@ Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream) :
   }
   else
   {
-    DBG_ERROR( "DataBaseID" );
+    OSL_FAIL( "DataBaseID" );
     nError = errUnknownID;
   }
 }
@@ -1466,7 +1466,7 @@ void Sc10Import::LoadTables()
         rStream >> ID;
         if (ID != ColWidthID)
         {
-            DBG_ERROR( "ColWidthID" );
+            OSL_FAIL( "ColWidthID" );
             nError = errUnknownID;
             return;
         }
@@ -1485,7 +1485,7 @@ void Sc10Import::LoadTables()
         rStream >> ID;
         if (ID != ColAttrID)
         {
-            DBG_ERROR( "ColAttrID" );
+            OSL_FAIL( "ColAttrID" );
             nError = errUnknownID;
             return;
         }
@@ -1515,7 +1515,7 @@ void Sc10Import::LoadTables()
         rStream >> ID;
         if (ID != RowHeightID)
         {
-            DBG_ERROR( "RowHeightID" );
+            OSL_FAIL( "RowHeightID" );
             nError = errUnknownID;
             return;
         }
@@ -1535,7 +1535,7 @@ void Sc10Import::LoadTables()
         rStream >> ID;
         if (ID != RowAttrID)
         {
-            DBG_ERROR( "RowAttrID" );
+            OSL_FAIL( "RowAttrID" );
             nError = errUnknownID;
             return;
         }
@@ -1565,7 +1565,7 @@ void Sc10Import::LoadTables()
         rStream >> ID;
         if (ID != TableID)
         {
-            DBG_ERROR( "TableID" );
+            OSL_FAIL( "TableID" );
             nError = errUnknownID;
             return;
         }
@@ -2378,7 +2378,7 @@ void Sc10Import::LoadObjects()
   }
   else
   {
-    DBG_ERROR( "ObjectID" );
+    OSL_FAIL( "ObjectID" );
     nError = errUnknownID;
   }
 }

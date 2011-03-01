@@ -105,7 +105,7 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const String& rName,
 
     if ( rName.EqualsAscii(STRING_STANDARD) && Find( rName, eFam ) != NULL )
     {
-        DBG_ERROR("renaming additional default style");
+        OSL_FAIL("renaming additional default style");
         sal_uInt32 nCount = aStyles.size();
         for ( sal_uInt32 nAdd = 1; nAdd <= nCount; nAdd++ )
         {

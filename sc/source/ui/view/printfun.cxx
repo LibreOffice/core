@@ -132,7 +132,7 @@ void ScPageRowEntry::SetPagesX(size_t nNew)
 {
     if (pHidden)
     {
-        DBG_ERROR("SetPagesX nicht nach SetHidden");
+        OSL_FAIL("SetPagesX nicht nach SetHidden");
         delete[] pHidden;
         pHidden = NULL;
     }
@@ -214,7 +214,7 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
         pParamSet = &pStyleSheet->GetItemSet();
     else
     {
-        DBG_ERROR("Seitenvorlage nicht gefunden" );
+        OSL_FAIL("Seitenvorlage nicht gefunden" );
         pParamSet = NULL;
     }
 
@@ -881,7 +881,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     aPageSize = ((const SvxSizeItem&) pParamSet->Get(ATTR_PAGE_SIZE)).GetSize();
     if ( !aPageSize.Width() || !aPageSize.Height() )
     {
-        DBG_ERROR("PageSize Null ?!?!?");
+        OSL_FAIL("PageSize Null ?!?!?");
         aPageSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );
     }
 
@@ -2013,7 +2013,7 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
 
     if ( pPrinter && bDoPrint )
     {
-        DBG_ERROR( "StartPage does not exist anymore" );
+        OSL_FAIL( "StartPage does not exist anymore" );
     }
 
     if ( bDoPrint || pLocationData )
@@ -2036,7 +2036,7 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
 
     if ( pPrinter && bDoPrint )
     {
-        DBG_ERROR( "EndPage does not exist anymore" );
+        OSL_FAIL( "EndPage does not exist anymore" );
     }
 
     return nCount;
@@ -2101,7 +2101,7 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
 
     if ( pPrinter && bDoPrint )
     {
-        DBG_ERROR( "StartPage does not exist anymore" );
+        OSL_FAIL( "StartPage does not exist anymore" );
     }
 
     //  Kopf- und Fusszeilen (ohne Zentrierung)
@@ -2382,7 +2382,7 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
 
     if ( pPrinter && bDoPrint )
     {
-        DBG_ERROR( "EndPage does not exist anymore" );
+        OSL_FAIL( "EndPage does not exist anymore" );
     }
 
     aLastSourceRange = ScRange( nX1, nY1, nPrintTab, nX2, nY2, nPrintTab );

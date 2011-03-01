@@ -129,7 +129,7 @@ void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
 {
     if ( nCol1 > nCol2 || nRow1 > nRow2 )
     {
-        DBG_ERROR("SetStyleById: invalid range");
+        OSL_FAIL("SetStyleById: invalid range");
         return;
     }
 

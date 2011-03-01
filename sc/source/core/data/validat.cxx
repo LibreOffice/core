@@ -537,7 +537,7 @@ BOOL ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) c
             break;
 
         default:
-            DBG_ERROR("hammanochnich");
+            OSL_FAIL("hammanochnich");
             break;
     }
 
@@ -935,7 +935,7 @@ ScValidationData* ScValidationDataList::GetData( sal_uInt32 nKey )
         if ((*this)[i]->GetKey() == nKey)
             return (*this)[i];
 
-    DBG_ERROR("ScValidationDataList: Eintrag nicht gefunden");
+    OSL_FAIL("ScValidationDataList: Eintrag nicht gefunden");
     return NULL;
 }
 

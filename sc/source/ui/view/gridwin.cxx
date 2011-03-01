@@ -470,7 +470,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             eVWhich = SC_SPLIT_BOTTOM;
             break;
         default:
-            DBG_ERROR("GridWindow: falsche Position");
+            OSL_FAIL("GridWindow: falsche Position");
     }
 
     SetBackground();
@@ -1310,7 +1310,7 @@ void ScGridWindow::ExecFilter( ULONG nSel,
     }
     else
     {
-        DBG_ERROR("Wo ist der Datenbankbereich?");
+        OSL_FAIL("Wo ist der Datenbankbereich?");
     }
 }
 
@@ -4148,7 +4148,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
             }
             else
             {
-                DBG_ERROR("drop with link: no sheet nor area");
+                OSL_FAIL("drop with link: no sheet nor area");
                 bOk = FALSE;
             }
         }

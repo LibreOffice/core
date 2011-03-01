@@ -946,7 +946,7 @@ SfxStyleSheetBase* lcl_CopyStyleToPool
 {
     if ( !pSrcStyle || !pDestPool || !pSrcPool )
     {
-        DBG_ERROR( "CopyStyleToPool: Invalid Arguments :-/" );
+        OSL_FAIL( "CopyStyleToPool: Invalid Arguments :-/" );
         return NULL;
     }
 
@@ -1183,7 +1183,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle )
     }
     else
     {
-        DBG_ERROR( "ScPatternAttr::SetStyleSheet( NULL ) :-|" );
+        OSL_FAIL( "ScPatternAttr::SetStyleSheet( NULL ) :-|" );
         GetItemSet().SetParent(NULL);
         pStyle = NULL;
     }

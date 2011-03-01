@@ -761,7 +761,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const String& rName, BOOL bRecord )
     }
     else
     {
-        DBG_ERROR( "UseScenario auf Szenario-Blatt" );
+        OSL_FAIL( "UseScenario auf Szenario-Blatt" );
     }
 }
 

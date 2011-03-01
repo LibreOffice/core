@@ -387,7 +387,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_SORTED_ASCENDING);
                     break;
                     default:
-                        DBG_ERROR("unknown ListType");
+                        OSL_FAIL("unknown ListType");
                     }
                 }
             }
@@ -762,7 +762,7 @@ sal_Int32 ScRowFormatRanges::GetMaxRows() const
     }
     else
     {
-        DBG_ERROR("no ranges found");
+        OSL_FAIL("no ranges found");
     }
     return nMaxRows;
 }

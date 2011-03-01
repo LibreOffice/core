@@ -211,12 +211,12 @@ drawing::Position3D getPointFromPoly( const drawing::PolyPolygonShape3D& rPolygo
         }
         else
         {
-            DBG_ERROR("polygon was accessed with a wrong index");
+            OSL_FAIL("polygon was accessed with a wrong index");
         }
     }
     else
     {
-        DBG_ERROR("polygon was accessed with a wrong index");
+        OSL_FAIL("polygon was accessed with a wrong index");
     }
     return aRet;
 }

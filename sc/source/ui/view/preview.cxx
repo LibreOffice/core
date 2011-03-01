@@ -842,7 +842,7 @@ Size lcl_GetDocPageSize( ScDocument* pDoc, SCTAB nTab )
     }
     else
     {
-        DBG_ERROR( "PageStyle not found" );
+        OSL_FAIL( "PageStyle not found" );
         return Size();
     }
 }

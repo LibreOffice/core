@@ -207,7 +207,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 }
                 else
                 {
-                    DBG_ERROR("Error in CreateAndLoad");
+                    OSL_FAIL("Error in CreateAndLoad");
                 }
             }
         }
@@ -280,7 +280,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 }
                 else
                 {
-                    DBG_ERROR("Error creating external OLE object");
+                    OSL_FAIL("Error creating external OLE object");
                 }
             }
             //TODO/LATER: if format is not available, create picture
@@ -562,7 +562,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 }
                 else
                 {
-                    DBG_ERROR("no dimension");  //! possible?
+                    OSL_FAIL("no dimension");   //! possible?
                     SCCOL nFirstCol, nLastCol;
                     SCROW nFirstRow, nLastRow;
                     if ( pInsDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
@@ -634,7 +634,7 @@ ByteString lcl_GetSubString( sal_Char* pData, long nStart, long nDataSize )
 {
     if ( nDataSize <= nStart /* || pData[nDataSize] != 0 */ )
     {
-        DBG_ERROR("DDE Data: invalid data");
+        OSL_FAIL("DDE Data: invalid data");
         return ByteString();
     }
     return ByteString( pData + nStart );
@@ -650,7 +650,7 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
     uno::Sequence<sal_Int8> aSequence;
     if ( !aDataHelper.GetSequence( SOT_FORMATSTR_ID_LINK, aSequence ) )
     {
-        DBG_ERROR("DDE Data not found.");
+        OSL_FAIL("DDE Data not found.");
         return FALSE;
     }
 

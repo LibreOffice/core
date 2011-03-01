@@ -401,7 +401,7 @@ OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
             aRet=String(SchResId(STR_OBJECT_TITLE_SECONDARY_Y_AXIS));
             break;
         default:
-            DBG_ERROR("unknown title type");
+            OSL_FAIL("unknown title type");
             break;
     }
 

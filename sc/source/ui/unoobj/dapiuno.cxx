@@ -1443,7 +1443,7 @@ void ScDataPilotDescriptor::SetDPObject( ScDPObject* pDPObject )
     {
         delete mpDPObject;
         mpDPObject = pDPObject;
-        DBG_ERROR("replace DPObject should not happen");
+        OSL_FAIL("replace DPObject should not happen");
     }
 }
 

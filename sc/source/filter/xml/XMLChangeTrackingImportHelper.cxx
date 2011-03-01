@@ -278,7 +278,7 @@ sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(const rtl::OUString&
         }
         else
         {
-            DBG_ERROR("wrong change action ID");
+            OSL_FAIL("wrong change action ID");
         }
     }
     return nResult;
@@ -373,7 +373,7 @@ void ScXMLChangeTrackingImportHelper::SetInsertionCutOff(const sal_uInt32 nID, c
     }
     else
     {
-        DBG_ERROR("wrong action type");
+        OSL_FAIL("wrong action type");
     }
 }
 
@@ -386,7 +386,7 @@ void ScXMLChangeTrackingImportHelper::AddMoveCutOff(const sal_uInt32 nID, const 
     }
     else
     {
-        DBG_ERROR("wrong action type");
+        OSL_FAIL("wrong action type");
     }
 }
 
@@ -398,7 +398,7 @@ void ScXMLChangeTrackingImportHelper::SetMoveRanges(const ScBigRange& aSourceRan
     }
     else
     {
-        DBG_ERROR("wrong action type");
+        OSL_FAIL("wrong action type");
     }
 }
 
@@ -420,7 +420,7 @@ void ScXMLChangeTrackingImportHelper::GetMultiSpannedRange()
     }
     else
     {
-        DBG_ERROR("wrong action type");
+        OSL_FAIL("wrong action type");
     }
 }
 
@@ -438,7 +438,7 @@ void ScXMLChangeTrackingImportHelper::AddGenerated(ScMyCellInfo* pCellInfo, cons
     }
     else
     {
-        DBG_ERROR("try to insert a generated action to a wrong action");
+        OSL_FAIL("try to insert a generated action to a wrong action");
     }
 }
 
@@ -451,7 +451,7 @@ void ScXMLChangeTrackingImportHelper::EndChangeAction()
         aActions.push_back(pCurrentAction);
     else
     {
-        DBG_ERROR("no current action");
+        OSL_FAIL("no current action");
     }
     pCurrentAction = NULL;
 }
@@ -615,7 +615,7 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
         }
         else
         {
-            DBG_ERROR("no cut off insert action");
+            OSL_FAIL("no cut off insert action");
         }
     }
     if (!pAction->aMoveCutOffs.empty())
@@ -637,7 +637,7 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
             }
             else
             {
-                DBG_ERROR("no cut off move action");
+                OSL_FAIL("no cut off move action");
             }
             aItr = pAction->aMoveCutOffs.erase(aItr);
         }
@@ -747,7 +747,7 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
     }
     else
     {
-        DBG_ERROR("could not find the action");
+        OSL_FAIL("could not find the action");
     }
 }
 
@@ -822,7 +822,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                 }
                 else
                 {
-                    DBG_ERROR("wrong cell position");
+                    OSL_FAIL("wrong cell position");
                 }
             }
         }
@@ -889,7 +889,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
                 pTrack->AppendLoaded(pAction);
             else
             {
-                DBG_ERROR("no action");
+                OSL_FAIL("no action");
             }
 
             ++aItr;
