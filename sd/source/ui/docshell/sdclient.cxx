@@ -37,13 +37,7 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 
-
 #include "misc.hxx"
-
-#ifdef STARIMAGE_AVAILABLE
-#include <sim2/simdll.hxx>
-#endif
-
 #include "strings.hrc"
 #include "ViewShell.hxx"
 #include "DrawViewShell.hxx"

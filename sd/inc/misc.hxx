@@ -29,10 +29,6 @@
 #ifndef _SD_MISC_HXX
 #define _SD_MISC_HXX
 
-// do we have a StarOffice Image OLE server?
-#undef STARIMAGE_AVAILABLE
-
 #endif // _SD_MISC_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

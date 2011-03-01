@@ -471,11 +471,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
     }
     else if( aType.EqualsAscii( "GraphicObjectShape" ) )
     {
-#ifdef STARIMAGE_AVAILABLE
-        eObjKind = PRESOBJ_IMAGE;
-#else
         eObjKind = PRESOBJ_GRAPHIC;
-#endif
     }
     else if( aType.EqualsAscii( "OrgChartShape" ) )
     {

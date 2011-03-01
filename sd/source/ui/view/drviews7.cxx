@@ -954,9 +954,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_VIDEO );
         rSet.DisableItem( SID_INSERT_APPLET );
         rSet.DisableItem( SID_INSERT_FLOATINGFRAME );
-#ifdef STARIMAGE_AVAILABLE
-        rSet.DisableItem( SID_INSERT_IMAGE );
-#endif
         rSet.DisableItem( SID_INSERT_MATH );
         rSet.DisableItem( SID_INSERT_DIAGRAM );
         rSet.DisableItem( SID_ATTR_TABLE );
@@ -1059,9 +1056,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_APPLET );
         rSet.DisableItem( SID_INSERT_FLOATINGFRAME );
 
-#ifdef STARIMAGE_AVAILABLE
-        rSet.DisableItem( SID_INSERT_IMAGE );
-#endif
         rSet.DisableItem( SID_INSERT_MATH );
         rSet.DisableItem( SID_INSERT_FRAME );
         rSet.DisableItem( SID_INSERTFILE );
@@ -1268,12 +1262,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         rSet.DisableItem( SID_INSERT_DIAGRAM );
     }
-#ifdef STARIMAGE_AVAILABLE
-    if (!(pApp->HasFeature(SFX_FEATURE_SIMAGE)))
-    {
-        rSet.DisableItem( SID_INSERT_IMAGE );
-    }
-#endif
     if (!SvtModuleOptions().IsMath())
     {
         rSet.DisableItem( SID_INSERT_MATH );
