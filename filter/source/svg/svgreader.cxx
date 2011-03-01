@@ -881,7 +881,7 @@ struct AnnotatingVisitor
             {
                 // TODO(F1): preserveAspectRatio
                 parseViewBox(
-                    aValueUtf8,
+                    aValueUtf8.getStr(),
                     maCurrState.maViewBox);
                 break;
             }
@@ -1003,7 +1003,7 @@ struct AnnotatingVisitor
                 if( aValueUtf8 == "inherit" )
                     maCurrState.maCurrentColor = maParentStates.back().maCurrentColor;
                 else
-                    parseColor(aValueUtf8, maCurrState.maCurrentColor);
+                    parseColor(aValueUtf8.getStr(), maCurrState.maCurrentColor);
                 break;
             }
             case XML_TRANSFORM:
@@ -1035,7 +1035,7 @@ struct AnnotatingVisitor
                 if( maGradientVector.empty() ||
                     maGradientVector.back().maStops.empty() )
                     break;
-                parseColor( aValueUtf8,
+                parseColor( aValueUtf8.getStr(),
                             maGradientStopVector[
                                 maGradientVector.back().maStops.back()].maStopColor );
                 break;
@@ -1043,7 +1043,7 @@ struct AnnotatingVisitor
                 if( maGradientVector.empty() ||
                     maGradientVector.back().maStops.empty() )
                     break;
-                parseOpacity( aValueUtf8,
+                parseOpacity( aValueUtf8.getStr(),
                               maGradientStopVector[
                                   maGradientVector.back().maStops.back()].maStopColor );
                 break;
@@ -1475,7 +1475,7 @@ struct ShapeWritingVisitor
                 // collect text from all TEXT_NODE children into sText
                 rtl::OUStringBuffer sText;
                 visitChildren(boost::bind(
-                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const sal_Unicode* str))&rtl::OUStringBuffer::append,
+                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const rtl::OUString& str))&rtl::OUStringBuffer::append,
                                   boost::ref(sText),
                                   boost::bind(&xml::dom::XNode::getNodeValue,
                                               _1)),
@@ -2385,7 +2385,7 @@ struct ShapeRenderingVisitor
                 // collect text from all TEXT_NODE children into sText
                 rtl::OUStringBuffer sText;
                 visitChildren(boost::bind(
-                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const sal_Unicode* str))&rtl::OUStringBuffer::append,
+                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const rtl::OUString& str))&rtl::OUStringBuffer::append,
                                   boost::ref(sText),
                                   boost::bind(&xml::dom::XNode::getNodeValue,
                                               _1)),
