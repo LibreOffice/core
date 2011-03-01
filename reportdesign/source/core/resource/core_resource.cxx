@@ -66,8 +66,7 @@ namespace reportdesign
 
             ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
 
-            rtl::OString sResLibName = rtl::OString( "rpt" );
-            m_pImpl = SimpleResMgr::Create(sResLibName, aLocale);
+            m_pImpl = SimpleResMgr::Create("rpt", aLocale);
         }
     }
 
