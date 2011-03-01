@@ -37,6 +37,7 @@
 #include "xeroot.hxx"
 #include "xestring.hxx"
 #include <boost/shared_ptr.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 
 class Size;
 
@@ -987,7 +988,7 @@ private:
 
 private:
     typedef XclExpRecordList< XclExpChSeries >          XclExpChSeriesList;
-    typedef ScfRefMap< sal_uInt16, XclExpChLineFormat > XclExpChLineFormatMap;
+    typedef ::boost::ptr_map<sal_uInt16, XclExpChLineFormat> XclExpChLineFormatMap;
 
     XclChTypeGroup      maData;             /// Contents of the CHTYPEGROUP record.
     XclExpChType        maType;             /// Chart type (e.g. CHBAR, CHLINE, ...).

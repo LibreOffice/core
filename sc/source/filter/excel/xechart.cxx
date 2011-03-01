@@ -149,6 +149,16 @@ void lclSaveRecord( XclExpStream& rStrm, XclExpRecordRef xRec, sal_uInt16 nRecId
     }
 }
 
+template<typename ValueType, typename KeyType>
+void lclSaveRecord(XclExpStream& rStrm, ValueType* pRec, sal_uInt16 nRecId, KeyType nValue)
+{
+    if (pRec)
+    {
+        XclExpValueRecord<KeyType>(nRecId, nValue).Save(rStrm);
+        pRec->Save(rStrm);
+    }
+}
+
 void lclWriteChFrBlockRecord( XclExpStream& rStrm, const XclChFrBlock& rFrBlock, bool bBegin )
 {
     sal_uInt16 nRecId = bBegin ? EXC_ID_CHFRBLOCKBEGIN : EXC_ID_CHFRBLOCKEND;
@@ -2413,14 +2423,7 @@ void XclExpChTypeGroup::ConvertSeries(
                 if (bConnectBars && (maTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR))
                 {
                     sal_uInt16 nKey = EXC_CHCHARTLINE_CONNECT;
-                    XclExpChLineFormatRef p(new XclExpChLineFormat(GetChRoot()));
-                    XclExpChLineFormatMap::iterator itr = maChartLines.lower_bound(nKey);
-                    if (itr != maChartLines.end() && !(maChartLines.key_comp()(nKey, itr->first)))
-                        // Overwrite the existing element.
-                        itr->second = p;
-                    else
-                        // Insert new element.
-                        maChartLines.insert(itr, XclExpChLineFormatMap::value_type(nKey, p));
+                    maChartLines.insert(nKey, new XclExpChLineFormat(GetChRoot()));
                 }
             }
             else
@@ -2512,7 +2515,8 @@ void XclExpChTypeGroup::CreateAllStockSeries(
         ScfPropertySet aSeriesProp( xDataSeries );
         XclExpChLineFormatRef xLineFmt( new XclExpChLineFormat( GetChRoot() ) );
         xLineFmt->Convert( GetChRoot(), aSeriesProp, EXC_CHOBJTYPE_HILOLINE );
-        maChartLines[ EXC_CHCHARTLINE_HILO ] = xLineFmt;
+        sal_uInt16 nKey = EXC_CHCHARTLINE_HILO;
+        maChartLines.insert(nKey, new XclExpChLineFormat(GetChRoot()));
     }
     // dropbars
     if( bHasOpen && bHasClose )
