@@ -183,12 +183,12 @@ sal_Int32 SAL_CALL ScVbaFileSearch::Execute( )  throw (css::uno::RuntimeExceptio
         bool bStartWithAsterisk = (aTempFileName.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"))) == 0);
         if ( !bEndWithAsterisk && !bStartWithAsterisk )
         {
-            aTempFileName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")); + aTempFileName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+            aTempFileName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) + aTempFileName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
         }
     }
     else
     {
-        aTempFileName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")); + aTempFileName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+        aTempFileName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) + aTempFileName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
     }
     WildCard wildCard( aTempFileName );
     SearchWildCard( wildCard, m_sLookIn, m_bSearchSubFolders, m_aSearchedFiles );
