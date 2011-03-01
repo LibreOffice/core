@@ -2147,7 +2147,7 @@ void ScCellShell::ExecuteDataPilotDialog()
 
         //  first select type of source data
 
-        BOOL bEnableExt = ScDPObject::HasRegisteredSources();
+        bool bEnableExt = ScDPObject::HasRegisteredSources();
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
@@ -2216,7 +2216,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                         pTabViewShell->MarkRange(aRange);
                     }
 
-                    BOOL bOK = TRUE;
+                    bool bOK = true;
                     if ( pDoc->HasSubTotalCells( aRange ) )
                     {
                         //  confirm selection if it contains SubTotal cells
@@ -2225,7 +2225,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                                         WinBits(WB_YES_NO | WB_DEF_YES),
                                         ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL) );
                         if (aBox.Execute() == RET_NO)
-                            bOK = FALSE;
+                            bOK = false;
                     }
                     if (bOK)
                     {

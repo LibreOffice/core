@@ -94,8 +94,11 @@ public:
 class AbstractScDataPilotSourceTypeDlg  : public VclAbstractDialog  //add for ScDataPilotSourceTypeDlg
 {
 public:
-    virtual BOOL    IsDatabase() const = 0;
-    virtual BOOL    IsExternal() const = 0;
+    virtual bool IsDatabase() const = 0;
+    virtual bool IsExternal() const = 0;
+    virtual bool IsNamedRange() const = 0;
+    virtual rtl::OUString GetSelectedNamedRange() const = 0;
+    virtual void SetNamedRanges(const ::std::vector<rtl::OUString>& rNames) = 0;
 };
 
 class AbstractScDataPilotServiceDlg : public VclAbstractDialog  //add for ScDataPilotServiceDlg

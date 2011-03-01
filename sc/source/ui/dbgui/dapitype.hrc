@@ -50,3 +50,6 @@
 #define CB_OBJECT       21
 #define FT_OBJTYPE      22
 #define LB_OBJTYPE      23
+
+#define BTN_NAMED_RANGE 24
+#define LB_NAMED_RANGE  25

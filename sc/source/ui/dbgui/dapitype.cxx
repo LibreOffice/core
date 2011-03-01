@@ -41,6 +41,7 @@
 #include "dapitype.hrc"
 
 using namespace com::sun::star;
+using ::rtl::OUString;
 
 //-------------------------------------------------------------------------
 
@@ -49,6 +50,8 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg( Window* pParent, BOOL bEnabl
     //
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aBtnSelection   ( this, ScResId( BTN_SELECTION ) ),
+    aBtnNamedRange  ( this, ScResId( BTN_NAMED_RANGE ) ),
+    aLbNamedRange   ( this, ScResId( LB_NAMED_RANGE ) ),
     aBtnDatabase    ( this, ScResId( BTN_DATABASE ) ),
     aBtnExternal    ( this, ScResId( BTN_EXTERNAL ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
@@ -59,6 +62,7 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg( Window* pParent, BOOL bEnabl
         aBtnExternal.Disable();
 
     aBtnSelection.Check();
+    aLbNamedRange.Disable();
 
     FreeResource();
 }
@@ -67,14 +71,28 @@ ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg()
 {
 }
 
-BOOL ScDataPilotSourceTypeDlg::IsDatabase() const
+bool ScDataPilotSourceTypeDlg::IsDatabase() const
 {
     return aBtnDatabase.IsChecked();
 }
 
-BOOL ScDataPilotSourceTypeDlg::IsExternal() const
+bool ScDataPilotSourceTypeDlg::IsExternal() const
 {
     return aBtnExternal.IsChecked();
+}
+
+bool ScDataPilotSourceTypeDlg::IsNamedRange() const
+{
+    return false;
+}
+
+OUString ScDataPilotSourceTypeDlg::GetSelectedNamedRange() const
+{
+    return OUString();
+}
+
+void ScDataPilotSourceTypeDlg::SetNamedRanges(const ::std::vector<OUString>& rNames)
+{
 }
 
 //-------------------------------------------------------------------------
