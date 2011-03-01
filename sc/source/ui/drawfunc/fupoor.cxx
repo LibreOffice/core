@@ -57,7 +57,7 @@ FuPoor::FuPoor(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
     aSfxRequest(rReq),
     pDialog(NULL),
     bIsInDragMode(FALSE),
-    // #95491# remember MouseButton state
+    // remember MouseButton state
     mnCode(0)
 {
     aScrollTimer.SetTimeoutHdl( LINK(this, FuPoor, ScrollHdl) );
@@ -170,7 +170,7 @@ IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, EMPTYARG )
 {
     Point aPosPixel = pWindow->GetPointerPosPixel();
 
-    // #95491# use remembered MouseButton state to create correct
+    // use remembered MouseButton state to create correct
     // MouseEvents for this artifical MouseMove.
     MouseMove(MouseEvent(aPosPixel, 1, 0, GetMouseButtonCode()));
 
@@ -178,19 +178,19 @@ IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
 
-// #95491# moved from inline to *.cxx
+// moved from inline to *.cxx
 BOOL FuPoor::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     return FALSE;
 }
 
-// #95491# moved from inline to *.cxx
+// moved from inline to *.cxx
 BOOL FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     return FALSE;
@@ -351,7 +351,7 @@ void FuPoor::StopDragTimer()
 
 /*************************************************************************
 |*
-|* #98185# Create default drawing objects via keyboard
+|* Create default drawing objects via keyboard
 |*
 \************************************************************************/
 

@@ -1214,7 +1214,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const rtl::OUString& rParentStyle )
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
     if (pStyle)
     {
-        //  #70909# cell styles cannot be modified if any sheet is protected
+        //  cell styles cannot be modified if any sheet is protected
         if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( *pDocShell->GetDocument() ) )
             return;         //! exception?
 
@@ -1270,7 +1270,7 @@ void SAL_CALL ScStyleObj::setName( const rtl::OUString& aNewName )
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
     if (pStyle)
     {
-        //  #71225# cell styles cannot be renamed if any sheet is protected
+        //  cell styles cannot be renamed if any sheet is protected
         if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( *pDocShell->GetDocument() ) )
             return;         //! exception?
 
@@ -1432,7 +1432,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aProperty
             //  Default ist Default vom ItemPool, nicht vom Standard-Style,
             //  damit es zu setPropertyToDefault passt
             SfxItemSet aEmptySet( *pStyleSet->GetPool(), pStyleSet->GetRanges() );
-            //  #65253# Default-Items mit falscher Slot-ID funktionieren im SfxItemPropertySet3 nicht
+            //  Default-Items mit falscher Slot-ID funktionieren im SfxItemPropertySet3 nicht
             //! Slot-IDs aendern...
             if ( aEmptySet.GetPool()->GetSlotId(nWhich) == nWhich &&
                  aEmptySet.GetItemState(nWhich, sal_False) == SFX_ITEM_DEFAULT )
@@ -1581,7 +1581,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault() throw (uno::RuntimeExcepti
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
     if ( pStyle )
     {
-        //  #70909# cell styles cannot be modified if any sheet is protected
+        //  cell styles cannot be modified if any sheet is protected
         if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( *pDocShell->GetDocument() ) )
             throw uno::RuntimeException();
 
@@ -1689,7 +1689,7 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
     if ( pStyle && pEntry )
     {
-        //  #70909# cell styles cannot be modified if any sheet is protected
+        //  cell styles cannot be modified if any sheet is protected
         if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( *pDocShell->GetDocument() ) )
             throw uno::RuntimeException();
 
@@ -1738,7 +1738,7 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
                         {
                             case ATTR_VALUE_FORMAT:
                                 {
-                                    // #67847# language for number formats
+                                    // language for number formats
                                     SvNumberFormatter* pFormatter =
                                             pDocShell->GetDocument()->GetFormatTable();
                                     UINT32 nOldFormat = ((const SfxUInt32Item&)
@@ -1889,7 +1889,7 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
                                 }
                                 break;
                             default:
-                                //  #65253# Default-Items mit falscher Slot-ID
+                                //  Default-Items mit falscher Slot-ID
                                 //  funktionieren im SfxItemPropertySet3 nicht
                                 //! Slot-IDs aendern...
                                 if ( rSet.GetPool()->GetSlotId(pEntry->nWID) == pEntry->nWID &&
@@ -1903,7 +1903,7 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
                     else
                     {
                         rSet.ClearItem( pEntry->nWID );
-                        // #67847# language for number formats
+                        // language for number formats
                         if ( pEntry->nWID == ATTR_VALUE_FORMAT )
                             rSet.ClearItem( ATTR_LANGUAGE_FORMAT );
 
@@ -2054,7 +2054,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                         }
                         break;
                     default:
-                        //  #65253# Default-Items mit falscher Slot-ID
+                        //  Default-Items mit falscher Slot-ID
                         //  funktionieren im SfxItemPropertySet3 nicht
                         //! Slot-IDs aendern...
                         if ( pItemSet->GetPool()->GetSlotId(nWhich) == nWhich &&

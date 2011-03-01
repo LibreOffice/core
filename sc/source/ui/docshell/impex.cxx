@@ -998,7 +998,7 @@ static bool lcl_PutString(
                     else if ( i == 8 && rTransliteration.isEqual( aSeptCorrect,
                                 xMonths[i].AbbrevName ) &&
                             rTransliteration.isEqual( aMStr, aSepShortened ) )
-                    {   // #102136# correct English abbreviation is SEPT,
+                    {   // correct English abbreviation is SEPT,
                         // but data mostly contains SEP only
                         nMonth = sal::static_int_cast<sal_Int16>( i+1 );
                     }
@@ -1018,7 +1018,7 @@ static bool lcl_PutString(
                         }
                         else if ( i == 8 && pSecondTransliteration->isEqual(
                                     aMStr, aSepShortened ) )
-                        {   // #102136# correct English abbreviation is SEPT,
+                        {   // correct English abbreviation is SEPT,
                             // but data mostly contains SEP only
                             nMonth = sal::static_int_cast<sal_Int16>( i+1 );
                             bSecondCal = TRUE;
@@ -1967,7 +1967,7 @@ BOOL ScImportExport::Dif2Doc( SvStream& rStrm )
     SCCOL nEndCol;
     SCROW nEndRow;
     pImportDoc->GetCellArea( nTab, nEndCol, nEndRow );
-    // #131247# if there are no cells in the imported content, nEndCol/nEndRow may be before the start
+    // if there are no cells in the imported content, nEndCol/nEndRow may be before the start
     if ( nEndCol < aRange.aStart.Col() )
         nEndCol = aRange.aStart.Col();
     if ( nEndRow < aRange.aStart.Row() )

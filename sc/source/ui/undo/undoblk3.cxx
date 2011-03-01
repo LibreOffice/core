@@ -1259,7 +1259,7 @@ void ScUndoReplace::Undo()
     }
     else
     {
-        // #78889# aUndoStr may contain line breaks
+        // aUndoStr may contain line breaks
         if ( aUndoStr.Search('\n') != STRING_NOTFOUND )
             pDoc->PutCell( aCursorPos, new ScEditCell( aUndoStr, pDoc ) );
         else

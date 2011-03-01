@@ -1305,7 +1305,7 @@ void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
         mpViewShell = NULL;
     }
 
-    // #100593# no need to Dispose the AccessibleTextHelper,
+    // no need to Dispose the AccessibleTextHelper,
     // as long as mpNotesChilds are destructed here
     if (mpNotesChilds)
         DELETEZ(mpNotesChilds);

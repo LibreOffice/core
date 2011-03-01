@@ -976,7 +976,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                             if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
                             {
                                 if ( pCell->GetCellType() == CELLTYPE_EDIT )
-                                {   // #60761# Paragraphs erhalten
+                                {   // Paragraphs erhalten
                                     lcl_getLongVarCharEditString( aString,
                                             pCell, aEditEngine);
                                 }
@@ -1003,7 +1003,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                     case sdbc::DataType::DATE:
                         {
                             aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
-                            // #39274# zwischen 0 Wert und 0 kein Wert unterscheiden
+                            // zwischen 0 Wert und 0 kein Wert unterscheiden
                             BOOL bIsNull = (fVal == 0.0);
                             if ( bIsNull )
                                 bIsNull = !aDocument.HasValueData( nDocCol, nDocRow, nTab );

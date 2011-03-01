@@ -137,7 +137,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
 {
     ScDrawView* pView = pViewData->GetScDrawView();
 
-    //  #111711# call IsMirrorAllowed first to make sure ForcePossibilities (and thus CheckMarked)
+    //  call IsMirrorAllowed first to make sure ForcePossibilities (and thus CheckMarked)
     //  is called before GetMarkCount, so the nMarkCount value is valid for the rest of this method.
     if (!pView->IsMirrorAllowed(TRUE,TRUE))
     {
@@ -177,7 +177,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
     }
 
     // do not change layer of form controls
-    // #158385# #i83729# do not change layer of cell notes (on internal layer)
+    // #i83729# do not change layer of cell notes (on internal layer)
     if ( !nMarkCount || pView->HasMarkedControl() || pView->HasMarkedInternal() )
     {
         rSet.DisableItem( SID_OBJECT_HEAVEN );

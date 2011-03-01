@@ -331,7 +331,7 @@ void ScDPLayoutDlg::StateChanged( StateChangedType nStateChange )
 
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
-        // #124828# Hiding the FixedTexts and clearing the tab stop style bits
+        // Hiding the FixedTexts and clearing the tab stop style bits
         // has to be done after assigning the mnemonics, but Paint is too late,
         // because the test tool may send key events to the dialog when it isn't visible.
         // Mnemonics are assigned in the Dialog::StateChanged for STATE_CHANGE_INITSHOW,
@@ -1086,12 +1086,12 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
 void ScDPLayoutDlg::NotifyFieldFocus( ScDPFieldType eType, BOOL bGotFocus )
 {
     /*  Enable Remove/Options buttons on GetFocus in field window.
-        #107616# Enable them also, if dialog is deactivated (click into document).
+        Enable them also, if dialog is deactivated (click into document).
         The !IsActive() condition handles the case that a LoseFocus event of a
         field window would follow the Deactivate event of this dialog. */
     BOOL bEnable = (bGotFocus || !IsActive()) && (eType != TYPE_SELECT);
 
-    // #128113# The TestTool may set the focus into an empty field.
+    // The TestTool may set the focus into an empty field.
     // Then the Remove/Options buttons must be disabled.
     ScDPFieldControlBase* pWnd = GetFieldWindow(eType);
     if ( bEnable && bGotFocus && pWnd && pWnd->IsEmpty() )
@@ -1134,7 +1134,7 @@ void ScDPLayoutDlg::NotifyRemoveField( ScDPFieldType eType, size_t nFieldIndex )
 
 void ScDPLayoutDlg::Deactivate()
 {
-    /*  #107616# If the dialog has been deactivated (click into document), the LoseFocus
+    /*  If the dialog has been deactivated (click into document), the LoseFocus
         event from field window disables Remove/Options buttons. Re-enable them here by
         simulating a GetFocus event. Event order of LoseFocus and Deactivate is not important.
         The last event will enable the buttons in both cases (see NotifyFieldFocus). */
@@ -1765,7 +1765,7 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
     ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
     pTabViewShell->SetDialogDPObject(xDlgDPObject.get());
 
-    //  #95513# don't hide the dialog before executing the slot, instead it is used as
+    //  don't hide the dialog before executing the slot, instead it is used as
     //  parent for message boxes in ScTabViewShell::GetDialogParent
 
     const SfxPoolItem* pRet = GetBindings().GetDispatcher()->Execute(

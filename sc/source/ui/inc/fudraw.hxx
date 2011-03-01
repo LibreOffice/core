@@ -63,7 +63,7 @@ class FuDraw : public FuPoor
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    // #97016# II
+    // II
     virtual void SelectionHasChanged();
 
     BOOL IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;

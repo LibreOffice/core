@@ -1420,7 +1420,7 @@ ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, BOOL bUseRef )
     if ( pViewSh )
         pHdl = pViewSh->GetInputHandler();      // Viewshell hat jetzt immer einen
 
-    //  #57989# wenn keine ViewShell uebergeben oder aktiv, kann NULL herauskommen
+    //  wenn keine ViewShell uebergeben oder aktiv, kann NULL herauskommen
     DBG_ASSERT( pHdl || !pViewSh, "GetInputHdl: kein InputHandler gefunden" );
     return pHdl;
 }
@@ -1589,7 +1589,7 @@ void ScModule::SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm )
         if ( !pViewFrm )
             pViewFrm = SfxViewFrame::Current();
 
-        // #79379# bindings update causes problems with update of stylist if
+        // bindings update causes problems with update of stylist if
         // current style family has changed
         //if ( pViewFrm )
         //  pViewFrm->GetBindings().Update();       // to avoid trouble in LockDispatcher

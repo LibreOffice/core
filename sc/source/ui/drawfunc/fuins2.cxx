@@ -401,7 +401,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
             if ( nAspect != embed::Aspects::MSOLE_ICON )
             {
-                //  #73279# Math objects change their object size during InsertObject.
+                //  Math objects change their object size during InsertObject.
                 //  New size must be set in SdrObject, or a wrong scale will be set at
                 //  ActivateObject.
 
@@ -427,7 +427,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 // XXX Activate aus Makro ist toedlich !!! ???
                 if (bIsFromFile)
                 {
-                    // #45012# Objekt ist selektiert, also Draw-Shell aktivieren
+                    // Objekt ist selektiert, also Draw-Shell aktivieren
                     pViewShell->SetDrawShell( TRUE );
                 }
                 else
@@ -612,7 +612,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                     nToTable = ((const SfxUInt16Item*)pItem)->GetValue();
                 else if ( pItem->ISA( SfxBoolItem ) )
                 {
-                    //  #46033# in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
+                    //  in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
                     //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
 
                     if ( ((const SfxBoolItem*)pItem)->GetValue() )

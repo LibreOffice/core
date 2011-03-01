@@ -1142,7 +1142,7 @@ void SAL_CALL ScShapeObj::insertTextContent( const uno::Reference<text::XTextRan
     ScCellFieldObj* pCellField = ScCellFieldObj::getImplementation( xContent );
     if ( pCellField )
     {
-        //  #105585# createInstance("TextField.URL") from the document creates a ScCellFieldObj.
+        //  createInstance("TextField.URL") from the document creates a ScCellFieldObj.
         //  To insert it into drawing text, a SvxUnoTextField is needed instead.
         //  The ScCellFieldObj object is left in non-inserted state.
 

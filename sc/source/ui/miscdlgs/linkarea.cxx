@@ -232,7 +232,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
     {
         WaitObject aWait( this );
 
-        // #92296# replace HTML filter with DataQuery filter
+        // replace HTML filter with DataQuery filter
         const String aHTMLFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_HTML ) );
         const String aWebQFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_QUERY ) );
 

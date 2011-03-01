@@ -151,7 +151,7 @@ BOOL ScTpSubTotalGroup::DoReset( USHORT             nGroupNo,
 
     //----------------------------------------------------------
 
-    // #79058# first we have to clear the listboxes...
+    // first we have to clear the listboxes...
     for ( USHORT nLbEntry = 0; nLbEntry < aLbColumns.GetEntryCount(); ++nLbEntry )
     {
         aLbColumns.CheckEntryPos( nLbEntry, FALSE );

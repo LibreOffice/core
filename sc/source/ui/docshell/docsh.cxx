@@ -521,7 +521,7 @@ BOOL ScDocShell::Load( SfxMedium& rMedium )
     InitItems();
     CalcOutputFactor();
 
-    // #73762# invalidate eventually temporary table areas
+    // invalidate eventually temporary table areas
     if ( bRet )
         aDocument.InvalidateTableArea();
 
@@ -1130,7 +1130,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 eFormat = EIF_BIFF8;
 
             MakeDrawLayer();                //! im Filter
-            CalcOutputFactor();             // #93255# prepare update of row height
+            CalcOutputFactor();             // prepare update of row height
             ScColumn::bDoubleAlloc = TRUE;
             FltError eError = ScFormatFilter::Get().ScImportExcel( rMedium, &aDocument, eFormat );
             ScColumn::bDoubleAlloc = FALSE;
@@ -1138,7 +1138,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
                 aDocument.UpdateChartListenerCollection();              //! fuer alle Importe?
 
-            // #75299# all graphics objects must have names
+            // all graphics objects must have names
             aDocument.EnsureGraphicNames();
 
             if (eError == SCWARN_IMPORT_RANGE_OVERFLOW)
@@ -1496,7 +1496,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
     FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
 
 
-    // #73762# invalidate eventually temporary table areas
+    // invalidate eventually temporary table areas
     if ( bRet )
         aDocument.InvalidateTableArea();
 
@@ -1930,7 +1930,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     }
                     else
                     {
-                        // #105549# This is nasty. The Unicode to byte encoding
+                        // This is nasty. The Unicode to byte encoding
                         // may convert typographical quotation marks to ASCII
                         // quotation marks, which may interfer with the delimiter,
                         // so we have to escape delimiters after the string has
@@ -2072,7 +2072,7 @@ BOOL ScDocShell::ConvertTo( SfxMedium &rMed )
                 aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
             pViewShell->GetViewData()->WriteExtOptions( *pExtDocOpt );
 
-            /*  #115980# #i104990# If the imported document contains a medium
+            /*  #i104990# If the imported document contains a medium
                 password, determine if we can save it, otherwise ask the users
                 whether they want to save without it. */
             if( (rMed.GetFilter()->GetFilterFlags() & SFX_FILTER_ENCRYPTION) == 0 )
@@ -2548,7 +2548,7 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags )
 
 ScDocShell::~ScDocShell()
 {
-    ResetDrawObjectShell(); // #55570# falls der Drawing-Layer noch versucht, darauf zuzugreifen
+    ResetDrawObjectShell(); // falls der Drawing-Layer noch versucht, darauf zuzugreifen
 
     SfxStyleSheetPool* pStlPool = aDocument.GetStyleSheetPool();
     if (pStlPool)
@@ -2632,7 +2632,7 @@ void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
 
             //  Detective AutoUpdate:
             //  Update if formulas were modified (DetectiveDirty) or the list contains
-            //  "Trace Error" entries (#75362# - Trace Error can look completely different
+            //  "Trace Error" entries (Trace Error can look completely different
             //  after changes to non-formula cells).
 
             ScDetOpList* pList = aDocument.GetDetOpList();
@@ -2644,7 +2644,7 @@ void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
             aDocument.SetDetectiveDirty(FALSE);         // always reset, also if not refreshed
         }
 
-        // #b6697848# notify UNO objects after BCA_BRDCST_ALWAYS etc.
+        // notify UNO objects after BCA_BRDCST_ALWAYS etc.
         aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
     }
 }

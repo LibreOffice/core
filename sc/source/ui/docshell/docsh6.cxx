@@ -157,7 +157,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
 
     //      hier Position anpassen!
 
-    //  #92248# when loading an ole object, the VisArea is set from the document's
+    //  when loading an ole object, the VisArea is set from the document's
     //  view settings and must be used as-is (document content may not be complete yet).
     if ( !aDocument.IsImportingXML() )
         aDocument.SnapVisArea( aArea );

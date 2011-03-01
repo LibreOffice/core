@@ -292,7 +292,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
     else if (rHint.ISA( ScUpdateRefHint ))
     {
         const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
-        if (rRef.GetMode() == URM_INSDEL && rRef.GetDz() == 0) //#107250# test whether table is inserted or deleted
+        if (rRef.GetMode() == URM_INSDEL && rRef.GetDz() == 0) //test whether table is inserted or deleted
         {
             if (((rRef.GetRange().aStart.Col() == maRange.aStart.Col()) &&
                 (rRef.GetRange().aEnd.Col() == maRange.aEnd.Col())) ||

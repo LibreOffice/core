@@ -147,7 +147,7 @@ void FuDraw::ResetModifiers()
 
 BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     DoModifiers( rMEvt );
@@ -162,7 +162,7 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 
 BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
 {
-    //  #106438# evaluate modifiers only if in a drawing layer action
+    //  evaluate modifiers only if in a drawing layer action
     //  (don't interfere with keyboard shortcut handling)
     if (pView->IsAction())
         DoModifiers( rMEvt );
@@ -178,7 +178,7 @@ BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     ResetModifiers();
@@ -249,7 +249,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
             }
             else if ( pView->AreObjectsMarked() )
             {
-                // #97016# III
+                // III
                 SdrHdlList& rHdlList = const_cast< SdrHdlList& >( pView->GetHdlList() );
                 if( rHdlList.GetFocusHdl() )
                     rHdlList.ResetFocusHdl();
@@ -273,8 +273,8 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             if( rKEvt.GetKeyCode().GetModifier() == 0 )
             {
-                // #98256# activate OLE object on RETURN for selected object
-                // #98198# put selected text object in edit mode
+                // activate OLE object on RETURN for selected object
+                // put selected text object in edit mode
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
@@ -298,7 +298,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             if( rKEvt.GetKeyCode().GetModifier() == 0 )
             {
-                // #98198# put selected text object in edit mode
+                // put selected text object in edit mode
                 // (this is not SID_SETINPUTMODE, but F2 hardcoded, like in Writer)
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
@@ -325,23 +325,23 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                     // changeover to the next object
                     if(!pView->MarkNextObj( !aCode.IsShift() ))
                     {
-                        // #97016# No next object: go over open end and
+                        // No next object: go over open end and
                         // get first from the other side
                         pView->UnmarkAllObj();
                         pView->MarkNextObj(!aCode.IsShift());
                     }
 
-                    // #97016# II
+                    // II
                     if(pView->AreObjectsMarked())
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                     bReturn = TRUE;
                 }
 
-                // #98994# handle Mod1 and Mod2 to get travelling running on different systems
+                // handle Mod1 and Mod2 to get travelling running on different systems
                 if(rKEvt.GetKeyCode().IsMod1() || rKEvt.GetKeyCode().IsMod2())
                 {
-                    // #97016# II do something with a selected handle?
+                    // II do something with a selected handle?
                     const SdrHdlList& rHdlList = pView->GetHdlList();
                     sal_Bool bForward(!rKEvt.GetKeyCode().IsShift());
 
@@ -375,11 +375,11 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
 
                 if ( aCode.IsMod1() )
                 {
-                    // #97016# mark last object
+                    // mark last object
                     pView->UnmarkAllObj();
                     pView->MarkNextObj(FALSE);
 
-                    // #97016# II
+                    // II
                     if(pView->AreObjectsMarked())
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
@@ -400,11 +400,11 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
 
                 if ( aCode.IsMod1() )
                 {
-                    // #97016# mark first object
+                    // mark first object
                     pView->UnmarkAllObj();
                     pView->MarkNextObj(TRUE);
 
-                    // #97016# II
+                    // II
                     if(pView->AreObjectsMarked())
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
@@ -470,7 +470,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                 {
                     if(rKEvt.GetKeyCode().IsMod2())
                     {
-                        // #97016# move in 1 pixel distance
+                        // move in 1 pixel distance
                         Size aLogicSizeOnePixel = (pWindow) ? pWindow->PixelToLogic(Size(1,1)) : Size(100, 100);
                         nX *= aLogicSizeOnePixel.Width();
                         nY *= aLogicSizeOnePixel.Height();
@@ -485,16 +485,16 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                     // is there a movement to do?
                     if(0 != nX || 0 != nY)
                     {
-                        // #97016# II
+                        // II
                         const SdrHdlList& rHdlList = pView->GetHdlList();
                         SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
                         if(0L == pHdl)
                         {
-                            // #107086# only take action when move is allowed
+                            // only take action when move is allowed
                             if(pView->IsMoveAllowed())
                             {
-                                // #90129# restrict movement to WorkArea
+                                // restrict movement to WorkArea
                                 const Rectangle& rWorkArea = pView->GetWorkArea();
 
                                 if(!rWorkArea.IsEmpty())
@@ -529,7 +529,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                                 // now move the selected draw objects
                                 pView->MoveAllMarked(Size(nX, nY));
 
-                                // #97016# II
+                                // II
                                 pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                                 bReturn = TRUE;
@@ -655,7 +655,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
 
     if (!bReturn)
     {
-        // #98198# allow direct typing into a selected text object
+        // allow direct typing into a selected text object
 
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() && EditEngine::IsSimpleCharInput(rKEvt) )
@@ -671,7 +671,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
     return (bReturn);
 }
 
-// #97016# II
+// II
 void FuDraw::SelectionHasChanged()
 {
     const SdrHdlList& rHdlList = pView->GetHdlList();

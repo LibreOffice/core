@@ -218,7 +218,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
                             aStrNoName,
                             aStrUndefined );
 
-    //  #35206# Spezialfilter braucht immer Spaltenkoepfe
+    //  Spezialfilter braucht immer Spaltenkoepfe
     aBtnHeader.Check(TRUE);
     aBtnHeader.Disable();
 

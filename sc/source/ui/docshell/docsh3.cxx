@@ -828,14 +828,14 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         DBG_ASSERT(pThisTrack,"ChangeTracking nicht angeschaltet?");
         if ( !bShared )
         {
-            // #51138# visuelles RedLining einschalten
+            // visuelles RedLining einschalten
             ScChangeViewSettings aChangeViewSet;
             aChangeViewSet.SetShowChanges(TRUE);
             aDocument.SetChangeViewSettings(aChangeViewSet);
         }
     }
 
-    // #97286# include 100th seconds in compare?
+    // include 100th seconds in compare?
     BOOL bIgnore100Sec = !pSourceTrack->IsTime100thSeconds() ||
             !pThisTrack->IsTime100thSeconds();
 

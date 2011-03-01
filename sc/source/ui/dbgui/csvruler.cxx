@@ -111,7 +111,7 @@ ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
     mnPosCursorLast( 1 )
 {
-    EnableRTL( false ); // #107812# RTL
+    EnableRTL( false ); // RTL
     InitColors();
     InitSizeData();
     maBackgrDev.SetFont( GetFont() );

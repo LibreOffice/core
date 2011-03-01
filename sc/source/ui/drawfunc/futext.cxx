@@ -50,7 +50,7 @@
 #include "tabvwsh.hxx"
 #include "drawview.hxx"
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 #include "scresid.hxx"
 
 //  Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
@@ -134,7 +134,7 @@ FuText::~FuText()
 
 BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     if ( pView->MouseButtonDown(rMEvt, pWindow) )
@@ -384,7 +384,7 @@ BOOL FuText::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FALSE;
@@ -444,7 +444,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 }
             }
 
-            // #93382# init object different when vertical writing
+            // init object different when vertical writing
             sal_uInt16 nSlotID(aSfxRequest.GetSlot());
             BOOL bVertical = (SID_DRAW_TEXT_VERTICAL == nSlotID);
             if(bVertical)
@@ -745,7 +745,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
     }
 }
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_DRAW_TEXT:
@@ -764,7 +764,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
             SdrTextObj* pText = (SdrTextObj*)pObj;
             pText->SetLogicRect(rRectangle);
 
-            //  #105815# don't set default text, start edit mode instead
+            //  don't set default text, start edit mode instead
             // String aText(ScResId(STR_CAPTION_DEFAULT_TEXT));
             // pText->SetText(aText);
 
@@ -799,7 +799,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
                 pObj->SetMergedItemSetAndBroadcast(aSet);
             }
 
-            SetInEditMode( pObj );      // #105815# start edit mode
+            SetInEditMode( pObj );      // start edit mode
         }
         else
         {

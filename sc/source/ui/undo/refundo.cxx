@@ -189,7 +189,7 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, BOOL bUndoRefFirst )
     if (pDetOpList)
         pDoc->SetDetOpList( new ScDetOpList(*pDetOpList) );
 
-    // #65055# bUndoRefFirst ist bSetChartRangeLists
+    // bUndoRefFirst ist bSetChartRangeLists
     if ( pChartListenerCollection )
         pDoc->SetChartListenerCollection( new ScChartListenerCollection(
             *pChartListenerCollection ), bUndoRefFirst );

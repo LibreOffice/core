@@ -558,7 +558,7 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         rDocShell.GetDocFunc().MoveBlock( aSource, aDest, FALSE, FALSE, FALSE, TRUE );
     }
 
-    // #105780# don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
+    // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
     if ( aLocalParam.bDoSort[0] )
         pDoc->Sort( nTab, aLocalParam, bRepeatQuery );
 
@@ -1295,7 +1295,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
             }
             if ( pDestObj )
             {
-                // #78541# create new database connection for "refresh"
+                // create new database connection for "refresh"
                 // (and re-read column entry collections)
                 // so all changes take effect
                 if ( pNewObj == pOldObj && pDestObj->IsImportData() )
@@ -1485,7 +1485,7 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
         pData->GetArea(aRange);
         pViewSh->MarkRange(aRange);         // selektieren
 
-        if ( bContinue )        // #41905# Fehler beim Import -> Abbruch
+        if ( bContinue )        // Fehler beim Import -> Abbruch
         {
             //  interne Operationen, wenn welche gespeichert
 

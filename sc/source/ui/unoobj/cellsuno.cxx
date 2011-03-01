@@ -1133,7 +1133,7 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                             eElemClass == uno::TypeClass_FLOAT ||
                             eElemClass == uno::TypeClass_DOUBLE )
                 {
-                    //  #87871# accept integer types because Basic passes a floating point
+                    //  accept integer types because Basic passes a floating point
                     //  variable as byte, short or long if it's an integer number.
                     double fVal(0.0);
                     rElement >>= fVal;
@@ -1384,7 +1384,7 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
 
 ScCellRangesBase::~ScCellRangesBase()
 {
-    //  #107294# call RemoveUnoObject first, so no notification can happen
+    //  call RemoveUnoObject first, so no notification can happen
     //  during ForgetCurrentAttrs
 
     if (pDocShell)
@@ -1500,7 +1500,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
             }
             RefChanged();
 
-            // #129050# any change of the range address is broadcast to value (modify) listeners
+            // any change of the range address is broadcast to value (modify) listeners
             if ( aValueListeners.Count() )
                 bGotDataChangedHint = TRUE;
 
@@ -1920,7 +1920,7 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const rtl::OUString& aProp
                 aWIDs[0] = nItemWhich;
                 if ( nItemWhich == ATTR_VALUE_FORMAT )
                 {
-                    aWIDs[1] = ATTR_LANGUAGE_FORMAT;    // #67847# language for number formats
+                    aWIDs[1] = ATTR_LANGUAGE_FORMAT;    // language for number formats
                     aWIDs[2] = 0;
                 }
                 else
@@ -2068,7 +2068,7 @@ void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const uno::A
     {
         case ATTR_VALUE_FORMAT:
             {
-                // #67847# language for number formats
+                // language for number formats
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                 ULONG nOldFormat = ((const SfxUInt32Item&)rSet.Get( ATTR_VALUE_FORMAT )).GetValue();
                 LanguageType eOldLang = ((const SvxLanguageItem&)rSet.Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
@@ -2087,7 +2087,7 @@ void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const uno::A
                     {
                         rSet.Put( SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
 
-                        // #40606# if only language is changed,
+                        // if only language is changed,
                         // don't touch number format attribute
                         ULONG nNewMod = nNewFormat % SV_COUNTRY_LANGUAGE_OFFSET;
                         if ( nNewMod == ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) &&
@@ -3754,7 +3754,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryPreceden
         {
             bFound = FALSE;
 
-            //  #97205# aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
+            //  aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
             ScMarkData aMarkData;
             aMarkData.MarkFromRangeList( aNewRanges, FALSE );
             aMarkData.MarkToMulti();        // needed for IsAllMarked
@@ -3807,7 +3807,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
         {
             bFound = FALSE;
 
-            //  #97205# aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
+            //  aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
             ScMarkData aMarkData;
             aMarkData.MarkFromRangeList( aNewRanges, FALSE );
             aMarkData.MarkToMulti();        // needed for IsAllMarked
@@ -5068,7 +5068,7 @@ void ScCellRangeObj::SetArrayFormula_Impl( const rtl::OUString& rFormula,
         {
             if ( ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ) )
             {
-                //  #74681# don't set array formula for sheet object
+                //  don't set array formula for sheet object
                 throw uno::RuntimeException();
             }
 
@@ -6379,7 +6379,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
             aSelection.nEndPos = aSelection.nStartPos + 1;
             pCellField->InitDoc( pDocSh, aCellPos, aSelection );
 
-            //  #91431# for bAbsorb=FALSE, the new selection must be behind the inserted content
+            //  for bAbsorb=FALSE, the new selection must be behind the inserted content
             //  (the xml filter relies on this)
             if (!bAbsorb)
                 aSelection.nStartPos = aSelection.nEndPos;

@@ -213,7 +213,7 @@ void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
     bAcceptEnableFlag=TRUE;
     bRejectEnableFlag=TRUE;
 
-    //  #91781# don't call Init here (switching between views), just set link below
+    //  don't call Init here (switching between views), just set link below
     //  (dialog is just hidden, not deleted anymore, when switching views)
     ClearView();
     UpdateView();

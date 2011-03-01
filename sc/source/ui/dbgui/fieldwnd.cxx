@@ -273,7 +273,7 @@ const vector<ScDPFieldControlBase::FieldName>& ScDPFieldControlBase::GetFieldNam
 
 void ScDPFieldControlBase::Paint( const Rectangle& /* rRect */ )
 {
-    // #124828# hiding the caption is now done from StateChanged
+    // hiding the caption is now done from StateChanged
     Redraw();
 }
 

@@ -180,7 +180,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
     SCROW nEndRow = rMarked.aEnd.Row();
     SCTAB nEndTab = rMarked.aEnd.Tab();
 
-    //  Wegen #49655# nicht einfach GetDBAtCursor: Der zusammenhaengende Datenbereich
+    //  Nicht einfach GetDBAtCursor: Der zusammenhaengende Datenbereich
     //  fuer "unbenannt" (GetDataArea) kann neben dem Cursor legen, also muss auch ein
     //  benannter DB-Bereich dort gesucht werden.
 

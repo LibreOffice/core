@@ -110,7 +110,7 @@ BYTE FuSelection::Command(const CommandEvent& rCEvt)
 
 BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
     const bool bSelectionOnly = rMEvt.IsRight();
     if ( pView->IsAction() )
@@ -294,7 +294,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     //********************************************************
                     if (pView->IsMarkedHit(aMDPos))
                     {
-                        //  #95834# Don't start drag timer if inplace editing of an OLE object
+                        //  Don't start drag timer if inplace editing of an OLE object
                         //  was just ended with this mouse click - the view will be moved
                         //  (different tool bars) and the object that was clicked on would
                         //  be moved unintentionally.
@@ -386,7 +386,7 @@ BOOL FuSelection::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FuDraw::MouseButtonUp(rMEvt);
@@ -476,7 +476,7 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                //  #43984# aktivieren nur, wenn die Maus auch (noch) ueber dem
+                //  aktivieren nur, wenn die Maus auch (noch) ueber dem
                 //  selektierten Objekt steht
 
                 SdrViewEvent aVEvt;
@@ -502,7 +502,7 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
                     //
                     //  Edit text
-                    //  #49458# not in UNO controls
+                    //  not in UNO controls
                     //  #i32352# not in media objects
                     //
                     else if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) && !pObj->ISA(SdrMediaObj) )

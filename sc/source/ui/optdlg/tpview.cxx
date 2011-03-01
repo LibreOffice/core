@@ -365,7 +365,7 @@ void ScTpContentOptions::InitGridOpt()
         Invalidate();
     }
 
-    //  #79720# also select grid color entry on subsequent calls
+    //  also select grid color entry on subsequent calls
 
     String  aName;
     Color   aCol    = pLocalOptions->GetGridColor( &aName );

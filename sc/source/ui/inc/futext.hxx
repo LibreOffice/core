@@ -69,7 +69,7 @@ public:
     void    StopEditMode(BOOL bTextDirection = FALSE);
     void    StopDragMode(SdrObject* pObject);
 
-    // #98185# Create default drawing objects via keyboard
+    // Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 private:

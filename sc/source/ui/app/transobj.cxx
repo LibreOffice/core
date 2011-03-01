@@ -419,7 +419,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                 }
                 else
                 {
-                    //  #107722# can't use Write for EditEngine format because that would
+                    //  can't use Write for EditEngine format because that would
                     //  write old format without support for unicode characters.
                     //  Get the data from the EditEngine's transferable instead.
 
@@ -498,7 +498,7 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
         {
             ScMarkData aMarkData = GetSourceMarkData();
             //  external drag&drop doesn't copy objects, so they also aren't deleted:
-            //  #105703# bApi=TRUE, don't show error messages from drag&drop
+            //  bApi=TRUE, don't show error messages from drag&drop
             pSourceSh->GetDocFunc().DeleteContents( aMarkData, IDF_ALL & ~IDF_OBJECTS, TRUE, TRUE );
         }
     }

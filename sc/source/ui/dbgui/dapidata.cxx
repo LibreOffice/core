@@ -220,7 +220,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
     }
     catch(uno::Exception&)
     {
-        //  #71604# this may happen if an invalid database is selected -> no DBG_ERROR
+        //  this may happen if an invalid database is selected -> no DBG_ERROR
         DBG_WARNING("exception in database");
     }
 }

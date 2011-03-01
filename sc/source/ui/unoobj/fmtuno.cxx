@@ -695,7 +695,7 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
         if (pData)
         {
             nMode = sal::static_int_cast<USHORT>( pData->GetOperation() );
-            aSrcPos = pData->GetValidSrcPos();  // #b4974740# valid pos for expressions
+            aSrcPos = pData->GetValidSrcPos();  // valid pos for expressions
             aExpr1 = pData->GetExpression( aSrcPos, 0, 0, eGrammar );
             aExpr2 = pData->GetExpression( aSrcPos, 1, 0, eGrammar );
             meGrammar1 = meGrammar2 = eGrammar;

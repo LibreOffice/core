@@ -135,7 +135,7 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
 
 ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
 #ifdef OS2
-// #37192# ohne WB_CLIPCHILDREN wg. os/2 Paintproblem
+// ohne WB_CLIPCHILDREN wg. os/2 Paintproblem
         ToolBox         ( pParent, WinBits(WB_BORDER|WB_3DLOOK) ),
 #else
 // mit WB_CLIPCHILDREN, sonst Flicker
@@ -242,7 +242,7 @@ ScInputWindow::~ScInputWindow()
             if ( pHdl && pHdl->GetInputWindow() == this )
             {
                 pHdl->SetInputWindow( NULL );
-                pHdl->StopInputWinEngine( FALSE );  // #125841# reset pTopView pointer
+                pHdl->StopInputWinEngine( FALSE );  // reset pTopView pointer
             }
             pSh = SfxViewShell::GetNext( *pSh, &aScType );
         }
@@ -721,11 +721,11 @@ ScTextWnd::ScTextWnd( Window* pParent )
         bFormulaMode ( FALSE ),
         bInputMode   ( FALSE )
 {
-    EnableRTL( FALSE );     // #106269# EditEngine can't be used with VCL EnableRTL
+    EnableRTL( FALSE );     // EditEngine can't be used with VCL EnableRTL
 
     bIsRTL = GetSettings().GetLayoutRTL();
 
-    //  #79096# always use application font, so a font with cjk chars can be installed
+    //  always use application font, so a font with cjk chars can be installed
     Font aAppFont = GetFont();
     aTextFont = aAppFont;
     aTextFont.SetSize( PixelToLogic( aAppFont.GetSize(), MAP_TWIP ) );  // AppFont ist in Pixeln
@@ -846,15 +846,15 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
         ScModule* pScMod = SC_MOD();
         ScTabViewShell* pStartViewSh = ScTabViewShell::GetActiveViewShell();
 
-        // #109441# don't modify the font defaults here - the right defaults are
+        // don't modify the font defaults here - the right defaults are
         // already set in StartEditEngine when the EditEngine is created
 
-        // #63263# verhindern, dass die EditView beim View-Umschalten wegkommt
+        // verhindern, dass die EditView beim View-Umschalten wegkommt
         pScMod->SetInEditCommand( TRUE );
         pEditView->Command( rCEvt );
         pScMod->SetInEditCommand( FALSE );
 
-        //  #48929# COMMAND_STARTDRAG heiss noch lange nicht, dass der Inhalt geaendert wurde
+        //  COMMAND_STARTDRAG heiss noch lange nicht, dass der Inhalt geaendert wurde
         //  darum in dem Fall kein InputChanged
         //! erkennen, ob mit Move gedraggt wurde, oder Drag&Move irgendwie verbieten
 
@@ -1017,7 +1017,7 @@ void lcl_ModifyRTLVisArea( EditView* pEditView )
 
 void ScTextWnd::StartEditEngine()
 {
-    //  #31147# Bei "eigener Modalitaet" (Doc-modale Dialoge) nicht aktivieren
+    //  Bei "eigener Modalitaet" (Doc-modale Dialoge) nicht aktivieren
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
     if ( pObjSh && pObjSh->IsInModalMode() )
         return;
@@ -1054,7 +1054,7 @@ void ScTextWnd::StartEditEngine()
             pEditEngine->SetDefaults( pSet );
         }
 
-        //  #57254# Wenn in der Zelle URL-Felder enthalten sind, muessen die auch in
+        //  Wenn in der Zelle URL-Felder enthalten sind, muessen die auch in
         //  die Eingabezeile uebernommen werden, weil sonst die Positionen nicht stimmen.
 
         BOOL bFilled = FALSE;
@@ -1114,7 +1114,7 @@ IMPL_LINK(ScTextWnd, NotifyHdl, EENotify*, EMPTYARG)
     {
         ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
 
-        //  #105354# Use the InputHandler's InOwnChange flag to prevent calling InputChanged
+        //  Use the InputHandler's InOwnChange flag to prevent calling InputChanged
         //  while an InputHandler method is modifying the EditEngine content
 
         if ( pHdl && !pHdl->IsInOwnChange() )

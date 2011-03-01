@@ -293,7 +293,7 @@ void ScMoveUndo::UndoRef()
     pRefUndoDoc->CopyToDocument( aRange, IDF_FORMULA, FALSE, pDoc, NULL, FALSE );
     if (pRefUndoData)
         pRefUndoData->DoUndo( pDoc, (eMode == SC_UNDO_REFFIRST) );
-        // #65055# HACK: ScDragDropUndo ist der einzige mit REFFIRST.
+        // HACK: ScDragDropUndo ist der einzige mit REFFIRST.
         // Falls nicht, resultiert daraus evtl. ein zu haeufiges Anpassen
         // der ChartRefs, nicht schoen, aber auch nicht schlecht..
 }
@@ -310,7 +310,7 @@ void ScMoveUndo::BeginUndo()
 
 void ScMoveUndo::EndUndo()
 {
-    DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );     // #125875# must also be called when pointer is null
+    DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );     // must also be called when pointer is null
 
     if (pRefUndoDoc && eMode == SC_UNDO_REFLAST)
         UndoRef();

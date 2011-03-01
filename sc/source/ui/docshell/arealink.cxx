@@ -139,7 +139,7 @@ void ScAreaLink::DataChanged( const String&,
         //  -> remove prefix
         ScDocumentLoader::RemoveAppPrefix( aFilter );
 
-        // #81155# dialog doesn't set area, so keep old one
+        // dialog doesn't set area, so keep old one
         if ( !aArea.Len() )
         {
             aArea = aSourceArea;

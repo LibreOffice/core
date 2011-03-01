@@ -95,7 +95,7 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
 
     maPopup.SetMenuFlags( maPopup.GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
 
-    EnableRTL( false ); // #107812# RTL
+    EnableRTL( false ); // RTL
     InitFonts();
     ImplClearSplits();
 }

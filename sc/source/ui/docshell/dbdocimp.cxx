@@ -616,7 +616,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         //  CopyToDocument doesn't remove contents
         pDoc->DeleteAreaTab( rParam.nCol1, rParam.nRow1, nEndCol, nEndRow, nTab, IDF_CONTENTS & ~IDF_NOTE );
 
-        //  #41216# remove each column from ImportDoc after copying to reduce memory usage
+        //  remove each column from ImportDoc after copying to reduce memory usage
         BOOL bOldAutoCalc = pDoc->GetAutoCalc();
         pDoc->SetAutoCalc( FALSE );             // outside of the loop
         for (SCCOL nCopyCol = rParam.nCol1; nCopyCol <= nEndCol; nCopyCol++)

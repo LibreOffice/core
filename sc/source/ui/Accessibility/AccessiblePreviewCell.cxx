@@ -183,7 +183,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessi
         pStateSet->AddState(AccessibleStateType::TRANSIENT);
         if (isVisible())
             pStateSet->AddState(AccessibleStateType::VISIBLE);
-        // #111635# MANAGES_DESCENDANTS (for paragraphs)
+        // MANAGES_DESCENDANTS (for paragraphs)
         pStateSet->AddState(AccessibleStateType::MANAGES_DESCENDANTS);
     }
     return pStateSet;
@@ -308,7 +308,7 @@ void ScAccessiblePreviewCell::CreateTextHelper()
         mpTextHelper = new ::accessibility::AccessibleTextHelper( pEditSource );
         mpTextHelper->SetEventSource( this );
 
-        // #111635# paragraphs in preview are transient
+        // paragraphs in preview are transient
         ::accessibility::AccessibleTextHelper::VectorOfStates aChildStates;
         aChildStates.push_back( AccessibleStateType::TRANSIENT );
         mpTextHelper->SetAdditionalChildStates( aChildStates );

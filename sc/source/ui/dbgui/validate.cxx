@@ -224,7 +224,7 @@ USHORT lclGetPosFromCondMode( ScConditionMode eCondMode )
     USHORT nLbPos = SC_VALIDDLG_DATA_EQUAL;
     switch( eCondMode )
     {
-        case SC_COND_NONE:          // #111771# may occur in old XML files after Excel import
+        case SC_COND_NONE:          // may occur in old XML files after Excel import
         case SC_COND_EQUAL:         nLbPos = SC_VALIDDLG_DATA_EQUAL;        break;
         case SC_COND_LESS:          nLbPos = SC_VALIDDLG_DATA_LESS;         break;
         case SC_COND_GREATER:       nLbPos = SC_VALIDDLG_DATA_GREATER;      break;
@@ -821,7 +821,7 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
     if ( rArgSet.GetItemState( FID_VALID_SHOWERR, TRUE, &pItem ) == SFX_ITEM_SET )
         aTsbShow.SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
     else
-        aTsbShow.SetState( STATE_CHECK );   // #111720# check by default
+        aTsbShow.SetState( STATE_CHECK );   // check by default
 
     if ( rArgSet.GetItemState( FID_VALID_ERRSTYLE, TRUE, &pItem ) == SFX_ITEM_SET )
         aLbAction.SelectEntryPos( ((const SfxAllEnumItem*)pItem)->GetValue() );

@@ -75,7 +75,7 @@ FuMarkRect::~FuMarkRect()
 
 BOOL FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     pWindow->CaptureMouse();
@@ -123,7 +123,7 @@ BOOL FuMarkRect::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     if ( bVisible )
@@ -172,7 +172,7 @@ BYTE FuMarkRect::Command(const CommandEvent& rCEvt)
 {
     if ( COMMAND_STARTDRAG == rCEvt.GetCommand() )
     {
-        //  #29877# nicht anfangen, auf der Tabelle rumzudraggen,
+        //  nicht anfangen, auf der Tabelle rumzudraggen,
         //  aber Maus-Status nicht zuruecksetzen
         return SC_CMD_IGNORE;
     }

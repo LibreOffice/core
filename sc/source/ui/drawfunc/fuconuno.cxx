@@ -70,7 +70,7 @@ FuConstUnoControl::~FuConstUnoControl()
 
 BOOL FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
@@ -104,7 +104,7 @@ BOOL FuConstUnoControl::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FALSE;
@@ -171,7 +171,7 @@ void FuConstUnoControl::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& rRectangle)
 {
     // case SID_FM_CREATE_CONTROL:

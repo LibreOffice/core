@@ -311,7 +311,7 @@ IMPL_LINK( ScContentTree, ContentDoubleClickHdl, ScContentTree *, EMPTYARG )
 
             case SC_CONTENT_DBAREA:
             {
-                //  #47905# Wenn gleiche Bereichs- und DB-Namen existieren, wird
+                //  Wenn gleiche Bereichs- und DB-Namen existieren, wird
                 //  bei SID_CURRENTCELL der Bereichsname genommen.
                 //  DB-Bereiche darum direkt ueber die Adresse anspringen.
 

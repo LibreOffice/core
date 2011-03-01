@@ -85,7 +85,7 @@ BYTE FuConstruct::Command(const CommandEvent& rCEvt)
 
 BOOL FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FuDraw::MouseButtonDown(rMEvt);
@@ -179,7 +179,7 @@ BOOL FuConstruct::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = SimpleMouseButtonUp( rMEvt );
@@ -197,7 +197,7 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                //  #49458# bei Uno-Controls nicht in Textmodus
+                //  bei Uno-Controls nicht in Textmodus
                 if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
                 {
                     OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();

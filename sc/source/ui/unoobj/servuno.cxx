@@ -57,7 +57,7 @@
 #include "chart2uno.hxx"
 #include "tokenuno.hxx"
 
-// #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+// Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <sfx2/docfile.hxx>
@@ -277,7 +277,7 @@ static const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.image.ImageMapCircleObject",        SC_SERVICE_IMAP_CIRC },
     { "com.sun.star.image.ImageMapPolygonObject",       SC_SERVICE_IMAP_POLY },
 
-        // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
     { "com.sun.star.document.ExportGraphicObjectResolver",  SC_SERVICE_EXPORT_GOR },
     { "com.sun.star.document.ImportGraphicObjectResolver",  SC_SERVICE_IMPORT_GOR },
     { "com.sun.star.document.ExportEmbeddedObjectResolver", SC_SERVICE_EXPORT_EOR },
@@ -345,7 +345,7 @@ static const sal_Char* aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_IMAP_CIRC
         "",                                         // SC_SERVICE_IMAP_POLY
 
-        // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
         "",                                         // SC_SERVICE_EXPORT_GOR
         "",                                         // SC_SERVICE_IMPORT_GOR
         "",                                         // SC_SERVICE_EXPORT_EOR
@@ -497,7 +497,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             xRet.set(SvUnoImageMapPolygonObject_createInstance( ScShapeObj::GetSupportedMacroItems() ));
             break;
 
-        // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
         case SC_SERVICE_EXPORT_GOR:
             xRet.set((::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE ));
             break;

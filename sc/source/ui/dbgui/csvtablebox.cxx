@@ -51,7 +51,7 @@ ScCsvTableBox::ScCsvTableBox( Window* pParent, const ResId& rResId ) :
     mbFixedMode = false;
     mnFixedWidth = 1;
 
-    maHScroll.EnableRTL( false ); // #107812# RTL
+    maHScroll.EnableRTL( false ); // RTL
     maHScroll.SetLineSize( 1 );
     maVScroll.SetLineSize( 1 );
 

@@ -554,7 +554,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     pDBData->GetArea(aRange);
                                     pViewSh->MarkRange(aRange);
 
-                                    if ( bContinue )    // #41905# Fehler beim Import -> Abbruch
+                                    if ( bContinue )    // Fehler beim Import -> Abbruch
                                     {
                                         //  interne Operationen, wenn welche gespeichert
 
@@ -1252,7 +1252,7 @@ void ScDocShell::DoRecalc( BOOL bApi )
 
         aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 
-        //  #47939# Wenn es Charts gibt, dann alles painten, damit nicht
+        //  Wenn es Charts gibt, dann alles painten, damit nicht
         //  PostDataChanged und die Charts nacheinander kommen und Teile
         //  doppelt gepainted werden.
 
@@ -1491,7 +1491,7 @@ BOOL ScDocShell::AdjustPrintZoom( const ScRange& rRange )
         aOldPrFunc.GetScaleData( aPhysPage, nHdr, nFtr );
         nBlkTwipsY += nHdr + nFtr;
 
-        if ( nBlkTwipsX == 0 )      // #100639# hidden columns/rows may lead to 0
+        if ( nBlkTwipsX == 0 )      // hidden columns/rows may lead to 0
             nBlkTwipsX = 1;
         if ( nBlkTwipsY == 0 )
             nBlkTwipsY = 1;
@@ -2200,8 +2200,8 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                 break;
 
             //  Wenn eine Formel editiert wird, muss FID_RECALC auf jeden Fall enabled sein.
-            //  Recalc fuer das Doc war mal wegen #29898# disabled, wenn AutoCalc an war,
-            //  ist jetzt wegen #41540# aber auch immer enabled.
+            //  Recalc fuer das Doc war mal wegen eines Bugs disabled, wenn AutoCalc an war,
+            //  ist jetzt wegen eines anderen Bugs aber auch immer enabled.
 
             case SID_TABLES_COUNT:
                 rSet.Put( SfxInt16Item( nWhich, aDocument.GetTableCount() ) );

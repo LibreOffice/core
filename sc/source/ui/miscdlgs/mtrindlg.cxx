@@ -129,7 +129,7 @@ void ScMetricInputDlg::CalcPositions()
     Point   aNewPos;
 
     aFtSize.Width() = aFtEditTitle.GetTextWidth(aFtEditTitle.GetText());
-    // #95990# add mnemonic char width to fixed text width
+    // add mnemonic char width to fixed text width
     aFtSize.Width() += aFtEditTitle.GetTextWidth(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("(W)")));
     aFtEditTitle.SetSizePixel( aFtSize );
 

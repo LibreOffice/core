@@ -243,7 +243,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     BOOL bNotFound = FALSE;
     ScDocument* pSrcDoc = pSrcShell->GetDocument();
 
-    //  #74835# from text filters that don't set the table name,
+    //  from text filters that don't set the table name,
     //  use the one table regardless of link table name
     BOOL bAutoTab = (pSrcDoc->GetTableCount() == 1) &&
                     ScDocShell::HasAutomaticTableName( rNewFilter );
@@ -313,7 +313,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
                 bool bShowError = true;
                 if ( nMode == SC_LINK_VALUE )
                 {
-                    //  #139464# Value link (used with external references in formulas):
+                    //  Value link (used with external references in formulas):
                     //  Look for formulas that reference the sheet, and put errors in the referenced cells.
 
                     ScRangeList aErrorCells;        // cells on the linked sheets that need error values

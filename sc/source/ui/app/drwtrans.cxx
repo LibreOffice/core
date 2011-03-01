@@ -363,7 +363,7 @@ void ScDrawTransferObj::AddSupportedFormats()
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         AddFormat( SOT_FORMATSTR_ID_DRAWING );
 
-        // #103556# leave out bitmap and metafile if there are only controls
+        // leave out bitmap and metafile if there are only controls
         if ( !lcl_HasOnlyControls( pModel ) )
         {
             AddFormat( SOT_FORMAT_BITMAP );

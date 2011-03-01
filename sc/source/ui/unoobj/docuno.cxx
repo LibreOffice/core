@@ -1939,7 +1939,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
         {
         }
 
-        //  #96117# if the drawing factory created a shape, a ScShapeObj has to be used
+        //  if the drawing factory created a shape, a ScShapeObj has to be used
         //  to support own properties like ImageMap:
 
         uno::Reference<drawing::XShape> xShape( xRet, uno::UNO_QUERY );

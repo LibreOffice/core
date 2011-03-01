@@ -1112,11 +1112,11 @@ ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
     if (mbEditEngineCreated && mpEditEngine)
     {
         delete mpEditEngine;
-        mpEditEngine = NULL;    // #103346# don't access in ScAccessibleEditObjectTextData dtor!
+        mpEditEngine = NULL;    // don't access in ScAccessibleEditObjectTextData dtor!
     }
     else if (pTxtWnd && pTxtWnd->GetEditView() && pTxtWnd->GetEditView()->GetEditEngine())
     {
-        //  #103346# the NotifyHdl also has to be removed from the ScTextWnd's EditEngine
+        //  the NotifyHdl also has to be removed from the ScTextWnd's EditEngine
         //  (it's set in ScAccessibleEditLineTextData::GetTextForwarder, and mpEditEngine
         //  is reset there)
         pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link());
