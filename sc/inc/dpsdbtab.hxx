@@ -61,7 +61,7 @@ struct ScImportSourceDesc
                  bNative == rOther.bNative &&
                 mpDoc == rOther.mpDoc; }
 
-    ScDPTableDataCache* CreateCache() const;
+    ScDPCache* CreateCache() const;
 };
 
 class ScDatabaseDPData : public ScDPTableData

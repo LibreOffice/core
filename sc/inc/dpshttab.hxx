@@ -78,7 +78,7 @@ public:
     const ScQueryParam& GetQueryParam() const;
 
     bool operator== ( const ScSheetSourceDesc& rOther ) const;
-    ScDPTableDataCache* CreateCache() const;
+    ScDPCache* CreateCache() const;
 
     /**
      * Check the sanity of the data source range.

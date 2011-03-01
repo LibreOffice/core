@@ -306,7 +306,7 @@ bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
         maQueryParam  == rOther.maQueryParam;
 }
 
-ScDPTableDataCache* ScSheetSourceDesc::CreateCache() const
+ScDPCache* ScSheetSourceDesc::CreateCache() const
 {
     if (!mpDoc)
         return NULL;
@@ -318,7 +318,7 @@ ScDPTableDataCache* ScSheetSourceDesc::CreateCache() const
         return NULL;
     }
 
-    ScDPTableDataCache* pCache = new ScDPTableDataCache(mpDoc);
+    ScDPCache* pCache = new ScDPCache(mpDoc);
     pCache->InitFromDoc(mpDoc, GetSourceRange());
     return pCache;
 }

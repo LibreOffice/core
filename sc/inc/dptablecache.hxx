@@ -42,7 +42,11 @@
 
 struct ScQueryParam;
 
-class SC_DLLPUBLIC ScDPTableDataCache
+/**
+ * This class represents the cached data part of the datapilot cache table
+ * implementation.
+ */
+class SC_DLLPUBLIC ScDPCache
 {
     friend class ScDPCacheTable;
 public:
@@ -96,10 +100,10 @@ public:
 
     const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
 
-    bool operator== ( const ScDPTableDataCache& r ) const;
+    bool operator== ( const ScDPCache& r ) const;
 
-    ScDPTableDataCache(ScDocument* pDoc);
-    virtual ~ScDPTableDataCache();
+    ScDPCache(ScDocument* pDoc);
+    virtual ~ScDPCache();
 
 private:
     SCROW GetOrder( long nDim, SCROW nIndex ) const;

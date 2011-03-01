@@ -80,7 +80,7 @@ const sal_Int32 SC_DP_DATE_LAST = 10000;
 // ============================================================================
 namespace
 {
-    BOOL lcl_Search( SCCOL nSourceDim, const ScDPTableDataCache* pCache , const std::vector< SCROW >& vIdx, SCROW nNew , SCROW& rIndex)
+    BOOL lcl_Search( SCCOL nSourceDim, const ScDPCache* pCache , const std::vector< SCROW >& vIdx, SCROW nNew , SCROW& rIndex)
     {
         rIndex = vIdx.size();
         BOOL bFound = FALSE;
@@ -112,7 +112,7 @@ namespace
         return bFound;
     }
 
-    void  lcl_Insert( SCCOL nSourceDim, const ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, SCROW nNew )
+    void  lcl_Insert( SCCOL nSourceDim, const ScDPCache* pCache ,  std::vector< SCROW >& vIdx, SCROW nNew )
     {
         SCROW nIndex = 0;
         if ( !lcl_Search( nSourceDim, pCache, vIdx, nNew ,nIndex ) )
@@ -120,10 +120,10 @@ namespace
     }
 
     template<bool bUpdateData>
-    SCROW lcl_InsertValue(SCCOL nSourceDim, const ScDPTableDataCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData);
+    SCROW lcl_InsertValue(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData);
 
     template<>
-    SCROW lcl_InsertValue<false>(SCCOL nSourceDim, const ScDPTableDataCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData)
+    SCROW lcl_InsertValue<false>(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData)
     {
         SCROW nNewID = pCache->GetAdditionalItemID(rData);
         lcl_Insert(nSourceDim, pCache, vIdx, nNewID);
@@ -131,7 +131,7 @@ namespace
     }
 
     template<>
-    SCROW lcl_InsertValue<true>(SCCOL nSourceDim, const ScDPTableDataCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData)
+    SCROW lcl_InsertValue<true>(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData)
     {
         SCROW nItemId = lcl_InsertValue<false>( nSourceDim, pCache, vIdx, rData );
 
@@ -142,13 +142,13 @@ namespace
     }
 
     template<bool bUpdateData>
-    void lcl_InsertValue ( SCCOL nSourceDim, const ScDPTableDataCache* pCache,  std::vector< SCROW >& vIdx, const String&  rString, const double& fValue )
+    void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache,  std::vector< SCROW >& vIdx, const String&  rString, const double& fValue )
     {
         lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( rString, fValue, TRUE ) );
     }
 
     template<bool bUpdateData>
-    void lcl_InsertValue ( SCCOL nSourceDim, const ScDPTableDataCache* pCache, std::vector< SCROW >& vIdx, const String&  rString, const double& fValue, sal_Int32 nDatePart )
+    void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache, std::vector< SCROW >& vIdx, const String&  rString, const double& fValue, sal_Int32 nDatePart )
     {
         lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( nDatePart, rString, fValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL|ScDPItemData::MK_DATEPART ) );
     }
@@ -601,7 +601,7 @@ String lcl_GetSpecialDateName( double fValue, bool bFirst, SvNumberFormatter* pF
 }
 
 void ScDPDateGroupHelper::FillColumnEntries(
-    SCCOL nSourceDim, const ScDPTableDataCache* pCache, std::vector<SCROW>& rEntries, const std::vector<SCROW>& rOriginal) const
+    SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& rEntries, const std::vector<SCROW>& rOriginal) const
 {
     // auto min/max is only used for "Years" part, but the loop is always needed
     double fSourceMin = 0.0;
@@ -902,7 +902,7 @@ void ScDPNumGroupDimension::MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_I
 }
 
 const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
-    SCCOL nSourceDim, const ScDPTableDataCache* pCache, const std::vector<SCROW>& rOriginal) const
+    SCCOL nSourceDim, const ScDPCache* pCache, const std::vector<SCROW>& rOriginal) const
 {
     if ( maMemberEntries.empty() )
     {
@@ -1338,7 +1338,7 @@ void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pIt
 {
     long nGroupedColumns = aGroups.size();
 
-    const ScDPTableDataCache* pCache = GetCacheTable().getCache();
+    const ScDPCache* pCache = GetCacheTable().getCache();
     for (long nDim=0; nDim<nCount; nDim++)
     {
         const ScDPDateGroupHelper* pDateHelper = NULL;

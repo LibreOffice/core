@@ -126,7 +126,7 @@ private:
     double  fValue;
     BYTE    mbFlag;
 
-    friend class ScDPTableDataCache;
+    friend class ScDPCache;
 public:
     ScDPItemData() : nNumFormat( 0 ), fValue(0.0), mbFlag( 0 ){}
     ScDPItemData( ULONG nNF, const String & rS, double fV, BYTE bF ):nNumFormat(nNF), aString(rS), fValue(fV), mbFlag( bF ){}

@@ -50,7 +50,7 @@ namespace com { namespace sun { namespace star {
 
 class Date;
 class ScDPItemData;
-class ScDPTableDataCache;
+class ScDPCache;
 class ScDocument;
 class ScRange;
 struct ScDPValueData;
@@ -121,13 +121,13 @@ public:
         Criterion();
     };
 
-    ScDPCacheTable(ScDPTableDataCache* pCache);
+    ScDPCacheTable(ScDPCache* pCache);
     ~ScDPCacheTable();
 
     sal_Int32 getRowSize() const;
     sal_Int32 getColSize() const;
 
-    const ScDPTableDataCache* getCache() const;
+    const ScDPCache* getCache() const;
 
     /** Fill the internal table from the cell range provided.  This function
         assumes that the first row is the column header. */
@@ -169,13 +169,13 @@ public:
     SCROW getOrder(long nDim, SCROW nIndex) const;
     void clear();
     bool empty() const;
-    void setCache(ScDPTableDataCache* p);
+    void setCache(ScDPCache* p);
 
 private:
     ScDPCacheTable();
     ScDPCacheTable(const ScDPCacheTable&);
 
-    ScDPTableDataCache* getCache();
+    ScDPCache* getCache();
 
     /**
      * Check if a given row meets all specified criteria.
@@ -193,7 +193,7 @@ private:
         has the index of 0. */
     ::std::vector<bool> maRowsVisible;
 
-    ScDPTableDataCache* mpCache;
+    ScDPCache* mpCache;
 };
 #endif
 

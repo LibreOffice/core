@@ -75,7 +75,7 @@ public:
     const ScDPNumGroupInfo& GetNumInfo() const { return aNumInfo; }
 
     void FillColumnEntries(
-        SCCOL nSourceDim, const ScDPTableDataCache* pCahe , std::vector<SCROW>& rEntries,
+        SCCOL nSourceDim, const ScDPCache* pCahe , std::vector<SCROW>& rEntries,
         const std::vector<SCROW>& rOriginal) const;
 };
 
@@ -166,7 +166,7 @@ public:
     const ScDPDateGroupHelper* GetDateHelper() const    { return pDateHelper; }
 
     const std::vector<SCROW>& GetNumEntries(
-        SCCOL nSourceDim, const ScDPTableDataCache* pCache,
+        SCCOL nSourceDim, const ScDPCache* pCache,
         const std::vector< SCROW >& rOriginal) const;
 
     void        MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );

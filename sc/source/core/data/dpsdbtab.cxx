@@ -75,7 +75,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
 
-ScDPTableDataCache* ScImportSourceDesc::CreateCache() const
+ScDPCache* ScImportSourceDesc::CreateCache() const
 {
     if (!mpDoc)
         return NULL;
@@ -91,7 +91,7 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache() const
         return NULL;
     }
 
-    ScDPTableDataCache* pCache = new ScDPTableDataCache(mpDoc);
+    ScDPCache* pCache = new ScDPCache(mpDoc);
 
     uno::Reference<sdbc::XRowSet> xRowSet ;
     try

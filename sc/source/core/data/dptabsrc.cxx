@@ -2796,7 +2796,7 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const rtl::OUString& aPropertyNa
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPMember )
 
 
-const ScDPTableDataCache* ScDPSource::GetCache()
+const ScDPCache* ScDPSource::GetCache()
 {
     DBG_ASSERT( GetData() , "empty ScDPTableData pointer");
     return ( GetData()!=NULL) ? GetData()->GetCacheTable().getCache() : NULL ;

@@ -158,7 +158,7 @@ ScDPCacheTable::Criterion::Criterion() :
 
 // ----------------------------------------------------------------------------
 
-ScDPCacheTable::ScDPCacheTable(ScDPTableDataCache* pCache) :
+ScDPCacheTable::ScDPCacheTable(ScDPCache* pCache) :
     mpCache(pCache)
 {
 }
@@ -411,7 +411,7 @@ bool ScDPCacheTable::empty() const
     return mpCache == NULL || maFieldEntries.empty();
 }
 
-void ScDPCacheTable::setCache(ScDPTableDataCache* p)
+void ScDPCacheTable::setCache(ScDPCache* p)
 {
     delete mpCache;
     mpCache = p;
@@ -438,12 +438,12 @@ bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCr
     return true;
 }
 
-const ScDPTableDataCache* ScDPCacheTable::getCache() const
+const ScDPCache* ScDPCacheTable::getCache() const
 {
     return mpCache;
 }
 
-ScDPTableDataCache* ScDPCacheTable::getCache()
+ScDPCache* ScDPCacheTable::getCache()
 {
     return mpCache;
 }
