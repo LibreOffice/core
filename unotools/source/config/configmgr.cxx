@@ -56,6 +56,9 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
 using ::rtl::OUString;
+#if OSL_DEBUG_LEVEL > 0
+using ::rtl::OString;
+#endif
 
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
