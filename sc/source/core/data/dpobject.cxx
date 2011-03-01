@@ -2404,8 +2404,7 @@ ScDPCollection::ScDPCollection(ScDocument* pDocument) :
 }
 
 ScDPCollection::ScDPCollection(const ScDPCollection& r) :
-    pDoc(r.pDoc),
-    maDPDataCaches(r.maDPDataCaches)
+    pDoc(r.pDoc)
 {
 }
 

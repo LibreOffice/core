@@ -263,13 +263,10 @@ public:
 class ScDPCollection
 {
 private:
+    typedef ::boost::ptr_vector<ScDPObject> TablesType;
+
     ScDocument* pDoc;
-
-    typedef ::boost::ptr_list<ScDPTableDataCache>   DataCachesType;
-    typedef ::boost::ptr_vector<ScDPObject>         TablesType;
-
-    TablesType      maTables;
-    DataCachesType  maDPDataCaches;
+    TablesType maTables;
 
 public:
     ScDPCollection(ScDocument* pDocument);
