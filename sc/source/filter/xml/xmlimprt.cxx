@@ -2137,13 +2137,15 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
 {
     SvXMLImportContext* pContext = NULL;
 
-    if( !IsStylesOnlyMode() && (getImportFlags() & IMPORT_META))
+    if (getImportFlags() & IMPORT_META)
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> const xDocProps(
+            (IsStylesOnlyMode()) ? 0 : xDPS->getDocumentProperties());
         pContext = new SvXMLMetaDocumentContext(*this,
             XML_NAMESPACE_OFFICE, rLocalName,
-            xDPS->getDocumentProperties());
+            xDocProps);
     }
 
     if( !pContext )
@@ -2872,6 +2874,25 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
             pSheetData->StoreInitialNamespaces(rNamespaces);
         }
     }
+
+    uno::Reference< beans::XPropertySet > const xImportInfo( getImportInfo() );
+    uno::Reference< beans::XPropertySetInfo > const xPropertySetInfo(
+            xImportInfo.is() ? xImportInfo->getPropertySetInfo() : 0);
+    if (xPropertySetInfo.is())
+    {
+        ::rtl::OUString const sOrganizerMode(
+            RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
+        if (xPropertySetInfo->hasPropertyByName(sOrganizerMode))
+        {
+            sal_Bool bStyleOnly(sal_False);
+            if (xImportInfo->getPropertyValue(sOrganizerMode) >>= bStyleOnly)
+            {
+                bLoadDoc = !bStyleOnly;
+            }
+        }
+    }
+
+    UnlockSolarMutex();
 }
 
 sal_Int32 ScXMLImport::GetRangeType(const rtl::OUString sRangeType) const
