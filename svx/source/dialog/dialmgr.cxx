@@ -46,10 +46,7 @@ static ResMgr* pResMgr=0;
 ResMgr* DialogsResMgr::GetResMgr()
 {
     if ( !pResMgr )
-    {
-        ByteString aName( "svx" );
-        pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILocale() );
-    }
+        pResMgr = ResMgr::CreateResMgr( "svx", Application::GetSettings().GetUILocale() );
 
     return pResMgr;
 }

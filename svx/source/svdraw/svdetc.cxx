@@ -671,9 +671,8 @@ ResMgr* ImpGetResMgr()
 
     if(!rGlobalData.pResMgr)
     {
-        ByteString aName("svx");
         rGlobalData.pResMgr =
-            ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILocale() );
+            ResMgr::CreateResMgr( "svx", Application::GetSettings().GetUILocale() );
     }
 
     return rGlobalData.pResMgr;

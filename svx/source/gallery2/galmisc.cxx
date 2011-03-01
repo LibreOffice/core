@@ -76,9 +76,8 @@ ResMgr* GetGalleryResMgr()
 
     if( !pGalleryResMgr )
     {
-        ByteString aResMgrName( "gal" );
         pGalleryResMgr = ResMgr::CreateResMgr(
-            aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+            "gal", Application::GetSettings().GetUILocale() );
     }
 
     return pGalleryResMgr;
