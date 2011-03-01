@@ -65,7 +65,7 @@ namespace
         // pCallStack: ret, [return ptr], this, params
         char * pTopStack = (char *)(pCallStack + 0);
         char * pCppStack = pTopStack;
-#ifdef CMC_DEBUG
+#ifdef OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "cpp2uno_call\n");
 #endif
         // return
@@ -81,14 +81,14 @@ namespace
         {
             if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
             {
-#ifdef CMC_DEBUG
+#ifdef OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "simple return\n");
 #endif
                 pUnoReturn = pRegisterReturn; // direct way for simple types
             }
             else // complex return via ptr (pCppReturn)
             {
-#ifdef CMC_DEBUG
+#ifdef OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "complex return\n");
 #endif
                 pCppReturn = (void *)r8;
@@ -190,14 +190,14 @@ namespace
         uno_Any aUnoExc; // Any will be constructed by callee
         uno_Any * pUnoExc = &aUnoExc;
 
-#ifdef CMC_DEBUG
+#ifdef OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "before dispatch\n");
 #endif
         // invoke uno dispatch call
         (*pThis->getUnoI()->pDispatcher)(
           pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-#ifdef CMC_DEBUG
+#ifdef OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "after dispatch\n");
 #endif
 
@@ -277,7 +277,7 @@ namespace
         sal_Int64 * pRegisterReturn /* space for register return */ )
     {
     void ** pCallStack = (void**)(sp);
-#ifdef CMC_DEBUG
+#ifdef OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "cpp_mediate with\n");
     fprintf(stderr, "%x %x\n", nFunctionIndex, nVtableOffset);
     fprintf(stderr, "and %x %x\n", pCallStack, pRegisterReturn);

@@ -106,7 +106,7 @@ void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     pMethod += 4 * nVtableIndex;
     pMethod = *((sal_uInt32 *)pMethod);
 
-#ifdef CMC_DEBUG
+#ifdef OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "this is %p\n", pGPR[0]);
     for (int i = 0; i < hppa::MAX_GPR_REGS ; ++i)
         fprintf(stderr, "normal reg %d is %d %x\n", i, pGPR[i], pGPR[i]);

@@ -508,7 +508,7 @@ void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
-#ifdef CMC_DEBUG
+#ifdef OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "unoInterfaceProxyDispatch\n");
 #endif
 
