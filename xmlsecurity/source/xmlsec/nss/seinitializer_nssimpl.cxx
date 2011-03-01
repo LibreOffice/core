@@ -400,7 +400,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     rtl::OString sCertDir;
     if( sCertDB.getLength() )
     {
-        sCertDir = rtl::OString(sCertDB, sCertDB.getLength(), RTL_TEXTENCODING_ASCII_US);
+        sCertDir = rtl::OUStringToOString(sCertDB, RTL_TEXTENCODING_ASCII_US);
     }
     else
     {
@@ -410,10 +410,8 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
             pDefaultCertDir = new rtl::OString;
             rtl::OUString ouCertDir;
 
-
-
             if ( getMozillaCurrentProfile(mxMSF, ouCertDir) )
-                *pDefaultCertDir = rtl::OString(ouCertDir, ouCertDir.getLength(), RTL_TEXTENCODING_ASCII_US);
+                *pDefaultCertDir = rtl::OUStringToOString(ouCertDir, RTL_TEXTENCODING_ASCII_US);
         }
         sCertDir = *pDefaultCertDir;
 
