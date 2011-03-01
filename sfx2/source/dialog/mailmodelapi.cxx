@@ -322,7 +322,6 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocument( const ::rtl::OUString& _sAt
         {
             // detect filter
             const SfxFilter* pFilter = SfxFilter::GetDefaultFilter(lcl_getFactoryName(_xModel));
-//          sal_Bool bHasFilter = pFilter != NULL;
 
             sal_Bool bRet = sal_False;
             // create temp file name with leading chars and extension
@@ -381,7 +380,6 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocument( const ::rtl::OUString& _sAt
                     Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
                     SfxStoringHelper aHelper(xMgr);
                     aHelper.GUIStoreModel(_xModel,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveAs")),aArgs, sal_False, ::rtl::OUString() );
-                    //  xStor->storeToURL(rFileName,aArgs);
                     bRet = sal_True;
                 }
                 catch(Exception&)
@@ -389,11 +387,6 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocument( const ::rtl::OUString& _sAt
                 }
             }
 
-            // restore old settings
-/* TODO
-            if ( !bModified && xDocShell->IsEnableSetModified() )
-                xDocShell->SetModified( FALSE );
-*/
             eRet = bRet ? SAVE_SUCCESSFULL : SAVE_ERROR;
         }
     }
@@ -448,7 +441,6 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocAsPDF( const ::rtl::OUString& _sAt
                     Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
                     SfxStoringHelper aHelper(xMgr);
                     aHelper.GUIStoreModel(_xModel,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ExportToPDF")),aArgs, sal_False, ::rtl::OUString);
-                    //  xStor->storeToURL(rFileName,aArgs);
                     bRet = sal_True;
                 }
                 catch(Exception&)
@@ -456,12 +448,6 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocAsPDF( const ::rtl::OUString& _sAt
                 }
 
                 eRet = bRet ? SAVE_SUCCESSFULL : SAVE_CANCELLED;
-
-                // restore old settings
-                /* TODO
-                if ( !bModified && xDocShell->IsEnableSetModified() )
-                    xDocShell->SetModified( FALSE );
-                */
             }
         }
     }
@@ -480,7 +466,6 @@ SfxMailModel::SendMailResult SfxMailModel::AttachDocument(   MailDocType _eMailD
     SaveResult eSaveResult;
     String aFileName;
 
-//  sal_Bool bSuccessfull = sal_False;
     if ( _eMailDocType == TYPE_SELF )
         eSaveResult = SaveDocument( _sAttachmentTitle,_xModel,aFileName);
     else
@@ -664,7 +649,6 @@ SfxMailModel::SendMailResult SfxMailModel::Send( )
                     xSimpleMailMessage->setSubject( maSubject );
                     xSimpleMailMessage->setAttachement( aAttachmentSeq );
 
-                    // Bugfix: #95743#
                     // Due to the current clipboard implementation we cannot stop the main thread
                     // because the clipboard implementation calls the main thread from another thread
                     // and this would result in a deadlock!

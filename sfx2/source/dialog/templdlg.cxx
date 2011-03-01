@@ -261,9 +261,6 @@ sal_Int8 DropListBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
 
 sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-//  rEvt.maDropEvent.Context->acceptDrop( DND_ACTION_NONE );
-//  rEvt.maDropEvent.Context->dropComplete( TRUE );
-
     sal_Int8 nRet = DND_ACTION_NONE;
     SfxObjectShell* pDocShell = pDialog->GetObjectShell();
     TransferableDataHelper aHelper( rEvt.maDropEvent.Transferable );
@@ -1195,8 +1192,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         const USHORT nCount = aArr.Count();
         for(USHORT i = 0; i < nCount; ++i)
             FillBox_Impl(pTreeBox, aArr[i], aEntries);
-
-//      EnableEdit(FALSE);
+;
         EnableItem(SID_STYLE_WATERCAN,FALSE);
 
         SfxTemplateItem* pState = pFamilyState[nActFamily-1];
@@ -1371,7 +1367,6 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)
 // Aktualisierung Anzeige: Gie\skanne an/aus
 void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 {
-//  EnableItem(SID_STYLE_WATERCAN, pItem != 0);
     bWaterDisabled =  pItem == 0;
 
     if(!bWaterDisabled)
@@ -1766,7 +1761,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
             bHierarchical=TRUE;
             const String aSelectEntry( GetSelectedEntry());
             aFmtLb.Hide();
-            // aFilterLb.Disable();
 
             pTreeBox = new StyleTreeListBox_Impl(
                     this, WB_HASBUTTONS | WB_HASLINES |

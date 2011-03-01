@@ -476,8 +476,6 @@ IMPL_LINK( SfxSecurityPage_Impl, ChangeProtectionPBHdl, void*, EMPTYARG )
     m_bNewPasswordIsValid = true;
     m_aNewPassword = bNewProtection? aPasswordText : String();
 
-//    // RecordChangesCB is enabled if protection is off
-//    m_aRecordChangesCB.Enable( !bNewProtection );
     m_aRecordChangesCB.Check( bNewProtection );
     // toggle text of button "Protect" <-> "Unprotect"
     m_aChangeProtectionPB.SetText( bNewProtection ? m_aUnProtectSTR : m_aProtectSTR );

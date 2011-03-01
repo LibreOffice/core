@@ -140,9 +140,6 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
         {
             rTemplateDlg.EnableExample_Impl(
                 GetId(), eState != SFX_ITEM_DISABLED );
-            // Das Select Disabled dann, falls enabled und Style Readonly
-/*          String aStr = rTemplateDlg.GetSelectedEntry();
-            if( aStr.Len() ) rTemplateDlg.SelectStyle( aStr ); */
             break;
         }
         case SID_STYLE_NEW:

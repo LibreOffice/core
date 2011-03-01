@@ -321,8 +321,7 @@ void SAL_CALL FileDialogHelper_Impl::disposing( const EventObject& ) throw ( Run
 }
 
 // ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+
 void FileDialogHelper_Impl::dispose()
 {
     if ( mxFileDlg.is() )
@@ -610,7 +609,6 @@ void FileDialogHelper_Impl::updatePreviewState( sal_Bool _bUpdatePreviewWindow )
                 {
                     mbShowPreview = bShowPreview;
 
-                    // #97633
                     // setShowState has currently no effect for the
                     // OpenOffice FilePicker (see svtools/source/filepicker/iodlg.cxx)
                     uno::Reference< XFilePreview > xFilePreview( mxFileDlg, UNO_QUERY );
@@ -717,7 +715,6 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 
         if ( ERRCODE_NONE == getGraphic( aURL, maGraphic ) )
         {
-            // #89491
             // changed the code slightly;
             // before: the bitmap was scaled and
             // surrounded a white frame
@@ -742,7 +739,7 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
             else
                 aBmp.Scale( nYRatio, nYRatio );
 
-            // #94505# Convert to true color, to allow CopyPixel
+            // Convert to true color, to allow CopyPixel
             aBmp.Convert( BMP_CONVERSION_24BIT );
 
             // and copy it into the Any
@@ -1033,9 +1030,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 break;
         }
 
-
-
-        //Sequence < Any > aInitArguments( mbSystemPicker || !mpPreferredParentWindow ? 1 : 3 );
         Sequence < Any > aInitArguments( !mpPreferredParentWindow ? 3 : 4 );
 
         // This is a hack. We currently know that the internal file picker implementation
@@ -1072,8 +1066,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),
                                         makeAny( VCLUnoHelper::GetInterface( mpPreferredParentWindow ) )
                                     );
-
-
         }
 
         try
@@ -1235,7 +1227,6 @@ void FileDialogHelper_Impl::preExecute()
     updatePreviewState( sal_False );
 
     implInitializeFileName( );
-    // #106079# / 2002-12-09 / fs@openoffice.org
 
 #if !(defined(MACOSX) && defined(QUARTZ)) && !defined(WNT)
     // allow for dialog implementations which need to be executed before they return valid values for
@@ -1270,7 +1261,6 @@ void FileDialogHelper_Impl::implInitializeFileName( )
 
         // in case we're operating as save dialog, and "auto extension" is checked,
         // cut the extension from the name
-        // #106079# / 2002-12-09 / fs@openoffice.org
         if ( mbIsSaveDlg && mbHasAutoExt )
         {
             try
@@ -1309,21 +1299,7 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
 //On MacOSX the native file picker has to run in the primordial thread because of drawing issues
 //On Linux the native gtk file picker, when backed by gnome-vfs2, needs to be run in the same
 //primordial thread as the ucb gnome-vfs2 provider was initialized in.
-/*
-#ifdef WNT
-    if ( mbSystemPicker )
-    {
-        PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
-        pThread->create();
-        while ( pThread->GetReturnValue() == nMagic )
-            Application::Yield();
-        pThread->join();
-        nRet = pThread->GetReturnValue();
-        delete pThread;
-    }
-    else
-#endif
-*/
+
     {
         try
         {
@@ -1378,35 +1354,7 @@ String FileDialogHelper_Impl::implEnsureURLExtension(const String& sURL,
                                                      const String& /*sExtension*/)
 {
     return sURL;
-    /*
-    // This feature must be active for file save/export only !
-    if (
-        (! mbIsSaveDlg) &&
-        (! mbExport   )
-        )
-        return sURL;
 
-    // no extension available (because "ALL *.*" was selected) ?
-    // Nod idea what else should happen here .-)
-    if (sExtension.Len() < 1)
-        return sURL;
-
-    // Some FilePicker implementations already add the right extension ...
-    // or might be the user used the right one already ...
-    // Dont create duplicate extension.
-    INetURLObject aURL(sURL);
-    if (aURL.getExtension().equals(sExtension))
-        return sURL;
-
-    // Ignore any other extension set by the user.
-    // Make sure suitable extension is used always.
-    // e.g. "test.bla.odt" for "ODT"
-    ::rtl::OUStringBuffer sNewURL(256);
-    sNewURL.append     (sURL      );
-    sNewURL.appendAscii("."       );
-    sNewURL.append     (sExtension);
-    return sNewURL.makeStringAndClear();
-    */
 }
 
 // ------------------------------------------------------------------------
@@ -1732,12 +1680,6 @@ void FileDialogHelper_Impl::displayFolder( const ::rtl::OUString& _rPath )
     if ( ! _rPath.getLength() )
         // nothing to do
         return;
-
-    /*
-    if ( !::utl::UCBContentHelper::IsFolder( _rPath ) )
-        // only valid folders accepted here
-        return;
-    */
 
     maPath = _rPath;
     if ( mxFileDlg.is() )
@@ -2236,9 +2178,6 @@ void FileDialogHelper_Impl::setDefaultValues()
         {
             DBG_ERROR( "FileDialogHelper_Impl::setDefaultValues: caught an exception while setting the display directory!" );
         }
-
-        // INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
-        //SetStandardDir( aStdDirObj.GetMainURL( INetURLObject::NO_DECODE ) );
     }
 }
 

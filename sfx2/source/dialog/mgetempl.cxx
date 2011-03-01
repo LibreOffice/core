@@ -316,7 +316,6 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 
 {
     SfxMapUnit eUnit = SFX_MAPUNIT_CM;
-//    FieldUnit eFieldUnit = pSfxApp->GetOptions().GetMetric();
     FieldUnit eFieldUnit( FUNIT_CM );
     SfxModule* pModule = SfxModule::GetActiveModule();
     if ( pModule )

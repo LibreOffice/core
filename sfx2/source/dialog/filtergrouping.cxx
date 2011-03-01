@@ -693,12 +693,6 @@ namespace sfx2
             FilterGroupEntryReferrer::iterator aBelongsToLocal = aLocalClassesRef.find( sFilterName );
             if ( aLocalClassesRef.end() != aBelongsToLocal )
             {
-/*
-#ifdef DBG_UTIL
-                const ::rtl::OUString& rLocalClassDisplayName = aBelongsToLocal->second->First;
-                const ::rtl::OUString& rLocalClassExtension = aBelongsToLocal->second->Second;
-#endif
-*/
                 // okay, there is a local class which the filter belongs to
                 // -> append the wildcard
                 aExtendWildcard( *aBelongsToLocal );

@@ -447,7 +447,6 @@ friend class SfxDockingWindow;
     Size                aMinSize;
     SfxSplitWindow*     pSplitWin;
     BOOL                bSplitable;
-//  BOOL                bAutoHide;
     Timer               aMoveTimer;
 
     // Folgende members sind nur in der Zeit von StartDocking bis EndDocking
@@ -614,12 +613,6 @@ void SfxDockingWindow::ToggleFloatingMode()
             GetFloatingWindow()->SetWindowState( pImp->aWinState );
         else
             GetFloatingWindow()->SetOutputSizePixel( GetFloatingSize() );
-/*
-        if ( pImp->bSplitable && !pImp->bEndDocked )
-            // Wenn das Fenster vorher in einem SplitWindow lag, kommt von
-            // Sv kein Show
-            Show();
-*/
     }
     else
     {
@@ -894,12 +887,7 @@ void SfxDockingWindow::Resizing( Size& /*rSize*/ )
 */
 
 {
-/*
-    if(rSize.Width()   < pImp->aMinSize.Width())
-        rSize.Width()  = pImp->aMinSize.Width();
-    if(rSize.Height()  < pImp->aMinSize.Height())
-        rSize.Height() = pImp->aMinSize.Height();
-*/
+
 }
 
 //-------------------------------------------------------------------------
@@ -931,7 +919,6 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->bDockingPrevented = FALSE;
 
     pImp->bSplitable = TRUE;
-//  pImp->bAutoHide = FALSE;
 
     // Zun"achst auf Defaults setzen; das Alignment wird in der Subklasse gesetzt
     pImp->nLine = pImp->nDockLine = 0;
@@ -940,8 +927,6 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->SetLastAlignment(SFX_ALIGN_NOALIGNMENT);
     pImp->aMoveTimer.SetTimeout(50);
     pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxDockingWindow,TimerHdl));
-
-//  DBG_ASSERT(pMgr,"DockingWindow erfordert ein SfxChildWindow!");
 }
 
 //-------------------------------------------------------------------------
@@ -971,7 +956,6 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->bDockingPrevented = FALSE;
 
     pImp->bSplitable = TRUE;
-//  pImp->bAutoHide = FALSE;
 
     // Zun"achst auf Defaults setzen; das Alignment wird in der Subklasse gesetzt
     pImp->nLine = pImp->nDockLine = 0;
@@ -980,8 +964,6 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->SetLastAlignment(SFX_ALIGN_NOALIGNMENT);
     pImp->aMoveTimer.SetTimeout(50);
     pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxDockingWindow,TimerHdl));
-
-//  DBG_ASSERT(pMgr,"DockingWindow erfordert ein SfxChildWindow!");
 }
 
 //-------------------------------------------------------------------------
@@ -997,7 +979,6 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
 {
     if ( !pMgr )
     {
-        // Bugfix #39771
         pImp->SetDockAlignment( SFX_ALIGN_NOALIGNMENT );
         pImp->bConstructed = TRUE;
         return;
@@ -1147,7 +1128,6 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
 
         if ( pImp->bSplitable )
         {
-//          pImp->bAutoHide = ( pInfo->nFlags & SFX_CHILDWIN_AUTOHIDE) != 0;
             pImp->pSplitWin = pWorkWin->GetSplitWindow_Impl(GetAlignment());
             pImp->pSplitWin->InsertWindow(this, pImp->aSplitSize);
         }
@@ -1171,7 +1151,6 @@ void SfxDockingWindow::Initialize_Impl()
 {
     if ( !pMgr )
     {
-        // Bugfix #39771
         pImp->bConstructed = TRUE;
         return;
     }
@@ -1881,8 +1860,6 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
 USHORT SfxDockingWindow::GetWinBits_Impl() const
 {
     USHORT nBits = 0;
-//  if ( pImp->bAutoHide )
-//      nBits |= SWIB_AUTOHIDE;
     return nBits;
 }
 
@@ -1943,14 +1920,6 @@ void SfxDockingWindow::AutoShow_Impl( BOOL bShow )
             pImp->pSplitWin->FadeOut();
     }
 }
-
-/*
-void SfxDockingWindow::Pin_Impl( BOOL bPinned )
-{
-    if ( pImp->pSplitWin )
-        pImp->pSplitWin->Pin_Impl( bPinned );
-}
-*/
 
 SfxSplitWindow* SfxDockingWindow::GetSplitWindow_Impl() const
 {

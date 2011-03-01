@@ -1445,7 +1445,6 @@ void SfxInternetPage::Reset( const SfxItemSet& rSet )
 
     ChangeState( eNewState );
 
-    // #102907# ------------------------
     SFX_ITEMSET_ARG( &rSet, pROItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
     if ( pROItem && pROItem->GetValue() )
     {
@@ -2063,7 +2062,7 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
         pCurrent++;
         pNewCurrent++;
     }
-    //
+
     pNewLine->m_aDatePos = pNewLine->m_aDateField.GetPosPixel();
     pNewLine->m_aTimePos = pNewLine->m_aTimeField.GetPosPixel();
     pNewLine->m_aDateTimeSize = pNewLine->m_aDateField.GetSizePixel();

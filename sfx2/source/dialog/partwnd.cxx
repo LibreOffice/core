@@ -95,37 +95,9 @@ SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
     // and we need a valid pMgr for further operations ...
 
     SfxPartDockWnd_Impl* pWin = (SfxPartDockWnd_Impl*) pWindow;
-//    if( pWin != NULL && !xFrame.is() )
-//        pWin->ReleaseChildWindow_Impl();
-/*
-    // Release frame and window.
-    // If frame reference is valid here ... start dieing from inside by calling dispose().
-    SetFrame( NULL );
-    pWindow = NULL;
-*/
+
     if ( pWin && xFrame == pWin->GetBindings().GetActiveFrame() )
         pWin->GetBindings().SetActiveFrame( NULL );
-/*
-    if( xFrame.is() )
-    {
-        try
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > xCloseable  ( xFrame, ::com::sun::star::uno::UNO_QUERY );
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDisposeable( xFrame, ::com::sun::star::uno::UNO_QUERY );
-            if (xCloseable.is())
-                xCloseable->close(sal_True);
-            else
-            if (xDisposeable.is())
-                xDisposeable->dispose();
-        }
-        catch( ::com::sun::star::util::CloseVetoException& )
-        {
-        }
-        catch( ::com::sun::star::lang::DisposedException& )
-        {
-        }
-    }
- */
 }
 
 sal_Bool SfxPartChildWnd_Impl::QueryClose()

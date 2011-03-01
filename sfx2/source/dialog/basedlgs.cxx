@@ -215,11 +215,6 @@ SfxModalDialog::~SfxModalDialog()
 */
 
 {
-/*
-    SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
-    if ( pHelpPI )
-        pHelpPI->ResetTopic();
-*/
     SetDialogData_Impl();
     aTimer.Stop();
     delete pOutputSet;
@@ -236,11 +231,6 @@ void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )
 
 IMPL_LINK( SfxModalDialog, TimerHdl_Impl, Timer*, EMPTYARG )
 {
-/*
-    SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
-    if ( pHelpPI )
-        pHelpPI->LoadTopic( GetHelpId() );
- */
     return 0L;
 }
 
