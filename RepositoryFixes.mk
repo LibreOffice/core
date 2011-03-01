@@ -133,6 +133,7 @@ gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71_stldebug%,$(gb_Lib
 endif
 gb_Library_NOILIBFILENAMES:=\
     advapi32 \
+	cairo \
 	d3d9 \
 	d3dx \
 	ddraw \
