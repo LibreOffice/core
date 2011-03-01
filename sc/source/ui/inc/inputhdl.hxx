@@ -223,7 +223,7 @@ public:
     EditView*       GetTopView()        { return pTopView; }
 
     bool            DataChanging( sal_Unicode cTyped = 0, bool bFromCommand = false );
-    void            DataChanged( bool bFromTopNotify = false );
+    void            DataChanged( bool bFromTopNotify = false, bool bSetModified = true );
 
     bool            TakesReturn() const     { return ( nTipVisible != 0 ); }
 

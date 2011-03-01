@@ -187,6 +187,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
     pHdl->DataChanging();
     sal_Bool bSetSelIsRef = false;
+    bool bSetModified = true;
 
     switch ( nSlot )
     {
@@ -222,7 +223,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_COPY:
             pTableView->Copy();
-            return;
+            bSetModified = false;
+            break;
 
         case SID_CUT:
             pTableView->Cut();
@@ -319,6 +321,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     if (pTopView)
                         pTopView->SetSelection(ESelection(0,0,nPar-1,nLen));
                 }
+                bSetModified = sal_False;
             }
             return;
 
@@ -617,7 +620,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         break;
     }
 
-    pHdl->DataChanged();
+    pHdl->DataChanged(sal_False, bSetModified);
     if (bSetSelIsRef)
         pHdl->SetSelIsRef(sal_True);
 }
