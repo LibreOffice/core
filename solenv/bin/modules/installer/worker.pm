@@ -1741,7 +1741,7 @@ sub get_all_files_from_filelist
     my @allpackages = ();
 
     for (@{$listfile}) {
-        next unless /^\s*+([^#].*?)\s*$/;
+        next unless /^\s*([^#].*?)\s*$/;
         push @allpackages, $1;
     }
 
