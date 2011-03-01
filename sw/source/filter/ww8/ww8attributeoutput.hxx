@@ -428,6 +428,7 @@ public:
 
     /// Return the right export class.
     virtual MSWordExportBase& GetExport() { return m_rWW8Export; }
+    using AttributeOutputBase::GetExport;
 
 protected:
     /// Output the bold etc. attributes

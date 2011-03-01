@@ -568,6 +568,9 @@ public:
     /// Return the right export class.
     virtual MSWordExportBase& GetExport() = 0;
 
+    /// @overload
+    const MSWordExportBase& GetExport() const { return const_cast< AttributeOutputBase* >( this )->GetExport(); }
+
     /// Call the right virtual function according to the type of the item.
     void OutputItem( const SfxPoolItem& rHt );
 

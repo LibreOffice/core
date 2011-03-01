@@ -587,6 +587,7 @@ public:
 
     /// Return the right export class.
     virtual MSWordExportBase& GetExport();
+    using AttributeOutputBase::GetExport;
 
     /// For eg. the output of the styles, we need to switch the serializer to enother one.
     void SetSerializer( ::sax_fastparser::FSHelperPtr pSerializer ) { m_pSerializer = pSerializer; }

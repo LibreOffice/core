@@ -543,6 +543,7 @@ public:
 
     /// Return the right export class.
     virtual MSWordExportBase& GetExport();
+    using AttributeOutputBase::GetExport;
 
     rtl::OStringBuffer m_aTabStop;
 

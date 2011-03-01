@@ -88,6 +88,7 @@ class DocxExport : public MSWordExportBase
 public:
 
     DocxExportFilter& GetFilter() { return *m_pFilter; };
+    const DocxExportFilter& GetFilter() const { return *m_pFilter; };
 
     /// Access to the attribute output class.
     virtual AttributeOutputBase& AttrOutput() const;
