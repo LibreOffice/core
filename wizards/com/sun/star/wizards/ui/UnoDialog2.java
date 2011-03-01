@@ -369,7 +369,7 @@ public class UnoDialog2 extends UnoDialog implements EventNames
 
     public String translateURL(String relativeURL)
     {
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public static Object getControlModel(Object unoControl)

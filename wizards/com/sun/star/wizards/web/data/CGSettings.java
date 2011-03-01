@@ -83,8 +83,8 @@ public class CGSettings extends ConfigGroup
         xmsf = xmsf_;
         try
         {
-            soTemplateDir = FileAccess.getOfficePath(xmsf, "Config", "", "");
-            soGalleryDir = FileAccess.getOfficePath(xmsf, "Gallery", "share", "");
+            soTemplateDir = FileAccess.getOfficePath(xmsf, "Config", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
+            soGalleryDir = FileAccess.getOfficePath(xmsf, "Gallery", "share", PropertyNames.EMPTY_STRING);
             root = this;
             formatter = new Formatter(xmsf, document);
             resources = resources_;
@@ -152,7 +152,7 @@ public class CGSettings extends ConfigGroup
             throws NoSuchElementException,
             WrappedTargetException
     {
-        if (!exporter.cp_TargetType.equals(""))
+        if (!exporter.cp_TargetType.equals(PropertyNames.EMPTY_STRING))
         {
             exporter.targetTypeName =
                     (String) Properties.getPropertyValue(

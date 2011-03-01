@@ -28,6 +28,7 @@ package com.sun.star.wizards.agenda;
 
 import com.sun.star.wizards.common.ConfigGroup;
 import com.sun.star.wizards.common.ConfigSet;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * CGAgenda means Configuration Group Agenda.
@@ -43,13 +44,13 @@ public class CGAgenda extends ConfigGroup
     /** step 1 - include minutes*/
     public boolean cp_IncludeMinutes;
     /** step 2  - title */
-    public String cp_Title = "";
+    public String cp_Title = PropertyNames.EMPTY_STRING;
     /** step 2  - date */
     public String cp_Date;
     /** step 2  - time */
     public String cp_Time;
     /** step 2  - location */
-    public String cp_Location = "";
+    public String cp_Location = PropertyNames.EMPTY_STRING;
     /** step 3  - show meeting type */
     public boolean cp_ShowMeetingType;
     /** step 3  - show read */

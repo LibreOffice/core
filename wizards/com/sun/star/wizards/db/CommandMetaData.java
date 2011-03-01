@@ -41,6 +41,7 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.NumberFormatter;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,8 +76,8 @@ public class CommandMetaData extends DBMetaData
     private int CommandType;
     private String Command;
     boolean bCatalogAtStart = true;
-    String sCatalogSep = "";
-    String sIdentifierQuote = "";
+    String sCatalogSep = PropertyNames.EMPTY_STRING;
+    String sIdentifierQuote = PropertyNames.EMPTY_STRING;
     boolean bCommandComposerAttributesalreadyRetrieved = false;
     private XIndexAccess xIndexKeys;
 
@@ -178,7 +179,7 @@ public class CommandMetaData extends DBMetaData
             }
             else
             {
-                sSortFieldName[1] = "ASC";
+                sSortFieldName[1] = PropertyNames.ASC;
             }
             aSortFields.add(sSortFieldName);
         }

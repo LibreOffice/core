@@ -105,8 +105,8 @@ public class TimeStampControl extends DatabaseControl
         oResource = _oResource;
         sDateAppendix = oResource.getResText(UIConsts.RID_FORM + 88);
         sTimeAppendix = oResource.getResText(UIConsts.RID_FORM + 89);
-        oDateControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.DATE, _curfieldcolumn.getFieldTitle() + " " + sDateAppendix);
-        oTimeControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.TIME, _curfieldcolumn.getFieldTitle() + " " + sTimeAppendix);
+        oDateControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.DATE, _curfieldcolumn.getFieldTitle() + PropertyNames.SPACE + sDateAppendix);
+        oTimeControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.TIME, _curfieldcolumn.getFieldTitle() + PropertyNames.SPACE + sTimeAppendix);
     }
 
     public void setPropertyValue(String _sPropertyName, Object _aPropertyValue) throws Exception

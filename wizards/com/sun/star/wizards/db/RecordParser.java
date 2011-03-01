@@ -44,6 +44,7 @@ import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.NumberFormatter;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.task.XInteractionHandler;
+import com.sun.star.wizards.common.PropertyNames;
 
 public class RecordParser extends QueryMetaData
 {
@@ -217,9 +218,9 @@ public class RecordParser extends QueryMetaData
         try
         {
             Helper.setUnoPropertyValue(xRowSet, "DataSourceName", DataSourceName);
-            Helper.setUnoPropertyValue(xRowSet, "ActiveConnection", DBConnection);
-            Helper.setUnoPropertyValue(xRowSet, "Command", Command);
-            Helper.setUnoPropertyValue(xRowSet, "CommandType", new Integer(_nCommandType)); // CommandType
+            Helper.setUnoPropertyValue(xRowSet, PropertyNames.ACTIVE_CONNECTION, DBConnection);
+            Helper.setUnoPropertyValue(xRowSet, PropertyNames.COMMAND, Command);
+            Helper.setUnoPropertyValue(xRowSet, PropertyNames.COMMAND_TYPE, new Integer(_nCommandType)); // CommandType
             xExecute.executeWithCompletion(xInteraction);
             com.sun.star.sdb.XResultSetAccess xResultAccess = (com.sun.star.sdb.XResultSetAccess) UnoRuntime.queryInterface(com.sun.star.sdb.XResultSetAccess.class, xRowSet);
             ResultSet = xResultAccess.createResultSet();

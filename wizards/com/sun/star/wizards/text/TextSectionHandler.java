@@ -43,6 +43,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 
 public class TextSectionHandler
 {
@@ -161,7 +162,7 @@ public class TextSectionHandler
             XIndexAccess xAllTextSections = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
             int iSectionCount = xAllTextSections.getCount();
             SectionFileLink oSectionLink = new SectionFileLink();
-            oSectionLink.FileURL = "";
+            oSectionLink.FileURL = PropertyNames.EMPTY_STRING;
             for (int i = 0; i < iSectionCount; i++)
             {
                 oTextSection = xAllTextSections.getByIndex(i);
@@ -170,7 +171,7 @@ public class TextSectionHandler
                             "FileLink", "LinkRegion"
                         }, new Object[]
                         {
-                            oSectionLink, ""
+                            oSectionLink, PropertyNames.EMPTY_STRING
                         });
             }
         }
@@ -183,13 +184,13 @@ public class TextSectionHandler
     public void breakLinkOfTextSection(Object oTextSection)
     {
         SectionFileLink oSectionLink = new SectionFileLink();
-        oSectionLink.FileURL = "";
+        oSectionLink.FileURL = PropertyNames.EMPTY_STRING;
         Helper.setUnoPropertyValues(oTextSection, new String[]
                 {
                     "FileLink", "LinkRegion"
                 }, new Object[]
                 {
-                    oSectionLink, ""
+                    oSectionLink, PropertyNames.EMPTY_STRING
                 });
     }
 
