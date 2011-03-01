@@ -214,7 +214,7 @@ void ScDPCacheTable::fillTable(
             for (SCROW nRow = 0; nRow < nRowCount; ++nRow )
             {
                 SCROW nIndex = getCache()->GetItemDataId( nCol, nRow, bRepeatIfEmpty );
-                SCROW nOrder = getCache()->GetOrder( nCol, nIndex );
+                SCROW nOrder = getOrder( nCol, nIndex );
 
                 if ( nCol == 0 )
                          maRowsVisible.push_back(false);
@@ -270,7 +270,7 @@ void ScDPCacheTable::fillTable()
             for (SCROW nRow = 0; nRow < nRowCount; ++nRow )
             {
                 SCROW nIndex = getCache()->GetItemDataId( nCol, nRow, false );
-                SCROW nOrder = getCache()->GetOrder( nCol, nIndex );
+                SCROW nOrder = getOrder( nCol, nIndex );
 
                 if ( nCol == 0 )
                      maRowsVisible.push_back(true);

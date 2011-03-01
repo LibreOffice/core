@@ -44,6 +44,7 @@ struct ScQueryParam;
 
 class SC_DLLPUBLIC ScDPTableDataCache
 {
+    friend class ScDPCacheTable;
 public:
     typedef ::boost::ptr_vector<ScDPItemData>           DataListType;
 private:
@@ -65,7 +66,6 @@ private:
     mutable ScDPItemDataPool    maAdditionalData;
 
 public:
-    SCROW GetOrder( long nDim, SCROW nIndex ) const;
     SCROW GetIdByItemData( long nDim,  String sItemData  ) const;
     SCROW GetIdByItemData( long nDim, const ScDPItemData& rData ) const;
 
@@ -106,6 +106,7 @@ public:
     virtual ~ScDPTableDataCache();
 
 private:
+    SCROW GetOrder( long nDim, SCROW nIndex ) const;
     void AddLabel( ScDPItemData* pData);
     bool AddData( long nDim, ScDPItemData* itemData );
 };
