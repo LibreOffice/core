@@ -945,7 +945,7 @@ void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const ::rtl::OUString& r
 
     m_pAdapter->setText(nParentPos, pItem, rText);
 
-    if (!rText)
+    if (rText.isEmpty())
         Remove(pItem);
     else
     {
