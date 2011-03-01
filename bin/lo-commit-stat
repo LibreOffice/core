@@ -18,6 +18,7 @@ sub search_bugs($$$$)
     my $bug = "";
     my $bug_orig;
     while (defined $bug) {
+
         # match fdo#123, rhz#123, i#123
         if ( $line =~ m/(\w*\#+\d+)/ ) {
             $bug_orig = $1;
@@ -30,11 +31,17 @@ sub search_bugs($$$$)
             $bug = undef;
             next;
         }
+
 #        print "   found $bug\n";
+        # remove bug number from the comment; it will be added later a standardized way
         $bug_orig =~ s/\#/\\#/;
         $line =~ s/[Rr]esolves:\s*$bug_orig\s*//;
         $line =~ s/\s*-\s*$bug_orig\s*//;
         $line =~ s/\(?$bug_orig\)?[:,]?\s*//;
+
+        # bnc# is prefered over n# for novell bugs
+        $bug =~ s/^n\#/bnc#/;
+        # save the bug number
         %{$pdata->{$piece}{$commit_id}{'bugs'}} = () if (! defined %{$pdata->{$piece}{$commit_id}{'bugs'}});
         $pdata->{$piece}{$commit_id}{'bugs'}{$bug} = 1;
         $pdata->{$piece}{$commit_id}{'flags'}{'bug'} = 1;
