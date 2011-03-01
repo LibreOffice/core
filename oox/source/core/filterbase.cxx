@@ -241,7 +241,7 @@ bool FilterBase::isExportFilter() const
     return mxImpl->meDirection == FILTERDIRECTION_EXPORT;
 }
 
-OoxmlVersion FilterBase::getVersion( )
+OoxmlVersion FilterBase::getVersion() const
 {
     return mxImpl->meVersion;
 }
