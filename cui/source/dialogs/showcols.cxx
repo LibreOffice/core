@@ -117,7 +117,7 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
 
             ::rtl::OUString sName;
             xCurCol->getPropertyValue(CUIFM_PROP_LABEL) >>= sName;
-            sCurName = (const sal_Unicode*)sName;
+            sCurName = sName;
         }
         catch(...)
         {
