@@ -892,10 +892,10 @@ void ShutdownIcon::SetAutostart( bool bActivate )
                                                      osl_getThreadTextEncoding() );
         OString aShortcutUnx = OUStringToOString( aShortcut,
                                                   osl_getThreadTextEncoding() );
-        if ((0 != symlink(aDesktopFileUnx, aShortcutUnx)) && (errno == EEXIST))
+        if ((0 != symlink(aDesktopFileUnx.getStr(), aShortcutUnx.getStr())) && (errno == EEXIST))
         {
-            unlink(aShortcutUnx);
-            int ret = symlink(aDesktopFileUnx, aShortcutUnx);
+            unlink(aShortcutUnx.getStr());
+            int ret = symlink(aDesktopFileUnx.getStr(), aShortcutUnx.getStr());
             (void)ret; //deliberately ignore return value, it's non-critical if it fails
         }
 
