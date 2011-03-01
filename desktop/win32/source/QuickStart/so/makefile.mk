@@ -41,6 +41,8 @@ UWINAPILIB =
 
 # --- Resources ----------------------------------------------------
 
+.IF "$(LINK_SO)"=="TRUE"
+
 RCFILES=QuickStart.rc
 INCPRE=..
 
@@ -67,6 +69,8 @@ APP1STDLIBS+=$(SHELL32LIB)\
             $(OLEAUT32LIB)
 
 APP1NOSVRES=$(RES)$/$(TARGET).res
+
+.ENDIF # "$(LINK_SO)"=="TRUE"
 
 # --- Targets ------------------------------------------------------
 

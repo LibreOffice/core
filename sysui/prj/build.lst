@@ -16,4 +16,4 @@ su  sysui\desktop\debian                nmake   -   u   su_dtdebian su_dtshare.u
 su  sysui\desktop\slackware             nmake   -   u   su_dtslackware su_dtshare.u NULL
 su  sysui\desktop\solaris               nmake   -   u   su_dtsolaris su_dtshare.u NULL
 su  sysui\desktop\util                  nmake   -   u   su_desktop su_dtredhat.u su_dtsuse.u su_dtmdk.u su_dtfreedesktop.u su_dtdebian.u su_dtslackware.u NULL
-su  sysui\util		                    nmake   -   all su_util su_dtsolaris.u su_desktop.u su_win32_quickstart_so.w su_iconsw.w NULL
+su  sysui\util		                    nmake   -   all su_util su_dtsolaris.u su_desktop.u su_iconsw.w NULL
