@@ -77,9 +77,10 @@
 #include "ixfstream.hxx"
 #include "ixfattrlist.hxx"
 #include <rtl/ustring.hxx>
-using namespace rtl;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 /**
 * @brief

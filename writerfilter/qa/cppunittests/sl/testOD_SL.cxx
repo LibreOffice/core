@@ -39,8 +39,11 @@
 
 using namespace writerfilter;
 using namespace osl;
-using namespace rtl;
 using namespace util;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 class MyHandler : public xxml::ContentHandler
 {
