@@ -1469,10 +1469,10 @@ void ScDPLayoutDlg::UpdateSrcRange()
     aPageArr.clear();
 
     InitFields();
-    RepaintFields();
+    RepaintFieldWindows();
 }
 
-void ScDPLayoutDlg::RepaintFields()
+void ScDPLayoutDlg::RepaintFieldWindows()
 {
     Rectangle aRect; // currently has no effect whatsoever.
     aWndPage.Paint(aRect);
