@@ -210,7 +210,7 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
 
         for( unsigned int n = 0; n < rStyle.SubStyles.size(); ++n )
             impl_emitStyle( rStyle.SubStyles[n], rContext, rContainedElemVisitor );
-        if( rStyle.Contents )
+        if( rStyle.Contents.getLength() )
             rContext.rEmitter.write( rStyle.Contents );
         if( rStyle.ContainedElement )
             rStyle.ContainedElement->visitedBy( rContainedElemVisitor,
