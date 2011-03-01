@@ -58,7 +58,7 @@ java_lang_Class * java_lang_Class::forName( const ::rtl::OUString& _par0 )
     {
         ::rtl::OString sClassName = ::rtl::OUStringToOString(_par0, RTL_TEXTENCODING_JAVA_UTF8);
         sClassName = sClassName.replace('.','/');
-        out = t.pEnv->FindClass(sClassName);
+        out = t.pEnv->FindClass(sClassName.getStr());
         ThrowSQLException(t.pEnv,0);
     } //t.pEnv
     // WARNING: the caller becomes the owner of the returned pointer
