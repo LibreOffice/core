@@ -110,6 +110,7 @@ private:
     bool            bIgnoreEmptyRows;
     bool            bRepeatIfEmpty;
 
+    const ScSheetSourceDesc& mrDesc;
     ScDPCacheTable  aCacheTable;
 
 public:

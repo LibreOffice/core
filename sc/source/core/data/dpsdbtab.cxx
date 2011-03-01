@@ -75,9 +75,9 @@ using ::com::sun::star::uno::UNO_QUERY;
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
 
-ScDPTableDataCache* ScImportSourceDesc::CreateCache(ScDocument* pDoc) const
+ScDPTableDataCache* ScImportSourceDesc::CreateCache() const
 {
-    if ( !pDoc )
+    if (!mpDoc)
         return NULL;
 
     sal_Int32 nSdbType = -1;
@@ -91,7 +91,7 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache(ScDocument* pDoc) const
         return NULL;
     }
 
-    ScDPTableDataCache* pCache = new ScDPTableDataCache( pDoc );
+    ScDPTableDataCache* pCache = new ScDPTableDataCache(mpDoc);
 
     uno::Reference<sdbc::XRowSet> xRowSet ;
     try
@@ -131,7 +131,7 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache(ScDocument* pDoc) const
             }
             else
                 xRowSet->execute();
-            SvNumberFormatter aFormat( pDoc->GetServiceManager(), ScGlobal::eLnge);
+            SvNumberFormatter aFormat(mpDoc->GetServiceManager(), ScGlobal::eLnge);
             pCache->InitFromDataBase( xRowSet, *aFormat.GetNullDate() );
         }
     }
@@ -157,7 +157,8 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache(ScDocument* pDoc) const
 
 ScDatabaseDPData::ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport) :
     ScDPTableData(pDoc),
-    aCacheTable(rImport.CreateCache(pDoc))
+    mrImport(rImport),
+    aCacheTable(rImport.CreateCache())
 {
 }
 
@@ -168,7 +169,7 @@ ScDatabaseDPData::~ScDatabaseDPData()
 void ScDatabaseDPData::DisposeData()
 {
     //! use OpenDatabase here?
-     aCacheTable.clear();
+    aCacheTable.clear();
 }
 
 long ScDatabaseDPData::GetColumnCount()
@@ -213,6 +214,7 @@ void ScDatabaseDPData::CreateCacheTable()
     if (!aCacheTable.empty())
         return;
 
+    aCacheTable.setCache(mrImport.CreateCache());
     aCacheTable.fillTable();
 }
 

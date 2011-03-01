@@ -50,22 +50,25 @@ struct ScImportSourceDesc
     String  aObject;
     USHORT  nType;          // enum DataImportMode
     BOOL    bNative;
+    ScDocument* mpDoc;
 
-    ScImportSourceDesc() : nType(0), bNative(FALSE) {}
+    ScImportSourceDesc(ScDocument* pDoc) : nType(0), bNative(FALSE), mpDoc(pDoc) {}
 
     BOOL operator== ( const ScImportSourceDesc& rOther ) const
         { return aDBName == rOther.aDBName &&
                  aObject == rOther.aObject &&
                  nType   == rOther.nType &&
-                 bNative == rOther.bNative; }
+                 bNative == rOther.bNative &&
+                mpDoc == rOther.mpDoc; }
 
-    ScDPTableDataCache* CreateCache(ScDocument* pDoc) const;
+    ScDPTableDataCache* CreateCache() const;
 };
 
 class ScDatabaseDPData : public ScDPTableData
 {
 private:
-     ScDPCacheTable      aCacheTable;
+    const ScImportSourceDesc& mrImport;
+    ScDPCacheTable aCacheTable;
 public:
                     ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport);
     virtual         ~ScDatabaseDPData();

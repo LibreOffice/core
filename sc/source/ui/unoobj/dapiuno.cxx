@@ -833,7 +833,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                 uno::Sequence<beans::PropertyValue> aArgSeq;
                 if ( aValue >>= aArgSeq )
                 {
-                    ScImportSourceDesc aImportDesc;
+                    ScImportSourceDesc aImportDesc(pDocShell->GetDocument());
 
                     const ScImportSourceDesc* pOldDesc = pDPObject->GetImportSourceDesc();
                     if (pOldDesc)

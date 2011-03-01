@@ -809,7 +809,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             DBG_ASSERT(pDataDlg, "Dialog create fail!");
                             if ( pDataDlg->Execute() == RET_OK )
                             {
-                                ScImportSourceDesc aImpDesc;
+                                ScImportSourceDesc aImpDesc(pDoc);
                                 pDataDlg->GetValues( aImpDesc );
                                 pNewDPObject = new ScDPObject( pDoc );
                                 pNewDPObject->SetImportDesc( aImpDesc );

@@ -66,6 +66,7 @@ ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc) :
     pSpecial(NULL),
     bIgnoreEmptyRows( FALSE ),
     bRepeatIfEmpty(FALSE),
+    mrDesc(rDesc),
     aCacheTable(rDesc.CreateCache())
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
@@ -200,8 +201,8 @@ void ScSheetDPData::CreateCacheTable()
         // already cached.
         return;
 
-    aCacheTable.fillTable( aQuery, pSpecial,
-                                bIgnoreEmptyRows, bRepeatIfEmpty );
+    aCacheTable.setCache(mrDesc.CreateCache());
+    aCacheTable.fillTable(aQuery, pSpecial, bIgnoreEmptyRows, bRepeatIfEmpty);
 }
 
 void ScSheetDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)

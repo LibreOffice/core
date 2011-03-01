@@ -409,7 +409,7 @@ void ScXMLDataPilotTableContext::EndElement()
     {
         case SQL :
         {
-            ScImportSourceDesc aImportDesc;
+            ScImportSourceDesc aImportDesc(pDoc);
             aImportDesc.aDBName = sDatabaseName;
             aImportDesc.aObject = sSourceObject;
             aImportDesc.nType = sheet::DataImportMode_SQL;
@@ -419,7 +419,7 @@ void ScXMLDataPilotTableContext::EndElement()
         break;
         case TABLE :
         {
-            ScImportSourceDesc aImportDesc;
+            ScImportSourceDesc aImportDesc(pDoc);
             aImportDesc.aDBName = sDatabaseName;
             aImportDesc.aObject = sSourceObject;
             aImportDesc.nType = sheet::DataImportMode_TABLE;
@@ -428,7 +428,7 @@ void ScXMLDataPilotTableContext::EndElement()
         break;
         case QUERY :
         {
-            ScImportSourceDesc aImportDesc;
+            ScImportSourceDesc aImportDesc(pDoc);
             aImportDesc.aDBName = sDatabaseName;
             aImportDesc.aObject = sSourceObject;
             aImportDesc.nType = sheet::DataImportMode_QUERY;

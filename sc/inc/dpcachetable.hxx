@@ -169,6 +169,7 @@ public:
     SCROW getOrder(long nDim, SCROW nIndex) const;
     void clear();
     bool empty() const;
+    void setCache(ScDPTableDataCache* p);
 
 private:
     ScDPCacheTable();

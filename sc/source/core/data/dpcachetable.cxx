@@ -402,11 +402,19 @@ void ScDPCacheTable::clear()
 {
     maFieldEntries.clear();
     maRowsVisible.clear();
+    delete mpCache;
+    mpCache = NULL;
 }
 
 bool ScDPCacheTable::empty() const
 {
     return mpCache == NULL || maFieldEntries.empty();
+}
+
+void ScDPCacheTable::setCache(ScDPTableDataCache* p)
+{
+    delete mpCache;
+    mpCache = p;
 }
 
 bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCriteria,
