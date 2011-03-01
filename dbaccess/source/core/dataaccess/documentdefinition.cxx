@@ -744,7 +744,7 @@ namespace
             }
             catch( Exception& )
             {
-                DBG_ERROR( "LayoutManagerLock::~LayoutManagerLock: caught an exception!" );
+                OSL_FAIL( "LayoutManagerLock::~LayoutManagerLock: caught an exception!" );
             }
         }
     };

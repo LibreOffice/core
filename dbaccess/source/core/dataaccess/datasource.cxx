@@ -273,7 +273,7 @@ Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getReme
 
 void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentication /*Remember*/ ) throw(RuntimeException)
 {
-    DBG_ERROR("OAuthenticationContinuation::setRememberAccount: not supported!");
+    OSL_FAIL("OAuthenticationContinuation::setRememberAccount: not supported!");
 }
 
 /** The class OSharedConnectionManager implements a structure to share connections.

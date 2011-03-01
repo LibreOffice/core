@@ -1086,19 +1086,19 @@ sal_Bool SAL_CALL SbaXFormAdapter::getGroupControl() throw( RuntimeException )
 // -------------------------------------------------------------------------
 void SAL_CALL SbaXFormAdapter::setGroupControl(sal_Bool /*GroupControl*/) throw( RuntimeException )
 {
-    DBG_ERROR("SAL_CALL SbaXFormAdapter::setGroupControl : not supported !");
+    OSL_FAIL("SAL_CALL SbaXFormAdapter::setGroupControl : not supported !");
 }
 
 // -------------------------------------------------------------------------
 void SAL_CALL SbaXFormAdapter::setControlModels(const Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& /*Controls*/) throw( RuntimeException )
 {
-    DBG_ERROR("SAL_CALL SbaXFormAdapter::setControlModels : not supported !");
+    OSL_FAIL("SAL_CALL SbaXFormAdapter::setControlModels : not supported !");
 }
 
 // -------------------------------------------------------------------------
 Sequence< Reference< ::com::sun::star::awt::XControlModel > > SAL_CALL SbaXFormAdapter::getControlModels() throw( RuntimeException )
 {
-    DBG_ERROR("SAL_CALL SbaXFormAdapter::getControlModels : not supported !");
+    OSL_FAIL("SAL_CALL SbaXFormAdapter::getControlModels : not supported !");
     return Sequence< Reference< ::com::sun::star::awt::XControlModel > >();
 }
 
@@ -1111,7 +1111,7 @@ void SAL_CALL SbaXFormAdapter::setGroup(const Sequence< Reference< ::com::sun::s
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL SbaXFormAdapter::getGroupCount() throw( RuntimeException )
 {
-    DBG_ERROR("SAL_CALL SbaXFormAdapter::getGroupCount : not supported !");
+    OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroupCount : not supported !");
     return 0;
 }
 
