@@ -1626,7 +1626,7 @@ void ModulWindowLayout::DockaWindow( DockingWindow* pDockingWindow )
         // evtl. Sonderbehandlung...
         ArrangeWindows();
     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     else
         OSL_FAIL( "Wer will sich denn hier andocken ?" );
 #endif
