@@ -31,6 +31,7 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -225,25 +226,16 @@ bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField
 {
     bool bRes = true;
     uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
-    if ( m_pFFData && xNameCont.is() )
+    uno::Reference<container::XNamed> xNamed( xFormField, uno::UNO_QUERY );
+    if ( m_pFFData && xNamed.is() && xNameCont.is() )
     {
 
         if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
         {
             xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT)));
-            if (  m_pFFData->getName().getLength() )
-            {
-                if ( xNameCont->hasByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_NAME)) ) )
-                    xNameCont->replaceByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_NAME)), uno::makeAny( m_pFFData->getName() ) );
-                else
-                    xNameCont->insertByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_NAME)), uno::makeAny( m_pFFData->getName() ) );
-            }
             if (  m_pFFData->getTextDefault().getLength() )
             {
-                if ( xNameCont->hasByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_DEFAULT)) ) )
-                    xNameCont->replaceByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_DEFAULT)), uno::makeAny( m_pFFData->getTextDefault() ) );
-                else
-                    xNameCont->insertByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_DEFAULT)), uno::makeAny( m_pFFData->getTextDefault() ) );
+                xNamed->setName( m_pFFData->getName() );
             }
         }
         else if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
