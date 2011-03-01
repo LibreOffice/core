@@ -539,8 +539,7 @@ short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool /*bAutoSave
 
 ResMgr* SfxApplication::CreateResManager( const char *pPrefix )
 {
-    String aMgrName = String::CreateFromAscii( pPrefix );
-    return ResMgr::CreateResMgr(U2S(aMgrName));
+    return ResMgr::CreateResMgr(pPrefix);
 }
 
 //---------------------------------------------------------------------
