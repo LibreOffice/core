@@ -471,7 +471,7 @@ static typelib_TypeClass cpp_mediate(
  */
 static void privateSnippetExecutor( sal_uInt32 nOffsetAndIndex, void** gpregptr, void** fpregptr, void** ovrflw)
 {
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "privateSnippetExecutor\n");
 #endif
 
@@ -644,7 +644,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 {
      (*slots) -= functionCount;
      Slot * s = *slots;
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "in addLocalFunctions functionOffset is %x\n",functionOffset);
     fprintf(stderr, "in addLocalFunctions vtableOffset is %x\n",vtableOffset);
 #endif

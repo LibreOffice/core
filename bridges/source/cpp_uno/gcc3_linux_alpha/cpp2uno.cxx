@@ -58,7 +58,7 @@ static typelib_TypeClass cpp2uno_call(
         void ** gpreg, void ** fpreg, void ** ovrflw,
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "as far as cpp2uno_call\n");
 #endif
     int nregs = 0; //number of words passed in registers
@@ -115,13 +115,13 @@ static typelib_TypeClass cpp2uno_call(
         typelib_TypeDescription * pParamTypeDescr = 0;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "arg %d of %d\n", nPos, nParams);
 #endif
 
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr )) // value
         {
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
             fprintf(stderr, "simple type is %d\n", pParamTypeDescr->eTypeClass);
 #endif
 
@@ -216,7 +216,7 @@ static typelib_TypeClass cpp2uno_call(
         }
         else // ptr to complex value | ref
         {
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
             fprintf(stderr, "complex, nregs is %d\n", nregs);
 #endif
 
@@ -262,7 +262,7 @@ static typelib_TypeClass cpp2uno_call(
         }
     }
 
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "end of params\n");
 #endif
 
@@ -348,11 +348,11 @@ static typelib_TypeClass cpp_mediate(
     sal_Int32 nVtableOffset = (nOffsetAndIndex >> 32);
     sal_Int32 nFunctionIndex = (nOffsetAndIndex & 0xFFFFFFFF);
 
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "nVTableOffset, nFunctionIndex are %x %x\n", nVtableOffset, nFunctionIndex);
 #endif
 
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
         // Let's figure out what is really going on here
         {
             fprintf( stderr, "= cpp_mediate () =\nGPR's (%d): ", 6 );
@@ -524,7 +524,7 @@ long cpp_vtable_call(long r16, long r17, long r18, long r19, long r20, long r21,
     register double f21  asm("$f21");  fpreg[5] = f21;
 
     volatile long nRegReturn[1];
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "before mediate with %lx\n",nOffsetAndIndex);
     fprintf(stderr, "non-doubles are %x %x %x %x %x %x\n", gpreg[0], gpreg[1], gpreg[2], gpreg[3], gpreg[4], gpreg[5]);
     fprintf(stderr, "doubles are %f %f %f %f %f %f\n", fpreg[0], fpreg[1], fpreg[2], fpreg[3], fpreg[4], fpreg[5]);
@@ -532,7 +532,7 @@ long cpp_vtable_call(long r16, long r17, long r18, long r19, long r20, long r21,
     typelib_TypeClass aType =
         cpp_mediate( nOffsetAndIndex, (void**)gpreg, (void**)fpreg, (void**)sp,
             (sal_Int64*)nRegReturn );
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "after mediate ret is %lx %ld\n", nRegReturn[0], nRegReturn[0]);
 #endif
 
@@ -625,7 +625,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 {
     (*slots) -= functionCount;
     Slot * s = *slots;
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "in addLocalFunctions functionOffset is %x\n",functionOffset);
     fprintf(stderr, "in addLocalFunctions vtableOffset is %x\n",vtableOffset);
 #endif

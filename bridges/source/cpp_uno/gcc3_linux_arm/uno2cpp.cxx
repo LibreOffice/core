@@ -394,7 +394,7 @@ static void cpp_call(
             {
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
                 fprintf(stderr, "hyper is %lx\n", pCppArgs[nPos]);
 #endif
                 INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack, pStackStart, bOverFlow );
@@ -402,7 +402,7 @@ static void cpp_call(
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
             case typelib_TypeClass_ENUM:
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
                 fprintf(stderr, "long is %x\n", pCppArgs[nPos]);
 #endif
                 INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack, bOverFlow );

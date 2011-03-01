@@ -50,7 +50,7 @@ using namespace ::com::sun::star::uno;
 
 void MapReturn(long r2, double f0, typelib_TypeClass eTypeClass, sal_uInt64* pRegisterReturn)
 {
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr,"Mapping Return with %lx %ld %f\n", r2, r2, f0);
 #endif
     switch (eTypeClass)
@@ -82,7 +82,7 @@ void MapReturn(long r2, double f0, typelib_TypeClass eTypeClass, sal_uInt64* pRe
     default:
             break;
     }
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "end of MapReturn with %x\n", pRegisterReturn ? *pRegisterReturn : 0);
 #endif
 }
@@ -143,7 +143,7 @@ void callVirtualMethod(
     if ( nGPR > s390x::MAX_GPR_REGS )
         nGPR = s390x::MAX_GPR_REGS;
 
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
         // Let's figure out what is really going on here
         {
             fprintf( stderr, "= nStack is %d\n", nStack );
@@ -411,7 +411,7 @@ void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
-#ifdef OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "unoInterfaceProxyDispatch\n");
 #endif
 
