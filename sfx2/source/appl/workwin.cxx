@@ -1690,9 +1690,6 @@ void SfxWorkWindow::RemoveChildWin_Impl( SfxChildWin_Impl *pCW )
     USHORT nId = pCW->nSaveId;
     SfxChildWindow *pChildWin = pCW->pWin;
 
-    // existing window goes out of the context and is therefore removed
-    USHORT nPos = pChildWin->GetPosition();
-
     // Save the information in the INI file
     USHORT nFlags = pCW->aInfo.nFlags;
     pCW->aInfo = pChildWin->GetInfo();
