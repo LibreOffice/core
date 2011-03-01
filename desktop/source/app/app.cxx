@@ -195,12 +195,10 @@ ResMgr* Desktop::GetDesktopResManager()
 {
     if ( !Desktop::pResMgr )
     {
-        String aMgrName = String::CreateFromAscii( "dkt" );
-
         // Create desktop resource manager and bootstrap process
         // was successful. Use default way to get language specific message.
         if ( Application::IsInExecute() )
-            Desktop::pResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
+            Desktop::pResMgr = ResMgr::CreateResMgr("dkt");
 
         if ( !Desktop::pResMgr )
         {
@@ -215,7 +213,7 @@ ResMgr* Desktop::GetDesktopResManager()
 
             ::com::sun::star::lang::Locale aLocale( aLanguage, aCountry, aVariant );
 
-            Desktop::pResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale);
+            Desktop::pResMgr = ResMgr::SearchCreateResMgr( "dkt", aLocale);
             AllSettings as = GetSettings();
             as.SetUILocale(aLocale);
             SetSettings(as);
@@ -1606,13 +1604,11 @@ int Desktop::Main()
         // create title string
         sal_Bool bCheckOk = sal_False;
         ::com::sun::star::lang::Locale aLocale;
-        String aMgrName = String::CreateFromAscii( "iso" );
-        ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale );
+        ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( "iso", aLocale );
         if ( !pLabelResMgr )
         {
             // no "iso" resource -> search for "ooo" resource
-            aMgrName = String::CreateFromAscii( "ooo" );
-            pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale);
+            pLabelResMgr = ResMgr::SearchCreateResMgr( "ooo", aLocale);
         }
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;
