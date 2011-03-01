@@ -91,7 +91,9 @@ $(OUT_BIN)/string_samples$(EXE_EXT) : $(SAMPLE_OBJ_OUT)/string_samples.$(OBJ_EXT
 ProUNOCppBindingExample : $(APP1_BINARY) $(APP2_BINARY)
 	@echo --------------------------------------------------------------------------------
 	@echo Note: For the "$(QM)$(APP1_NAME)$(QM)" example you need a running office listening
-	@echo $(SQM)      $(SQM)on port 2083. Before you run the example you have to start your office with
+	@echo $(SQM)      $(SQM)on port 2083. The example use the defaultBootstrap_InitialComponentContext method and provides 
+	@echo $(SQM)      $(SQM)the additional office types via the UNO environment variable -env:URE_MORE_TYPES=... 
+	@echo $(SQM)      $(SQM)Before you can run this example you have to start your office in listening mode.
 	@echo -
 	@echo $(SQM)  $(SQM)soffice "$(QM)-accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager$(QM)"
 	@echo -----
