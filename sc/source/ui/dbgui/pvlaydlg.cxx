@@ -1469,6 +1469,16 @@ void ScDPLayoutDlg::UpdateSrcRange()
     aPageArr.clear();
 
     InitFields();
+    RepaintFields();
+}
+
+void ScDPLayoutDlg::RepaintFields()
+{
+    Rectangle aRect; // currently has no effect whatsoever.
+    aWndPage.Paint(aRect);
+    aWndCol.Paint(aRect);
+    aWndRow.Paint(aRect);
+    aWndData.Paint(aRect);
 }
 
 ScDPFieldControlBase* ScDPLayoutDlg::GetFieldWindow(ScDPFieldType eType)

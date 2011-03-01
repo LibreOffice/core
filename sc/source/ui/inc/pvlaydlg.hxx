@@ -217,6 +217,7 @@ private:
                                             ::std::vector<PivotField>& rDataFields );
 
     void                    UpdateSrcRange();
+    void                    RepaintFields();
 
     ScDPFieldControlBase* GetFieldWindow(ScDPFieldType eType);
 
