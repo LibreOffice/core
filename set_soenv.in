@@ -1612,6 +1612,7 @@ ToFile( "EXTERNAL_WARNINGS_NOT_ERRORS", "TRUE",  "e" );
 ToFile( "PRODUCT",           "@PRODUCT@",        "e" );
 ToFile( "PROFULLSWITCH",     "@PROFULLSWITCH@",  "e" );
 ToFile( "PROEXT",            $PROEXT,            "e" );
+ToFile( "VALGRIND_CFLAGS",   "@VALGRIND_CFLAGS@",  "e" );
 ToFile( "UNIXWRAPPERNAME",   "@UNIXWRAPPERNAME@","e" );
 ToFile( "BUILD_MOZAB",       "@BUILD_MOZAB@",    "e" );
 ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
@@ -1795,8 +1796,6 @@ ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
 ToFile( "HAVE_LD_HASH_STYLE","@HAVE_LD_HASH_STYLE@","e" );
 ToFile( "HAVE_LD_BSYMBOLIC_FUNCTIONS",
 		"@HAVE_LD_BSYMBOLIC_FUNCTIONS@","e" );
-ToFile( "HAVE_VALGRIND_MEMCHECK_H",
-		"@HAVE_VALGRIND_MEMCHECK_H@","e" );
 ToFile( "CXX",               $CXX,               "e" );
 ToFile( "USE_CCACHE",        "@USE_CCACHE@",     "e" );
 ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
