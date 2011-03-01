@@ -35,19 +35,15 @@
 
 
 #define ODF_FORMTEXT "vnd.oasis.opendocument.field.FORMTEXT"
-#define ODF_FORMTEXT_NAME "FormText_Name"
-#define ODF_FORMTEXT_DEFAULT "FormText_Default"
 
 #define ODF_FORMCHECKBOX "vnd.oasis.opendocument.field.FORMCHECKBOX"
 #define ODF_FORMCHECKBOX_HELPTEXT "Checkbox_HelpText"
 #define ODF_FORMCHECKBOX_NAME "Checkbox_Name"
 #define ODF_FORMCHECKBOX_RESULT "Checkbox_Checked"
-#define ODF_FORMCHECKBOX_DEFAULT "Checkbox_Default"
 
 #define ODF_FORMDROPDOWN "vnd.oasis.opendocument.field.FORMDROPDOWN"
 #define ODF_FORMDROPDOWN_LISTENTRY "Dropdown_ListEntry"
 #define ODF_FORMDROPDOWN_RESULT "Dropdown_Selected"
-#define ODF_FORMDROPDOWN_NAME "Dropdown_Name"
 
 #define ODF_TOC "vnd.oasis.opendocument.field.TOC"
 
