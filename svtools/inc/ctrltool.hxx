@@ -229,7 +229,7 @@ private:
 class SVT_DLLPUBLIC FontSizeNames
 {
 private:
-    struct ImplFSNameItem*  mpArray;
+    const struct ImplFSNameItem*    mpArray;
     ULONG                   mnElem;
 
 public:
