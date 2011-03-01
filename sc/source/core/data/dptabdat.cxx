@@ -62,9 +62,8 @@ ScDPTableData::CalcInfo::CalcInfo() :
 
 // ---------------------------------------------------------------------------
 
-ScDPTableData::ScDPTableData(ScDocument* pDoc, long nCacheId ) :
-    mnCacheId( nCacheId ),
-    mpDoc ( pDoc )
+ScDPTableData::ScDPTableData(ScDocument* pDoc) :
+    mpDoc(pDoc)
 {
     nLastDateVal = nLastHier = nLastLevel = nLastRet = -1;      // invalid
 
@@ -262,11 +261,6 @@ long ScDPTableData::GetMembersCount( long nDim )
     if ( nDim > MAXCOL )
         return 0;
     return GetCacheTable().getFieldEntries( nDim ).size();
-}
-
-long ScDPTableData::GetCacheId() const
-{
-    return mnCacheId;
 }
 
 const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )

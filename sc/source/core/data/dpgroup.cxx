@@ -1009,7 +1009,7 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
 }
 
 ScDPGroupTableData::ScDPGroupTableData( const shared_ptr<ScDPTableData>& pSource, ScDocument* pDocument ) :
-    ScDPTableData(pDocument, pSource->GetCacheId() ),
+    ScDPTableData(pDocument),
     pSourceData( pSource ),
     pDoc( pDocument )
 {

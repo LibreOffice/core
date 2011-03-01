@@ -97,8 +97,7 @@ class SC_DLLPUBLIC ScDPTableData
     long    nLastHier;
     long    nLastLevel;
     long    nLastRet;
-    long                          mnCacheId;
-    const ScDocument*   mpDoc;
+    const ScDocument* mpDoc;
 public:
 
     /** This structure stores dimension information used when calculating
@@ -124,7 +123,7 @@ public:
         CalcInfo();
     };
 
-    ScDPTableData(ScDocument* pDoc, long nCacheId );
+    ScDPTableData(ScDocument* pDoc);
     virtual     ~ScDPTableData();
 
     long        GetDatePart( long nDateVal, long nHierarchy, long nLevel );
@@ -134,7 +133,6 @@ public:
 
     virtual long                    GetColumnCount() = 0;
     virtual   const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
-    long                                                     GetCacheId() const;
     virtual String                  getDimensionName(long nColumn) = 0;
     virtual BOOL                    getIsDataLayoutDimension(long nColumn) = 0;
     virtual BOOL                    IsDateDimension(long nDim) = 0;

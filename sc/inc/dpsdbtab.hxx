@@ -59,7 +59,7 @@ struct ScImportSourceDesc
                  nType   == rOther.nType &&
                  bNative == rOther.bNative; }
 
-    ScDPTableDataCache* CreateCache(  ScDocument* pDoc , long nID  ) const;
+    ScDPTableDataCache* CreateCache(ScDocument* pDoc) const;
 };
 
 class ScDatabaseDPData : public ScDPTableData
@@ -67,7 +67,7 @@ class ScDatabaseDPData : public ScDPTableData
 private:
      ScDPCacheTable      aCacheTable;
 public:
-                    ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport, long nCacheId = -1);
+                    ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport);
     virtual         ~ScDatabaseDPData();
 
     virtual long                    GetColumnCount();

@@ -78,7 +78,7 @@ public:
     const ScQueryParam& GetQueryParam() const;
 
     bool operator== ( const ScSheetSourceDesc& rOther ) const;
-    ScDPTableDataCache* CreateCache(long nID = -1) const;
+    ScDPTableDataCache* CreateCache() const;
 
     /**
      * Check the sanity of the data source range.
@@ -113,7 +113,7 @@ private:
     ScDPCacheTable  aCacheTable;
 
 public:
-    ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc, long nCacheId = -1 );
+    ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc);
     virtual ~ScSheetDPData();
 
     virtual long                    GetColumnCount();

@@ -60,13 +60,13 @@ using ::std::vector;
 
 // -----------------------------------------------------------------------
 
-ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc , long nCacheId) :
-    ScDPTableData(pD, -1),
+ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc) :
+    ScDPTableData(pD),
     aQuery ( rDesc.GetQueryParam() ),
     pSpecial(NULL),
     bIgnoreEmptyRows( FALSE ),
     bRepeatIfEmpty(FALSE),
-    aCacheTable(rDesc.CreateCache(-1))
+    aCacheTable(rDesc.CreateCache())
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
     pSpecial = new bool[nEntryCount];
@@ -305,7 +305,7 @@ bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
         maQueryParam  == rOther.maQueryParam;
 }
 
-ScDPTableDataCache* ScSheetSourceDesc::CreateCache(long nID) const
+ScDPTableDataCache* ScSheetSourceDesc::CreateCache() const
 {
     if (!mpDoc)
         return NULL;

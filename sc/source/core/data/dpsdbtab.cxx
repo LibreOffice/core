@@ -75,7 +75,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
 
-ScDPTableDataCache* ScImportSourceDesc::CreateCache(ScDocument* pDoc , long nID) const
+ScDPTableDataCache* ScImportSourceDesc::CreateCache(ScDocument* pDoc) const
 {
     if ( !pDoc )
         return NULL;
@@ -155,11 +155,9 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache(ScDocument* pDoc , long nID)
      return pCache;
 }
 
-ScDatabaseDPData::ScDatabaseDPData(
-    ScDocument* pDoc,
-    const ScImportSourceDesc& rImport, long nCacheId /*=-1 */ ) :
-    ScDPTableData(pDoc, -1),
-    aCacheTable(rImport.CreateCache(pDoc, -1))
+ScDatabaseDPData::ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport) :
+    ScDPTableData(pDoc),
+    aCacheTable(rImport.CreateCache(pDoc))
 {
 }
 
