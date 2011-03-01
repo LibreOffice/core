@@ -1963,7 +1963,7 @@ void SbaXDataBrowserController::ExecuteSearch()
     Reference< XInterface >  xCurControl(xColControls->getByIndex(nViewCol),UNO_QUERY);
     ::rtl::OUString aInitialText;
     if (IsSearchableControl(xCurControl, &aInitialText))
-        sInitialText = (const sal_Unicode*)aInitialText;
+        sInitialText = aInitialText;
 
     // prohibit the synchronization of the grid's display with the cursor's position
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
@@ -2518,7 +2518,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
         Reference< XPropertySet >  xCurrentColModel(xModelColumns->getByIndex(nModelPos),UNO_QUERY);
         ::rtl::OUString aName = ::comphelper::getString(xCurrentColModel->getPropertyValue(PROPERTY_CONTROLSOURCE));
 
-        sFieldList += (const sal_Unicode*)aName;
+        sFieldList += aName;
         sFieldList += ';';
 
         pContext->arrFields.push_back(xCurrentColumn);
