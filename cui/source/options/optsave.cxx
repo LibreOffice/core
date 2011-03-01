@@ -103,62 +103,6 @@ void    FilterWarningDialog_Impl::SetFilterName(const String& rFilterUIName)
     aFilterWarningFT.SetText(sTmp);
 }
 // ----------------------------------------------------------------------
-#ifdef FILTER_WARNING_ENABLED
-class SvxAlienFilterWarningConfig_Impl : public utl::ConfigItem
-{
-    sal_Bool bWarning;
-    com::sun::star::uno::Sequence< OUString > aPropNames;
-
-    public:
-        SvxAlienFilterWarningConfig_Impl();
-        ~SvxAlienFilterWarningConfig_Impl();
-
-    virtual void            Commit();
-
-    void                    ResetWarning()
-                            {
-                                if(bWarning)
-                                {
-                                    bWarning = sal_False;
-                                    ConfigItem::SetModified();
-                                }
-
-                            }
-    sal_Bool                IsWarning()const{return bWarning;}
-};
-// ----------------------------------------------------------------------
-SvxAlienFilterWarningConfig_Impl::SvxAlienFilterWarningConfig_Impl() :
-    ConfigItem(C2U("TypeDetection.Misc/Defaults"),
-        CONFIG_MODE_IMMEDIATE_UPDATE),
-    aPropNames(1),
-    bWarning(sal_True)
-{
-    aPropNames.getArray()[0] = C2U("ShowAlienFilterWarning");
-    Sequence<Any> aValues = GetProperties(aPropNames);
-    const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aPropNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aPropNames.getLength() &&
-        pValues[0].hasValue() &&
-            pValues[0].getValueType() == ::getBooleanCppuType())
-        bWarning = *(sal_Bool*)pValues[0].getValue();
-}
-// ----------------------------------------------------------------------
-SvxAlienFilterWarningConfig_Impl::~SvxAlienFilterWarningConfig_Impl()
-{
-    if(IsModified())
-        Commit();
-}
-// ----------------------------------------------------------------------
-void SvxAlienFilterWarningConfig_Impl::Commit()
-{
-    Sequence<Any> aValues(aPropNames.getLength());
-    Any* pValues = aValues.getArray();
-    pValues[0].setValue(&bWarning, ::getBooleanCppuType());
-    PutProperties(aPropNames, aValues);
-}
-#endif // FILTER_WARNING_ENABLED
-// ----------------------------------------------------------------------
-// ----------------------------------------------------------------------
 
 struct SvxSaveTabPage_Impl
 {
