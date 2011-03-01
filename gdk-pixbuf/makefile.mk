@@ -74,6 +74,8 @@ BUILD_DIR=$(CONFIGURE_DIR)
 EXTRPATH=LOADER
 OUT2LIB+=gdk-pixbuf/.libs/libgdk_pixbuf-2.0.0.dylib
 
+OUT2BIN+=gdk-pixbuf/.libs/gdk-pixbuf-query-loaders
+
 OUT2INC+=gdk-pixbuf/gdk-pixbuf-animation.h
 OUT2INC+=gdk-pixbuf/gdk-pixbuf-features.h
 OUT2INC+=gdk-pixbuf/gdk-pixbuf-marshal.h

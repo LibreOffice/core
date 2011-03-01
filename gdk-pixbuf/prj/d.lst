@@ -15,4 +15,5 @@ mkdir: %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf
 ..\%__SRC%\inc\gdk-pixbuf-transform.h %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf\gdk-pixbuf-transform.h
 
 ..\%__SRC%\lib\libgdk_pixbuf-2.0.0.dylib %_DEST%\lib%_EXT%\libgdk_pixbuf-2.0.0.dylib
-
+symlink: %_DEST%\lib%_EXT%\libgdk_pixbuf-2.0.0.dylib %_DEST%\lib%_EXT%\libgdk_pixbuf-2.0.dylib
+..\%__SRC%\bin\gdk-pixbuf-query-loaders %_DEST%\bin%_EXT%\gdk-pixbuf-query-loaders
