@@ -236,10 +236,6 @@ void ScDPObject::SetSaveData(const ScDPSaveData& rData)
     {
         delete pSaveData;
         pSaveData = new ScDPSaveData( rData );
-        if ( rData.GetCacheId() >= 0 )
-            mnCacheId = rData.GetCacheId();
-        else if ( mnCacheId >= 0 )
-            pSaveData->SetCacheId( mnCacheId );
     }
 
     InvalidateData();       // re-init source from SaveData
@@ -2570,11 +2566,9 @@ String ScDPCollection::CreateNewName( USHORT nMin ) const
 
 long ScDPObject::GetCacheId() const
 {
-    if ( GetSaveData() )
-        return GetSaveData()->GetCacheId();
-    else
-        return mnCacheId;
+    return mnCacheId;
 }
+
 ULONG ScDPObject::RefreshCache()
 {
     if ( pServDesc )
@@ -2633,9 +2627,6 @@ void ScDPObject::SetCacheId( long nCacheId )
     if ( GetCacheId() != nCacheId )
     {
         InvalidateSource();
-        if ( GetSaveData() )
-            GetSaveData()->SetCacheId( nCacheId );
-
         mnCacheId = nCacheId;
     }
 }

@@ -247,7 +247,6 @@ private:
     sal_uInt16 nRepeatEmptyMode;
     bool bFilterButton; // not passed to DataPilotSource
     bool bDrillDown; // not passed to DataPilotSource
-    long mnCacheId;
 
     /** if true, all dimensions already have all of their member instances
      *  created. */
@@ -327,11 +326,6 @@ public:
     void WriteToSource( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& xSource );
     void Refresh( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& xSource );
     bool IsEmpty() const;
-    inline long GetCacheId() const
-        { return mnCacheId; }
-
-    inline void SetCacheId( long nCacheId )
-        { mnCacheId = nCacheId; }
 
     const ScDPDimensionSaveData* GetExistingDimensionData() const
         { return pDimensionData; }

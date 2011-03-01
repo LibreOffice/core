@@ -737,7 +737,6 @@ ScDPSaveData::ScDPSaveData() :
     nRepeatEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     bFilterButton( true ),
     bDrillDown( true ),
-    mnCacheId( -1),
     mbDimensionMembersBuilt(false),
     mpGrandTotalName(NULL)
 {
@@ -750,7 +749,6 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     nRepeatEmptyMode( r.nRepeatEmptyMode ),
     bFilterButton( r.bFilterButton ),
     bDrillDown( r.bDrillDown ),
-    mnCacheId(  r.mnCacheId ),
     mbDimensionMembersBuilt(r.mbDimensionMembersBuilt),
     mpGrandTotalName(NULL)
 {
@@ -782,7 +780,6 @@ bool ScDPSaveData::operator== ( const ScDPSaveData& r ) const
          nIgnoreEmptyMode != r.nIgnoreEmptyMode ||
          nRepeatEmptyMode != r.nRepeatEmptyMode ||
          bFilterButton    != r.bFilterButton    ||
-         mnCacheId        != r.mnCacheId        ||
          bDrillDown       != r.bDrillDown       ||
          mbDimensionMembersBuilt != r.mbDimensionMembersBuilt)
         return false;
@@ -1299,8 +1296,8 @@ void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xS
     {
         DBG_ERROR("error in ScDPSaveData::Refresh");
     }
-
 }
+
 void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
                                 com::sun::star::sheet::XDimensionsSupplier>& xSource ,
                                 const std::list<rtl::OUString>& deletedDims)
@@ -1308,7 +1305,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
     if ( xSource.is() )
     {
         ScDPSource* pTabSource = static_cast<ScDPSource*>( xSource.get() );
-        ScDPTableDataCache*  pCache = pTabSource->GetCache();
+        const ScDPTableDataCache*  pCache = pTabSource->GetCache();
         if ( pCache->GetId() == -1 )
             return;
 
