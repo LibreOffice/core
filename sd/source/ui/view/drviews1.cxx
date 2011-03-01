@@ -55,10 +55,6 @@
 #include <svx/globl3d.hxx>
 #include <svx/fmglob.hxx>
 #include <editeng/outliner.hxx>
-
-
-#include "misc.hxx"
-
 #include <svx/dialogs.hrc>
 
 #include "view/viewoverlaymanager.hxx"

@@ -55,7 +55,6 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "helpids.h"
-#include "misc.hxx"
 #include "Window.hxx"
 #include "imapinfo.hxx"
 #include "futempl.hxx"

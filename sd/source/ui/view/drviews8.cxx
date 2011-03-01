@@ -47,7 +47,6 @@
 #include "app.hrc"
 #include "strings.hrc"
 
-#include "misc.hxx"
 #include "fuzoom.hxx"
 #include "fudspord.hxx"
 #include "futransf.hxx"

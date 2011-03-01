@@ -71,7 +71,6 @@
 #include "res_bmp.hrc"
 #include "PresentationViewShell.hxx"
 
-#include "misc.hxx"
 #include "Outliner.hxx"
 #include "drawdoc.hxx"
 #include "sdresid.hxx"

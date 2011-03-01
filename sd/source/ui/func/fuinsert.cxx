@@ -76,7 +76,6 @@
 #include <sfx2/viewfrm.hxx>
 
 #include "app.hrc"
-#include "misc.hxx"
 #include "sdresid.hxx"
 #include "View.hxx"
 #include "app.hxx"

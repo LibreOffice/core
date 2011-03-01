@@ -37,7 +37,6 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include "misc.hxx"
 #include "strings.hrc"
 #include "ViewShell.hxx"
 #include "DrawViewShell.hxx"

@@ -24,7 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "misc.hxx"
 
 #ifndef _MENUIDS2_SRC
 #define _MENUIDS2_SRC

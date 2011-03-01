@@ -72,7 +72,6 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdview.hxx>
-#include "misc.hxx"
 #include "View.hxx"
 #ifndef SVX_LIGHT
 #include "DrawDocShell.hxx"
