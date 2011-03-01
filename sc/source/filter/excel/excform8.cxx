@@ -132,7 +132,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     {
         aIn >> nOp;
 
-        // #98524# always reset flags
+        // always reset flags
         aSRD.InitFlags();
         aCRD.InitFlags();
 
@@ -223,7 +223,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x10: // Union                                 [314 265]
                 // ocSep behelfsweise statt 'ocUnion'
                 aStack >> nMerk0;
-//#100928#      aPool << ocOpen << aStack << ocSep << nMerk0 << ocClose;
                 aPool << aStack << ocSep << nMerk0;
                     // doesn't fit exactly, but is more Excel-like
                 aPool >> aStack;
@@ -898,7 +897,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
     {
         aIn >> nOp;
 
-        // #98524# always reset flags
+        // always reset flags
         aSRD.InitFlags();
         aCRD.InitFlags();
 
@@ -1247,7 +1246,7 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
     {
         rStrm >> nOp;
 
-        // #98524# always reset flags
+        // always reset flags
         aSRD.InitFlags();
         aCRD.InitFlags();
 
@@ -1387,7 +1386,7 @@ void ExcelToSc8::ExcRelToScRel8( UINT16 nRow, UINT16 nC, ScSingleRefData &rSRD, 
             rSRD.nRow = Min( static_cast<SCROW>(nRow), MAXROW);
 
         // T A B
-        // #67965# abs needed if rel in shared formula for ScCompiler UpdateNameReference
+        // abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
             rSRD.nTab = GetCurrScTab();
     }
@@ -1471,7 +1470,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
                 aIn >> nIxti >> nRow1 >> nRow2 >> nCol1 >> nCol2;
 
     _3d_common:
-                // #122885# skip references to deleted sheets
+                // skip references to deleted sheets
                 if( !rLinkMan.GetScTabRange( nTab1, nTab2, nIxti ) || !ValidTab( nTab1 ) || !ValidTab( nTab2 ) )
                     break;
 

@@ -320,7 +320,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
 
         SvxFontItem aFontItem( maData.GetScFamily( GetTextEncoding() ), maData.maName, EMPTY_STRING,
                 PITCH_DONTKNOW, eTempTextEnc, ATTR_FONT );
-        // #91658# set only for valid script types
+        // set only for valid script types
         if( mbHasWstrn )
             PUTITEM( aFontItem, ATTR_FONT,      EE_CHAR_FONTINFO );
         if( mbHasAsian )
@@ -334,7 +334,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
     {
         sal_Int32 nHeight = maData.mnHeight;
         if( bEE && (eType != EXC_FONTITEM_HF) )     // do not convert header/footer height
-            nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // #98527# 1 in == 72 pt
+            nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // 1 in == 72 pt
 
         SvxFontHeightItem aHeightItem( nHeight, 100, ATTR_FONT_HEIGHT );
         PUTITEM( aHeightItem,   ATTR_FONT_HEIGHT,       EE_CHAR_FONTHEIGHT );
@@ -443,7 +443,7 @@ void XclImpFont::GuessScriptType()
     mbHasWstrn = true;
     mbHasAsian = mbHasCmplx = false;
 
-    // #91658# #113783# find the script types for which the font contains characters
+    // find the script types for which the font contains characters
     if( OutputDevice* pPrinter = GetPrinter() )
     {
         Font aFont( maData.maName, Size( 0, 10 ) );
@@ -452,7 +452,7 @@ void XclImpFont::GuessScriptType()
         pPrinter->SetFont( aFont );
         if( pPrinter->GetFontCharMap( aCharMap ) )
         {
-            // #91658# CJK fonts
+            // CJK fonts
             mbHasAsian =
                 aCharMap.HasChar( 0x3041 ) ||   // 3040-309F: Hiragana
                 aCharMap.HasChar( 0x30A1 ) ||   // 30A0-30FF: Katakana
@@ -467,7 +467,7 @@ void XclImpFont::GuessScriptType()
                 aCharMap.HasChar( 0xCC01 ) ||   // AC00-D7AF: Hangul Syllables
                 aCharMap.HasChar( 0xF901 ) ||   // F900-FAFF: CJK Compatibility Ideographs
                 aCharMap.HasChar( 0xFF71 );     // FF00-FFEF: Halfwidth/Fullwidth Forms
-            // #113783# CTL fonts
+            // CTL fonts
             mbHasCmplx =
                 aCharMap.HasChar( 0x05D1 ) ||   // 0590-05FF: Hebrew
                 aCharMap.HasChar( 0x0631 ) ||   // 0600-06FF: Arabic
@@ -783,7 +783,7 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
     // set an angle in the range from -90 to 90 degrees
     sal_Int32 nAngle = XclTools::GetScRotation( nXclRot, 0 );
     ScfTools::PutItem( rItemSet, SfxInt32Item( ATTR_ROTATE_VALUE, nAngle ), bSkipPoolDefs );
-    // #105933# set "Use asian vertical layout", if cell is stacked and font contains CKJ characters
+    // set "Use asian vertical layout", if cell is stacked and font contains CKJ characters
     bool bAsianVert = bStacked && pFont && pFont->HasAsianChars();
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_VERTICAL_ASIAN, bAsianVert ), bSkipPoolDefs );
 
@@ -1036,7 +1036,7 @@ void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& r
     {
         SvxBrushItem aBrushItem( ATTR_BACKGROUND );
 
-        // #108935# do not use IsTransparent() - old Calc filter writes tranparency with different color indexes
+        // do not use IsTransparent() - old Calc filter writes tranparency with different color indexes
         if( mnPattern == EXC_PATT_NONE )
         {
             aBrushItem.SetColor( Color( COL_TRANSPARENT ) );
@@ -1196,7 +1196,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
         /*  Enables mb***Used flags, if the formatting attributes differ from
             the passed XF record. In cell XFs Excel uses the cell attributes,
             if they differ from the parent style XF.
-            #109899# ...or if the respective flag is not set in parent style XF. */
+            ...or if the respective flag is not set in parent style XF. */
         if( pParentXF )
         {
             if( !mbProtUsed )
@@ -1807,11 +1807,11 @@ void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, X
         maColumns.resize( nIndex + 1 );
     if( !maColumns[ nIndex ] )
         maColumns[ nIndex ].reset( new XclImpXFRangeColumn );
-    // #108770# remember all Boolean cells, they will get 'Standard' number format
+    // remember all Boolean cells, they will get 'Standard' number format
     maColumns[ nIndex ]->SetXF( nScRow, XclImpXFIndex( nXFIndex, eMode == xlXFModeBoolCell ) );
 
     // set "center across selection" and "fill" attribute for all following empty cells
-    // #97130# ignore it on row default XFs
+    // ignore it on row default XFs
     if( eMode != xlXFModeRow )
     {
         const XclImpXF* pXF = GetXFBuffer().GetXF( nXFIndex );
@@ -1827,7 +1827,7 @@ void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, X
                   )
                     pRange->aEnd.IncCol();
             }
-            else if( eMode != xlXFModeBlank )   // #108781# do not merge empty cells
+            else if( eMode != xlXFModeBlank )   // do not merge empty cells
                 SetMerge( nScCol, nScRow );
         }
     }

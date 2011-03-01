@@ -613,7 +613,7 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
     ScDocument& rDoc = GetDoc();
     XclExpTabInfo& rTabInfo = GetTabInfo();
 
-    /*  #i2394# #100489# built-in defined names must be sorted by the name of the
+    /*  #i2394# built-in defined names must be sorted by the name of the
         containing sheet. Example: SheetA!Print_Range must be stored *before*
         SheetB!Print_Range, regardless of the position of SheetA in the document! */
     for( SCTAB nScTabIdx = 0, nScTabCount = rTabInfo.GetScTabCount(); nScTabIdx < nScTabCount; ++nScTabIdx )

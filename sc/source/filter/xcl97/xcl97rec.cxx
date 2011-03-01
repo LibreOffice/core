@@ -825,7 +825,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     sal_Char        aBuf[ sizeof(UINT32) * 2 + 1 ];
     // FIXME Eeek! Is this just a way to get a unique id?
     UINT32          nPictureId = UINT32(sal_uIntPtr(this) >> 2);
-    sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );        // #100211# - checked
+    sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );
     aStorageName.AppendAscii( aBuf );
     SotStorageRef    xOleStg = pRootStorage->OpenSotStorage( aStorageName,
                             STREAM_READWRITE| STREAM_SHARE_DENYALL );

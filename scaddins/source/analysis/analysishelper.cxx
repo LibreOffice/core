@@ -2123,7 +2123,7 @@ sal_Int16 ConvertData::GetMatchingLevel( const STRING& rRef ) const
                 n = INV_MATCHLEV;   // milli-bits doesn't make sense
 #endif
 
-//! <HACK> #100616# "cm3" is not 10^-2 m^3 but 10^-6 m^3 !!! ------------------
+//! <HACK> "cm3" is not 10^-2 m^3 but 10^-6 m^3 !!! ------------------
             if( n != INV_MATCHLEV )
             {
                 sal_Unicode cLast = p[ aStr.getLength() - 1 ];

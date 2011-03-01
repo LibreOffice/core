@@ -255,7 +255,7 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
         return;
 
     r.SetScenario( nNewTab, TRUE );
-    // #112621# do not show scenario frames
+    // do not show scenario frames
     r.SetScenarioData( nNewTab, *pComment, COL_LIGHTGRAY, /*SC_SCENARIO_SHOWFRAME|*/SC_SCENARIO_COPYALL|(nProtected ? SC_SCENARIO_PROTECT : 0) );
 
     boost::ptr_vector<ExcScenarioCell>::const_iterator iter;
@@ -273,7 +273,7 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
     if( bLast )
         r.SetActiveScenario( nNewTab, TRUE );
 
-    // #111896# modify what the Active tab is set to if the new
+    // modify what the Active tab is set to if the new
     // scenario tab occurs before the active tab.
     ScExtDocSettings& rDocSett = rRoot.GetExtDocOptions().GetDocSettings();
     if( (static_cast< SCCOL >( nTab ) < rDocSett.mnDisplTab) && (rDocSett.mnDisplTab < MAXTAB) )

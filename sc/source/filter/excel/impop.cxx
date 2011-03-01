@@ -139,7 +139,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     pExcRoot->pShrfmlaBuff = new ShrfmlaBuffer( pExcRoot );     //&aShrfrmlaBuff;
     pExcRoot->pExtNameBuff = new ExtNameBuff ( *this );
 
-    pExtNameBuff = new NameBuffer( pExcRoot );          //#94039# prevent empty rootdata
+    pExtNameBuff = new NameBuffer( pExcRoot );          //prevent empty rootdata
     pExtNameBuff->SetBase( 1 );
 
     pOutlineListBuffer = new XclImpOutlineListBuffer( );
@@ -1184,7 +1184,7 @@ const ScTokenArray* ImportExcel::ErrorToFormula( BYTE bErrOrVal, BYTE nError, do
 
 void ImportExcel::AdjustRowHeight()
 {
-    /*  #93255# Speed up chart import: import all sheets without charts, then
+    /*  Speed up chart import: import all sheets without charts, then
         update row heights (here), last load all charts -> do not any longer
         update inside of ScDocShell::ConvertFrom() (causes update of existing
         charts during each and every change of row height). */
@@ -1242,7 +1242,7 @@ void ImportExcel::PostDocLoad( void )
         }
     }
 
-    // #111099# open forms in alive mode (has no effect, if no controls in document)
+    // open forms in alive mode (has no effect, if no controls in document)
     if( ScModelObj* pDocObj = GetDocModelObj() )
         pDocObj->setPropertyValue( CREATE_OUSTRING( SC_UNO_APPLYFMDES ), uno::Any( false ) );
 

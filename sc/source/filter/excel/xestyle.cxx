@@ -387,7 +387,7 @@ void XclExpPaletteImpl::Finalize()
     while( mxColorList->size() > mrDefPal.GetColorCount() )
         ReduceLeastUsedColor();
 
-// --- #104865# use default palette and replace colors with nearest used colors ---
+// --- use default palette and replace colors with nearest used colors ---
 
     nCount = mxColorList->size();
     XclRemapVec aRemapVec( nCount );
@@ -862,7 +862,7 @@ sal_Int16 XclExpFontHelper::GetFirstUsedScript( const XclExpRoot& rRoot, const S
     static const WhichAndScript WAS_ASIAN( ATTR_CJK_FONT, ::com::sun::star::i18n::ScriptType::ASIAN );
     static const WhichAndScript WAS_CMPLX( ATTR_CTL_FONT, ::com::sun::star::i18n::ScriptType::COMPLEX );
 
-    /*  #114008# do not let a font from a parent style override an explicit
+    /*  do not let a font from a parent style override an explicit
         cell font. */
 
     sal_Int16 nDefScript = rRoot.GetDefApiScript();
@@ -1080,7 +1080,7 @@ sal_uInt16 XclExpFontBuffer::Insert(
     {
         XclExpFontRef xFont( new XclExpFont( GetRoot(), rFontData, eColorType ) );
         maFontList.ReplaceRecord( xFont, EXC_FONT_APP );
-        // #108487# set width of '0' character for column width export
+        // set width of '0' character for column width export
         SetCharWidth( xFont->GetFontData() );
         return EXC_FONT_APP;
     }
@@ -1120,7 +1120,7 @@ sal_uInt16 XclExpFontBuffer::Insert(
 sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet,
         sal_Int16 nScript, XclExpColorType eColorType, bool bAppFont )
 {
-    // #i17050# #114008# #115495# script type now provided by caller
+    // #i17050# script type now provided by caller
     Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rItemSet, nScript );
     return Insert( aFont, eColorType, bAppFont );
 }

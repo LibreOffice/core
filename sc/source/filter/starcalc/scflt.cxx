@@ -1018,7 +1018,7 @@ void Sc10Import::LoadFileHeader()
     if ( nError == 0 )
     {
         sal_Char Sc10CopyRight[32];
-        strcpy(Sc10CopyRight, "Blaise-Tabelle");    // #100211# - checked
+        strcpy(Sc10CopyRight, "Blaise-Tabelle");
         Sc10CopyRight[14] = 10;
         Sc10CopyRight[15] = 13;
         Sc10CopyRight[16] = 0;
@@ -1133,7 +1133,7 @@ void Sc10Import::LoadPatternCollection()
         else
         {
             pPattern->Name[ 27 ] = 0;
-            strcat( pPattern->Name, "_Old" );       // #100211# - checked
+            strcat( pPattern->Name, "_Old" );
             aName = SC10TOSTRING( pPattern->Name );
             pStylePool->Make( aName, SFX_STYLE_FAMILY_PARA );
         }

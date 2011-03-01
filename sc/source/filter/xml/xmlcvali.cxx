@@ -354,7 +354,7 @@ void ScXMLContentValidationContext::SetFormula( OUString& rFormula, OUString& rF
 
 void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidation ) const
 {
-    rValidation.aValidationType = sheet::ValidationType_ANY;    // #b6343997# default if no condition is given
+    rValidation.aValidationType = sheet::ValidationType_ANY;    // default if no condition is given
     rValidation.aOperator = sheet::ConditionOperator_NONE;
 
     if( sCondition.getLength() > 0 )

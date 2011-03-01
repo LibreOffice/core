@@ -137,7 +137,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     if( nXclTab != EXC_NAME_GLOBAL )
     {
         sal_uInt16 nUsedTab = (GetBiff() == EXC_BIFF8) ? nXclTab : nExtSheet;
-        // #163146# do not rename sheet-local names by default, this breaks VBA scripts
+        // do not rename sheet-local names by default, this breaks VBA scripts
 //        maScName.Append( '_' ).Append( String::CreateFromInt32( nUsedTab ) );
         // TODO: may not work for BIFF5, handle skipped sheets (all BIFF)
         mnScTab = static_cast< SCTAB >( nUsedTab - 1 );
@@ -216,7 +216,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
 
     // 4) *** create a defined name in the Calc document *** ------------------
 
-    // #163146# do not ignore hidden names (may be regular names created by VBA scripts)
+    // do not ignore hidden names (may be regular names created by VBA scripts)
     if( pTokArr /*&& (bBuiltIn || !::get_flag( nFlags, EXC_NAME_HIDDEN ))*/ && !mbFunction && !mbVBName )
     {
         // create the Calc name data

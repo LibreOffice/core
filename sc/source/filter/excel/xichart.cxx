@@ -411,7 +411,7 @@ void XclImpChLineFormat::ReadChLineFormat( XclImpStream& rStrm )
 
     const XclImpRoot& rRoot = rStrm.GetRoot();
     if( rRoot.GetBiff() == EXC_BIFF8 )
-        // #116397# BIFF8: index into palette used instead of RGB data
+        // BIFF8: index into palette used instead of RGB data
         maData.maColor = rRoot.GetPalette().GetColor( rStrm.ReaduInt16() );
 }
 
@@ -444,7 +444,7 @@ void XclImpChAreaFormat::ReadChAreaFormat( XclImpStream& rStrm )
     const XclImpRoot& rRoot = rStrm.GetRoot();
     if( rRoot.GetBiff() == EXC_BIFF8 )
     {
-        // #116397# BIFF8: index into palette used instead of RGB data
+        // BIFF8: index into palette used instead of RGB data
         const XclImpPalette& rPal = rRoot.GetPalette();
         maData.maPattColor = rPal.GetColor( rStrm.ReaduInt16() );
         maData.maBackColor = rPal.GetColor( rStrm.ReaduInt16());
@@ -902,7 +902,7 @@ void XclImpChText::ReadHeaderRecord( XclImpStream& rStrm )
 
     if( GetBiff() == EXC_BIFF8 )
     {
-        // #116397# BIFF8: index into palette used instead of RGB data
+        // BIFF8: index into palette used instead of RGB data
         maData.maTextColor = GetPalette().GetColor( rStrm.ReaduInt16() );
         // placement and rotation
         rStrm >> maData.mnFlags2 >> maData.mnRotation;
@@ -1213,7 +1213,7 @@ void XclImpChMarkerFormat::ReadChMarkerFormat( XclImpStream& rStrm )
     const XclImpRoot& rRoot = rStrm.GetRoot();
     if( rRoot.GetBiff() == EXC_BIFF8 )
     {
-        // #116397# BIFF8: index into palette used instead of RGB data
+        // BIFF8: index into palette used instead of RGB data
         const XclImpPalette& rPal = rRoot.GetPalette();
         maData.maLineColor = rPal.GetColor( rStrm.ReaduInt16() );
         maData.maFillColor = rPal.GetColor( rStrm.ReaduInt16() );
@@ -3012,7 +3012,7 @@ void XclImpChTick::ReadChTick( XclImpStream& rStrm )
 
     if( GetBiff() == EXC_BIFF8 )
     {
-        // #116397# BIFF8: index into palette used instead of RGB data
+        // BIFF8: index into palette used instead of RGB data
         maData.maTextColor = GetPalette().GetColor( rStrm.ReaduInt16() );
         // rotation
         rStrm >> maData.mnRotation;

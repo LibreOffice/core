@@ -653,7 +653,7 @@ struct ScMyImportValidation
     rtl::OUString                                   sFormula2;
     rtl::OUString                                   sFormulaNmsp1;
     rtl::OUString                                   sFormulaNmsp2;
-    rtl::OUString                                   sBaseCellAddress;   // #b4974740# string is used directly
+    rtl::OUString                                   sBaseCellAddress;   // string is used directly
     com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
     com::sun::star::sheet::ValidationType           aValidationType;
     com::sun::star::sheet::ConditionOperator        aOperator;

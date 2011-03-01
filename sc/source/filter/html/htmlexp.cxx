@@ -207,9 +207,9 @@ void lcl_AppendHTMLColorTripel( ByteString& rStr, const Color& rColor )
     sal_Char*   p = buf;
 
     rStr += "\"#";
-    p += sprintf( p, "%02X", rColor.GetRed() );     // #100211# - checked
-    p += sprintf( p, "%02X", rColor.GetGreen() );   // #100211# - checked
-    p += sprintf( p, "%02X", rColor.GetBlue() );    // #100211# - checked
+    p += sprintf( p, "%02X", rColor.GetRed() );
+    p += sprintf( p, "%02X", rColor.GetGreen() );
+    p += sprintf( p, "%02X", rColor.GetBlue() );
     rStr += buf;
     rStr += '\"';
 }
@@ -233,7 +233,7 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const String& rBaseURL, ScDocument
     bTableDataWidth( TRUE ),
     bTableDataHeight( TRUE )
 {
-    strcpy( sIndent, sIndentSource );       // #100211# - checked
+    strcpy( sIndent, sIndentSource );
     sIndent[0] = 0;
 
     // set HTML configuration
@@ -945,14 +945,14 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     Color aBgColor;
     if ( rBrushItem.GetColor().GetTransparency() == 255 )
-        aBgColor = aHTMLStyle.aBackgroundColor;     // #55121# keine ungewollte Hintergrundfarbe
+        aBgColor = aHTMLStyle.aBackgroundColor;     // keine ungewollte Hintergrundfarbe
     else
         aBgColor = rBrushItem.GetColor();
 
     BOOL bBold          = ( WEIGHT_BOLD     <= rWeightItem.GetWeight() );
     BOOL bItalic        = ( ITALIC_NONE     != rPostureItem.GetPosture() );
     BOOL bUnderline     = ( UNDERLINE_NONE  != rUnderlineItem.GetLineStyle() );
-    BOOL bSetFontColor  = ( COL_AUTO        != rColorItem.GetValue().GetColor() );  // #97650# default is AUTO now
+    BOOL bSetFontColor  = ( COL_AUTO        != rColorItem.GetValue().GetColor() );  // default is AUTO now
     BOOL bSetFontName   = ( aHTMLStyle.aFontFamilyName  != rFontItem.GetFamilyName() );
     USHORT nSetFontSizeNumber = 0;
     UINT32 nFontHeight = rFontHeightItem.GetHeight();
@@ -1106,7 +1106,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     {
         if ( !aStrOut.Len() )
         {
-            TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // #42573# keine komplett leere Zelle
+            TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // keine komplett leere Zelle
         }
         else
         {

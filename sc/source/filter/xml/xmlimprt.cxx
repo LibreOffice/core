@@ -2020,7 +2020,7 @@ sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValida
         {
             if (aItr->sName == sName)
             {
-                // #b4974740# source position must be set as string,
+                // source position must be set as string,
                 // so sBaseCellAddress no longer has to be converted here
 
                 bFound = sal_True;

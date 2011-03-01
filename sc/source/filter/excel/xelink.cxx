@@ -713,7 +713,7 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
 
     SCTAB nDisplScTab = rDocOpt.GetDocSettings().mnDisplTab;
 
-    // #112908# find first visible exported sheet
+    // find first visible exported sheet
     if( (nFirstVisScTab == SCTAB_INVALID) || !IsExportTab( nFirstVisScTab ) )
     {
         // no exportable visible sheet -> use first exportable sheet

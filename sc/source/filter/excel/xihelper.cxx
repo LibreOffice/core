@@ -596,7 +596,7 @@ namespace {
 
 void lclAppendUrlChar( String& rUrl, sal_Unicode cChar )
 {
-    // #126855# encode special characters
+    // encode special characters
     switch( cChar )
     {
         case '#':   rUrl.AppendAscii( "%23" );  break;

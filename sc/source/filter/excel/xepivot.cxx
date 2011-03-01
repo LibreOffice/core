@@ -665,7 +665,7 @@ XclExpPivotCache::XclExpPivotCache( const XclExpRoot& rRoot, const ScDPObject& r
                 if( 2 * (nDocRow2 - nDocRow1) < (nSrcRow2 - nSrcRow1) )
                     ::set_flag( maPCInfo.mnFlags, EXC_SXDB_SAVEDATA, false );
 
-                // #160184# Excel must refresh tables to make drilldown working
+                // Excel must refresh tables to make drilldown working
                 ::set_flag( maPCInfo.mnFlags, EXC_SXDB_REFRESH_LOAD );
 
                 // adjust row indexes, keep one row of empty area to surely have the empty cache item
@@ -1720,13 +1720,13 @@ void XclExpPivotTable::WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sa
         sal_uInt16 nLineSize = 8 + 2 * nIndexCount;
         rStrm.StartRecord( EXC_ID_SXLI, nLineSize * nLineCount );
 
-        /*  #158444# Excel expects the records to be filled completely, do not
+        /*  Excel expects the records to be filled completely, do not
             set a segment size... */
 //        rStrm.SetSliceSize( nLineSize );
 
         for( sal_uInt16 nLine = 0; nLine < nLineCount; ++nLine )
         {
-            // #106598# Excel XP needs a partly initialized SXLI record
+            // Excel XP needs a partly initialized SXLI record
             rStrm   << sal_uInt16( 0 )      // number of equal index entries
                     << EXC_SXVI_TYPE_DATA
                     << nIndexCount

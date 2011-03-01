@@ -1554,7 +1554,7 @@ boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPa
 {
     if( pSdrPage )
         mxEscherEx->AddSdrPage( *pSdrPage );
-    // #106213# the first dummy object may still be open
+    // the first dummy object may still be open
     DBG_ASSERT( mxEscherEx->GetGroupLevel() <= 1, "XclExpObjectManager::ProcessDrawing - still groups open?" );
     while( mxEscherEx->GetGroupLevel() )
         mxEscherEx->LeaveGroup();
@@ -1566,7 +1566,7 @@ boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( const
 {
     if( rxShapes.is() )
         mxEscherEx->AddUnoShapes( rxShapes );
-    // #106213# the first dummy object may still be open
+    // the first dummy object may still be open
     DBG_ASSERT( mxEscherEx->GetGroupLevel() <= 1, "XclExpObjectManager::ProcessDrawing - still groups open?" );
     while( mxEscherEx->GetGroupLevel() )
         mxEscherEx->LeaveGroup();

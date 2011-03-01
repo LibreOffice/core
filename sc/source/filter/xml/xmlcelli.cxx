@@ -550,7 +550,7 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
                     xCondition->setFormula1(aValidation.sFormula1);
                     xCondition->setFormula2(aValidation.sFormula2);
                     xCondition->setOperator(aValidation.aOperator);
-                    // #b4974740# source position must be set as string, because it may
+                    // source position must be set as string, because it may
                     // refer to a sheet that hasn't been loaded yet.
                     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCESTR)), uno::makeAny(aValidation.sBaseCellAddress));
                     // Transport grammar and formula namespace

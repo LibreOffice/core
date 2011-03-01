@@ -124,7 +124,7 @@ FltError ImportExcel::Read( void )
 
         if( !aIn.IsValid() )
         {
-            // #124240# finalize table if EOF is missing
+            // finalize table if EOF is missing
             switch( eAkt )
             {
                 case Z_Biff2:
@@ -854,7 +854,7 @@ FltError ImportExcel8::Read( void )
 
         if( !aIn.IsValid() )
         {
-            // #124240# #i63591# finalize table if EOF is missing
+            // #i63591# finalize table if EOF is missing
             switch( eAkt )
             {
                 case EXC_STATE_SHEET_PRE:
@@ -1028,7 +1028,7 @@ FltError ImportExcel8::Read( void )
             {
                 if( nRecId == EXC_ID5_BOF )
                 {
-                    // #94191# import only 256 sheets
+                    // import only 256 sheets
                     if( GetCurrScTab() > GetScMaxPos().Tab() )
                     {
                         XclTools::SkipSubStream( maStrm );

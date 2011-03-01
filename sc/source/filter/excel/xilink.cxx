@@ -263,7 +263,7 @@ void XclImpTabInfo::ReadTabid( XclImpStream& rStrm )
         maTabIdVec.clear();
         maTabIdVec.reserve( nReadCount );
         for( sal_Size nIndex = 0; rStrm.IsValid() && (nIndex < nReadCount); ++nIndex )
-            // #93471# zero index is not allowed in BIFF8, but it seems that it occurs in real life
+            // zero index is not allowed in BIFF8, but it seems that it occurs in real life
             maTabIdVec.push_back( rStrm.ReaduInt16() );
     }
 }

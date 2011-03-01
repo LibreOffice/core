@@ -1659,7 +1659,7 @@ void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
         case ocIf:
             if( nParamCount == 1 )
             {
-                // #112262# Excel needs at least two parameters in IF function
+                // Excel needs at least two parameters in IF function
                 PrepareParam( rFuncData );
                 AppendBoolToken( true );
                 FinishParam( rFuncData );

@@ -349,7 +349,7 @@ void XMLTableStyleContext::SetOperator( uno::Sequence< beans::PropertyValue >& r
 
 void XMLTableStyleContext::SetBaseCellAddress( uno::Sequence< beans::PropertyValue >& rProps, const OUString& rBaseCell ) const
 {
-    /*  #b4974740# Source position must be set as string, because it may refer
+    /*  Source position must be set as string, because it may refer
         to a sheet that hasn't been loaded yet. */
     lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SOURCESTR ) ), rBaseCell );
 }

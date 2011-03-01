@@ -458,7 +458,7 @@ sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
 
 String XclTools::GetXclFontName( const String& rFontName )
 {
-    // #106246# substitute with MS fonts
+    // substitute with MS fonts
     String aNewName( GetSubsFontName( rFontName, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
     if( aNewName.Len() )
         return aNewName;

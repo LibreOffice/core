@@ -340,7 +340,7 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim, bool bHas
 {
     if (pDPSave)
     {
-        //  #91045# if a dimension with that name has already been inserted,
+        //  if a dimension with that name has already been inserted,
         //  mark the new one as duplicate
         if ( !pDim->IsDataLayout() &&
                 pDPSave->GetExistingDimensionByName(pDim->GetName()) )

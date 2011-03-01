@@ -898,7 +898,7 @@ void ScXMLExport::GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp )
                     {
                         rDetOp.AddOperation( pDetData->GetOperation(), rDetPos, nIndex );
 
-                        // #123981# cells with detective operations are written even if empty
+                        // cells with detective operations are written even if empty
                         pSharedData->SetLastColumn( nTab, rDetPos.Col() );
                         pSharedData->SetLastRow( nTab, rDetPos.Row() );
                     }
@@ -1202,7 +1202,7 @@ void ScXMLExport::WriteRowStartTag(
     const ScMyDefaultStyleList& rRowDefaults = *pDefaults->GetRowDefaults();
     if ( nRow >= sal::static_int_cast<sal_Int32>( rRowDefaults.size() ) )
     {
-        // #123981# used to happen with detective operations - if there are more cases, use the last row's style
+        // used to happen with detective operations - if there are more cases, use the last row's style
         DBG_ERRORFILE("WriteRowStartTag: not enough defaults");
         nRow = rRowDefaults.size() - 1;
     }
@@ -1998,7 +1998,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                     // so in the worst case only one property has to be copied, but in the best case no
                     // property has to be copied
                     aItr = xPropStates.erase(aItr);
-                    aEndItr = xPropStates.end();    // #120346# old aEndItr is invalidated!
+                    aEndItr = xPropStates.end();    // old aEndItr is invalidated!
                 }
                 break;
                 case CTF_SC_CELLSTYLE :

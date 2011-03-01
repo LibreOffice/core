@@ -98,7 +98,7 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
 {
     if( b )
     {
-        // #96263# ignore 3D ranges
+        // ignore 3D ranges
         if( a.Ref1.nTab != a.Ref2.nTab )
             return;
 

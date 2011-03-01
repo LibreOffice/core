@@ -334,7 +334,7 @@ void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nF
     }
 }
 
-// ER: #71367# Xcl has an obscure sense of whether starting a new record or not,
+// Xcl has an obscure sense of whether starting a new record or not,
 // and crashes if it encounters the string header at the very end of a record.
 // Thus we add 1 to give some room, seems like they do it that way but with another count (10?)
 void XclExpStream::WriteByteString( const ByteString& rString, sal_uInt16 nMaxLen, bool b16BitCount )

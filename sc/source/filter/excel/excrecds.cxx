@@ -893,7 +893,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
 
         maRef = aRange;
 
-        // #i2394# #100489# built-in defined names must be sorted by containing sheet name
+        // #i2394# built-in defined names must be sorted by containing sheet name
         rNameMgr.InsertBuiltInName( EXC_BUILTIN_FILTERDATABASE, aRange );
 
         // advanced filter

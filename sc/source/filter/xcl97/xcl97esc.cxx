@@ -258,7 +258,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         }
         else if( !ScDrawLayer::IsNoteCaption( pObj ) )
         {
-            // #107540# ignore permanent note shapes
+            // ignore permanent note shapes
             // #i12190# do not ignore callouts (do not filter by object type ID)
             pCurrXclObj = ShapeInteractionHelper::CreateShapeObj( mrObjMgr, rxShape );
             ShapeInteractionHelper::PopulateShapeInteractionInfo( mrObjMgr, rxShape, *pCurrAppData );

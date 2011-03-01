@@ -1135,7 +1135,7 @@ rtl::OUString* ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex
 {
     if ( nIndex < 0 || nIndex >= sal::static_int_cast<sal_Int32>( aStyleNames.size() ) )
     {
-        // #123981# should no longer happen, use first style then
+        // should no longer happen, use first style then
         DBG_ERRORFILE("GetStyleNameByIndex: invalid index");
         return aStyleNames[0];
     }

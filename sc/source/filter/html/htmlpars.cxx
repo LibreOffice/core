@@ -561,7 +561,7 @@ void ScHTMLLayoutParser::SetWidths()
     }
     else
     {   // einige mit einige ohne Width
-        // #36350# wieso eigentlich kein pE ?!?
+        // wieso eigentlich kein pE ?!?
         if ( nFirstTableCell < maList.size() )
         {
             USHORT* pOffsets = new USHORT[ nColsPerRow+1 ];
@@ -781,7 +781,7 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
             if ( pInfo->aSelection.nEndPos )
             {
                 // If text remains: create paragraph, without calling CloseEntry().
-                if( bInCell )   // #108269# ...but only in opened table cells.
+                if( bInCell )   // ...but only in opened table cells.
                 {
                     bInCell = FALSE;
                     NextRow( pInfo );
@@ -2097,7 +2097,7 @@ void ScHTMLTable::BodyOn( const ImportInfo& rInfo )
     bool bPushed = PushEntry( rInfo );
     if( !mpParentTable )
     {
-        // #108269# do not start new row, if nothing (no title) precedes the body.
+        // do not start new row, if nothing (no title) precedes the body.
         if( bPushed || !mbRowOn )
             ImplRowOn();
         if( bPushed || !mbDataOn )
@@ -2674,7 +2674,7 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
             }
             else
             {
-                // #111667# fill up incomplete entry lists
+                // fill up incomplete entry lists
                 SCROW nFirstUnusedRow = aCellDocPos.mnRow + aCellDocSize.mnRows;
                 while( aEntryDocPos.mnRow < nFirstUnusedRow )
                 {

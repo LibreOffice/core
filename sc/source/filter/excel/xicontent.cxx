@@ -980,7 +980,7 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
         // #i64794# Excel replaces spaces with underscores
         aXclName.SearchAndReplaceAll( ' ', '_' );
 
-        // #101529# find the defined name used in Calc
+        // find the defined name used in Calc
         if( const XclImpName* pName = GetNameManager().FindName( aXclName, GetCurrScTab() ) )
         {
             if( const ScRangeData* pRangeData = pName->GetScRangeData() )

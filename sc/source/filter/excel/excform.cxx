@@ -234,7 +234,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     {
         aIn >> nOp;
 
-        // #98524# always reset flags
+        // always reset flags
         aSRD.InitFlags();
         aCRD.InitFlags();
 
@@ -330,7 +330,6 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x10: // Union                                 [314 265]
                 // ocSep behelfsweise statt 'ocUnion'
                 aStack >> nMerk0;
-//#100928#      aPool << ocOpen << aStack << ocSep << nMerk0 << ocClose;
                 aPool << aStack << ocSep << nMerk0;
                     // doesn't fit exactly, but is more Excel-like
                 aPool >> aStack;
@@ -925,7 +924,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
         aIn >> nOp;
         nIgnore = 0;
 
-        // #98524# always reset flags
+        // always reset flags
         aSRD.InitFlags();
         aCRD.InitFlags();
 
@@ -1390,7 +1389,7 @@ BOOL ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Si
                 nTab1 = static_cast< SCTAB >( nTabFirst );
                 nTab2 = static_cast< SCTAB >( nTabLast );
 
-                // #122885# skip references to deleted sheets
+                // skip references to deleted sheets
                 if( (nRefIdx >= 0) || !ValidTab( nTab1 ) || (nTab1 != nTab2) )
                     break;
 
@@ -1595,7 +1594,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz, sal_uInt8 nMinParamCo
         // a function table, and pre-call argument normalisation 1st.
         INT16 nLastRemovable = nLast - nMinParamCount;
 
-        // #84453# skip missing parameters at end of parameter list
+        // skip missing parameters at end of parameter list
         while( nSkipEnd < nLastRemovable &&
                aPool.IsSingleOp( eParam[ nSkipEnd + 1 ], ocMissing ) )
             nSkipEnd++;
@@ -1654,7 +1653,7 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, ScSingleRefData &rSRD, c
         }
 
         // T A B
-        // #67965# abs needed if rel in shared formula for ScCompiler UpdateNameReference
+        // abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
             rSRD.nTab = GetCurrScTab();
     }

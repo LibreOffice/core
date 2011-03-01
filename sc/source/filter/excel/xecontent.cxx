@@ -1061,7 +1061,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
             case SC_VALERR_WARNING:     mnFlags |= EXC_DV_ERROR_WARNING;    break;
             case SC_VALERR_INFO:        mnFlags |= EXC_DV_ERROR_INFO;       break;
             case SC_VALERR_MACRO:
-                // #111781# set INFO for validity with macro call, delete title
+                // set INFO for validity with macro call, delete title
                 mnFlags |= EXC_DV_ERROR_INFO;
                 maErrorTitle.Assign( '\0' );    // contains macro name
             break;
