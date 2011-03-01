@@ -291,7 +291,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             {
                 aName = aName.replaceAt(aName.getLength()-(aFilenameExtension.Len()+1),aFilenameExtension.Len()+1,::rtl::OUString());
                 sal_Unicode nChar = aName.toChar();
-                if ( match(tableNamePattern,aName.getStr(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
+                if ( match(tableNamePattern,aName,'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
                 {
                     aRow.push_back(new ORowSetValueDecorator(aName));
                     bNewRow = sal_True;
@@ -306,7 +306,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 if (!aURL.getExtension().getLength())
                 {
                     sal_Unicode nChar = aURL.getBase().getStr()[0];
-                    if(match(tableNamePattern,aURL.getBase().getStr(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
+                    if(match(tableNamePattern,aURL.getBase(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
                     {
                         aRow.push_back(new ORowSetValueDecorator(::rtl::OUString(aURL.getBase())));
                         bNewRow = sal_True;
@@ -426,7 +426,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
         for(;pBegin != pEnd;++pBegin)
         {
-            if(match(tableNamePattern,pBegin->getStr(),'\0'))
+            if(match(tableNamePattern,*pBegin,'\0'))
             {
                 static ODatabaseMetaDataResultSet::ORow aRow(8);
 
