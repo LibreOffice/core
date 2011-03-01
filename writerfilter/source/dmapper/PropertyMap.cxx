@@ -325,7 +325,7 @@ void  SectionPropertyMap::SetPageStyleName( bool bFirst, const ::rtl::OUString& 
     for( sal_Int32 nStyle = 0; nStyle < rPageStyleNames.getLength(); ++nStyle)
     {
         if( pStyleNames[nStyle].getLength() > nDefaultLength &&
-                !rtl_ustr_compare_WithLength( sDefaultStyle, nDefaultLength, pStyleNames[nStyle], nDefaultLength))
+                !rtl_ustr_compare_WithLength( sDefaultStyle.getStr(), nDefaultLength, pStyleNames[nStyle].getStr(), nDefaultLength))
         {
             sal_Int32 nIndex = pStyleNames[nStyle].copy( nDefaultLength ).toInt32();
             if( nIndex > nMaxIndex)
