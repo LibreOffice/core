@@ -131,8 +131,7 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 
 #include "tempfile.hxx"
 
-using namespace rtl;
-
+using ::rtl::OUString;
 TempFile::TempFile( const OUString& rTempFileURL )
 :osl::File( rTempFileURL ), maURL( rTempFileURL )
 {

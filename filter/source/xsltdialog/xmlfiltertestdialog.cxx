@@ -60,7 +60,6 @@
 #include "xmlfileview.hxx"
 
 
-using namespace rtl;
 using namespace utl;
 using namespace osl;
 using namespace comphelper;
@@ -74,6 +73,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
+
+using ::rtl::OUString;
 
 class GlobalEventListenerImpl : public ::cppu::WeakImplHelper1< com::sun::star::document::XEventListener >
 {

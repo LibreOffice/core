@@ -57,7 +57,6 @@
 #include "typedetectionexport.hxx"
 #include "typedetectionimport.hxx"
 
-using namespace rtl;
 using namespace osl;
 using namespace comphelper;
 using namespace com::sun::star;
@@ -68,6 +67,9 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::io;
+
+using ::rtl::OUString;
+using ::rtl::Uri;
 
 XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF )
 : mxMSF( xMSF ),
