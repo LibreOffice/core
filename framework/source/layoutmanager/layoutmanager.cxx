@@ -817,7 +817,7 @@ void LayoutManager::implts_createCustomToolBar( const rtl::OUString& aTbxResName
     if ( aTbxResName.getLength() > 0 )
     {
         createElement( aTbxResName );
-        if ( aTitle )
+        if ( !aTitle.isEmpty() )
         {
             Reference< XUIElement > xUIElement = getElement( aTbxResName );
             if ( xUIElement.is() )
