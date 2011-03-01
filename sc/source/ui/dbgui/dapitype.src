@@ -31,12 +31,20 @@
 
 ModalDialog RID_SCDLG_DAPITYPE
 {
+    Text [ en-US ] = "Select Source";
     OutputSize = TRUE ;
     HelpId = HID_DATAPILOT_TYPE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 241 , 83 ) ;
     Moveable = TRUE ;
     Closeable = FALSE ;
+
+    FixedLine FL_FRAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
+        Text [ en-US ] = "Selection";
+    };
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 185 , 6 ) ;
@@ -91,13 +99,6 @@ ModalDialog RID_SCDLG_DAPITYPE
         TabStop = TRUE ;
         Text [ en-US ] = "~External source/interface";
     };
-    FixedLine FL_FRAME
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text [ en-US ] = "Selection";
-    };
-    Text [ en-US ] = "Select Source";
 };
 
 
