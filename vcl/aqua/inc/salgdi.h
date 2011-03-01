@@ -176,8 +176,7 @@ public:
     // InvalidateContext does an UnsetState and sets mrContext to 0
     void                InvalidateContext();
 
-    virtual sal_Bool        unionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual bool        unionClipRegion( const ::basegfx::B2DPolyPolygon& );
+    virtual bool        setClipRegion( const Region& );
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void        drawPixel( long nX, long nY );
@@ -250,11 +249,6 @@ public:
 
     // set the clip region to empty
     virtual void            ResetClipRegion();
-    // begin setting the clip region, add rectangles to the
-    // region with the UnionClipRegion call
-    virtual void            BeginSetClipRegion( sal_uLong nCount );
-    // all rectangles were added and the clip region should be set now
-    virtual void            EndSetClipRegion();
 
     // set the line color to transparent (= don't draw lines)
     virtual void            SetLineColor();

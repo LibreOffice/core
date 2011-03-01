@@ -1,2 +1,2 @@
-sl	svl	:	l10n rsc offuh ucbhelper unotools cppu cppuhelper comphelper sal sot  LIBXSLT:libxslt NULL
+sl	svl	:	L10N:l10n rsc offuh ucbhelper unotools cppu cppuhelper comphelper sal sot  LIBXSLT:libxslt NULL
 sl	svl\prj	nmake	-	all	svl_prj NULL

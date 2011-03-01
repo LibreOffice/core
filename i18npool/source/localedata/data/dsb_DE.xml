@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
+  <LC_INFO>
+    <Language>
+      <LangID>dsb</LangID>
+      <DefaultName>Sorbian, Lower</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>DE</CountryID>
+      <DefaultName>Germany</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE unoid="generic">
+    <Separators>
+      <DateSeparator>.</DateSeparator>
+      <ThousandSeparator>&#160;</ThousandSeparator><!-- a non-breaking space (U+00A0) as a thousand separator; alternatively, there could be no separator at all -->
+      <DecimalSeparator>,</DecimalSeparator>
+      <TimeSeparator>:</TimeSeparator>
+      <Time100SecSeparator>,</Time100SecSeparator>
+      <ListSeparator>;</ListSeparator>
+      <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
+      <LongDateDaySeparator>. </LongDateDaySeparator>
+      <LongDateMonthSeparator> </LongDateMonthSeparator>
+      <LongDateYearSeparator> </LongDateYearSeparator>
+    </Separators>
+    <Markers>
+      <QuotationStart>‚</QuotationStart>
+      <QuotationEnd>‘</QuotationEnd>
+      <DoubleQuotationStart>„</DoubleQuotationStart>
+      <DoubleQuotationEnd>“</DoubleQuotationEnd>
+    </Markers>
+    <TimeAM>dopołdnja</TimeAM>
+    <TimePM>wótpołdnja</TimePM>
+    <MeasurementSystem>metric</MeasurementSystem>
+  </LC_CTYPE>
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$€-82E]">
+    <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
+      <FormatCode>Standard</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey2" default="true" type="short" usage="FIXED_NUMBER" formatindex="1">
+      <FormatCode>0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey3" default="false" type="medium" usage="FIXED_NUMBER" formatindex="2">
+      <FormatCode>0,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey4" default="false" type="short" usage="FIXED_NUMBER" formatindex="3">
+      <FormatCode># ##0</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey5" default="false" type="medium" usage="FIXED_NUMBER" formatindex="4">
+      <FormatCode># ##0,00</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER" formatindex="5">
+      <FormatCode># ###,00</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+    </FormatElement>
+    <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
+      <FormatCode>0,00E+000</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="ScientificFormatskey2" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
+      <FormatCode>0,00E+00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER" formatindex="8">
+      <FormatCode>0%</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
+      <FormatCode>0,00%</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
+      <FormatCode># ##0 [CURRENCY];-# ##0 [CURRENCY]</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
+      <FormatCode># ##0,00 [CURRENCY];-# ##0,00 [CURRENCY]</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
+      <FormatCode># ##0 [CURRENCY];[RED]-# ##0 [CURRENCY]</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
+      <FormatCode># ##0,00 [CURRENCY];[RED]-# ##0,00 [CURRENCY]</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
+      <FormatCode>CCC# ##0,00</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
+      <FormatCode># ##0,-- [CURRENCY];[RED]-# ##0,-- [CURRENCY]</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey11" default="true" type="short" usage="DATE" formatindex="18">
+      <FormatCode>D.MM.YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey14" default="true" type="long" usage="DATE" formatindex="19">
+      <FormatCode>NNNND. MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey6" default="true" type="medium" usage="DATE" formatindex="20">
+      <FormatCode>DD.MM.YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="21">
+      <FormatCode>DD.MM.YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="22">
+      <FormatCode>D. MMM YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="23">
+      <FormatCode>D. MMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey21" default="false" type="long" usage="DATE" formatindex="24">
+      <FormatCode>D. MMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="25">
+      <FormatCode>D. MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey22" default="false" type="long" usage="DATE" formatindex="26">
+      <FormatCode>D. MMMM YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
+      <FormatCode>NN, DD. MMM YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey18" default="false" type="long" usage="DATE" formatindex="28">
+      <FormatCode>NN, D. MMM YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey19" default="false" type="long" usage="DATE" formatindex="29">
+      <FormatCode>NN, D. MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey20" default="false" type="long" usage="DATE" formatindex="30">
+      <FormatCode>NNNND. MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey12" default="false" type="short" usage="DATE" formatindex="31">
+      <FormatCode>MM.DD</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="32">
+      <FormatCode>YY-MM-DD</FormatCode>
+      <DefaultName>ISO 8601</DefaultName>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="33">
+      <FormatCode>YYYY-MM-DD</FormatCode>
+      <DefaultName>ISO 8601</DefaultName>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey1" default="false" type="medium" usage="DATE" formatindex="34">
+      <FormatCode>MM.YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="35">
+      <FormatCode>D. MMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="36">
+      <FormatCode>MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="37">
+      <FormatCode>QQ YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey9" default="false" type="medium" usage="DATE" formatindex="38">
+      <FormatCode>WW</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey1" default="false" type="short" usage="TIME" formatindex="39">
+      <FormatCode>H:MM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey2" default="false" type="medium" usage="TIME" formatindex="40">
+      <FormatCode>H:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey3" default="true" type="short" usage="TIME" formatindex="41">
+      <FormatCode>H:MM AM/PM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey4" default="true" type="medium" usage="TIME" formatindex="42">
+      <FormatCode>H:MM:SS AM/PM</FormatCode><!-- with commonly used 24-hour time, the AM/PM indicator is not needed -->
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME" formatindex="43">
+      <FormatCode>[H]:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey6" default="false" type="short" usage="TIME" formatindex="44">
+      <FormatCode>MM:SS,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME" formatindex="45">
+      <FormatCode>[H]:MM:SS,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME" formatindex="46">
+      <FormatCode>DD.MM.YY H:MM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
+      <FormatCode>DD.MM.YYYY H:MM:SS AM/PM</FormatCode><!-- with commonly used 24-hour time, the AM/PM indicator is useless (and also never used) -->
+    </FormatElement>
+  </LC_FORMAT>
+  <LC_COLLATION>
+    <Collator default="true" unoid="alphanumeric"/>
+    <CollationOptions>
+      <TransliterationModules>IGNORE_CASE</TransliterationModules>
+    </CollationOptions>
+  </LC_COLLATION>
+  <LC_SEARCH>
+    <SearchOptions>
+      <TransliterationModules>IGNORE_CASE</TransliterationModules>
+    </SearchOptions>
+  </LC_SEARCH>
+  <LC_INDEX>
+    <IndexKey unoid="alphanumeric" default="true" phonetic="false">A-C Č Ć D E Ě F-H {Ch} I-K Ł L-N Ń O Ó P-R Ŕ S Š Ś T-Z Ž Ź</IndexKey>
+    <UnicodeScript>0</UnicodeScript>
+    <UnicodeScript>1</UnicodeScript>
+    <UnicodeScript>2</UnicodeScript>
+    <FollowPageWord>bok</FollowPageWord><!-- there's no conventional abbreviation -->
+    <FollowPageWord>boki</FollowPageWord><!-- there's no conventional abbreviation -->
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>nje.</DefaultAbbrvName>
+          <DefaultFullName>njeźela</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>pón.</DefaultAbbrvName>
+          <DefaultFullName>pónjeźela</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>wał.</DefaultAbbrvName>
+          <DefaultFullName>wałtora</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>srj.</DefaultAbbrvName>
+          <DefaultFullName>srjoda</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>stw.</DefaultAbbrvName>
+          <DefaultFullName>stwórtk</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>pět.</DefaultAbbrvName>
+          <DefaultFullName>pětk</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>sob.</DefaultAbbrvName>
+          <DefaultFullName>sobota</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>jan.</DefaultAbbrvName>
+          <DefaultFullName>januar</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>feb.</DefaultAbbrvName>
+          <DefaultFullName>februar</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>měr.</DefaultAbbrvName>
+          <DefaultFullName>měrc</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>apr.</DefaultAbbrvName>
+          <DefaultFullName>apryl</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>maj</DefaultAbbrvName>
+          <DefaultFullName>maj</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>jun.</DefaultAbbrvName>
+          <DefaultFullName>junij</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>jul.</DefaultAbbrvName>
+          <DefaultFullName>julij</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>awg.</DefaultAbbrvName>
+          <DefaultFullName>awgust</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>sep.</DefaultAbbrvName>
+          <DefaultFullName>september</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>okt.</DefaultAbbrvName>
+          <DefaultFullName>oktober</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>now.</DefaultAbbrvName>
+          <DefaultFullName>nowember</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>dec.</DefaultAbbrvName>
+          <DefaultFullName>december</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>pś. Kr.</DefaultAbbrvName>
+          <DefaultFullName>pśed Kristusom</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>pó Kr.</DefaultAbbrvName>
+          <DefaultFullName>pó Kristusu</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>mon</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>4</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>EUR</CurrencyID>
+      <CurrencySymbol>€</CurrencySymbol>
+      <BankSymbol>EUR</BankSymbol>
+      <CurrencyName>euro</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+  </LC_CURRENCY>
+  <LC_TRANSLITERATION>
+    <Transliteration unoid="LOWERCASE_UPPERCASE"/>
+    <Transliteration unoid="UPPERCASE_LOWERCASE"/>
+    <Transliteration unoid="IGNORE_CASE"/>
+  </LC_TRANSLITERATION>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>wěrno</trueWord>
+      <falseWord>njewěrno</falseWord>
+      <quarter1Word>prědny kwartal</quarter1Word>
+      <quarter2Word>drugi kwartal</quarter2Word>
+      <quarter3Word>tśeśi kwartal</quarter3Word>
+      <quarter4Word>stwórty kwartal</quarter4Word>
+      <aboveWord>nad</aboveWord>
+      <belowWord>pód</belowWord>
+      <quarter1Abbreviation>K1</quarter1Abbreviation>
+      <quarter2Abbreviation>K2</quarter2Abbreviation>
+      <quarter3Abbreviation>K3</quarter3Abbreviation>
+      <quarter4Abbreviation>K4</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel ref="en_US"/>
+  <LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>
+<!--Version 1.0  -->
