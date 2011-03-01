@@ -181,8 +181,8 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
             pMenu->CheckItem( MN_READONLY_TOGALLERYLINK,  bGrfToGalleryAsLnk );
             pMenu->CheckItem( MN_READONLY_TOGALLERYCOPY, !bGrfToGalleryAsLnk );
 
-            for (string_const_iterator_t it = aThemeList.begin(); it != aThemeList.end(); ++it)
-                pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3,*it);
+            for ( USHORT i=0; i < aThemeList.size(); ++i )
+                pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3, aThemeList[ i ] );
         }
         else
             bEnableGraphicToGallery = false;
@@ -212,8 +212,8 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
                 pMenu->CheckItem( MN_READONLY_TOGALLERYCOPY, !bGrfToGalleryAsLnk );
                 bEnableBackGallery = TRUE;
 
-                for (string_const_iterator_t it = aThemeList.begin(); it != aThemeList.end(); ++it)
-                    pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3,*it);
+                for ( USHORT i=0; i < aThemeList.size(); ++i )
+                    pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3, aThemeList[ i ] );
             }
         }
     }
