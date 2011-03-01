@@ -17,8 +17,6 @@
 
 #include <comphelper\documentconstants.hxx>
 
-// #define MY_DEBUG 1
-
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
@@ -210,10 +208,6 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
     // Unfortunately it can be done only for the user who installs the office.
     if ( bForAllUsers )
         DllUnregisterServerNative( nMode, sal_False, sal_False );
-
-#ifdef MY_DEBUG
-    MessageBoxA(NULL, pProgramPath, "Library Path, ( from library )", MB_OK | MB_ICONINFORMATION);
-#endif
 
     if ( pProgramPath && strlen( pProgramPath ) < 1024 )
     {
