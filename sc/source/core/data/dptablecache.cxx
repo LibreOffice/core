@@ -62,7 +62,7 @@ namespace {
 
 bool lcl_isDate( ULONG nNumType )
 {
-    return ( (nNumType & NUMBERFORMAT_DATE) != 0 )? 1:0 ;
+    return ((nNumType & NUMBERFORMAT_DATE) != 0) ? 1 : 0;
 }
 
 bool lcl_Search( const ScDPTableDataCache::DataListType& list, const ::std::vector<SCROW>& rOrder, const ScDPItemData& item, SCROW& rIndex)
@@ -93,8 +93,8 @@ bool lcl_Search( const ScDPTableDataCache::DataListType& list, const ::std::vect
     return bFound;
 }
 
-ScDPItemData*  lcl_GetItemValue(const Reference<sdbc::XRow>& xRow, sal_Int32 nType, long nCol,
-              const Date& rNullDate )
+ScDPItemData* lcl_GetItemValue(
+    const Reference<sdbc::XRow>& xRow, sal_Int32 nType, long nCol, const Date& rNullDate)
 {
     short nNumType = NUMBERFORMAT_NUMBER;
     try
@@ -171,13 +171,13 @@ ScDPItemData*  lcl_GetItemValue(const Reference<sdbc::XRow>& xRow, sal_Int32 nTy
 
 }
 
-ScDPItemData::ScDPItemData( const String& rS, double fV/* = 0.0*/, bool bHV/* = false*/, const ULONG nNumFormatP /*= 0*/ , bool bData/* = true*/) :
+ScDPItemData::ScDPItemData(const String& rS, double fV, bool bHV, const ULONG nNumFormatP, bool bData) :
     nNumFormat( nNumFormatP ), aString(rS), fValue(fV),
     mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!false) | (MK_DATE*!!lcl_isDate( nNumFormat ) ) )
 {
 }
 
-ScDPItemData::ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nDocTab  ) :
+ScDPItemData::ScDPItemData(ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nDocTab) :
     nNumFormat( 0 ), fValue(0.0), mbFlag( 0 )
 {
     String aDocStr;
@@ -287,7 +287,7 @@ void    ScDPItemData::dump() const
 }
 #endif
 
-TypedStrData*  ScDPItemData::CreateTypeString( )
+TypedStrData* ScDPItemData::CreateTypeString( )
 {
     if ( IsValue() )
         return new TypedStrData( aString, fValue, SC_STRTYPE_VALUE );
@@ -794,7 +794,7 @@ bool ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
     DBG_ASSERT( nDim < mnColumnCount && nDim >=0 , "dimension out of bound" );
     SCROW nIndex = 0;
 
-    bool    bInserted = false;
+    bool bInserted = false;
 
     pitemData->SetDate( lcl_isDate( GetNumType( pitemData->nNumFormat ) ) );
 
@@ -809,7 +809,7 @@ bool ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
     else
         maSourceData[nDim].push_back( maGlobalOrder[nDim][nIndex] );
 //init empty row tag
-    size_t  nCurRow = maSourceData[nDim].size() -1 ;
+    size_t nCurRow = maSourceData[nDim].size() - 1;
 
     while ( mbEmptyRow.size() <= nCurRow )
         mbEmptyRow.push_back( true );
@@ -876,7 +876,7 @@ SCROW ScDPTableDataCache::GetItemDataId(USHORT nDim, SCROW nRow, bool bRepeatIfE
     if ( bRepeatIfEmpty )
     {
         while ( nRow >0 && !maTableDataValues[nDim][ maSourceData[nDim][nRow] ].IsHasData() )
-        --nRow;
+            --nRow;
     }
 
     return maSourceData[nDim][nRow];
@@ -960,10 +960,10 @@ const ScDPItemData* ScDPTableDataCache::GetSortedItemData(SCCOL nDim, SCROW nOrd
 
 SCCOL ScDPTableDataCache::GetDimensionIndex(String sName) const
 {
-    for ( size_t n = 1; n < maLabelNames.size(); n ++ )
+    for (size_t i = 1; i < maLabelNames.size(); ++i)
     {
-        if ( maLabelNames[n].GetString() == sName )
-            return (SCCOL)(n-1);
+        if ( maLabelNames[i].GetString() == sName )
+            return (SCCOL)(i-1);
     }
     return -1;
 }
@@ -972,10 +972,10 @@ SCROW ScDPTableDataCache::GetIdByItemData(long nDim, String sItemData ) const
 {
     if ( nDim < mnColumnCount && nDim >=0 )
     {
-        for ( size_t n = 0; n< maTableDataValues[nDim].size(); n++ )
+        for (size_t i = 0; i < maTableDataValues[nDim].size(); ++i)
         {
-            if ( maTableDataValues[nDim][n].GetString() == sItemData )
-                return n;
+            if ( maTableDataValues[nDim][i].GetString() == sItemData )
+                return i;
         }
     }
 
@@ -987,10 +987,10 @@ SCROW ScDPTableDataCache::GetIdByItemData( long nDim, const ScDPItemData& rData 
 {
     if ( nDim < mnColumnCount && nDim >=0 )
     {
-        for ( size_t n = 0; n< maTableDataValues[nDim].size(); n++ )
+        for (size_t i = 0; i < maTableDataValues[nDim].size(); ++i)
         {
-            if ( maTableDataValues[nDim][n] == rData )
-                return n;
+            if ( maTableDataValues[nDim][i] == rData )
+                return i;
         }
     }
     return  GetRowCount() + maAdditionalData.getDataId(rData);
@@ -1015,17 +1015,17 @@ SCROW ScDPTableDataCache::GetOrder(long nDim, SCROW nIndex) const
 
     if ( maIndexOrder[nDim].size() !=  maGlobalOrder[nDim].size() )
     { //not inited
-        SCROW i  = 0;
+        SCROW nRow  = 0;
         maIndexOrder[nDim].resize(maGlobalOrder[nDim].size(), 0);
-        for ( size_t n = 0 ; n<  maGlobalOrder[nDim].size(); n++ )
+        for (size_t i = 0 ; i < maGlobalOrder[nDim].size(); ++i)
         {
-            i =  maGlobalOrder[nDim][n];
-            maIndexOrder[nDim][i] = n;
+            nRow = maGlobalOrder[nDim][i];
+            maIndexOrder[nDim][nRow] = i;
         }
     }
 
     DBG_ASSERT( nIndex>=0 && (size_t)nIndex < maIndexOrder[nDim].size() , "ScDPTableDataCache::GetOrder");
-    return  maIndexOrder[nDim][nIndex];
+    return maIndexOrder[nDim][nIndex];
 }
 
 ScDocument* ScDPTableDataCache::GetDoc() const
