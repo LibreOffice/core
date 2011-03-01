@@ -232,7 +232,7 @@ public:
     void FontAlternateName( const String& rName ) const;
 
     /// Font charset.
-    void FontCharset( sal_uInt8 nCharSet ) const;
+    void FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEncoding ) const;
 
     /// Font family.
     void FontFamilyType( FontFamily eFamily ) const;

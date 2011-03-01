@@ -2552,15 +2552,23 @@ void DocxAttributeOutput::FontAlternateName( const String& rName ) const
             FSEND );
 }
 
-void DocxAttributeOutput::FontCharset( sal_uInt8 nCharSet ) const
+void DocxAttributeOutput::FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEncoding ) const
 {
+    FastAttributeList* pAttr = m_pSerializer->createAttrList();
+
     OString aCharSet( OString::valueOf( sal_Int32( nCharSet ), 16 ) );
     if ( aCharSet.getLength() == 1 )
         aCharSet = OString( "0" ) + aCharSet;
+    pAttr->add( FSNS( XML_w, XML_val ), aCharSet.getStr());
 
-    m_pSerializer->singleElementNS( XML_w, XML_charset,
-            FSNS( XML_w, XML_val ), aCharSet.getStr(),
-            FSEND );
+    const DocxExport& rExport = dynamic_cast< const DocxExport& >( GetExport() );
+    if( rExport.GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
+    {
+        if( const char* charset = rtl_getMimeCharsetFromTextEncoding( nEncoding ))
+            pAttr->add( FSNS( XML_w, XML_characterSet ), charset );
+    }
+
+    m_pSerializer->singleElementNS( XML_w, XML_charset, XFastAttributeListRef( pAttr ));
 }
 
 void DocxAttributeOutput::FontFamilyType( FontFamily eFamily ) const
