@@ -113,6 +113,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/bootstrap.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -2121,7 +2123,7 @@ void ScCellShell::ExecuteDataPilotDialog()
     ScViewData* pData = GetViewData();
     ScDocument* pDoc = pData->GetDocument();
 
-    ScDPObject* pNewDPObject = NULL;
+    ::boost::scoped_ptr<ScDPObject> pNewDPObject(NULL);
 
     // ScPivot is no longer used...
     ScDPObject* pDPObj = pDoc->GetDPAtCursor(
@@ -2129,7 +2131,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                                 pData->GetTabNo() );
     if ( pDPObj )   // on an existing table?
     {
-        pNewDPObject = new ScDPObject( *pDPObj );
+        pNewDPObject.reset(new ScDPObject(*pDPObj));
     }
     else            // create new table
     {
@@ -2150,14 +2152,20 @@ void ScCellShell::ExecuteDataPilotDialog()
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
-        AbstractScDataPilotSourceTypeDlg* pTypeDlg = pFact->CreateScDataPilotSourceTypeDlg( pTabViewShell->GetDialogParent(), bEnableExt, RID_SCDLG_DAPITYPE );
+        ::boost::scoped_ptr<AbstractScDataPilotSourceTypeDlg> pTypeDlg(
+            pFact->CreateScDataPilotSourceTypeDlg(
+                pTabViewShell->GetDialogParent(), bEnableExt, RID_SCDLG_DAPITYPE));
+
         DBG_ASSERT(pTypeDlg, "Dialog create fail!");
         if ( pTypeDlg->Execute() == RET_OK )
         {
             if ( pTypeDlg->IsExternal() )
             {
                 uno::Sequence<rtl::OUString> aSources = ScDPObject::GetRegisteredSources();
-                AbstractScDataPilotServiceDlg* pServDlg = pFact->CreateScDataPilotServiceDlg( pTabViewShell->GetDialogParent(), aSources, RID_SCDLG_DAPISERVICE );
+                ::boost::scoped_ptr<AbstractScDataPilotServiceDlg> pServDlg(
+                    pFact->CreateScDataPilotServiceDlg(
+                        pTabViewShell->GetDialogParent(), aSources, RID_SCDLG_DAPISERVICE));
+
                 DBG_ASSERT(pServDlg, "Dialog create fail!");
                 if ( pServDlg->Execute() == RET_OK )
                 {
@@ -2167,25 +2175,26 @@ void ScCellShell::ExecuteDataPilotDialog()
                             pServDlg->GetParName(),
                             pServDlg->GetParUser(),
                             pServDlg->GetParPass() );
-                    pNewDPObject = new ScDPObject( pDoc );
+                    pNewDPObject.reset(new ScDPObject(pDoc));
                     pNewDPObject->SetServiceData( aServDesc );
                 }
-                delete pServDlg;
             }
             else if ( pTypeDlg->IsDatabase() )
             {
                 DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
-                AbstractScDataPilotDatabaseDlg* pDataDlg = pFact->CreateScDataPilotDatabaseDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_DAPIDATA);
+                ::boost::scoped_ptr<AbstractScDataPilotDatabaseDlg> pDataDlg(
+                    pFact->CreateScDataPilotDatabaseDlg(
+                        pTabViewShell->GetDialogParent(), RID_SCDLG_DAPIDATA));
+
                 DBG_ASSERT(pDataDlg, "Dialog create fail!");
                 if ( pDataDlg->Execute() == RET_OK )
                 {
                     ScImportSourceDesc aImpDesc(pDoc);
                     pDataDlg->GetValues( aImpDesc );
-                    pNewDPObject = new ScDPObject( pDoc );
+                    pNewDPObject.reset(new ScDPObject(pDoc));
                     pNewDPObject->SetImportDesc( aImpDesc );
                 }
-                delete pDataDlg;
             }
             else        // selection
             {
@@ -2222,7 +2231,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                     {
                         ScSheetSourceDesc aShtDesc(pDoc);
                         aShtDesc.SetSourceRange(aRange);
-                        pNewDPObject = new ScDPObject( pDoc );
+                        pNewDPObject.reset(new ScDPObject(pDoc));
                         pNewDPObject->SetSheetDesc( aShtDesc );
 
                         //  output below source data
@@ -2234,13 +2243,12 @@ void ScCellShell::ExecuteDataPilotDialog()
                 }
             }
         }
-        delete pTypeDlg;
 
         if ( pNewDPObject )
             pNewDPObject->SetOutRange( aDestPos );
     }
 
-    pTabViewShell->SetDialogDPObject( pNewDPObject );   // is copied
+    pTabViewShell->SetDialogDPObject( pNewDPObject.get() );   // is copied
     if ( pNewDPObject )
     {
         //  start layout dialog
@@ -2250,7 +2258,6 @@ void ScCellShell::ExecuteDataPilotDialog()
         SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
         pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
     }
-    delete pNewDPObject;
 }
 
 IMPL_LINK( ScCellShell, DialogClosed, AbstractScLinkedAreaDlg*, EMPTYARG )
