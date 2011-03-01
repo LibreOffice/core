@@ -39,22 +39,17 @@
 class ScDPCacheTable;
 class ScDocument;
 
-// --------------------------------------------------------------------
-//
-//  implementation of ScDPTableData with database data
-//
-
 struct ScImportSourceDesc
 {
     String  aDBName;
     String  aObject;
     USHORT  nType;          // enum DataImportMode
-    BOOL    bNative;
+    bool    bNative;
     ScDocument* mpDoc;
 
-    ScImportSourceDesc(ScDocument* pDoc) : nType(0), bNative(FALSE), mpDoc(pDoc) {}
+    ScImportSourceDesc(ScDocument* pDoc) : nType(0), bNative(false), mpDoc(pDoc) {}
 
-    BOOL operator== ( const ScImportSourceDesc& rOther ) const
+    bool operator== ( const ScImportSourceDesc& rOther ) const
         { return aDBName == rOther.aDBName &&
                  aObject == rOther.aObject &&
                  nType   == rOther.nType &&
@@ -64,6 +59,9 @@ struct ScImportSourceDesc
     ScDPCache* CreateCache() const;
 };
 
+/**
+ * This class represents source data from database source.
+ */
 class ScDatabaseDPData : public ScDPTableData
 {
 private:

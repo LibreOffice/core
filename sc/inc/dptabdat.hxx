@@ -90,6 +90,10 @@ class ScDPInitState;
 class ScDPResultMember;
 class ScDocument;
 
+/**
+ * Base class that abstracts different data source types of a datapilot
+ * table.
+ */
 class SC_DLLPUBLIC ScDPTableData
 {
     //  cached data for GetDatePart

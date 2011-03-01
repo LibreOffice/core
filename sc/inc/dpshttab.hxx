@@ -98,10 +98,9 @@ private:
     ScDocument*     mpDoc;
 };
 
-// --------------------------------------------------------------------
-//
-//  implementation of ScDPTableData with sheet data
-//
+/**
+ * Implementation of ScDPTableData with sheet data.
+ */
 class SC_DLLPUBLIC ScSheetDPData : public ScDPTableData
 {
 private:
