@@ -2326,6 +2326,11 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         }
     }
 
+    // write attributes of the node itself
+    AttrOutput().StartRunProperties();
+    OutputItemSet( rNode.GetSwAttrSet(), false, true, i18n::ScriptType::LATIN, false);
+    AttrOutput().EndRunProperties( NULL );
+
     AttrOutput().EndParagraphProperties();
 
     AttrOutput().EndParagraph( pTextNodeInfoInner );
