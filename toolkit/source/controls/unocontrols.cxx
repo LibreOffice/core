@@ -720,7 +720,7 @@ UnoButtonControl::UnoButtonControl()
                                                 break;
             default:
             {
-                DBG_ERROR( "Unknown Button Type!" );
+                OSL_FAIL( "Unknown Button Type!" );
             }
         }
     }

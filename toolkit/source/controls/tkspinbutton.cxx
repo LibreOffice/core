@@ -217,7 +217,7 @@ namespace toolkit
                 ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE ), makeAny( rEvent.Value ), sal_False );
                 break;
             default:
-                DBG_ERROR( "UnoSpinButtonControl::adjustmentValueChanged - unknown Type" );
+                OSL_FAIL( "UnoSpinButtonControl::adjustmentValueChanged - unknown Type" );
         }
 
         if ( maAdjustmentListeners.getLength() )

@@ -576,7 +576,7 @@ SfxNumRanges& SfxNumRanges::operator -=
         }
 
         // we should never be here
-        DBG_ERROR( "SfxNumRanges::operator-=: internal error" );
+        OSL_FAIL( "SfxNumRanges::operator-=: internal error" );
     } // while
 
     pTarget[ nTargetPos ] = 0;

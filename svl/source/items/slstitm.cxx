@@ -403,7 +403,7 @@ bool SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal,BYTE )
         return true;
     }
 
-    DBG_ERROR( "SfxStringListItem::PutValue - Wrong type!" );
+    OSL_FAIL( "SfxStringListItem::PutValue - Wrong type!" );
     return false;
 }
 

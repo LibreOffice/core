@@ -138,7 +138,7 @@ void* HashTable::GetObjectAt(ULONG lPos) const
 
 void HashTable::OnDeleteObject(void*)
 {
-    DBG_ERROR("HashTable::OnDeleteObject(void*) nicht überladen");
+    OSL_FAIL("HashTable::OnDeleteObject(void*) nicht überladen");
 }
 
 ULONG HashTable::Hash(String const& Key) const
@@ -222,7 +222,7 @@ BOOL HashTable::Insert(String const& Key, void* pObject)
 
     if (IsFull())
     {
-        DBG_ERROR("HashTable::Insert() is full");
+        OSL_FAIL("HashTable::Insert() is full");
         return FALSE;
     }
 

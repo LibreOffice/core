@@ -119,7 +119,7 @@ sal_Bool SvtCTLOptions_Impl::IsReadOnly(SvtCTLOptions::EOption eOption) const
         case SvtCTLOptions::E_CTLTEXTNUMERALS     : bReadOnly = m_bROCTLTextNumerals      ; break;
         case SvtCTLOptions::E_CTLSEQUENCECHECKINGRESTRICTED: bReadOnly = m_bROCTLRestricted  ; break;
         case SvtCTLOptions::E_CTLSEQUENCECHECKINGTYPEANDREPLACE: bReadOnly = m_bROCTLTypeAndReplace; break;
-        default: DBG_ERROR(  "SvtCTLOptions_Impl::IsReadOnly() - invalid option" );
+        default: OSL_FAIL(  "SvtCTLOptions_Impl::IsReadOnly() - invalid option" );
     }
     return bReadOnly;
 }

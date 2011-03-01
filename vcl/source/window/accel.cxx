@@ -263,7 +263,7 @@ void Accelerator::ImplInsertAccel( USHORT nItemId, const KeyCode& rKeyCode,
     ULONG nCode = rKeyCode.GetFullKeyCode();
     if ( !nCode )
     {
-        DBG_ERROR( "Accelerator::InsertItem(): KeyCode with KeyCode 0 not allowed" );
+        OSL_FAIL( "Accelerator::InsertItem(): KeyCode with KeyCode 0 not allowed" );
         delete pEntry;
     }
     else if ( !mpData->maKeyTable.Insert( nCode, pEntry ) )

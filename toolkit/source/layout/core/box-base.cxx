@@ -52,7 +52,7 @@ static bool isVisible( uno::Reference< awt::XLayoutConstrains > xWidget )
 {
     if ( !xWidget.is() )
     {
-        DBG_ERROR( "FIXME: invalid child !" );
+        OSL_FAIL( "FIXME: invalid child !" );
         return true;
     }
 
@@ -132,7 +132,7 @@ Box_Base::removeChild( const uno::Reference< awt::XLayoutConstrains >& xChild )
     }
     else
     {
-        DBG_ERROR( "Box_Base: removeChild: no such child" );
+        OSL_FAIL( "Box_Base: removeChild: no such child" );
     }
 }
 

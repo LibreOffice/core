@@ -1142,7 +1142,7 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
                         aMask = AlphaMask( aIcon.GetMask() );
                     break;
                     default:
-                        DBG_ERROR( "unhandled transparent type" );
+                        OSL_FAIL( "unhandled transparent type" );
                     break;
                 }
             }

@@ -1377,7 +1377,7 @@ void UcbLockBytes::terminate_Impl()
 
     if ( GetError() == ERRCODE_NONE && !m_xInputStream.is() )
     {
-        DBG_ERROR("No InputStream, but no error set!" );
+        OSL_FAIL("No InputStream, but no error set!" );
         SetError( ERRCODE_IO_NOTEXISTS );
     }
 
@@ -1648,7 +1648,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
 
        if ( xLockBytes->GetError() == ERRCODE_NONE && ( bError || !xLockBytes->getInputStream().is() ) )
     {
-        DBG_ERROR("No InputStream, but no error set!" );
+        OSL_FAIL("No InputStream, but no error set!" );
            xLockBytes->SetError( ERRCODE_IO_GENERAL );
     }
 
@@ -1699,7 +1699,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
 
     if ( xLockBytes->GetError() == ERRCODE_NONE && ( bError || !xLockBytes->getInputStream().is() ) )
     {
-        DBG_ERROR("No InputStream, but no error set!" );
+        OSL_FAIL("No InputStream, but no error set!" );
            xLockBytes->SetError( ERRCODE_IO_GENERAL );
     }
 

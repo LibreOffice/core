@@ -5252,7 +5252,7 @@ void INetURLObject::appendUCS4(rtl::OUStringBuffer& rTheText, sal_uInt32 nUCS4,
         switch (eTargetCharset)
         {
             default:
-                DBG_ERROR("INetURLObject::appendUCS4(): Unsupported charset");
+                OSL_FAIL("INetURLObject::appendUCS4(): Unsupported charset");
             case RTL_TEXTENCODING_ASCII_US:
             case RTL_TEXTENCODING_ISO_8859_1:
                 appendEscape(rTheText, cEscapePrefix, nUCS4);
@@ -5298,7 +5298,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
                 switch (eCharset)
                 {
                     default:
-                        DBG_ERROR(
+                        OSL_FAIL(
                             "INetURLObject::getUTF32(): Unsupported charset");
                     case RTL_TEXTENCODING_ASCII_US:
                         rEscapeType = INetMIME::isUSASCII(nUTF32) ?

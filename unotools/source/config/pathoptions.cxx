@@ -468,7 +468,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     if ( !m_xPathSettings.is() )
     {
         // #112719#: check for existance
-        DBG_ERROR( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
+        OSL_FAIL( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
         throw RuntimeException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Service com.sun.star.util.PathSettings cannot be created" )),
             Reference< XInterface >() );
@@ -481,7 +481,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     if ( !m_xSubstVariables.is() )
     {
         // #112719#: check for existance
-        DBG_ERROR( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
+        OSL_FAIL( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
         throw RuntimeException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Service com.sun.star.util.PathSubstitution cannot be created" )),
             Reference< XInterface >() );

@@ -112,18 +112,18 @@ void B3dTransformationSet::Ortho(basegfx::B3DHomMatrix& rTarget, double fLeft, d
 {
     if(fNear == fFar)
     {
-        DBG_ERROR("Near and far clipping plane in Ortho definition are identical");
+        OSL_FAIL("Near and far clipping plane in Ortho definition are identical");
         fFar = fNear + 1.0;
     }
     if(fLeft == fRight)
     {
-        DBG_ERROR("Left and right in Ortho definition are identical");
+        OSL_FAIL("Left and right in Ortho definition are identical");
         fLeft -= 1.0;
         fRight += 1.0;
     }
     if(fTop == fBottom)
     {
-        DBG_ERROR("Top and bottom in Ortho definition are identical");
+        OSL_FAIL("Top and bottom in Ortho definition are identical");
         fBottom -= 1.0;
         fTop += 1.0;
     }

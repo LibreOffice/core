@@ -2221,7 +2221,7 @@ Rectangle SvxIconChoiceCtrl_Impl::CalcBmpRect( SvxIconChoiceCtrlEntry* pEntry, c
             return Rectangle( aPos, aImageSize );
 
         default:
-            DBG_ERROR("IconView: Viewmode not set");
+            OSL_FAIL("IconView: Viewmode not set");
             return aBound;
     }
 }
@@ -3784,7 +3784,7 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry( ULONG& rP
             pEntry = pEntry->pflink;
             if( nCount && pEntry == pHead )
             {
-                DBG_ERROR("SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry > Endlosschleife!");
+                OSL_FAIL("SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry > Endlosschleife!");
                 return 0;
             }
         }

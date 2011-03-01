@@ -52,7 +52,7 @@ static ::rtl::OString polyToString( const Polygon& rPoly )
                 break;
 
             default:
-                DBG_ERROR( "SvtGraphicStroke::polyToString invalid flag");
+                OSL_FAIL( "SvtGraphicStroke::polyToString invalid flag");
                 break;
         }
         aStr += ::rtl::OString::valueOf( static_cast< double >( rPoly[nVertex].getX() ) );
@@ -227,7 +227,7 @@ void SvtGraphicStroke::getDashArray( DashArray& rDashArray ) const
             break;
 
         default:
-            DBG_ERROR( "SvtGraphicStroke::toString missing cap type");
+            OSL_FAIL( "SvtGraphicStroke::toString missing cap type");
             break;
     }
     aStr += " join: ";
@@ -250,7 +250,7 @@ void SvtGraphicStroke::getDashArray( DashArray& rDashArray ) const
             break;
 
         default:
-            DBG_ERROR( "SvtGraphicStroke::toString missing join type");
+            OSL_FAIL( "SvtGraphicStroke::toString missing join type");
             break;
     }
     aStr += " ";
@@ -515,7 +515,7 @@ void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const
             break;
 
         default:
-            DBG_ERROR( "SvtGraphicFill::toString missing fill rule");
+            OSL_FAIL( "SvtGraphicFill::toString missing fill rule");
             break;
     }
     aStr += " type: ";
@@ -538,7 +538,7 @@ void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const
             break;
 
         default:
-            DBG_ERROR( "SvtGraphicStroke::toString missing fill type");
+            OSL_FAIL( "SvtGraphicStroke::toString missing fill type");
             break;
     }
 
@@ -564,7 +564,7 @@ void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const
             break;
 
         default:
-            DBG_ERROR( "SvtGraphicStroke::toString missing hatch type");
+            OSL_FAIL( "SvtGraphicStroke::toString missing hatch type");
             break;
     }
 
@@ -587,7 +587,7 @@ void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const
             break;
 
         default:
-            DBG_ERROR( "SvtGraphicStroke::toString missing gradient type");
+            OSL_FAIL( "SvtGraphicStroke::toString missing gradient type");
             break;
     }
 
@@ -618,7 +618,7 @@ void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const
                 break;
 
             default:
-                DBG_ERROR( "SvtGraphicStroke::toString missing graphic type");
+                OSL_FAIL( "SvtGraphicStroke::toString missing graphic type");
                 break;
         }
 

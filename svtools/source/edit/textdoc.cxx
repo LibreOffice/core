@@ -241,7 +241,7 @@ BOOL TextCharAttribList::DbgCheckAttribs()
         if ( pAttr->GetStart() > pAttr->GetEnd() )
         {
             bOK = FALSE;
-            DBG_ERROR( "Attr verdreht" );
+            OSL_FAIL( "Attr verdreht" );
         }
     }
     return bOK;
@@ -553,7 +553,7 @@ String TextDoc::GetText( const sal_Unicode* pSep ) const
 
     if ( nLen > STRING_MAXLEN )
     {
-        DBG_ERROR( "Text zu gross fuer String" );
+        OSL_FAIL( "Text zu gross fuer String" );
         return String();
     }
 
@@ -679,13 +679,13 @@ BOOL TextDoc::IsValidPaM( const TextPaM& rPaM )
 {
     if ( rPaM.GetPara() >= maTextNodes.Count() )
     {
-        DBG_ERROR( "PaM: Para out of range" );
+        OSL_FAIL( "PaM: Para out of range" );
         return FALSE;
     }
     TextNode * pNode = maTextNodes.GetObject( rPaM.GetPara() );
     if ( rPaM.GetIndex() > pNode->GetText().Len() )
     {
-        DBG_ERROR( "PaM: Index out of range" );
+        OSL_FAIL( "PaM: Index out of range" );
         return FALSE;
     }
     return TRUE;

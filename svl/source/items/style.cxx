@@ -279,7 +279,7 @@ BOOL SfxStyleSheetBase::SetParent( const XubString& rName )
         SfxStyleSheetBase* pIter = rPool.Find(rName, nFamily);
         if( rName.Len() && !pIter )
         {
-            DBG_ERROR( "StyleSheet-Parent nicht gefunden" );
+            OSL_FAIL( "StyleSheet-Parent nicht gefunden" );
             return FALSE;
         }
         // rekursive Verknuepfungen verhindern
@@ -309,7 +309,7 @@ BOOL SfxStyleSheetBase::SetFollow( const XubString& rName )
     {
         if( !rPool.Find( rName, nFamily ) )
         {
-            DBG_ERROR( "StyleSheet-Follow nicht gefunden" );
+            OSL_FAIL( "StyleSheet-Follow nicht gefunden" );
             return FALSE;
         }
         aFollow = rName;
@@ -484,7 +484,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](USHORT nIdx)
             ++z;
         }
     }
-    DBG_ERROR("falscher Index");
+    OSL_FAIL("falscher Index");
     return 0;
 }
 

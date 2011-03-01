@@ -1005,7 +1005,7 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
         }
         catch ( const ::com::sun::star::uno::Exception& )
         {
-            DBG_ERROR( "VCLXWindow::dispose: could not dispose the accessible context!" );
+            OSL_FAIL( "VCLXWindow::dispose: could not dispose the accessible context!" );
         }
         mpImpl->mxAccessibleContext.clear();
 
@@ -1327,7 +1327,7 @@ void VCLXWindow::getStyles( sal_Int16 nType, ::com::sun::star::awt::FontDescript
                 BackgroundColor = rStyleSettings.GetDialogColor().GetColor();
             }
             break;
-            default: DBG_ERROR( "VCLWindow::getStyles() - unknown Type" );
+            default: OSL_FAIL( "VCLWindow::getStyles() - unknown Type" );
         }
 
     }

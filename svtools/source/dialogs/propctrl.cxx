@@ -196,7 +196,7 @@ void PropertyEditorControler_Impl::setObject( XPropertyEditorRef xEditor_, const
         XIdlClassRef xPropClass = rProp.Type;
         if( !xPropClass.is() )
         {
-            DBG_ERROR( "PropertyEditorControler_Impl::Commit(), Property without type" )
+            OSL_FAIL( "PropertyEditorControler_Impl::Commit(), Property without type" )
             return;
         }
         TypeClass eType = xPropClass->getTypeClass();
@@ -293,7 +293,7 @@ void PropertyEditorControler_Impl::Clicked
     XIdlClassRef xPropClass = rProp.Type;
     if( !xPropClass.is() )
     {
-        DBG_ERROR( "PropertyEditorControler_Impl::Commit(), Property without type" )
+        OSL_FAIL( "PropertyEditorControler_Impl::Commit(), Property without type" )
         return;
     }
     TypeClass eType = xPropClass->getTypeClass();
@@ -315,7 +315,7 @@ void PropertyEditorControler_Impl::Commit
     XIdlClassRef xPropClass = rProp.Type;
     if( !xPropClass.is() )
     {
-        DBG_ERROR( "PropertyEditorControler_Impl::Commit(), Property without type" )
+        OSL_FAIL( "PropertyEditorControler_Impl::Commit(), Property without type" )
         return;
     }
     TypeClass eType = xPropClass->getTypeClass();

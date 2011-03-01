@@ -2251,7 +2251,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
 #endif
                                 }
                                 break;
-                                default:    DBG_ERROR( "ImpPaint: Unknown Portion-Type !" );
+                                default:    OSL_FAIL( "ImpPaint: Unknown Portion-Type !" );
                             }
                         }
 

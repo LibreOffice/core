@@ -246,7 +246,7 @@ float VCLUnoHelper::ConvertFontWidth( FontWidth eWidth )
     else if( eWidth == WIDTH_ULTRA_EXPANDED )
         return ::com::sun::star::awt::FontWidth::ULTRAEXPANDED;
 
-    DBG_ERROR( "Unknown FontWidth" );
+    OSL_FAIL( "Unknown FontWidth" );
     return ::com::sun::star::awt::FontWidth::DONTKNOW;
 }
 
@@ -273,7 +273,7 @@ FontWidth VCLUnoHelper::ConvertFontWidth( float f )
     else if( f <= ::com::sun::star::awt::FontWidth::ULTRAEXPANDED )
         return WIDTH_ULTRA_EXPANDED;
 
-    DBG_ERROR( "Unknown FontWidth" );
+    OSL_FAIL( "Unknown FontWidth" );
     return WIDTH_DONTKNOW;
 }
 
@@ -300,7 +300,7 @@ float VCLUnoHelper::ConvertFontWeight( FontWeight eWeight )
     else if( eWeight == WEIGHT_BLACK )
         return ::com::sun::star::awt::FontWeight::BLACK;
 
-    DBG_ERROR( "Unknown FontWeigth" );
+    OSL_FAIL( "Unknown FontWeigth" );
     return ::com::sun::star::awt::FontWeight::DONTKNOW;
 }
 
@@ -327,7 +327,7 @@ FontWeight VCLUnoHelper::ConvertFontWeight( float f )
     else if( f <= ::com::sun::star::awt::FontWeight::BLACK )
         return WEIGHT_BLACK;
 
-    DBG_ERROR( "Unknown FontWeigth" );
+    OSL_FAIL( "Unknown FontWeigth" );
     return WEIGHT_DONTKNOW;
 }
 

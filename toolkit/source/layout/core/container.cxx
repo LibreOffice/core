@@ -76,7 +76,7 @@ Container::allocateChildAt( const uno::Reference< awt::XLayoutConstrains > &xChi
                                  awt::PosSize::POSSIZE );
         else
         {
-            DBG_ERROR( "Error: non-sizeable child" );
+            OSL_FAIL( "Error: non-sizeable child" );
         }
     }
 }

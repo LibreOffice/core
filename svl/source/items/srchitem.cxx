@@ -661,7 +661,7 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMember
             break;
         }
         default:
-            DBG_ERROR( "Unknown MemberId" );
+            OSL_FAIL( "Unknown MemberId" );
     }
 
     return bRet;

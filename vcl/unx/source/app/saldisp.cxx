@@ -2190,7 +2190,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             break;
 
         default:
-            DBG_ERROR("pointer not implemented");
+            OSL_FAIL("pointer not implemented");
             aCur = XCreateFontCursor( pDisp_, XC_arrow );
             break;
     }
@@ -2802,7 +2802,7 @@ void SalDisplay::deregisterFrame( SalFrame* pFrame )
         osl_releaseMutex( hEventGuard_ );
     }
     else {
-        DBG_ERROR( "SalDisplay::deregisterFrame !acquireMutex\n" );
+        OSL_FAIL( "SalDisplay::deregisterFrame !acquireMutex\n" );
     }
 
     m_aFrames.remove( pFrame );

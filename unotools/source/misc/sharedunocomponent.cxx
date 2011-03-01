@@ -208,7 +208,7 @@ namespace utl
         // this should be unreachable: As long as we're a CloseListener, we veto the closing. If we're going
         // to close the component ourself, then we revoke ourself as listener *before* the close call. So,
         // if this here fires, something went definately wrong.
-        DBG_ERROR( "CloseableComponentImpl::notifyClosing: unreachable!" );
+        OSL_FAIL( "CloseableComponentImpl::notifyClosing: unreachable!" );
     }
 
     //--------------------------------------------------------------------
@@ -219,7 +219,7 @@ namespace utl
     ) throw (RuntimeException)
     {
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::disposing: where did this come from?" );
-        DBG_ERROR( "CloseableComponentImpl::disposing: unreachable!" );
+        OSL_FAIL( "CloseableComponentImpl::disposing: unreachable!" );
             // same reasoning for this assertion as in ->notifyClosing
     }
 

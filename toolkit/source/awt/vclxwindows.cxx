@@ -900,7 +900,7 @@ short VCLXCheckBox::getState() throw(::com::sun::star::uno::RuntimeException)
             case STATE_NOCHECK:     nState = 0; break;
             case STATE_CHECK:       nState = 1; break;
             case STATE_DONTKNOW:    nState = 2; break;
-            default:                DBG_ERROR( "VCLXCheckBox::getState(): unknown TriState!" );
+            default:                OSL_FAIL( "VCLXCheckBox::getState(): unknown TriState!" );
         }
     }
 

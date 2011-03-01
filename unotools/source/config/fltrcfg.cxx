@@ -374,7 +374,7 @@ static ULONG lcl_GetFlag(sal_Int32 nProp)
         case 10: nFlag = FILTERCFG_ENABLE_WORD_PREVIEW; break;
         case 11: nFlag = FILTERCFG_USE_ENHANCED_FIELDS; break;
 
-        default: DBG_ERROR("illegal value");
+        default: OSL_FAIL("illegal value");
     }
     return nFlag;
 }

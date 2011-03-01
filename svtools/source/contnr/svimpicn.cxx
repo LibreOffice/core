@@ -1310,7 +1310,7 @@ void SvImpIconView::PaintResizeRect( const Rectangle& rRect )
 
 void SvImpIconView::RepaintSelectionItems()
 {
-    DBG_ERROR("RepaintSelectionItems");
+    OSL_FAIL("RepaintSelectionItems");
     pView->Invalidate(); // vorlaeufig
 }
 

@@ -372,7 +372,7 @@ BOOL PspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
 void PspGraphics::copyBits( const SalTwoRect* /*pPosAry*/,
                             SalGraphics* /*pSSrcGraphics*/ )
 {
-    DBG_ERROR( "Error: PrinterGfx::CopyBits() not implemented" );
+    OSL_FAIL( "Error: PrinterGfx::CopyBits() not implemented" );
 }
 
 void PspGraphics::copyArea ( long /*nDestX*/,    long /*nDestY*/,
@@ -380,7 +380,7 @@ void PspGraphics::copyArea ( long /*nDestX*/,    long /*nDestY*/,
                              long /*nSrcWidth*/, long /*nSrcHeight*/,
                              USHORT /*nFlags*/ )
 {
-    DBG_ERROR( "Error: PrinterGfx::CopyArea() not implemented" );
+    OSL_FAIL( "Error: PrinterGfx::CopyArea() not implemented" );
 }
 
 void PspGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
@@ -402,21 +402,21 @@ void PspGraphics::drawBitmap( const SalTwoRect* /*pPosAry*/,
                               const SalBitmap& /*rSalBitmap*/,
                               const SalBitmap& /*rTransBitmap*/ )
 {
-    DBG_ERROR("Error: no PrinterGfx::DrawBitmap() for transparent bitmap");
+    OSL_FAIL("Error: no PrinterGfx::DrawBitmap() for transparent bitmap");
 }
 
 void PspGraphics::drawBitmap( const SalTwoRect* /*pPosAry*/,
                               const SalBitmap& /*rSalBitmap*/,
                               SalColor /*nTransparentColor*/ )
 {
-    DBG_ERROR("Error: no PrinterGfx::DrawBitmap() for transparent color");
+    OSL_FAIL("Error: no PrinterGfx::DrawBitmap() for transparent color");
 }
 
 void PspGraphics::drawMask( const SalTwoRect* /*pPosAry*/,
                             const SalBitmap& /*rSalBitmap*/,
                             SalColor /*nMaskColor*/ )
 {
-    DBG_ERROR("Error: PrinterGfx::DrawMask() not implemented");
+    OSL_FAIL("Error: PrinterGfx::DrawMask() not implemented");
 }
 
 SalBitmap* PspGraphics::getBitmap( long /*nX*/, long /*nY*/, long /*nDX*/, long /*nDY*/ )
@@ -427,7 +427,7 @@ SalBitmap* PspGraphics::getBitmap( long /*nX*/, long /*nY*/, long /*nDX*/, long 
 
 SalColor PspGraphics::getPixel( long /*nX*/, long /*nY*/ )
 {
-    DBG_ERROR ("Warning: PrinterGfx::GetPixel() not implemented");
+    OSL_FAIL("Warning: PrinterGfx::GetPixel() not implemented");
     return 0;
 }
 
@@ -438,7 +438,7 @@ void PspGraphics::invert(
                          long       /*nDY*/,
                          SalInvert  /*nFlags*/ )
 {
-    DBG_ERROR ("Warning: PrinterGfx::Invert() not implemented");
+    OSL_FAIL("Warning: PrinterGfx::Invert() not implemented");
 }
 
 //==========================================================================

@@ -383,7 +383,7 @@ ULONG StgIo::ValidateFATs()
 //      DBG_ASSERT( nErr == FAT_OK ,"Storage kaputt");
         return nErr;
     }
-//  DBG_ERROR("Validiere nicht (kein FileStorage)");
+//  OSL_FAIL("Validiere nicht (kein FileStorage)");
     return FAT_OK;
 }
 

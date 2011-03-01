@@ -130,7 +130,7 @@ bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, BYTE )
         return true;
     }
 
-    DBG_ERROR( "SfxInt16Item::PutValue - Wrong type!" );
+    OSL_FAIL( "SfxInt16Item::PutValue - Wrong type!" );
     return false;
 }
 

@@ -179,7 +179,7 @@ SvStream& operator>>( SvStream& rIn, XForm& rXForm )
 {
     if ( sizeof( float ) != 4 )
     {
-        DBG_ERROR( "EnhWMFReader::sizeof( float ) != 4" );
+        OSL_FAIL( "EnhWMFReader::sizeof( float ) != 4" );
         rXForm = XForm();
     }
     else

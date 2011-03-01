@@ -185,7 +185,7 @@ DialogButtonHBox::removeChild( uno::Reference< awt::XLayoutConstrains > const& x
     }
     else
     {
-        DBG_ERROR( "DialogButtonHBox: removeChild: no such child" );
+        OSL_FAIL( "DialogButtonHBox: removeChild: no such child" );
     }
 }
 

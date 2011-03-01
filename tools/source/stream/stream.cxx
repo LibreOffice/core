@@ -197,7 +197,7 @@ ErrCode SvLockBytes::ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
 {
     if (!m_pStream)
     {
-        DBG_ERROR("SvLockBytes::ReadAt(): Bad stream");
+        OSL_FAIL("SvLockBytes::ReadAt(): Bad stream");
         return ERRCODE_NONE;
     }
 
@@ -215,7 +215,7 @@ ErrCode SvLockBytes::WriteAt(sal_Size nPos, const void * pBuffer, sal_Size nCoun
 {
     if (!m_pStream)
     {
-        DBG_ERROR("SvLockBytes::WriteAt(): Bad stream");
+        OSL_FAIL("SvLockBytes::WriteAt(): Bad stream");
         return ERRCODE_NONE;
     }
 
@@ -232,7 +232,7 @@ ErrCode SvLockBytes::Flush() const
 {
     if (!m_pStream)
     {
-        DBG_ERROR("SvLockBytes::Flush(): Bad stream");
+        OSL_FAIL("SvLockBytes::Flush(): Bad stream");
         return ERRCODE_NONE;
     }
 
@@ -246,7 +246,7 @@ ErrCode SvLockBytes::SetSize(sal_Size nSize)
 {
     if (!m_pStream)
     {
-        DBG_ERROR("SvLockBytes::SetSize(): Bad stream");
+        OSL_FAIL("SvLockBytes::SetSize(): Bad stream");
         return ERRCODE_NONE;
     }
 
@@ -257,7 +257,7 @@ ErrCode SvLockBytes::SetSize(sal_Size nSize)
 //============================================================================
 ErrCode SvLockBytes::LockRegion(sal_Size, sal_Size, LockType)
 {
-    DBG_ERROR("SvLockBytes::LockRegion(): Not implemented");
+    OSL_FAIL("SvLockBytes::LockRegion(): Not implemented");
     return ERRCODE_NONE;
 }
 
@@ -265,7 +265,7 @@ ErrCode SvLockBytes::LockRegion(sal_Size, sal_Size, LockType)
 
 ErrCode SvLockBytes::UnlockRegion(sal_Size, sal_Size, LockType)
 {
-    DBG_ERROR("SvLockBytes::UnlockRegion(): Not implemented");
+    OSL_FAIL("SvLockBytes::UnlockRegion(): Not implemented");
     return ERRCODE_NONE;
 }
 
@@ -274,7 +274,7 @@ ErrCode SvLockBytes::Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const
 {
     if (!m_pStream)
     {
-        DBG_ERROR("SvLockBytes::Stat(): Bad stream");
+        OSL_FAIL("SvLockBytes::Stat(): Bad stream");
         return ERRCODE_NONE;
     }
 

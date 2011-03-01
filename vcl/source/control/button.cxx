@@ -2901,7 +2901,7 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
     }
     else
     {
-        DBG_ERROR( "RadioButton::Draw() - not implemented for RadioButton with Image" );
+        OSL_FAIL( "RadioButton::Draw() - not implemented for RadioButton with Image" );
     }
 }
 

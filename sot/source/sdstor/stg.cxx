@@ -560,7 +560,7 @@ void Storage::FillInfoList( SvStorageInfoList* pList ) const
 
 BaseStorage* Storage::OpenUCBStorage( const String& rName, StreamMode m, BOOL bDirect )
 {
-    DBG_ERROR("Not supported!");
+    OSL_FAIL("Not supported!");
 /*
     BaseStorage* pStorage = new Storage( pIo, NULL, m );
     SetError( ERRCODE_IO_NOTSUPPORTED );

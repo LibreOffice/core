@@ -1386,7 +1386,7 @@ DirEntry& DirEntry::operator=( const DirEntry& rEntry )
     if ( this == &rEntry )
         return *this;
     if ( rEntry.nError != FSYS_ERR_OK ) {
-        DBG_ERROR("Zuweisung mit invalidem DirEntry");
+        OSL_FAIL("Zuweisung mit invalidem DirEntry");
         nError = rEntry.nError;
         return *this;
     }

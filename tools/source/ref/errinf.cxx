@@ -367,13 +367,13 @@ USHORT ErrorHandler::HandleError_Impl(
         }
     }
     }
-    DBG_ERROR("Error nicht behandelt");
+    OSL_FAIL("Error nicht behandelt");
     // Error 1 ist General Error im Sfx
     if(pInfo->GetErrorCode()!=1) {
         HandleError_Impl(1, USHRT_MAX, bJustCreateString, rError);
     }
     else {
-        DBG_ERROR("Error 1 nicht gehandeled");
+        OSL_FAIL("Error 1 nicht gehandeled");
     }
     delete pInfo;
     return 0;

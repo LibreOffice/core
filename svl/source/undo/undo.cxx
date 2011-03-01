@@ -122,7 +122,7 @@ XubString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
 void SfxUndoAction::Undo()
 {
     // die sind nur konzeptuell pure virtual
-    DBG_ERROR( "pure virtual function called: SfxUndoAction::Undo()" );
+    OSL_FAIL( "pure virtual function called: SfxUndoAction::Undo()" );
 }
 
 //------------------------------------------------------------------------
@@ -130,7 +130,7 @@ void SfxUndoAction::Undo()
 void SfxUndoAction::Redo()
 {
     // die sind nur konzeptuell pure virtual
-    DBG_ERROR( "pure virtual function called: SfxUndoAction::Redo()" );
+    OSL_FAIL( "pure virtual function called: SfxUndoAction::Redo()" );
 }
 
 //------------------------------------------------------------------------
@@ -138,7 +138,7 @@ void SfxUndoAction::Redo()
 void SfxUndoAction::Repeat(SfxRepeatTarget&)
 {
     // die sind nur konzeptuell pure virtual
-    DBG_ERROR( "pure virtual function called: SfxUndoAction::Repeat()" );
+    OSL_FAIL( "pure virtual function called: SfxUndoAction::Repeat()" );
 }
 
 //------------------------------------------------------------------------
@@ -585,7 +585,7 @@ void SfxUndoManager::LeaveListAction()
 
     if( pActUndoArray == pUndoArray )
     {
-        DBG_ERROR( "svl::SfxUndoManager::LeaveListAction(), called without calling EnterListAction()!" );
+        OSL_FAIL( "svl::SfxUndoManager::LeaveListAction(), called without calling EnterListAction()!" );
         return;
     }
 

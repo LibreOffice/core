@@ -67,7 +67,7 @@ namespace svt
         }
         catch( const css::uno::Exception& )
         {
-            DBG_ERROR( "svt::SetDialogHelpId(): caught an exception while setting the help id!" );
+            OSL_FAIL( "svt::SetDialogHelpId(): caught an exception while setting the help id!" );
         }
     }
 
@@ -93,7 +93,7 @@ namespace svt
         }
         catch( const css::uno::Exception& )
         {
-            DBG_ERROR( "svt::SetDialogHelpId(): caught an exception while setting the help id!" );
+            OSL_FAIL( "svt::SetDialogHelpId(): caught an exception while setting the help id!" );
         }
     }
 }

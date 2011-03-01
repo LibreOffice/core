@@ -1627,7 +1627,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( META_TEXTRECT_ACTION ):
                 case( META_MOVECLIPREGION_ACTION ):
                 {
-                    DBG_ERROR( "GDIMetaFile::Rotate(): unsupported action" );
+                    OSL_FAIL( "GDIMetaFile::Rotate(): unsupported action" );
                 }
                 break;
 
@@ -2331,7 +2331,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             case( META_BMPEX_ACTION ):
             case( META_MASK_ACTION ):
             {
-                DBG_ERROR( "Don't use bitmap actions of this type in metafiles!" );
+                OSL_FAIL( "Don't use bitmap actions of this type in metafiles!" );
             }
             break;
 

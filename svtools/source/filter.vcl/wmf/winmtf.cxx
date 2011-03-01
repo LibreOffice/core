@@ -816,7 +816,7 @@ void WinMtfOutput::CreateObject( INT32 nIndex, GDIObjectType eType, void* pStyle
             break;
 
             default:
-                DBG_ERROR( "unsupported style not deleted" );
+                OSL_FAIL( "unsupported style not deleted" );
                 break;
         }
     }

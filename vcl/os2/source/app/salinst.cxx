@@ -308,7 +308,7 @@ void ImplDbgTestSolarMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                DBG_ERROR( "SolarMutex not locked, and not thread save code in VCL is called from outside of the main thread" );
+                OSL_FAIL( "SolarMutex not locked, and not thread save code in VCL is called from outside of the main thread" );
             }
         }
     }
@@ -319,7 +319,7 @@ void ImplDbgTestSolarMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                DBG_ERROR( "SolarMutex not locked in the main thread" );
+                OSL_FAIL( "SolarMutex not locked in the main thread" );
             }
         }
     }

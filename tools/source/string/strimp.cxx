@@ -355,7 +355,7 @@ STRING::STRING( const STRCODE* pCharStr, xub_StrLen nLen )
         {
             if ( !pCharStr[i] )
             {
-                DBG_ERROR( "String::String() : nLen is wrong" );
+                OSL_FAIL( "String::String() : nLen is wrong" );
             }
         }
     }
@@ -459,7 +459,7 @@ STRING& STRING::Assign( const STRCODE* pCharStr, xub_StrLen nLen )
         {
             if ( !pCharStr[i] )
             {
-                DBG_ERROR( "String::Assign() : nLen is wrong" );
+                OSL_FAIL( "String::Assign() : nLen is wrong" );
             }
         }
     }
@@ -590,7 +590,7 @@ STRING& STRING::Append( const STRCODE* pCharStr, xub_StrLen nCharLen )
         {
             if ( !pCharStr[i] )
             {
-                DBG_ERROR( "String::Append() : nLen is wrong" );
+                OSL_FAIL( "String::Append() : nLen is wrong" );
             }
         }
     }

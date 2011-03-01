@@ -260,7 +260,7 @@ void SvxAsianConfig::SetStartEndChars( const Locale& rLocale,
     }
 #ifdef DBG_UTIL
     else if(!bFound)
-        DBG_ERROR("attempt to clear unavailable data");
+        OSL_FAIL("attempt to clear unavailable data");
 #endif
     SetModified();
 }

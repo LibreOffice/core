@@ -263,7 +263,7 @@ namespace svt
         {
             if ( !_rLHS.is() || !_rRHS.is() )
             {
-                DBG_ERROR( "TemplateContentEqual::operator(): invalid contents!" );
+                OSL_FAIL( "TemplateContentEqual::operator(): invalid contents!" );
                 return true;
                     // this is not strictly true, in case only one is invalid - but this is a heavy error anyway
             }
@@ -691,7 +691,7 @@ namespace svt
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "TemplateFolderCacheImpl::implReadFolder: caught an exception!" );
+            OSL_FAIL( "TemplateFolderCacheImpl::implReadFolder: caught an exception!" );
             return sal_False;
         }
         return sal_True;
@@ -788,7 +788,7 @@ namespace svt
         INetURLObject aStorageURL( sStorageURL );
         if ( INET_PROT_NOT_VALID == aStorageURL.GetProtocol() )
         {
-            DBG_ERROR( "TemplateFolderCacheImpl::openCacheStream: invalid storage path!" );
+            OSL_FAIL( "TemplateFolderCacheImpl::openCacheStream: invalid storage path!" );
             return sal_False;
         }
 

@@ -725,7 +725,7 @@ void SfxItemSet::PutExtended
                             break;
 
                         default:
-                            DBG_ERROR( "invalid Argument for eDontCareAs" );
+                            OSL_FAIL( "invalid Argument for eDontCareAs" );
                     }
                 }
                 else
@@ -750,7 +750,7 @@ void SfxItemSet::PutExtended
                         break;
 
                     default:
-                        DBG_ERROR( "invalid Argument for eDefaultAs" );
+                        OSL_FAIL( "invalid Argument for eDefaultAs" );
                 }
             }
         pPtr += 2;
@@ -972,7 +972,7 @@ const SfxPoolItem* SfxItemSet::GetItem
             return pItem;
 
         // sonst Fehler melden
-        DBG_ERROR( "invalid argument type" );
+        OSL_FAIL( "invalid argument type" );
     }
 
     // kein Item gefunden oder falschen Typ gefunden

@@ -197,7 +197,7 @@ void SvxZoomDialog::SetButtonText( USHORT nBtnId, const String& rNewTxt )
             break;
 
         default:
-            DBG_ERROR( "wrong button number" );
+            OSL_FAIL( "wrong button number" );
     }
 }
 
@@ -220,7 +220,7 @@ void SvxZoomDialog::HideButton( USHORT nBtnId )
             break;
 
         default:
-            DBG_ERROR( "Falsche Button-Nummer!!!" );
+            OSL_FAIL( "Falsche Button-Nummer!!!" );
     }
 }
 
@@ -498,7 +498,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
     }
     else
     {
-        DBG_ERROR( "Wrong Button" );
+        OSL_FAIL( "Wrong Button" );
         return 0;
     }
 
@@ -585,7 +585,7 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
         }
         else
         {
-            DBG_ERROR( "Wrong Button" );
+            OSL_FAIL( "Wrong Button" );
             return 0;
         }
 #if !TEST_LAYOUT

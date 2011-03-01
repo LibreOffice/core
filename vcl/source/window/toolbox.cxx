@@ -1125,7 +1125,7 @@ void ToolBox::ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRec
         mbHorz = TRUE;
     }
     else {
-        DBG_ERROR( "ImplLineSizing: Trailing else" );
+        OSL_FAIL( "ImplLineSizing: Trailing else" );
         nCurSize = 0;
         mbHorz = FALSE;
     }

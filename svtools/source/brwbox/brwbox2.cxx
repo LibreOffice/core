@@ -952,7 +952,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
         // prepare row
         ULONG nRow = nTopRow+nRelRow;
         if ( !SeekRow( nRow) ) {
-            DBG_ERROR("BrowseBox::ImplPaintData: SeekRow gescheitert");
+            OSL_FAIL("BrowseBox::ImplPaintData: SeekRow gescheitert");
         }
         _rOut.SetClipRegion();
         aPos.X() = aOverallAreaPos.X();
@@ -994,7 +994,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
                 if (!pCol)
                 {   // FS - 21.05.99 - 66325
                     // ist zwar eigentlich woanders (an der richtigen Stelle) gefixt, aber sicher ist sicher ...
-                    DBG_ERROR("BrowseBox::PaintData : nFirstCol is probably invalid !");
+                    OSL_FAIL("BrowseBox::PaintData : nFirstCol is probably invalid !");
                     break;
                 }
             }
@@ -1267,7 +1267,7 @@ void BrowseBox::UpdateScrollbars()
     if ( nTopRow > nRowCount )
     {
         nTopRow = nRowCount - 1;
-        DBG_ERROR("BrowseBox: nTopRow > nRowCount");
+        OSL_FAIL("BrowseBox: nTopRow > nRowCount");
     }
 
     if ( pVScroll->GetThumbPos() != nTopRow )

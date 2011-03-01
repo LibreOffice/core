@@ -221,7 +221,7 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
     }
     else
     {
-        DBG_ERROR( "Bitmap::GetGreyPalette: invalid entry count (2/4/16/256 allowed)" );
+        OSL_FAIL( "Bitmap::GetGreyPalette: invalid entry count (2/4/16/256 allowed)" );
         return aGreyPalette2;
     }
 }

@@ -98,7 +98,7 @@ bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
         return true;
     }
 
-    DBG_ERROR( "SfxGlobalNameItem::PutValue - Wrong type!" );
+    OSL_FAIL( "SfxGlobalNameItem::PutValue - Wrong type!" );
     return true;
 }
 

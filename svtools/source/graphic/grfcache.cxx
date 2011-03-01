@@ -512,7 +512,7 @@ ULONG GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Point& 
         }
         else
         {
-             DBG_ERROR( "GraphicDisplayCacheEntry::GetNeededSize(): pOut->GetBitCount() == 0" );
+             OSL_FAIL( "GraphicDisplayCacheEntry::GetNeededSize(): pOut->GetBitCount() == 0" );
             nNeededSize = 256000;
         }
     }

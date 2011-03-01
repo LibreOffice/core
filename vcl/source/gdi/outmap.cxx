@@ -279,7 +279,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             }
             break;
         default:
-            DBG_ERROR( "unhandled MapUnit" );
+            OSL_FAIL( "unhandled MapUnit" );
             break;
     }
 

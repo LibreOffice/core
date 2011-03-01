@@ -111,7 +111,7 @@ void SalData::ensureThreadAutoreleasePool()
     }
     else
     {
-        DBG_ERROR( "no autorelease key" );
+        OSL_FAIL( "no autorelease key" );
     }
 }
 
@@ -135,7 +135,7 @@ void SalData::drainThreadAutoreleasePool()
     }
     else
     {
-        DBG_ERROR( "no autorelease key" );
+        OSL_FAIL( "no autorelease key" );
     }
 }
 

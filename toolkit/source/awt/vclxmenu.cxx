@@ -203,7 +203,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                 case VCLEVENT_MENU_HIDE:
                 break;
 
-                default:    DBG_ERROR( "MenuEventListener - Unknown event!" );
+                default:    OSL_FAIL( "MenuEventListener - Unknown event!" );
            }
        }
     }

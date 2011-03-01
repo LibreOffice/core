@@ -283,7 +283,7 @@ sal_uInt32 SvpElement::getBitCountFromScanlineFormat( sal_Int32 nFormat )
             nBitCount = 32;
             break;
         default:
-        DBG_ERROR( "unsupported basebmp format" );
+        OSL_FAIL( "unsupported basebmp format" );
         break;
     }
     return nBitCount;

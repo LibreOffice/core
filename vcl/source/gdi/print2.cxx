@@ -202,7 +202,7 @@ static void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
             case META_TRANSPARENT_ACTION:
 
             default:
-                DBG_ERROR("Printer::GetPreparedMetafile impossible state reached");
+                OSL_FAIL("Printer::GetPreparedMetafile impossible state reached");
                 break;
         }
 
@@ -267,7 +267,7 @@ static void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
                                        aBmp ));
                 break;
             default:
-                DBG_ERROR("Unexpected case");
+                OSL_FAIL("Unexpected case");
                 break;
         }
     }
@@ -605,7 +605,7 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         break;
 
         case META_TEXTLINE_ACTION:
-            DBG_ERROR("META_TEXTLINE_ACTION not supported");
+            OSL_FAIL("META_TEXTLINE_ACTION not supported");
             break;
 
         default:

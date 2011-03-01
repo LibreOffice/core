@@ -116,7 +116,7 @@ bool FontSubsetInfo::CreateFontSubset(
     case NO_FONT:
         // fall trough
     default:
-        DBG_ERROR( "unhandled type in CreateFontSubset()");
+        OSL_FAIL( "unhandled type in CreateFontSubset()");
         break;
     }
 

@@ -634,7 +634,7 @@ void TransferableHelper::ImplFlush()
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
-            DBG_ERROR( "Could not flush clipboard" );
+            OSL_FAIL( "Could not flush clipboard" );
         }
 
         Application::AcquireSolarMutex( nRef );
@@ -1038,7 +1038,7 @@ sal_Bool TransferableHelper::SetInterface( const ::com::sun::star::uno::Referenc
 
 sal_Bool TransferableHelper::WriteObject( SotStorageStreamRef&, void*, sal_uInt32, const DataFlavor& )
 {
-    DBG_ERROR( "TransferableHelper::WriteObject( ... ) not implemented" );
+    OSL_FAIL( "TransferableHelper::WriteObject( ... ) not implemented" );
     return sal_False;
 }
 

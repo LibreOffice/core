@@ -145,7 +145,7 @@ SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer) :
             mpFncGetPixel = BitmapReadAccess::GetPixelFor_32BIT_TC_MASK; break;
 
         default:
-            DBG_ERROR("Error: SalPrinterBmp::SalPrinterBmp() unknown bitmap format");
+            OSL_FAIL("Error: SalPrinterBmp::SalPrinterBmp() unknown bitmap format");
         break;
     }
 }
@@ -190,7 +190,7 @@ SalPrinterBmp::GetDepth () const
 
         default:
             nDepth = 1;
-            DBG_ERROR ("Error: unsupported bitmap depth in SalPrinterBmp::GetDepth()");
+            OSL_FAIL("Error: unsupported bitmap depth in SalPrinterBmp::GetDepth()");
             break;
     }
 
@@ -448,12 +448,12 @@ BOOL PspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
 void PspGraphics::copyBits( const SalTwoRect*,
                             SalGraphics* )
 {
-    DBG_ERROR( "Error: PrinterGfx::CopyBits() not implemented" );
+    OSL_FAIL( "Error: PrinterGfx::CopyBits() not implemented" );
 }
 
 void PspGraphics::copyArea ( long,long,long,long,long,long,USHORT )
 {
-    DBG_ERROR( "Error: PrinterGfx::CopyArea() not implemented" );
+    OSL_FAIL( "Error: PrinterGfx::CopyArea() not implemented" );
 }
 
 void PspGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
@@ -475,21 +475,21 @@ void PspGraphics::drawBitmap( const SalTwoRect*,
                               const SalBitmap&,
                               const SalBitmap& )
 {
-    DBG_ERROR("Error: no PrinterGfx::DrawBitmap() for transparent bitmap");
+    OSL_FAIL("Error: no PrinterGfx::DrawBitmap() for transparent bitmap");
 }
 
 void PspGraphics::drawBitmap( const SalTwoRect*,
                               const SalBitmap&,
                               SalColor )
 {
-    DBG_ERROR("Error: no PrinterGfx::DrawBitmap() for transparent color");
+    OSL_FAIL("Error: no PrinterGfx::DrawBitmap() for transparent color");
 }
 
 void PspGraphics::drawMask( const SalTwoRect*,
                             const SalBitmap &,
                             SalColor )
 {
-    DBG_ERROR("Error: PrinterGfx::DrawMask() not implemented");
+    OSL_FAIL("Error: PrinterGfx::DrawMask() not implemented");
 }
 
 SalBitmap* PspGraphics::getBitmap( long, long, long, long )
@@ -500,13 +500,13 @@ SalBitmap* PspGraphics::getBitmap( long, long, long, long )
 
 SalColor PspGraphics::getPixel( long, long )
 {
-    DBG_ERROR ("Warning: PrinterGfx::GetPixel() not implemented");
+    OSL_FAIL("Warning: PrinterGfx::GetPixel() not implemented");
     return 0;
 }
 
 void PspGraphics::invert(long,long,long,long,SalInvert)
 {
-    DBG_ERROR ("Warning: PrinterGfx::Invert() not implemented");
+    OSL_FAIL("Warning: PrinterGfx::Invert() not implemented");
 }
 
 //==========================================================================
@@ -1202,7 +1202,7 @@ FontWidth PspGraphics::ToFontWidth (psp::width::type eWidth)
         case psp::width::UltraExpanded:  return WIDTH_ULTRA_EXPANDED;
         case psp::width::Unknown:        return WIDTH_DONTKNOW;
         default:
-            DBG_ERROR( "unknown width mapping" );
+            OSL_FAIL( "unknown width mapping" );
             break;
     }
     return WIDTH_DONTKNOW;
@@ -1224,7 +1224,7 @@ FontWeight PspGraphics::ToFontWeight (psp::weight::type eWeight)
         case psp::weight::Black:      return WEIGHT_BLACK;
         case psp::weight::Unknown:    return WEIGHT_DONTKNOW;
         default:
-            DBG_ERROR( "unknown weight mapping" );
+            OSL_FAIL( "unknown weight mapping" );
             break;
     }
     return WEIGHT_DONTKNOW;
@@ -1238,7 +1238,7 @@ FontPitch PspGraphics::ToFontPitch (psp::pitch::type ePitch)
         case psp::pitch::Variable:  return PITCH_VARIABLE;
         case psp::pitch::Unknown:   return PITCH_DONTKNOW;
         default:
-            DBG_ERROR( "unknown pitch mapping" );
+            OSL_FAIL( "unknown pitch mapping" );
             break;
     }
     return PITCH_DONTKNOW;
@@ -1253,7 +1253,7 @@ FontItalic PspGraphics::ToFontItalic (psp::italic::type eItalic)
         case psp::italic::Italic:   return ITALIC_NORMAL;
         case psp::italic::Unknown:  return ITALIC_DONTKNOW;
         default:
-            DBG_ERROR( "unknown italic mapping" );
+            OSL_FAIL( "unknown italic mapping" );
             break;
     }
     return ITALIC_DONTKNOW;
@@ -1271,7 +1271,7 @@ FontFamily PspGraphics::ToFontFamily (psp::family::type eFamily)
         case psp::family::System:     return FAMILY_SYSTEM;
         case psp::family::Unknown:    return FAMILY_DONTKNOW;
         default:
-            DBG_ERROR( "unknown family mapping" );
+            OSL_FAIL( "unknown family mapping" );
             break;
     }
     return FAMILY_DONTKNOW;

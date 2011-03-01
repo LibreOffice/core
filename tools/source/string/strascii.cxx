@@ -261,7 +261,7 @@ UniString& UniString::AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
         {
             if ( !pAsciiStr[i] )
             {
-                DBG_ERROR( "UniString::AssignAscii() : nLen is wrong" );
+                OSL_FAIL( "UniString::AssignAscii() : nLen is wrong" );
             }
         }
     }
@@ -338,7 +338,7 @@ UniString& UniString::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
         {
             if ( !pAsciiStr[i] )
             {
-                DBG_ERROR( "UniString::AppendAscii() : nLen is wrong" );
+                OSL_FAIL( "UniString::AppendAscii() : nLen is wrong" );
             }
         }
     }

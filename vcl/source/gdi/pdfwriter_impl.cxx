@@ -2427,7 +2427,7 @@ void PDFWriterImpl::endPage()
         // sanity check
         if( m_aOutputStreams.begin() != m_aOutputStreams.end() )
         {
-            DBG_ERROR( "redirection across pages !!!" );
+            OSL_FAIL( "redirection across pages !!!" );
             m_aOutputStreams.clear(); // leak !
             m_aMapMode.SetOrigin( Point() );
         }
@@ -2678,7 +2678,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
             }
             else
             {
-                DBG_ERROR( "unresolved link id for Link structure" );
+                OSL_FAIL( "unresolved link id for Link structure" );
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "unresolved link id %" SAL_PRIdINT32 " for Link structure\n", nLink );
                 {
@@ -2779,7 +2779,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
                     emitStructure( rChild );
                 else
                 {
-                    DBG_ERROR( "PDFWriterImpl::emitStructure: invalid child structure element" );
+                    OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure element" );
 #if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure elemnt with id %" SAL_PRIdINT32 "\n", *it );
 #endif
@@ -2788,7 +2788,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         }
         else
         {
-            DBG_ERROR( "PDFWriterImpl::emitStructure: invalid child structure id" );
+            OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure id" );
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure id %" SAL_PRIdINT32 "\n", *it );
 #endif
@@ -3120,7 +3120,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const ImplFontDa
     }
     else
     {
-        DBG_ERROR( "system font neither embeddable nor subsettable" );
+        OSL_FAIL( "system font neither embeddable nor subsettable" );
     }
 
     // write font descriptor
@@ -3956,7 +3956,7 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const ImplFontData* pFont, FontSubs
             case FontSubsetInfo::ANY_TYPE1:
                 break;
             default:
-                DBG_ERROR( "unknown fonttype in PDF font descriptor" );
+                OSL_FAIL( "unknown fonttype in PDF font descriptor" );
                 return 0;
         }
         aLine.append( ' ' );
@@ -4031,7 +4031,7 @@ bool PDFWriterImpl::emitFonts()
                     nGlyphs++;
                 else
                 {
-                    DBG_ERROR( "too many glyphs for subset" );
+                    OSL_FAIL( "too many glyphs for subset" );
                 }
             }
             FontSubsetInfo aSubsetInfo;
@@ -4092,7 +4092,7 @@ bool PDFWriterImpl::emitFonts()
                 else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::CFF_FONT) != 0 )
                 {
                     // TODO: implement
-                    DBG_ERROR( "PDFWriterImpl does not support CFF-font subsets yet!" );
+                    OSL_FAIL( "PDFWriterImpl does not support CFF-font subsets yet!" );
                 }
                 else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::TYPE1_PFB) != 0 ) // TODO: also support PFA?
                 {
@@ -11010,11 +11010,11 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
                 DBG_ASSERT( 0, "Structure element inserted to StructTreeRoot that is not a document" );
             }
             else {
-                DBG_ERROR( "document structure in disorder !" );
+                OSL_FAIL( "document structure in disorder !" );
             }
         }
         else {
-            DBG_ERROR( "PDF document structure MUST be contained in a Document element" );
+            OSL_FAIL( "PDF document structure MUST be contained in a Document element" );
         }
     }
 
@@ -11132,7 +11132,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
                     addInternalStructureContainer( rChild );//examine the child
                 else
                 {
-                    DBG_ERROR( "PDFWriterImpl::addInternalStructureContainer: invalid child structure element" );
+                    OSL_FAIL( "PDFWriterImpl::addInternalStructureContainer: invalid child structure element" );
 #if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "PDFWriterImpl::addInternalStructureContainer: invalid child structure elemnt with id %" SAL_PRIdINT32 "\n", *it );
 #endif
@@ -11141,7 +11141,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
         }
         else
         {
-            DBG_ERROR( "PDFWriterImpl::emitStructure: invalid child structure id" );
+            OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure id" );
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "PDFWriterImpl::addInternalStructureContainer: invalid child structure id %" SAL_PRIdINT32 "\n", *it );
 #endif

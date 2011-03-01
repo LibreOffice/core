@@ -132,13 +132,13 @@ void SvtUndoOptions_Impl::Load()
                             nUndoCount = nTemp;
                         else
                         {
-                            DBG_ERROR( "Wrong Type!" );
+                            OSL_FAIL( "Wrong Type!" );
                         }
                         break;
                     }
 
                     default:
-                        DBG_ERROR( "Wrong Type!" );
+                        OSL_FAIL( "Wrong Type!" );
                         break;
                 }
             }

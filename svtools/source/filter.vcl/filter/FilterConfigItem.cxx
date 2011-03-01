@@ -161,7 +161,7 @@ void FilterConfigItem::ImpInitTree( const String& rSubTree )
             }
             catch ( ::com::sun::star::uno::Exception& )
             {
-                DBG_ERROR( "FilterConfigItem::FilterConfigItem - Could not access configuration Key" );
+                OSL_FAIL( "FilterConfigItem::FilterConfigItem - Could not access configuration Key" );
             }
         }
     }
@@ -202,7 +202,7 @@ FilterConfigItem::~FilterConfigItem()
                 }
                 catch ( ::com::sun::star::uno::Exception& )
                 {
-                    DBG_ERROR( "FilterConfigItem::FilterConfigItem - Could not update configuration data" );
+                    OSL_FAIL( "FilterConfigItem::FilterConfigItem - Could not update configuration data" );
                 }
             }
         }
@@ -365,7 +365,7 @@ Size FilterConfigItem::ReadSize( const OUString& rKey, const Size& rDefault )
     }
     catch ( ::com::sun::star::uno::Exception& )
     {
-        DBG_ERROR( "FilterConfigItem::ReadSize - could not read PropertyValue" );
+        OSL_FAIL( "FilterConfigItem::ReadSize - could not read PropertyValue" );
     }
     PropertyValue aWidth;
     aWidth.Name = sWidth;
@@ -442,7 +442,7 @@ void FilterConfigItem::WriteBool( const OUString& rKey, sal_Bool bNewValue )
                     }
                     catch ( ::com::sun::star::uno::Exception& )
                     {
-                        DBG_ERROR( "FilterConfigItem::WriteBool - could not set PropertyValue" );
+                        OSL_FAIL( "FilterConfigItem::WriteBool - could not set PropertyValue" );
                     }
                 }
             }
@@ -476,7 +476,7 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
                     }
                     catch ( ::com::sun::star::uno::Exception& )
                     {
-                        DBG_ERROR( "FilterConfigItem::WriteInt32 - could not set PropertyValue" );
+                        OSL_FAIL( "FilterConfigItem::WriteInt32 - could not set PropertyValue" );
                     }
                 }
             }
@@ -528,7 +528,7 @@ void FilterConfigItem::WriteSize( const OUString& rKey, const Size& rNewValue )
             }
             catch ( ::com::sun::star::uno::Exception& )
             {
-                DBG_ERROR( "FilterConfigItem::WriteSize - could not read PropertyValue" );
+                OSL_FAIL( "FilterConfigItem::WriteSize - could not read PropertyValue" );
             }
         }
     }
@@ -560,7 +560,7 @@ void FilterConfigItem::WriteString( const OUString& rKey, const OUString& rNewVa
                     }
                     catch ( ::com::sun::star::uno::Exception& )
                     {
-                        DBG_ERROR( "FilterConfigItem::WriteInt32 - could not set PropertyValue" );
+                        OSL_FAIL( "FilterConfigItem::WriteInt32 - could not set PropertyValue" );
                     }
                 }
             }
@@ -588,7 +588,7 @@ void FilterConfigItem::WriteAny( const OUString& rKey, const Any& rNewAny )
                 }
                 catch ( com::sun::star::uno::Exception& )
                 {
-                    DBG_ERROR( "FilterConfigItem::WriteAny - could not set PropertyValue" );
+                    OSL_FAIL( "FilterConfigItem::WriteAny - could not set PropertyValue" );
 
                 }
             }

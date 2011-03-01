@@ -1125,7 +1125,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
                             : 0;
                 if ( !pItem )
                 {
-                    DBG_ERROR( "can't resolve surrogate" );
+                    OSL_FAIL( "can't resolve surrogate" );
                     rWhich = 0; // nur zur Sicherheit fuer richtige Stream-Pos
                     return 0;
                 }

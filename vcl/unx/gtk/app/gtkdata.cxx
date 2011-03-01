@@ -204,7 +204,7 @@ void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
         }
         else
         {
-            DBG_ERROR( "unknown screen changed size" );
+            OSL_FAIL( "unknown screen changed size" );
         }
     }
 }
@@ -233,7 +233,7 @@ void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
             }
             else
             {
-                DBG_ERROR( "monitors for non-default screen changed, extend-me" );
+                OSL_FAIL( "monitors for non-default screen changed, extend-me" );
             }
         }
     }

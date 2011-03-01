@@ -250,7 +250,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
 
             default:
             {
-                DBG_ERROR( "BitmapWriteAccess::ZeroInitUnusedBits: Unsupported pixel format");
+                OSL_FAIL( "BitmapWriteAccess::ZeroInitUnusedBits: Unsupported pixel format");
                 nBits = 0;
                 bMsb = true;
             }

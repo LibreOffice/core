@@ -95,7 +95,7 @@ static const char* getKeyType( int nKeyType )
     case DEFAULTFONT_UI_FIXED: return "UI_FIXED";
     case DEFAULTFONT_UI_SANS: return "UI_SANS";
     default:
-        DBG_ERROR( "unmatched type" );
+        OSL_FAIL( "unmatched type" );
         return "";
     }
 }

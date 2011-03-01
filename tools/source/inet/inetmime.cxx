@@ -1549,7 +1549,7 @@ const sal_Char * INetMIME::getCharsetName(rtl_TextEncoding eEncoding)
                 return "ISO-10646-UCS-2";
 
             default:
-                DBG_ERROR("INetMIME::getCharsetName(): Unsupported encoding");
+                OSL_FAIL("INetMIME::getCharsetName(): Unsupported encoding");
                 return 0;
         }
 }

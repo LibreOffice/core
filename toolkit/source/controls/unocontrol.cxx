@@ -374,7 +374,7 @@ void UnoControl::disposeAccessibleContext()
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "UnoControl::disposeAccessibleContext: could not dispose my AccessibleContext!" );
+            OSL_FAIL( "UnoControl::disposeAccessibleContext: could not dispose my AccessibleContext!" );
         }
     }
 }
@@ -1452,7 +1452,7 @@ sal_Bool UnoControl::isTransparent(  ) throw(RuntimeException)
 // XServiceInfo
 ::rtl::OUString UnoControl::getImplementationName(  ) throw(RuntimeException)
 {
-    DBG_ERROR( "This method should be overloaded!" );
+    OSL_FAIL( "This method should be overloaded!" );
     return ::rtl::OUString();
 }
 

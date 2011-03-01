@@ -192,7 +192,7 @@ bool SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
         return true;
     }
 
-    DBG_ERROR( "SfxDateTimeItem::PutValue - Wrong type!" );
+    OSL_FAIL( "SfxDateTimeItem::PutValue - Wrong type!" );
     return false;
 }
 

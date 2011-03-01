@@ -359,7 +359,7 @@ sal_Int32 GetFormatId_Impl( SvGlobalName aName )
         return 0;
     else
     {
-        DBG_ERROR( "Unknown UCB storage format!" );
+        OSL_FAIL( "Unknown UCB storage format!" );
         return 0;
     }
 }
@@ -612,7 +612,7 @@ String UCBStorageElement_Impl::GetContentType()
         return m_xStorage->m_aContentType;
     else
     {
-        DBG_ERROR("Element not loaded!");
+        OSL_FAIL("Element not loaded!");
         return String();
     }
 }
@@ -626,7 +626,7 @@ void UCBStorageElement_Impl::SetContentType( const String& rType )
         m_xStorage->m_aContentType = m_xStorage->m_aOriginalContentType = rType;
     }
     else {
-        DBG_ERROR("Element not loaded!");
+        OSL_FAIL("Element not loaded!");
     }
 }
 
@@ -738,7 +738,7 @@ Reference<XInputStream> UCBStorageStream_Impl::GetXInputStream()
 
     if( m_pAntiImpl && m_nRepresentMode != nonset )
     {
-        DBG_ERROR( "Misuse of the XInputstream!" );
+        OSL_FAIL( "Misuse of the XInputstream!" );
         SetError( ERRCODE_IO_ACCESSDENIED );
     }
     else
@@ -792,7 +792,7 @@ BOOL UCBStorageStream_Impl::Init()
 {
     if( m_nRepresentMode == xinputstream )
     {
-        DBG_ERROR( "XInputStream misuse!" );
+        OSL_FAIL( "XInputStream misuse!" );
         SetError( ERRCODE_IO_ACCESSDENIED );
         return FALSE;
     }
@@ -814,7 +814,7 @@ BOOL UCBStorageStream_Impl::Init()
 
         if( !m_pStream )
         {
-            DBG_ERROR( "Suspicious temporary stream creation!" );
+            OSL_FAIL( "Suspicious temporary stream creation!" );
             SetError( SVSTREAM_CANNOT_MAKE );
             return FALSE;
         }
@@ -853,7 +853,7 @@ BOOL UCBStorageStream_Impl::Init()
             {
                 // something is really wrong
                 m_bSourceRead = FALSE;
-                DBG_ERROR( "Can not operate original stream!" );
+                OSL_FAIL( "Can not operate original stream!" );
                 SetError( SVSTREAM_CANNOT_MAKE );
             }
 
@@ -1244,7 +1244,7 @@ BOOL UCBStorageStream_Impl::Revert()
     // if an OLEStorage is created on this stream, no "revert" is neccessary because OLEStorages do nothing on "Revert" !
     if ( m_bCommited )
     {
-        DBG_ERROR("Revert while commit is in progress!" );
+        OSL_FAIL("Revert while commit is in progress!" );
         return FALSE;                   //  ???
     }
 
@@ -1392,7 +1392,7 @@ ULONG UCBStorageStream::Write( const void* pData, ULONG nSize )
     // mba: does occur in writer !
     if ( pImp->m_bCommited )
     {
-        DBG_ERROR("Writing while commit is in progress!" );
+        OSL_FAIL("Writing while commit is in progress!" );
         return 0;
     }
 */
@@ -1425,7 +1425,7 @@ BOOL UCBStorageStream::SetSize( ULONG nNewSize )
 /*
     if ( pImp->m_bCommited )
     {
-        DBG_ERROR("Changing stream size while commit is in progress!" );
+        OSL_FAIL("Changing stream size while commit is in progress!" );
         return FALSE;
     }
 */
@@ -2665,7 +2665,7 @@ ULONG UCBStorage::GetFormat()
 
 String UCBStorage::GetUserName()
 {
-    DBG_ERROR("UserName is not implemented in UCB storages!" );
+    OSL_FAIL("UserName is not implemented in UCB storages!" );
     return pImp->m_aUserTypeName;
 }
 
@@ -2888,7 +2888,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
             // stream has already been created; if it has no external reference, it may be opened another time
             if ( pElement->m_xStream->m_pAntiImpl )
             {
-                DBG_ERROR("Stream is already open!" );
+                OSL_FAIL("Stream is already open!" );
                 SetError( SVSTREAM_ACCESS_DENIED );  // ???
                 return NULL;
             }
@@ -3011,7 +3011,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
         // storage has already been opened; if it has no external reference, it may be opened another time
         if ( pElement->m_xStorage->m_pAntiImpl )
         {
-            DBG_ERROR("Storage is already open!" );
+            OSL_FAIL("Storage is already open!" );
             SetError( SVSTREAM_ACCESS_DENIED );  // ???
         }
         else

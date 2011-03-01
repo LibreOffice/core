@@ -443,17 +443,17 @@ void AquaSalGraphics::initResolution( NSWindow* pWin )
                 }
                 else
                 {
-                    DBG_ERROR( "no resolution found in device description" );
+                    OSL_FAIL( "no resolution found in device description" );
                 }
             }
             else
             {
-                DBG_ERROR( "no device description" );
+                OSL_FAIL( "no device description" );
             }
         }
         else
         {
-            DBG_ERROR( "no screen found" );
+            OSL_FAIL( "no screen found" );
         }
 
         // #i107076# maintaining size-WYSIWYG-ness causes many problems for
@@ -1269,7 +1269,7 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rS
 
 void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,SalColor nTransparentColor )
 {
-    DBG_ERROR("not implemented for color masking!");
+    OSL_FAIL("not implemented for color masking!");
     drawBitmap( pPosAry, rSalBitmap );
 }
 
@@ -2416,7 +2416,7 @@ void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVerti
     else if( pFontData->IsEmbeddable() )
     {
         // get individual character widths
-        DBG_ERROR("not implemented for non-subsettable fonts!\n");
+        OSL_FAIL("not implemented for non-subsettable fonts!\n");
     }
 }
 

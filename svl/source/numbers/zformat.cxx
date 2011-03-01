@@ -2299,7 +2299,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                 }
                 if (rInfo.nCntExp == 0)
                 {
-                    DBG_ERROR("SvNumberformat:: Bruch, nCntExp == 0");
+                    OSL_FAIL("SvNumberformat:: Bruch, nCntExp == 0");
                     return FALSE;
                 }
                 ULONG nBasis = ((ULONG)floor(           // 9, 99, 999 ,...
@@ -4144,7 +4144,7 @@ DateFormat SvNumberformat::GetDateOrder() const
     }
     else
     {
-       DBG_ERROR( "SvNumberformat::GetDateOrder: no date" );
+       OSL_FAIL( "SvNumberformat::GetDateOrder: no date" );
     }
     return rLoc().getDateFormat();
 }
@@ -4154,7 +4154,7 @@ sal_uInt32 SvNumberformat::GetExactDateOrder() const
     sal_uInt32 nRet = 0;
     if ( (eType & NUMBERFORMAT_DATE) != NUMBERFORMAT_DATE )
     {
-        DBG_ERROR( "SvNumberformat::GetExactDateOrder: no date" );
+        OSL_FAIL( "SvNumberformat::GetExactDateOrder: no date" );
         return nRet;
     }
     short const * const pType = NumFor[0].Info().nTypeArray;

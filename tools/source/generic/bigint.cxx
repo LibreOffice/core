@@ -871,7 +871,7 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
     {
         if ( rVal.nVal == 0 )
         {
-            DBG_ERROR( "BigInt::operator/ --> divide by zero" );
+            OSL_FAIL( "BigInt::operator/ --> divide by zero" );
             return *this;
         }
 
@@ -932,7 +932,7 @@ void BigInt::DivMod( const BigInt& rVal, BigInt& rMod )
     {
         if ( rVal.nVal == 0 )
         {
-            DBG_ERROR( "BigInt::operator/ --> divide by zero" );
+            OSL_FAIL( "BigInt::operator/ --> divide by zero" );
             return;
         }
 
@@ -1001,7 +1001,7 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
     {
         if ( rVal.nVal == 0 )
         {
-            DBG_ERROR( "BigInt::operator/ --> divide by zero" );
+            OSL_FAIL( "BigInt::operator/ --> divide by zero" );
             return *this;
         }
 

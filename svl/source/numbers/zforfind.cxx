@@ -1022,7 +1022,7 @@ BOOL ImpSvNumberInputScan::GetDateRef( double& fDays, USHORT& nCounter,
                 }
             break;
             default:
-                DBG_ERROR( "ImpSvNumberInputScan::GetDateRef: unknown NfEvalDateFormat" );
+                OSL_FAIL( "ImpSvNumberInputScan::GetDateRef: unknown NfEvalDateFormat" );
                 DateFmt = YMD;
                 bFormatTurn = FALSE;
         }

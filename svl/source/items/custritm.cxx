@@ -61,7 +61,7 @@ int CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
 // virtual
 int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith) const
 {
-    DBG_ERROR("CntUnencodedStringItem::Compare(): No international");
+    OSL_FAIL("CntUnencodedStringItem::Compare(): No international");
     DBG_CHKTHIS(CntUnencodedStringItem, 0);
     DBG_ASSERT(rWith.ISA(CntUnencodedStringItem),
                 "CntUnencodedStringItem::Compare(): Bad type");
@@ -125,7 +125,7 @@ bool CntUnencodedStringItem::PutValue(const com::sun::star::uno::Any& rVal,
         m_aValue = UniString(aTheValue);
         return true;
     }
-    DBG_ERROR("CntUnencodedStringItem::PutValue(): Wrong type");
+    OSL_FAIL("CntUnencodedStringItem::PutValue(): Wrong type");
     return false;
 }
 

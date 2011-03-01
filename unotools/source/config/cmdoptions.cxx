@@ -362,7 +362,7 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
 //*****************************************************************************************************************
 void SvtCommandOptions_Impl::Commit()
 {
-    DBG_ERROR( "SvtCommandOptions_Impl::Commit()\nNot implemented yet!\n" );
+    OSL_FAIL( "SvtCommandOptions_Impl::Commit()\nNot implemented yet!\n" );
 }
 
 //*****************************************************************************************************************

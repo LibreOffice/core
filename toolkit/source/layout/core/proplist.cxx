@@ -246,7 +246,7 @@ setProperties( uno::Reference< uno::XInterface > const& xPeer,
 {
     if ( !prophlp::canHandleProps( xPeer ) )
     {
-        DBG_ERROR( "Error: setProperties - bad handle ignoring props:\n" );
+        OSL_FAIL( "Error: setProperties - bad handle ignoring props:\n" );
         for ( PropList::const_iterator it = rProps.begin(); it != rProps.end();
               ++it )
         {

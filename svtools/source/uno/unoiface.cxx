@@ -440,7 +440,7 @@ void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const 
                 case ::com::sun::star::awt::LineEndFormat::CARRIAGE_RETURN:           meLineEndType = LINEEND_CR; break;
                 case ::com::sun::star::awt::LineEndFormat::LINE_FEED:                 meLineEndType = LINEEND_LF; break;
                 case ::com::sun::star::awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED: meLineEndType = LINEEND_CRLF; break;
-                default: DBG_ERROR( "VCLXMultiLineEdit::setProperty: invalid line end value!" ); break;
+                default: OSL_FAIL( "VCLXMultiLineEdit::setProperty: invalid line end value!" ); break;
                 }
             }
             break;
@@ -496,7 +496,7 @@ void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const 
                 case LINEEND_CR:   nLineEndType = ::com::sun::star::awt::LineEndFormat::CARRIAGE_RETURN; break;
                 case LINEEND_LF:   nLineEndType = ::com::sun::star::awt::LineEndFormat::LINE_FEED; break;
                 case LINEEND_CRLF: nLineEndType = ::com::sun::star::awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED; break;
-                default: DBG_ERROR( "VCLXMultiLineEdit::getProperty: invalid line end value!" ); break;
+                default: OSL_FAIL( "VCLXMultiLineEdit::getProperty: invalid line end value!" ); break;
                 }
                 aProp <<= nLineEndType;
             }

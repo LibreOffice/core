@@ -133,7 +133,7 @@ namespace svt
 #ifdef DBG_UTIL
             else
             {
-                DBG_ERROR( "RegistrationDialog::Execute: invalid dialog state!" );
+                OSL_FAIL( "RegistrationDialog::Execute: invalid dialog state!" );
             }
 #endif
         }

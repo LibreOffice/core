@@ -67,7 +67,7 @@ String GetCommandLineParam( sal_uInt32 nParam )
         return String( aParam );
     else
     {
-        DBG_ERROR( "Unable to get CommandLineParam" );
+        OSL_FAIL( "Unable to get CommandLineParam" );
         return String();
     }
 }

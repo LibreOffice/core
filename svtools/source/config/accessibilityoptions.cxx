@@ -550,12 +550,12 @@ void SvtAccessibilityOptions::Commit()
 
 sal_Bool SvtAccessibilityOptions::GetIsForDrawings() const
 {
-    DBG_ERROR( "SvtAccessibilityOptions::GetIsForDrawings: is obsolete!" );
+    OSL_FAIL( "SvtAccessibilityOptions::GetIsForDrawings: is obsolete!" );
     return sal_False;
 }
 sal_Bool SvtAccessibilityOptions::GetIsForBorders() const
 {
-    DBG_ERROR( "SvtAccessibilityOptions::GetIsForBorders: is obsolete!" );
+    OSL_FAIL( "SvtAccessibilityOptions::GetIsForBorders: is obsolete!" );
     return sal_False;
 }
 sal_Bool SvtAccessibilityOptions::GetAutoDetectSystemHC() const

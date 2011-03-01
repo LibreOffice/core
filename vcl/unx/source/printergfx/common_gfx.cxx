@@ -566,7 +566,7 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const BY
                 }
                 else
                 {
-                    DBG_ERROR( "PrinterGfx::DrawPolyLineBezier: Strange output" );
+                    OSL_FAIL( "PrinterGfx::DrawPolyLineBezier: Strange output" );
                 }
                 i+=3;
             }
@@ -612,7 +612,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const BYT
             }
             else
             {
-                DBG_ERROR( "PrinterGfx::DrawPolygonBezier: Strange output" );
+                OSL_FAIL( "PrinterGfx::DrawPolygonBezier: Strange output" );
             }
             i+=3;
         }
@@ -676,7 +676,7 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
                 }
                 else
                 {
-                    DBG_ERROR( "PrinterGfx::DrawPolyPolygonBezier: Strange output" );
+                    OSL_FAIL( "PrinterGfx::DrawPolyPolygonBezier: Strange output" );
                 }
                 j+=3;
             }
@@ -999,7 +999,7 @@ PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
         case 4: cCmd |= 0x01;   break;
         case 6: cCmd |= 0x02;   break;
         case 8: cCmd |= 0x03;   break;
-        default:    DBG_ERROR ("invalid x precision in binary path");
+        default:    OSL_FAIL("invalid x precision in binary path");
     }
     switch (nXPrec)
     {
@@ -1007,7 +1007,7 @@ PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
         case 4: cCmd |= 0x04;   break;
         case 6: cCmd |= 0x08;   break;
         case 8: cCmd |= 0x0c;   break;
-        default:    DBG_ERROR ("invalid y precision in binary path");
+        default:    OSL_FAIL("invalid y precision in binary path");
     }
     cCmd += 'A';
     pPath[0] = cCmd;

@@ -1172,7 +1172,7 @@ SvLBox* SvLBox::GetTargetView() const
 void SvLBox::RequestingChilds( SvLBoxEntry*  )
 {
     DBG_CHKTHIS(SvLBox,0);
-    DBG_ERROR("Child-Request-Hdl not implemented!");
+    OSL_FAIL("Child-Request-Hdl not implemented!");
 }
 
 void SvLBox::RecalcViewData()

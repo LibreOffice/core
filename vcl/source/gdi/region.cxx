@@ -656,7 +656,7 @@ BOOL ImplRegion::InsertPoint( const Point &rPoint, long nLineID,
             mpLastCheckedBand = mpLastCheckedBand->mpNextBand;
         }
 
-        DBG_ERROR( "ImplRegion::InsertPoint reached the end of the list!" );
+        OSL_FAIL( "ImplRegion::InsertPoint reached the end of the list!" );
     }
     else
     {
@@ -673,10 +673,10 @@ BOOL ImplRegion::InsertPoint( const Point &rPoint, long nLineID,
             mpLastCheckedBand = mpLastCheckedBand->mpPrevBand;
         }
 
-        DBG_ERROR( "ImplRegion::InsertPoint reached the beginning of the list!" );
+        OSL_FAIL( "ImplRegion::InsertPoint reached the beginning of the list!" );
     }
 
-    DBG_ERROR( "ImplRegion::InsertPoint point not inserted!" );
+    OSL_FAIL( "ImplRegion::InsertPoint point not inserted!" );
 
     // reinitialize pointer (should never be reached!)
     mpLastCheckedBand = mpFirstBand;
@@ -889,7 +889,7 @@ void ImplRegion::Union( long nLeft, long nTop, long nRight, long nBottom )
                 {
                     if ( (pBand->mnYTop < nCurY) || (pBand->mnYBottom < nCurY) )
                     {
-                        DBG_ERROR( "ImplRegion::Union() - Bands not sorted!" );
+                        OSL_FAIL( "ImplRegion::Union() - Bands not sorted!" );
                     }
                     pBand = pBand->mpNextBand;
                 }
@@ -926,7 +926,7 @@ void ImplRegion::Exclude( long nLeft, long nTop, long nRight, long nBottom )
                 {
                     if ( (pBand->mnYTop < nCurY) || (pBand->mnYBottom < nCurY) )
                     {
-                        DBG_ERROR( "ImplRegion::Exclude() - Bands not sorted!" );
+                        OSL_FAIL( "ImplRegion::Exclude() - Bands not sorted!" );
                     }
                     pBand = pBand->mpNextBand;
                 }
@@ -963,7 +963,7 @@ void ImplRegion::XOr( long nLeft, long nTop, long nRight, long nBottom )
                 {
                     if ( (pBand->mnYTop < nCurY) || (pBand->mnYBottom < nCurY) )
                     {
-                        DBG_ERROR( "ImplRegion::XOr() - Bands not sorted!" );
+                        OSL_FAIL( "ImplRegion::XOr() - Bands not sorted!" );
                     }
                     pBand = pBand->mpNextBand;
                 }
@@ -1054,12 +1054,12 @@ BOOL ImplRegion::OptimizeBandList()
                     "Exiting ImplRegion::OptimizeBandList(): empty band in region!" );
 
         if ( pBand->mnYBottom < pBand->mnYTop )
-            DBG_ERROR( "ImplRegion::OptimizeBandList(): YBottomBoundary < YTopBoundary" );
+            OSL_FAIL( "ImplRegion::OptimizeBandList(): YBottomBoundary < YTopBoundary" );
 
         if ( pBand->mpNextBand )
         {
             if ( pBand->mnYBottom >= pBand->mpNextBand->mnYTop )
-                DBG_ERROR( "ImplRegion::OptimizeBandList(): overlapping bands in region!" );
+                OSL_FAIL( "ImplRegion::OptimizeBandList(): overlapping bands in region!" );
         }
 
         pBand = pBand->mpNextBand;
@@ -2477,7 +2477,7 @@ SvStream& operator>>( SvStream& rIStrm, Region& rRegion )
 
                 if( rIStrm.IsEof() )
                 {
-                    DBG_ERROR( "premature end of region stream" );
+                    OSL_FAIL( "premature end of region stream" );
                     delete rRegion.mpImplRegion;
                     rRegion.mpImplRegion = (ImplRegion*)&aImplEmptyRegion;
                     return rIStrm;

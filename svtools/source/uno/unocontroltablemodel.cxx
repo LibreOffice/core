@@ -290,7 +290,7 @@ using namespace ::com::sun::star::uno;
     {
         (void) listener;
         // TODO
-        DBG_ERROR( "DefaultTableModel::addTableModelListener: not yet implemented!" );
+        OSL_FAIL( "DefaultTableModel::addTableModelListener: not yet implemented!" );
     }
 
     //--------------------------------------------------------------------
@@ -298,7 +298,7 @@ using namespace ::com::sun::star::uno;
     {
         (void)listener;
         // TODO
-        DBG_ERROR( "DefaultTableModel::removeTableModelListener: not yet implemented!" );
+        OSL_FAIL( "DefaultTableModel::removeTableModelListener: not yet implemented!" );
     }
 
     //--------------------------------------------------------------------
@@ -319,7 +319,7 @@ using namespace ::com::sun::star::uno;
     {
         (void)id;
         // TODO
-        DBG_ERROR( "DefaultTableModel::getColumnModelByID: not yet implemented!" );
+        OSL_FAIL( "DefaultTableModel::getColumnModelByID: not yet implemented!" );
         return PColumnModel();
     }
 

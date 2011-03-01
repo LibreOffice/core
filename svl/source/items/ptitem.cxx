@@ -156,7 +156,7 @@ bool SfxPointItem::QueryValue( uno::Any& rVal,
         case 0: rVal <<= aTmp; break;
         case MID_X: rVal <<= aTmp.X; break;
         case MID_Y: rVal <<= aTmp.Y; break;
-        default: DBG_ERROR("Wrong MemberId!"); return true;
+        default: OSL_FAIL("Wrong MemberId!"); return true;
     }
 
     return true;
@@ -195,7 +195,7 @@ bool SfxPointItem::PutValue( const uno::Any& rVal,
             case 0: aVal.setX( aValue.X ); aVal.setY( aValue.Y ); break;
             case MID_X: aVal.setX( nVal ); break;
             case MID_Y: aVal.setY( nVal ); break;
-            default: DBG_ERROR("Wrong MemberId!"); return FALSE;
+            default: OSL_FAIL("Wrong MemberId!"); return FALSE;
         }
     }
 

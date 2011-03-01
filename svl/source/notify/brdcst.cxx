@@ -147,7 +147,7 @@ BOOL SfxBroadcaster::AddListener( SfxListener& rListener )
         aListeners.Insert( pListener, aListeners.Count() );
     else
     {
-        DBG_ERROR( "array overflow" );
+        OSL_FAIL( "array overflow" );
         return FALSE;
     }
 

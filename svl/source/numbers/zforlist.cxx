@@ -526,7 +526,7 @@ BOOL SvNumberFormatter::PutEntry(String& rString,
             sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
             if (nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
             {
-                DBG_ERROR("SvNumberFormatter:: Zu viele Formate pro CL");
+                OSL_FAIL("SvNumberFormatter:: Zu viele Formate pro CL");
                 delete p_Entry;
             }
             else if (!aFTable.Insert(nPos+1,p_Entry))
@@ -966,7 +966,7 @@ String SvNumberFormatter::GetKeyword( LanguageType eLnge, USHORT nIndex )
     if ( pTable && nIndex < NF_KEYWORD_ENTRIES_COUNT )
         return pTable[nIndex];
 
-    DBG_ERROR("GetKeyword: invalid index");
+    OSL_FAIL("GetKeyword: invalid index");
     return String();
 }
 
@@ -1050,7 +1050,7 @@ SvNumberFormatTable& SvNumberFormatter::GetFirstEntryTable(
         SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(FIndex);
         if (!pFormat)
         {
-//          DBG_ERROR("SvNumberFormatter:: Unbekanntes altes Zahlformat (1)");
+//          OSL_FAIL("SvNumberFormatter:: Unbekanntes altes Zahlformat (1)");
             rLnge = IniLnge;
             eType = NUMBERFORMAT_ALL;
             eTypetmp = eType;
@@ -1207,7 +1207,7 @@ BOOL SvNumberFormatter::IsNumberFormat(const String& sString,
     const SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(F_Index);
     if (!pFormat)
     {
-//      DBG_ERROR("SvNumberFormatter:: Unbekanntes altes Zahlformat (2)");
+//      OSL_FAIL("SvNumberFormatter:: Unbekanntes altes Zahlformat (2)");
         ChangeIntl(IniLnge);
         FType = NUMBERFORMAT_NUMBER;
     }
@@ -2964,7 +2964,7 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
                 nNewKey = nPos+1;
                 if (nPos - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
                 {
-                    DBG_ERROR(
+                    OSL_FAIL(
                         "SvNumberFormatter:: Zu viele Formate pro CL");
                     delete pNewEntry;
                 }
@@ -4017,7 +4017,7 @@ void NfCurrencyEntry::CompletePositiveFormatString( String& rStr,
         }
         break;
         default:
-            DBG_ERROR("NfCurrencyEntry::CompletePositiveFormatString: unknown option");
+            OSL_FAIL("NfCurrencyEntry::CompletePositiveFormatString: unknown option");
         break;
     }
 }
@@ -4139,7 +4139,7 @@ void NfCurrencyEntry::CompleteNegativeFormatString( String& rStr,
         }
         break;
         default:
-            DBG_ERROR("NfCurrencyEntry::CompleteNegativeFormatString: unknown option");
+            OSL_FAIL("NfCurrencyEntry::CompleteNegativeFormatString: unknown option");
         break;
     }
 }
@@ -4170,7 +4170,7 @@ USHORT NfCurrencyEntry::GetEffectivePositiveFormat( USHORT
             case 3:                                         // 1 $
             break;
             default:
-                DBG_ERROR("NfCurrencyEntry::GetEffectivePositiveFormat: unknown option");
+                OSL_FAIL("NfCurrencyEntry::GetEffectivePositiveFormat: unknown option");
             break;
         }
         return nIntlFormat;
@@ -4211,7 +4211,7 @@ USHORT lcl_MergeNegativeParenthesisFormat( USHORT nIntlFormat, USHORT nCurrForma
             nSign = 2;
         break;
         default:
-            DBG_ERROR("lcl_MergeNegativeParenthesisFormat: unknown option");
+            OSL_FAIL("lcl_MergeNegativeParenthesisFormat: unknown option");
         break;
     }
 
@@ -4324,7 +4324,7 @@ USHORT NfCurrencyEntry::GetEffectiveNegativeFormat( USHORT nIntlFormat,
                 nIntlFormat = 8;                            // -1 $
             break;
             default:
-                DBG_ERROR("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
+                OSL_FAIL("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
             break;
         }
 #endif
@@ -4386,7 +4386,7 @@ USHORT NfCurrencyEntry::GetEffectiveNegativeFormat( USHORT nIntlFormat,
                     nIntlFormat, nCurrFormat );
             break;
             default:
-                DBG_ERROR("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
+                OSL_FAIL("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
             break;
         }
     }

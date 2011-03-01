@@ -1581,7 +1581,7 @@ Window* Application::GetDefDialogParent()
                 // check for corrupted window hierarchy, #122232#, may be we now crash somewhere else
                 if( !pWin->mpWindowImpl )
                 {
-                    DBG_ERROR( "Window hierarchy corrupted!" );
+                    OSL_FAIL( "Window hierarchy corrupted!" );
                     pSVData->maWinData.mpFocusWin = NULL;   // avoid further access
                     return NULL;
                 }

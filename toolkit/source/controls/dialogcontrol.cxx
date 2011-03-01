@@ -150,7 +150,7 @@ struct DisposeControlModel : public ::std::unary_function< Reference< XControlMo
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "DisposeControlModel::(): caught an exception while disposing a component!" );
+            OSL_FAIL( "DisposeControlModel::(): caught an exception while disposing a component!" );
         }
     }
 };
@@ -909,7 +909,7 @@ sal_Bool SAL_CALL UnoControlDialogModel::getGroupControl(  ) throw (RuntimeExcep
 // ----------------------------------------------------------------------------
 void SAL_CALL UnoControlDialogModel::setGroupControl( sal_Bool ) throw (RuntimeException)
 {
-    DBG_ERROR( "UnoControlDialogModel::setGroupControl: explicit grouping not supported" );
+    OSL_FAIL( "UnoControlDialogModel::setGroupControl: explicit grouping not supported" );
 }
 
 // ----------------------------------------------------------------------------
@@ -1004,7 +1004,7 @@ void SAL_CALL UnoControlDialogModel::setGroup( const Sequence< Reference< XContr
     // We only have a sequence of control models, and we _know_ (yes, that's a HACK relying on
     // implementation details) that VCL does grouping according to the order of controls automatically
     // At least VCL does this for all we're interested in: Radio buttons.
-    DBG_ERROR( "UnoControlDialogModel::setGroup: grouping not supported" );
+    OSL_FAIL( "UnoControlDialogModel::setGroup: grouping not supported" );
 }
 
 // ----------------------------------------------------------------------------
@@ -1027,7 +1027,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "lcl_getDialogStep: caught an exception while determining the dialog page!" );
+            OSL_FAIL( "lcl_getDialogStep: caught an exception while determining the dialog page!" );
         }
         return nStep;
     }
@@ -1052,7 +1052,7 @@ void SAL_CALL UnoControlDialogModel::getGroup( sal_Int32 _nGroup, Sequence< Refe
 
     if ( ( _nGroup < 0 ) || ( _nGroup >= (sal_Int32)maGroups.size() ) )
     {
-        DBG_ERROR( "UnoControlDialogModel::getGroup: invalid argument and I am not allowed to throw an exception!" );
+        OSL_FAIL( "UnoControlDialogModel::getGroup: invalid argument and I am not allowed to throw an exception!" );
         _rGroup.realloc( 0 );
         _rName = ::rtl::OUString();
     }

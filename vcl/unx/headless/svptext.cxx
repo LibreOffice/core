@@ -118,7 +118,7 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
                 bFound = rServerFont.GetGlyphBitmap8( nGlyphIndex, pGcpHelper->maRawBitmap );
                 break;
             default:
-                DBG_ERROR( "SVP GCP::GetGlyphBmp(): illegal scanline format");
+                OSL_FAIL( "SVP GCP::GetGlyphBmp(): illegal scanline format");
                 // fall back to black&white mask
                 nBmpFormat = Format::ONE_BIT_LSB_GREY;
                 bFound = false;

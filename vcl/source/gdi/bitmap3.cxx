@@ -354,7 +354,7 @@ BOOL Bitmap::Convert( BmpConversion eConversion )
         break;
 
         default:
-            DBG_ERROR( "Bitmap::Convert(): Unsupported conversion" );
+            OSL_FAIL( "Bitmap::Convert(): Unsupported conversion" );
         break;
     }
 
@@ -1841,7 +1841,7 @@ BOOL Bitmap::ImplReduceMedian( USHORT nColCount )
         nBitCount = 8;
     else
     {
-        DBG_ERROR( "Bitmap::ImplReduceMedian(): invalid color count!" );
+        OSL_FAIL( "Bitmap::ImplReduceMedian(): invalid color count!" );
         nBitCount = 8;
         nColCount = 256;
     }
