@@ -233,7 +233,7 @@ bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField
         if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
         {
             xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT)));
-            if (  m_pFFData->getTextDefault().getLength() )
+            if (  m_pFFData->getName().getLength() )
             {
                 xNamed->setName( m_pFFData->getName() );
             }
