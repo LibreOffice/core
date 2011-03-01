@@ -89,9 +89,7 @@ public:
      *         returned.
      */
     ULONG CheckSourceRange() const;
-    ScDPTableDataCache* GetCache(long nID) const;
-    ScDPTableDataCache* GetExistDPObjectCache() const;
-    long GetCacheId(long nID) const;
+    long GetCacheId() const;
 
 private:
     mutable ScRange maSourceRange;

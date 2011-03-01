@@ -158,20 +158,14 @@ ScDPCacheTable::Criterion::Criterion() :
 
 // ----------------------------------------------------------------------------
 
-ScDPCacheTable::ScDPCacheTable( ScDocument* pDoc, long nId ) :
-    mpCache( NULL ),
-    mpNoneCache( NULL )
+ScDPCacheTable::ScDPCacheTable(ScDPTableDataCache* pCache) :
+    mpCache(pCache)
 {
-    if ( nId >= 0 )
-        mpCache = pDoc->GetDPCollection()->GetDPObjectCache( nId );
-    else
-    { //create a temp cache object
-        initNoneCache( NULL );
-    }
 }
 
 ScDPCacheTable::~ScDPCacheTable()
 {
+    delete mpCache;
 }
 
 sal_Int32 ScDPCacheTable::getRowSize() const
@@ -187,10 +181,6 @@ sal_Int32 ScDPCacheTable::getColSize() const
 void ScDPCacheTable::fillTable(
     const ScQueryParam& rQuery, bool* pSpecial, bool bIgnoreEmptyRows, bool bRepeatIfEmpty)
 {
-    // check cache
-    if ( mpCache == NULL )
-        initNoneCache( NULL );
-
    const SCROW  nRowCount = getRowSize();
    const SCCOL  nColCount = (SCCOL) getColSize();
    if ( nRowCount <= 0 || nColCount <= 0)
@@ -242,10 +232,6 @@ void ScDPCacheTable::fillTable(
 
 void ScDPCacheTable::fillTable()
 {
-    // check cache
-    if ( mpCache == NULL )
-        initNoneCache( NULL );
-
    const SCROW  nRowCount = getRowSize();
    const SCCOL  nColCount = (SCCOL) getColSize();
    if ( nRowCount <= 0 || nColCount <= 0)
@@ -420,7 +406,7 @@ void ScDPCacheTable::clear()
 
 bool ScDPCacheTable::empty() const
 {
-    return ( mpCache == NULL&& mpNoneCache == NULL ) || maFieldEntries.size()==0;
+    return mpCache == NULL || maFieldEntries.empty();
 }
 
 bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCriteria,
@@ -444,26 +430,14 @@ bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCr
     return true;
 }
 
-
-void ScDPCacheTable::initNoneCache( ScDocument* pDoc )
-{
-    mpCache = NULL;
-    delete mpNoneCache;
-    mpNoneCache = new ScDPTableDataCache( pDoc );
-}
-
 const ScDPTableDataCache* ScDPCacheTable::getCache() const
 {
-    if ( mpCache )
-        return mpCache;
-    return mpNoneCache;
+    return mpCache;
 }
 
 ScDPTableDataCache* ScDPCacheTable::getCache()
 {
-    if ( mpCache )
-        return mpCache;
-    return mpNoneCache;
+    return mpCache;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

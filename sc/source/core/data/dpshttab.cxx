@@ -61,12 +61,12 @@ using ::std::vector;
 // -----------------------------------------------------------------------
 
 ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc , long nCacheId) :
-    ScDPTableData(pD, rDesc.GetCacheId(nCacheId) ),
+    ScDPTableData(pD, -1),
     aQuery ( rDesc.GetQueryParam() ),
     pSpecial(NULL),
     bIgnoreEmptyRows( FALSE ),
     bRepeatIfEmpty(FALSE),
-    aCacheTable( pD, rDesc.GetCacheId(nCacheId))
+    aCacheTable(rDesc.CreateCache(-1))
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
     pSpecial = new bool[nEntryCount];
@@ -310,10 +310,6 @@ ScDPTableDataCache* ScSheetSourceDesc::CreateCache(long nID) const
     if (!mpDoc)
         return NULL;
 
-    ScDPTableDataCache* pCache = GetExistDPObjectCache();
-    if ( pCache && ( nID < 0 || nID == pCache->GetId() ) )
-        return pCache;
-
     ULONG nErrId = CheckSourceRange();
     if (nErrId)
     {
@@ -321,44 +317,14 @@ ScDPTableDataCache* ScSheetSourceDesc::CreateCache(long nID) const
         return NULL;
     }
 
-    pCache = new ScDPTableDataCache(mpDoc);
-
+    ScDPTableDataCache* pCache = new ScDPTableDataCache(mpDoc);
     pCache->InitFromDoc(mpDoc, GetSourceRange());
-    pCache->SetId( nID );
-    mpDoc->GetDPCollection()->AddDPObjectCache(pCache);
-
-    DBG_TRACE1("Create a cache id = %d \n", pCache->GetId());
-
     return pCache;
 }
 
-ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache() const
+long ScSheetSourceDesc::GetCacheId() const
 {
-    return mpDoc->GetDPCollection()->GetUsedDPObjectCache( GetSourceRange() );
-}
-
-ScDPTableDataCache* ScSheetSourceDesc::GetCache(long nID) const
-{
-    if (!mpDoc)
-        return NULL;
-
-    ScDPTableDataCache* pCache = mpDoc->GetDPCollection()->GetDPObjectCache(nID);
-    if (NULL == pCache)
-        pCache = GetExistDPObjectCache();
-
-    if (NULL == pCache)
-        pCache = CreateCache();
-
-    return pCache;
-}
-
-long ScSheetSourceDesc::GetCacheId(long nID) const
-{
-    ScDPTableDataCache* pCache = GetCache(nID);
-    if ( NULL == pCache )
-        return -1;
-    else
-        return pCache->GetId();
+    return -1;
 }
 
 ULONG ScSheetSourceDesc::CheckSourceRange() const

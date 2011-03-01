@@ -121,7 +121,7 @@ public:
         Criterion();
     };
 
-    ScDPCacheTable( ScDocument* pDoc, long nId );
+    ScDPCacheTable(ScDPTableDataCache* pCache);
     ~ScDPCacheTable();
 
     sal_Int32 getRowSize() const;
@@ -183,7 +183,6 @@ private:
      * @param rCriteria a list of criteria
      */
     bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const;
-    void initNoneCache( ScDocument* pDoc );
 
 private:
     /** unique field entires for each field (column). */
@@ -194,7 +193,6 @@ private:
     ::std::vector<bool> maRowsVisible;
 
     ScDPTableDataCache* mpCache;
-    ScDPTableDataCache* mpNoneCache;
 };
 #endif
 

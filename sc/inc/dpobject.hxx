@@ -123,9 +123,6 @@ private:
 
 public:
     inline void SetRefresh() { bRefresh = TRUE; }
-    long          GetCacheId() const;
-    void          SetCacheId( long nCacheId );
-    ULONG RefreshCache();
                 ScDPObject( ScDocument* pD );
                 ScDPObject(const ScDPObject& r);
                 ~ScDPObject();
@@ -307,16 +304,6 @@ public:
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
 
     bool HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
-
-    ScDPTableDataCache* GetDPObjectCache( long nID );
-    ScDPTableDataCache* GetUsedDPObjectCache ( const ScRange& rRange );
-    long AddDPObjectCache( ScDPTableDataCache* pData );
-    void RemoveDPObjectCache( long nID );
-
-    /**
-     * Get an available, unique ID value for datapilot data cache.
-     */
-    long GetNewDPObjectCacheId ();
 };
 
 

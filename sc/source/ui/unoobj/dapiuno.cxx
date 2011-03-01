@@ -1276,13 +1276,17 @@ CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRange() throw(RuntimeExc
     return aRet;
 }
 
-ULONG RefreshDPObject( ScDPObject *pDPObj, ScDocument *pDoc, ScDocShell *pDocSh, BOOL bRecord, BOOL bApi );
-
 void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if( ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName) )
-        RefreshDPObject( pDPObj, NULL, GetDocShell(), TRUE, TRUE );
+    ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
+    if (pDPObj)
+    {
+        ScDPObject* pNew = new ScDPObject(*pDPObj);
+        ScDBDocFunc aFunc(*GetDocShell());
+        aFunc.DataPilotUpdate( pDPObj, pNew, TRUE, TRUE );
+        delete pNew;        // DataPilotUpdate copies settings from "new" object
+    }
 }
 
 Sequence< Sequence<Any> > SAL_CALL ScDataPilotTableObj::getDrillDownData(const CellAddress& aAddr)

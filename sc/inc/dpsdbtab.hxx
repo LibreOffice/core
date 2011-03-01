@@ -59,10 +59,7 @@ struct ScImportSourceDesc
                  nType   == rOther.nType &&
                  bNative == rOther.bNative; }
 
-    ScDPTableDataCache* GetExistDPObjectCache( ScDocument* pDoc ) const;
     ScDPTableDataCache* CreateCache(  ScDocument* pDoc , long nID  ) const;
-    ScDPTableDataCache* GetCache( ScDocument* pDoc, long nID ) const;
-    long    GetCacheId( ScDocument* pDoc, long nID ) const;
 };
 
 class ScDatabaseDPData : public ScDPTableData
