@@ -5192,6 +5192,8 @@ void SwPageFrm::PaintMarginArea( const SwRect& _rOutputRect,
         {
             SwRect aPgRect = Frm();
             aPgRect._Intersection( _rOutputRect );
+            if(aPgRect.Height() < 0 || aPgRect.Width() <= 0)    // No intersection
+                return;
             SwRegionRects aPgRegion( aPgRect );
             aPgRegion -= aPgPrtRect;
             const SwPageFrm* pPage = static_cast<const SwPageFrm*>(this);
