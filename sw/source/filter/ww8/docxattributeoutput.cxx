@@ -213,6 +213,7 @@ class FieldMarkParamsHelper
     const sw::mark::IFieldmark& mrFieldmark;
     public:
     FieldMarkParamsHelper( const sw::mark::IFieldmark& rFieldmark ) : mrFieldmark( rFieldmark ) {}
+    rtl::OUString getName() { return mrFieldmark.GetName(); }
     template < typename T >
     bool extractParam( const rtl::OUString& rKey, T& rResult )
     {
@@ -633,9 +634,8 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
         rtl::OUString sName, sHelp, sToolTip, sSelected;
 
         FieldMarkParamsHelper params( rFieldmark );
-        params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_NAME) ), sName );
         params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY) ), vListEntries );
-
+        sName = params.getName();
         sal_Int32 nSelectedIndex = 0;
 
         if ( params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT) ), nSelectedIndex ) )
@@ -653,24 +653,19 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
 
         FieldMarkParamsHelper params( rFieldmark );
         params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMCHECKBOX_NAME ) ), sName );
-        params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMCHECKBOX_DEFAULT ) ), sDefault );
 
         const sw::mark::ICheckboxFieldmark* pCheckboxFm = dynamic_cast<const sw::mark::ICheckboxFieldmark*>(&rFieldmark);
         if ( pCheckboxFm && pCheckboxFm->IsChecked() )
             bChecked = true;
 
         FFDataWriterHelper ffdataOut( m_pSerializer );
-        ffdataOut.WriteFormCheckbox( sName, sDefault, bChecked );
+        ffdataOut.WriteFormCheckbox( sName, rtl::OUString(), bChecked );
     }
     else if ( rInfos.eType == ww::eFORMTEXT )
     {
-        rtl::OUString sName, sDefault;
         FieldMarkParamsHelper params( rFieldmark );
-        params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMTEXT_NAME ) ), sName );
-        params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMTEXT_DEFAULT ) ), sDefault );
-
         FFDataWriterHelper ffdataOut( m_pSerializer );
-        ffdataOut.WriteFormText( sName, sDefault );
+        ffdataOut.WriteFormText( params.getName(), rtl::OUString() );
     }
 }
 
