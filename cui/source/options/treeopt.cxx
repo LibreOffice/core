@@ -837,13 +837,11 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
 {
     aTreeLB.SetNodeDefaultImages();
 
-    String sResName = String::CreateFromAscii( "iso" );
-    ResMgr* pIsoRes = ResMgr::CreateResMgr( ::rtl::OUStringToOString( sResName, RTL_TEXTENCODING_UTF8 ) );
+    ResMgr* pIsoRes = ResMgr::CreateResMgr( "iso" );
     if ( !pIsoRes )
     {
         // Fallback: Use ooo resource file
-        String sOOoName = String::CreateFromAscii( "ooo" );
-        pIsoRes = ResMgr::CreateResMgr( ::rtl::OUStringToOString( sOOoName, RTL_TEXTENCODING_UTF8 ) );
+        pIsoRes = ResMgr::CreateResMgr("ooo");
     }
 
     //! ResMgr* pIsoRes = SFX_APP()->GetLabelResManager();
