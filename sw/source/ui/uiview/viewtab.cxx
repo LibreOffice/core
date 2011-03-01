@@ -694,7 +694,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             if(bIsTableRTL)
             {
                 USHORT nColCount = aColItem.Count() - 1;
-                for ( USHORT i = 0; i < nColCount; ++i )
+                for ( USHORT i = 0; i < nColCount && i < aTabCols.Count(); ++i )
                 {
                     const SvxColumnDescription& rCol = aColItem[nColCount - i];
                     aTabCols[i] = aTabCols.GetRight() - rCol.nStart;
@@ -703,7 +703,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             }
             else
             {
-                for ( USHORT i = 0; i < aColItem.Count()-1; ++i )
+                for ( USHORT i = 0; i < aColItem.Count()-1 && i < aTabCols.Count(); ++i )
                 {
                     const SvxColumnDescription& rCol = aColItem[i];
                     aTabCols[i] = rCol.nEnd + aTabCols.GetLeft();
