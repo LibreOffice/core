@@ -156,7 +156,7 @@ BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
                 }
                 catch( const std::bad_alloc& )
                 {
-                    DBG_ERROR( "sd PropItem::Read bad alloc" );
+                    OSL_FAIL( "sd PropItem::Read bad alloc" );
                 }
             }
             if ( bAlign )
@@ -185,7 +185,7 @@ BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
                 }
                 catch( const std::bad_alloc& )
                 {
-                    DBG_ERROR( "sd PropItem::Read bad alloc" );
+                    OSL_FAIL( "sd PropItem::Read bad alloc" );
                 }
             }
             if ( bAlign && ( nItemSize & 1 ) )
@@ -399,7 +399,7 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
                 }
                 catch( const std::bad_alloc& )
                 {
-                    DBG_ERROR( "sd Section::GetDictionary bad alloc" );
+                    OSL_FAIL( "sd Section::GetDictionary bad alloc" );
                 }
                 if ( !aString.Len() )
                     break;

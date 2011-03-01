@@ -427,7 +427,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
 
     if( !ConvertAnimationEffect( eEffect, aPresetId, aPresetSubType ) )
     {
-        DBG_ERROR( "sd::EffectMigration::SetAnimationEffect(), no mapping for given AnimationEffect value" );
+        OSL_FAIL( "sd::EffectMigration::SetAnimationEffect(), no mapping for given AnimationEffect value" );
         return;
     }
 
@@ -595,7 +595,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
 
     if( !ConvertAnimationEffect( eEffect, aPresetId, aPresetSubType ) )
     {
-        DBG_ERROR( "sd::EffectMigration::SetAnimationEffect(), no mapping for given AnimationEffect value" );
+        OSL_FAIL( "sd::EffectMigration::SetAnimationEffect(), no mapping for given AnimationEffect value" );
         return;
     }
 
@@ -1159,7 +1159,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
     // check if there is at least one effect for xThis
     if( nCurrentPos == -1 )
     {
-        DBG_ERROR("sd::EffectMigration::SetPresentationOrder() failed cause this shape has no effect" );
+        OSL_FAIL("sd::EffectMigration::SetPresentationOrder() failed cause this shape has no effect" );
         return;
     }
 

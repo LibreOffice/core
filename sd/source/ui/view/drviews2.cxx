@@ -322,7 +322,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else // nur zum Test
             {
-                DBG_ERROR(" Kein Wert fuer Silbentrennung!");
+                OSL_FAIL(" Kein Wert fuer Silbentrennung!");
                 SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
                 BOOL bValue = TRUE;
                 aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
@@ -611,7 +611,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
                         break;
                     case SVX_ZOOM_PAGEWIDTH_NOBORDER:
-                        DBG_ERROR("sd::DrawViewShell::FuTemporary(), SVX_ZOOM_PAGEWIDTH_NOBORDER not handled!" );
+                        OSL_FAIL("sd::DrawViewShell::FuTemporary(), SVX_ZOOM_PAGEWIDTH_NOBORDER not handled!" );
                         break;
                 }
                 rReq.Ignore ();

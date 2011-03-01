@@ -761,7 +761,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sd::SdXMLFilter::Import(), exception during clearing of unused named items");
+            OSL_FAIL("sd::SdXMLFilter::Import(), exception during clearing of unused named items");
         }
     }
 
@@ -846,7 +846,7 @@ sal_Bool SdXMLFilter::Export()
 
     if( !mxModel.is() )
     {
-        DBG_ERROR("Got NO Model in XMLExport");
+        OSL_FAIL("Got NO Model in XMLExport");
         return FALSE;
     }
 
@@ -860,7 +860,7 @@ sal_Bool SdXMLFilter::Export()
 
         if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GenericDrawingDocument" ) ) ) )
         {
-            DBG_ERROR( "Model is no DrawingDocument in XMLExport" );
+            OSL_FAIL( "Model is no DrawingDocument in XMLExport" );
             return FALSE;
         }
 
@@ -868,7 +868,7 @@ sal_Bool SdXMLFilter::Export()
 
         if( !xServiceFactory.is() )
         {
-            DBG_ERROR( "got no service manager" );
+            OSL_FAIL( "got no service manager" );
             return FALSE;
         }
 
@@ -876,7 +876,7 @@ sal_Bool SdXMLFilter::Export()
 
         if( !xWriter.is() )
         {
-            DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
+            OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
             return FALSE;
         }
         uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );

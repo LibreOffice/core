@@ -270,7 +270,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
     catch(...)
     {
-        DBG_ERROR("Can't get SpellChecker");
+        OSL_FAIL("Can't get SpellChecker");
     }
 
     rOutliner.SetDefaultLanguage( Application::GetSettings().GetLanguage() );
@@ -324,7 +324,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
     catch(...)
     {
-        DBG_ERROR("Can't get SpellChecker");
+        OSL_FAIL("Can't get SpellChecker");
     }
 
     pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguage() );

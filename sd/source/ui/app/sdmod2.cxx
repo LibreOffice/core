@@ -401,7 +401,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             }
             else
             {
-                DBG_ERROR("sd::SdModule::CalcFieldValueHdl(), unknown field type!");
+                OSL_FAIL("sd::SdModule::CalcFieldValueHdl(), unknown field type!");
             }
 
             if( aRepresentation.Len() == 0 )                // TODO: Edit engine doesn't handle empty fields?

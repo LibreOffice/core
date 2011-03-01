@@ -61,7 +61,7 @@ void UndoManager::LeaveListAction()
         }
         else
         {
-            DBG_ERROR("sd::UndoManager::LeaveListAction(), no open list action!" );
+            OSL_FAIL("sd::UndoManager::LeaveListAction(), no open list action!" );
         }
     }
 }

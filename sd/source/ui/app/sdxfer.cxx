@@ -308,7 +308,7 @@ void SdTransferable::CreateData()
 
         if( !maDocShellRef.Is() )
         {
-            DBG_ERROR( "SdTransferable::CreateData(), failed to create a model with persist, clipboard operation will fail for OLE objects!" );
+            OSL_FAIL( "SdTransferable::CreateData(), failed to create a model with persist, clipboard operation will fail for OLE objects!" );
             mbOwnDocument = TRUE;
         }
 
@@ -629,7 +629,7 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
             }
             catch( Exception& )
             {
-                DBG_ERROR( "sd::SdTransferable::WriteObject(), exception catched!" );
+                OSL_FAIL( "sd::SdTransferable::WriteObject(), exception catched!" );
                 bRet = FALSE;
             }
         }

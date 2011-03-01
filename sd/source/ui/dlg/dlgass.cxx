@@ -1085,7 +1085,7 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
     }
     else
     {
-        DBG_ERROR("sd::AssistentDlgImpl::GetDocument(), no template?");
+        OSL_FAIL("sd::AssistentDlgImpl::GetDocument(), no template?");
     }
 
     SfxObjectShellLock xRet = xDocShell;
@@ -1638,7 +1638,7 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
         }
         else
         {
-            DBG_ERROR("sd::AssistentDlgImpl::UpdatePreview(), no document for preview?");
+            OSL_FAIL("sd::AssistentDlgImpl::UpdatePreview(), no document for preview?");
         }
 
         mbUserDataDirty = TRUE;

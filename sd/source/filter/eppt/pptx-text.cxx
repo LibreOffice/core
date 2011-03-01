@@ -889,7 +889,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SymbolTextDistance" ) ) )
                             ||  ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Graphic" ) ) ) ) )
                         {
-                            DBG_ERROR( "Unbekanntes Property" );
+                            OSL_FAIL( "Unbekanntes Property" );
                         }
 #endif
                     }

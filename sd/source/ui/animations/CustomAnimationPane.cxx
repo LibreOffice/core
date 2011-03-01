@@ -240,7 +240,7 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPane::CustomAnimationPane(), Exception cought!" );
+        OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception cought!" );
     }
 
     // get current page and update custom animation list
@@ -1047,7 +1047,7 @@ void CustomAnimationPane::onSelectionChanged()
         }
         catch( Exception& )
         {
-            DBG_ERROR( "sd::CustomAnimationPane::onSelectionChanged(), Exception catched!" );
+            OSL_FAIL( "sd::CustomAnimationPane::onSelectionChanged(), Exception catched!" );
         }
     }
 }
@@ -1775,7 +1775,7 @@ void CustomAnimationPane::onChangeCurrentPage()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::CustomAnimationPane::onChangeCurrentPage(), exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationPane::onChangeCurrentPage(), exception catched!" );
     }
 }
 
@@ -1835,7 +1835,7 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPane::getTextSelection(), exception cought!" );
+        OSL_FAIL( "sd::CustomAnimationPane::getTextSelection(), exception cought!" );
     }
 
     return false;
@@ -1903,7 +1903,7 @@ void CustomAnimationPane::onChange( bool bCreate )
         }
         else
         {
-            DBG_ERROR("sd::CustomAnimationPane::onChange(), unknown view selection!" );
+            OSL_FAIL("sd::CustomAnimationPane::onChange(), unknown view selection!" );
             return;
         }
     }

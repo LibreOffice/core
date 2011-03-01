@@ -1503,14 +1503,14 @@ Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  )
 
 void SdGenericDrawPage::setBackground( const Any& ) throw(lang::IllegalArgumentException)
 {
-    DBG_ERROR( "Don't call me, I'm useless!" );
+    OSL_FAIL( "Don't call me, I'm useless!" );
 }
 
 //----------------------------------------------------------------------
 
 void SdGenericDrawPage::getBackground( Any& ) throw()
 {
-    DBG_ERROR( "Don't call me, I'm useless!" );
+    OSL_FAIL( "Don't call me, I'm useless!" );
 }
 
 //----------------------------------------------------------------------
@@ -2974,7 +2974,7 @@ void SdMasterPage::setBackground( const Any& rValue )
     }
     catch( Exception& )
     {
-        DBG_ERROR("sd::SdMasterPage::setBackground(), exception caught!");
+        OSL_FAIL("sd::SdMasterPage::setBackground(), exception caught!");
     }
 }
 
@@ -3030,7 +3030,7 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
     catch( Exception& )
     {
         rValue.clear();
-        DBG_ERROR("sd::SdMasterPage::getBackground(), exception caught!");
+        OSL_FAIL("sd::SdMasterPage::getBackground(), exception caught!");
     }
 }
 

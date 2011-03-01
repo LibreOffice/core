@@ -547,7 +547,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                                     }
                                     else
                                     {
-                                        DBG_ERROR( "array overflow while searching" );
+                                        OSL_FAIL( "array overflow while searching" );
                                     }
                                 }
 
@@ -568,7 +568,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                                     }
                                     else
                                     {
-                                        DBG_ERROR( "array overflow while searching" );
+                                        OSL_FAIL( "array overflow while searching" );
                                     }
                                 }
 
@@ -591,7 +591,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
             }
             else
             {
-                DBG_ERROR( "array overflow while searching" );
+                OSL_FAIL( "array overflow while searching" );
             }
         }
     }
@@ -631,7 +631,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
         }
         else
         {
-            DBG_ERROR("Array overflow while searching!");
+            OSL_FAIL("Array overflow while searching!");
         }
     }
 

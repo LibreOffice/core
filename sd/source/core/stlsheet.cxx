@@ -731,7 +731,7 @@ OUString SdStyleSheet::GetFamilyString( SfxStyleFamily eFamily )
     case SD_STYLE_FAMILY_CELL:
         return OUString( RTL_CONSTASCII_USTRINGPARAM( "cell" ) );
     default:
-        DBG_ERROR( "SdStyleSheet::GetFamilyString(), illegal family!" );
+        OSL_FAIL( "SdStyleSheet::GetFamilyString(), illegal family!" );
     case SD_STYLE_FAMILY_GRAPHICS:
         return OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
     }
@@ -1219,7 +1219,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
             }
             else
             {
-                DBG_ERROR("SvxShape::GetAnyForItem() Returnvalue has wrong Type!" );
+                OSL_FAIL("SvxShape::GetAnyForItem() Returnvalue has wrong Type!" );
             }
         }
 

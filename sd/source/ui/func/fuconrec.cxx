@@ -903,7 +903,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                 }
                 else
                 {
-                    DBG_ERROR("Object is NO line object");
+                    OSL_FAIL("Object is NO line object");
                 }
 
                 break;
@@ -919,7 +919,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                 }
                 else
                 {
-                    DBG_ERROR("Object is NO measure object");
+                    OSL_FAIL("Object is NO measure object");
                 }
 
                 break;
@@ -961,7 +961,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                 }
                 else
                 {
-                    DBG_ERROR("Object is NO connector object");
+                    OSL_FAIL("Object is NO connector object");
                 }
 
                 break;
@@ -993,7 +993,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                 }
                 else
                 {
-                    DBG_ERROR("Object is NO caption object");
+                    OSL_FAIL("Object is NO caption object");
                 }
 
                 break;

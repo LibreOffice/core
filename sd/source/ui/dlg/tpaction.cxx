@@ -191,7 +191,7 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
     }
     else
     {
-        DBG_ERROR("sd::SdTPAction::SetView(), no docshell or viewshell?");
+        OSL_FAIL("sd::SdTPAction::SetView(), no docshell or viewshell?");
     }
 }
 
@@ -331,7 +331,7 @@ BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
         }
         else
         {
-            DBG_ERROR("sd::SdTPAction::FillItemSet(), I need a medium!");
+            OSL_FAIL("sd::SdTPAction::FillItemSet(), I need a medium!");
         }
     }
 
@@ -917,7 +917,7 @@ USHORT SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
         case presentation::ClickAction_SOUND:            return STR_CLICK_ACTION_SOUND;
         case presentation::ClickAction_VERB:             return STR_CLICK_ACTION_VERB;
         case presentation::ClickAction_STOPPRESENTATION: return STR_CLICK_ACTION_STOPPRESENTATION;
-        default: DBG_ERROR( "Keine StringResource fuer ClickAction vorhanden!" );
+        default: OSL_FAIL( "Keine StringResource fuer ClickAction vorhanden!" );
     }
     return( 0 );
 }

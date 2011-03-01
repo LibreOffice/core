@@ -542,7 +542,7 @@ static void implCreateTableTemplate( const Reference< XNameContainer >& xTableFa
     }
     catch( Exception& )
     {
-        DBG_ERROR("sd::implCreateTableTemplate(), exception caught!");
+        OSL_FAIL("sd::implCreateTableTemplate(), exception caught!");
     }
 }
 
@@ -1352,7 +1352,7 @@ void SdDrawDocument::SetTextDefaults() const
             case( FRMDIR_VERT_TOP_RIGHT ): eRet = ::com::sun::star::text::WritingMode_TB_RL; break;
 
             default:
-                DBG_ERROR( "Frame direction not supported yet" );
+                OSL_FAIL( "Frame direction not supported yet" );
             break;
         }
     }
@@ -1371,7 +1371,7 @@ void SdDrawDocument::SetDefaultWritingMode(::com::sun::star::text::WritingMode e
         case ::com::sun::star::text::WritingMode_RL_TB: nVal = FRMDIR_HORI_RIGHT_TOP; break;
         case ::com::sun::star::text::WritingMode_TB_RL: nVal = FRMDIR_VERT_TOP_RIGHT; break;
         default:
-            DBG_ERROR( "Frame direction not supported yet" );
+            OSL_FAIL( "Frame direction not supported yet" );
             return;
         }
 

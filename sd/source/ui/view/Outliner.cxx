@@ -221,7 +221,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
         }
         catch( ... )
         {
-            DBG_ERROR( "Ill. type in linguistic property" );
+            OSL_FAIL( "Ill. type in linguistic property" );
         }
     }
 

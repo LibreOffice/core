@@ -155,7 +155,7 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
+        OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
     }
 
     onSelectionChanged();
@@ -263,7 +263,7 @@ void TableDesignPane::ApplyStyle()
     }
     catch( Exception& )
     {
-        DBG_ERROR("TableDesignPane::implValueSetHdl(), exception caught!");
+        OSL_FAIL("TableDesignPane::implValueSetHdl(), exception caught!");
     }
 }
 
@@ -354,7 +354,7 @@ void TableDesignPane::onSelectionChanged()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::TableDesignPane::onSelectionChanged(), Exception caught!" );
+        OSL_FAIL( "sd::TableDesignPane::onSelectionChanged(), Exception caught!" );
     }
 
     if( mxSelectedTable != xNewSelection )
@@ -486,7 +486,7 @@ void TableDesignPane::updateControls()
         }
         catch( Exception& )
         {
-            DBG_ERROR("sd::TableDesignPane::updateControls(), exception caught!");
+            OSL_FAIL("sd::TableDesignPane::updateControls(), exception caught!");
         }
         static_cast< CheckBox* >( mxControls[i].get() )->Check( bUse ? TRUE : FALSE );
         mxControls[i]->Enable(bHasTable ? TRUE : FALSE );
@@ -648,7 +648,7 @@ static void FillCellInfoVector( const Reference< XIndexAccess >& xTableStyle, Ce
     }
     catch(Exception&)
     {
-        DBG_ERROR("sd::FillCellInfoVector(), exception caught!");
+        OSL_FAIL("sd::FillCellInfoVector(), exception caught!");
     }
 }
 
@@ -888,12 +888,12 @@ void TableDesignPane::FillDesignPreviewControl()
         }
         catch( Exception& )
         {
-            DBG_ERROR("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
+            OSL_FAIL("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
         }
     }
     catch( Exception& )
     {
-        DBG_ERROR("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
+        OSL_FAIL("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
     }
     pValueSet->SelectItem(nSelectedItem);
 }

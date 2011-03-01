@@ -1293,7 +1293,7 @@ void SdDrawDocument::CheckMasterPages()
 
         if( bChanged )
         {
-            DBG_ERROR( "master pages where in a wrong order" );
+            OSL_FAIL( "master pages where in a wrong order" );
             RecalcPageNums( sal_True);
         }
     }

@@ -384,7 +384,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     }
                     else
                     {
-                        DBG_ERROR("Vorlage aus aelterer anderssprachiger Version");
+                        OSL_FAIL("Vorlage aus aelterer anderssprachiger Version");
                         bOldDocInOtherLanguage = TRUE;
                     }
 

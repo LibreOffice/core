@@ -636,7 +636,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
         else
         {
-            DBG_ERROR("Unknown property for html export detected!");
+            OSL_FAIL("Unknown property for html export detected!");
         }
 
         pParams++;

@@ -214,7 +214,7 @@ void AnnotationManagerImpl::init()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::AnnotationManagerImpl::AnnotationManagerImpl(), Exception caught!" );
+        OSL_FAIL( "sd::AnnotationManagerImpl::AnnotationManagerImpl(), Exception caught!" );
     }
 
     try
@@ -833,7 +833,7 @@ void AnnotationManagerImpl::onSelectionChanged()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::AnnotationManagerImpl::onSelectionChanged(), exception caught!" );
+        OSL_FAIL( "sd::AnnotationManagerImpl::onSelectionChanged(), exception caught!" );
     }
 }
 
@@ -906,7 +906,7 @@ void AnnotationManagerImpl::CreateTags()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::AnnotationManagerImpl::onSelectionChanged(), exception caught!" );
+        OSL_FAIL( "sd::AnnotationManagerImpl::onSelectionChanged(), exception caught!" );
     }
 }
 

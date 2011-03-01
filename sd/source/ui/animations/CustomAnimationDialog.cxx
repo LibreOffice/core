@@ -1843,7 +1843,7 @@ void CustomAnimationEffectTabPage::onSoundPreview()
     catch( uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR("CustomAnimationEffectTabPage::onSoundPreview(), exception caught!" );
+        OSL_FAIL("CustomAnimationEffectTabPage::onSoundPreview(), exception caught!" );
     }
 }
 

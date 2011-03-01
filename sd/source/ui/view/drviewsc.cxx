@@ -920,7 +920,7 @@ USHORT DrawViewShell::GetArrayId( USHORT nSId )
         if( mpSlotArray[ i ] == nSId )
             return( i );
     }
-    DBG_ERROR( "Slot im Array nicht gefunden!" );
+    OSL_FAIL( "Slot im Array nicht gefunden!" );
     return( USHRT_MAX );
 }
 

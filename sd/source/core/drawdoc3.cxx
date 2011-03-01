@@ -1566,7 +1566,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
             if( mpDocSh )
                 mpDocSh->SetWaitCursor( FALSE );
 
-            DBG_ERROR( "SdDrawDocument::SetMasterPage() failed!" );
+            OSL_FAIL( "SdDrawDocument::SetMasterPage() failed!" );
 
             return;
         }

@@ -676,7 +676,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( pModel->GetPageCount() == 0 )
             {
-                DBG_ERROR("empty or invalid drawing xml document on clipboard!" );
+                OSL_FAIL("empty or invalid drawing xml document on clipboard!" );
             }
             else
             {

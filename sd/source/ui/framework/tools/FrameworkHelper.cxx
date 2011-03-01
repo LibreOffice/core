@@ -822,7 +822,7 @@ void FrameworkHelper::WaitForEvent (const OUString& rsEventType) const
 
         if( (osl_getGlobalTimer() - nStartTime) > 60000  )
         {
-            DBG_ERROR("FrameworkHelper::WaitForEvent(), no event for a minute? giving up!");
+            OSL_FAIL("FrameworkHelper::WaitForEvent(), no event for a minute? giving up!");
             break;
         }
     }

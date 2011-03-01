@@ -669,7 +669,7 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
     case HID_PSEUDOSHEET_NOTES:             nNameId = STR_LAYOUT_NOTES;             break;
 
     default:
-        DBG_ERROR( "SdPage::getPresentationStyle(), illegal argument!" );
+        OSL_FAIL( "SdPage::getPresentationStyle(), illegal argument!" );
         return 0;
     }
     aStyleName.Append( String( SdResId( nNameId ) ) );
@@ -912,7 +912,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
             }
             else
             {
-                DBG_ERROR( "SdPage::CreateDefaultPresObj() - can't create a header placeholder for a slide master" );
+                OSL_FAIL( "SdPage::CreateDefaultPresObj() - can't create a header placeholder for a slide master" );
                 return NULL;
             }
         }
@@ -960,13 +960,13 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
                 return CreatePresObj( PRESOBJ_SLIDENUMBER, FALSE, aRect, bInsert );
             }
 
-            DBG_ERROR("SdPage::CreateDefaultPresObj() - this should not happen!");
+            OSL_FAIL("SdPage::CreateDefaultPresObj() - this should not happen!");
             return NULL;
         }
     }
     else
     {
-        DBG_ERROR("SdPage::CreateDefaultPresObj() - unknown PRESOBJ kind" );
+        OSL_FAIL("SdPage::CreateDefaultPresObj() - unknown PRESOBJ kind" );
         return NULL;
     }
 }
@@ -2693,7 +2693,7 @@ SdPage* SdPage::getImplementation( const ::com::sun::star::uno::Reference< ::com
     catch( ::com::sun::star::uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::SdPage::getImplementation(), exception cathced!" );
+        OSL_FAIL("sd::SdPage::getImplementation(), exception cathced!" );
     }
 
     return 0;

@@ -571,7 +571,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
                         }
                         catch( Exception& )
                         {
-                            DBG_ERROR( "sd::SdStyleSheetPool::CopyTableStyles(), exception caught!" );
+                            OSL_FAIL( "sd::SdStyleSheetPool::CopyTableStyles(), exception caught!" );
                         }
 
                         if( xTargetStyle.is() )
@@ -588,7 +588,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
         }
         catch( Exception& )
         {
-            DBG_ERROR("sd::SdStyleSheetPool::CopyTableStyles(), exception caught!");
+            OSL_FAIL("sd::SdStyleSheetPool::CopyTableStyles(), exception caught!");
         }
     }
 }

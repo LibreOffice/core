@@ -107,7 +107,7 @@ void DrawViewShell::DeleteActualPage()
     }
     catch( Exception& )
     {
-        DBG_ERROR("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
+        OSL_FAIL("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
     }
 }
 

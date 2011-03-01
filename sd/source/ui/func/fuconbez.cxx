@@ -524,7 +524,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
         }
         else
         {
-            DBG_ERROR("Object is NO path object");
+            OSL_FAIL("Object is NO path object");
         }
 
         pObj->SetLogicRect(rRectangle);

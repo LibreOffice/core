@@ -591,7 +591,7 @@ void Ppt97Animation::UpdateCacheData() const
         default:
         {
             m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-appear"));
-            DBG_ERROR("no effect mapped");
+            OSL_FAIL("no effect mapped");
         }
         break;
     }
@@ -605,20 +605,20 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
         return;
     if( !pObj || !pObj->GetPage() )
     {
-        DBG_ERROR("no valid SdrObject or page found for ppt import");
+        OSL_FAIL("no valid SdrObject or page found for ppt import");
         return;
     }
 
     uno::Reference< drawing::XShape > xShape = GetXShapeForSdrObject( pObj );
     if( !xShape.is() )
     {
-        DBG_ERROR("no XShape interface found for ppt import");
+        OSL_FAIL("no XShape interface found for ppt import");
         return;
     }
     ::sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
     if( !pMainSequence.get() )
     {
-        DBG_ERROR("no MainSequence found for ppt import");
+        OSL_FAIL("no MainSequence found for ppt import");
         return;
     }
 
@@ -626,7 +626,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
     ::sd::CustomAnimationPresetPtr pPreset( rPresets.getEffectDescriptor( this->GetPresetId() ) );
     if( !pPreset.get() )
     {
-        DBG_ERROR("no suiteable preset found for ppt import");
+        OSL_FAIL("no suiteable preset found for ppt import");
         return;
     }
 

@@ -595,7 +595,7 @@ SlideshowImpl::~SlideshowImpl()
 
     if( !mbDisposed )
     {
-        DBG_ERROR("SlideshowImpl::~SlideshowImpl(), component was not disposed!");
+        OSL_FAIL("SlideshowImpl::~SlideshowImpl(), component was not disposed!");
         disposing();
     }
 }
@@ -853,7 +853,7 @@ bool SlideshowImpl::startPreview(
         }
         else
         {
-            DBG_ERROR("sd::SlideshowImpl::startPreview(), I need either a parent window or a viewshell!");
+            OSL_FAIL("sd::SlideshowImpl::startPreview(), I need either a parent window or a viewshell!");
         }
         resize( maPresSize );
 
@@ -1576,7 +1576,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
         catch( uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR("sd::SlideshowImpl::click(), exception caught!" );
+            OSL_FAIL("sd::SlideshowImpl::click(), exception caught!" );
         }
     }
     break;
@@ -2986,7 +2986,7 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
     }
     catch( Exception& )
     {
-        DBG_ERROR("sd::SlideshowImpl::setAutoSaveState(), exception caught!");
+        OSL_FAIL("sd::SlideshowImpl::setAutoSaveState(), exception caught!");
     }
 }
 

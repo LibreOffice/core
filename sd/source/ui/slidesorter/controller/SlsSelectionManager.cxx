@@ -180,7 +180,7 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
     }
     catch( Exception& )
     {
-        DBG_ERROR("SelectionManager::DeleteSelectedNormalPages(), exception caught!");
+        OSL_FAIL("SelectionManager::DeleteSelectedNormalPages(), exception caught!");
     }
 }
 
@@ -216,7 +216,7 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
     }
     catch( Exception& )
     {
-        DBG_ERROR("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
+        OSL_FAIL("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
     }
 }
 

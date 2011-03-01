@@ -528,7 +528,7 @@ void AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refer
                 }
                 else
                 {
-                    DBG_ERROR( "unknown node atom!" );
+                    OSL_FAIL( "unknown node atom!" );
                     dump_atom_header( pAtom, true, false );
                     dump_atom( pAtom );
                     dump_atom_header( pAtom, false, false );
@@ -556,7 +556,7 @@ void AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refer
             break;
 
             default:
-                DBG_ERROR( "unknown group atom!" );
+                OSL_FAIL( "unknown group atom!" );
 
                 dump_atom_header( pAtom, true, false );
                 dump_atom( pAtom );
@@ -640,7 +640,7 @@ void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Refe
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::AnimationImporter::fixMainSequenceTiming(), exception caught!" );
+        OSL_FAIL("sd::AnimationImporter::fixMainSequenceTiming(), exception caught!" );
     }
 }
 
@@ -666,7 +666,7 @@ void AnimationImporter::fixInteractiveSequenceTiming( const ::com::sun::star::un
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::AnimationImporter::fixInteractiveSequenceTiming(), exception caught!" );
+        OSL_FAIL("sd::AnimationImporter::fixInteractiveSequenceTiming(), exception caught!" );
     }
 }
 
@@ -1643,7 +1643,7 @@ void AnimationImporter::importAnimateFilterContainer( const Atom* pAtom, const R
                         }
                         else
                         {
-                            DBG_ERROR( "unknown transition!" );
+                            OSL_FAIL( "unknown transition!" );
                         }
                     }
                 }
@@ -1871,7 +1871,7 @@ Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int3
             dump( "%ld", nA );
             dump( ",%ld", nB );
             dump( ",%ld)", nC );
-            DBG_ERROR( "ppt::implGetColorAny(), unhandled color type" );
+            OSL_FAIL( "ppt::implGetColorAny(), unhandled color type" );
 
             Any aAny;
             return aAny;
@@ -2285,7 +2285,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
             xCommand->setCommand( nCommand );
             if( nCommand == EffectCommands::CUSTOM )
             {
-                DBG_ERROR("sd::AnimationImporter::importCommandContainer(), unknown command!");
+                OSL_FAIL("sd::AnimationImporter::importCommandContainer(), unknown command!");
                 aParamValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("UserDefined"));
                 aParamValue.Value <<= aParam;
             }
@@ -2568,7 +2568,7 @@ bool AnimationImporter::importAttributeNamesContainer( const Atom* pAtom, OUStri
             }
             else
             {
-                DBG_ERROR( "error during ppt::AnimationImporter::importAttributeName()!" );
+                OSL_FAIL( "error during ppt::AnimationImporter::importAttributeName()!" );
             }
 
             pAttributeValueAtom = pAtom->findNextChildAtom( DFF_msofbtAnimAttributeValue, pAttributeValueAtom );
@@ -2937,7 +2937,7 @@ void AnimationImporter::importAnimationEvents( const Atom* pAtom, const Referenc
                 break;
                 default:
                 {
-                    DBG_ERROR("unknown atom inside ppt::AnimationImporter::importAnimationEvents()!");
+                    OSL_FAIL("unknown atom inside ppt::AnimationImporter::importAnimationEvents()!");
                 }
                 }
 
@@ -3123,7 +3123,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
                     }
                     break;
                 default:
-                    DBG_ERROR("unknown reference type");
+                    OSL_FAIL("unknown reference type");
                 }
 
             }
@@ -3135,7 +3135,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
             }
             break;
             default:
-                DBG_ERROR("unknwon atom inside ppt::AnimationImporter::importTargetElementContainer()!");
+                OSL_FAIL("unknwon atom inside ppt::AnimationImporter::importTargetElementContainer()!");
                 break;
             }
 
@@ -3166,7 +3166,7 @@ void AnimationImporter::importPropertySetContainer( const Atom* pAtom, PropertyS
             }
             else
             {
-                DBG_ERROR("unknwon atom inside ppt::AnimationImporter::importPropertySetContainer()!");
+                OSL_FAIL("unknwon atom inside ppt::AnimationImporter::importPropertySetContainer()!");
             }
 
             pChildAtom = pAtom->findNextChildAtom( pChildAtom );

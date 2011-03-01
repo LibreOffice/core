@@ -227,7 +227,7 @@ SdXImpressDocument::SdXImpressDocument (::sd::DrawDocShell* pShell, bool bClipBo
     }
     else
     {
-        DBG_ERROR("DocShell is invalid");
+        OSL_FAIL("DocShell is invalid");
     }
 }
 
@@ -246,7 +246,7 @@ SdXImpressDocument::SdXImpressDocument( SdDrawDocument* pDoc, bool bClipBoard ) 
     }
     else
     {
-        DBG_ERROR("SdDrawDocument is invalid");
+        OSL_FAIL("SdDrawDocument is invalid");
     }
 }
 
@@ -2538,12 +2538,12 @@ void SAL_CALL SdDrawPagesAccess::dispose(  ) throw (uno::RuntimeException)
 
 void SAL_CALL SdDrawPagesAccess::addEventListener( const uno::Reference< lang::XEventListener >&  ) throw (uno::RuntimeException)
 {
-    DBG_ERROR( "not implemented!" );
+    OSL_FAIL( "not implemented!" );
 }
 
 void SAL_CALL SdDrawPagesAccess::removeEventListener( const uno::Reference< lang::XEventListener >&  ) throw (uno::RuntimeException)
 {
-    DBG_ERROR( "not implemented!" );
+    OSL_FAIL( "not implemented!" );
 }
 
 //=============================================================================
@@ -2567,12 +2567,12 @@ void SAL_CALL SdMasterPagesAccess::dispose(  ) throw (uno::RuntimeException)
 
 void SAL_CALL SdMasterPagesAccess::addEventListener( const uno::Reference< lang::XEventListener >&  ) throw (uno::RuntimeException)
 {
-    DBG_ERROR( "not implemented!" );
+    OSL_FAIL( "not implemented!" );
 }
 
 void SAL_CALL SdMasterPagesAccess::removeEventListener( const uno::Reference< lang::XEventListener >&  ) throw (uno::RuntimeException)
 {
-    DBG_ERROR( "not implemented!" );
+    OSL_FAIL( "not implemented!" );
 }
 
 // XIndexAccess
@@ -2820,12 +2820,12 @@ void SAL_CALL SdDocLinkTargets::dispose(  ) throw (uno::RuntimeException)
 
 void SAL_CALL SdDocLinkTargets::addEventListener( const uno::Reference< lang::XEventListener >&  ) throw (uno::RuntimeException)
 {
-    DBG_ERROR( "not implemented!" );
+    OSL_FAIL( "not implemented!" );
 }
 
 void SAL_CALL SdDocLinkTargets::removeEventListener( const uno::Reference< lang::XEventListener >&  ) throw (uno::RuntimeException)
 {
-    DBG_ERROR( "not implemented!" );
+    OSL_FAIL( "not implemented!" );
 }
 
 // XNameAccess

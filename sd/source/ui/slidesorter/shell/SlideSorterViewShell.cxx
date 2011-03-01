@@ -166,7 +166,7 @@ SlideSorterViewShell::~SlideSorterViewShell (void)
     catch( ::com::sun::star::uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::SlideSorterViewShell::~SlideSorterViewShell(), exception caught!" );
+        OSL_FAIL("sd::SlideSorterViewShell::~SlideSorterViewShell(), exception caught!" );
     }
 }
 
