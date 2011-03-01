@@ -135,7 +135,7 @@ public:
     void                SetAllowMove(BOOL bSet);
 
     void                InvalidateData();
-    void                InvalidateSource();
+    void                ClearSource();
 
 
     void                Output( const ScAddress& rPos );

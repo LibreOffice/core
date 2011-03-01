@@ -212,7 +212,7 @@ ScDPObject::~ScDPObject()
     delete pSheetDesc;
     delete pImpDesc;
     delete pServDesc;
-    InvalidateSource();
+    ClearSource();
 }
 
 void ScDPObject::SetAlive(BOOL bSet)
@@ -276,7 +276,7 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     aParam.bHasHeader = true;
     pSheetDesc->SetQueryParam(aParam);
 
-    InvalidateSource();     // new source must be created
+    ClearSource();      // new source must be created
 }
 
 void ScDPObject::SetImportDesc(const ScImportSourceDesc& rDesc)
@@ -290,7 +290,7 @@ void ScDPObject::SetImportDesc(const ScImportSourceDesc& rDesc)
     delete pImpDesc;
     pImpDesc = new ScImportSourceDesc(rDesc);
 
-    InvalidateSource();     // new source must be created
+    ClearSource();      // new source must be created
 }
 
 void ScDPObject::SetServiceData(const ScDPServiceDesc& rDesc)
@@ -304,7 +304,7 @@ void ScDPObject::SetServiceData(const ScDPServiceDesc& rDesc)
     delete pServDesc;
     pServDesc = new ScDPServiceDesc(rDesc);
 
-    InvalidateSource();     // new source must be created
+    ClearSource();      // new source must be created
 }
 
 void ScDPObject::WriteSourceDataTo( ScDPObject& rDest ) const
@@ -438,7 +438,7 @@ void ScDPObject::CreateObjects()
 {
     // if groups are involved, create a new source with the ScDPGroupTableData
     if ( bSettingsChanged && pSaveData && pSaveData->GetExistingDimensionData() )
-        InvalidateSource();
+        ClearSource();
 
     if (!xSource.is())
     {
@@ -492,7 +492,7 @@ void ScDPObject::InvalidateData()
     bSettingsChanged = TRUE;
 }
 
-void ScDPObject::InvalidateSource()
+void ScDPObject::ClearSource()
 {
     Reference< XComponent > xObjectComp( xSource, UNO_QUERY );
     if ( xObjectComp.is() )
