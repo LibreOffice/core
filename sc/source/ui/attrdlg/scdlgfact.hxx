@@ -149,7 +149,7 @@ class AbstractScDataPilotSourceTypeDlg_Impl  :public AbstractScDataPilotSourceTy
     virtual bool IsExternal() const;
     virtual bool IsNamedRange() const;
     virtual rtl::OUString GetSelectedNamedRange() const;
-    virtual void SetNamedRanges(const ::std::vector<rtl::OUString>& rNames);
+    virtual void AppendNamedRange(const ::rtl::OUString& rName);
 };
 
 class AbstractScDataPilotServiceDlg_Impl : public AbstractScDataPilotServiceDlg  //add for ScDataPilotServiceDlg

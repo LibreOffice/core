@@ -118,6 +118,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using ::rtl::OUString;
 
 //------------------------------------------------------------------
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
@@ -2156,6 +2157,22 @@ void ScCellShell::ExecuteDataPilotDialog()
             pFact->CreateScDataPilotSourceTypeDlg(
                 pTabViewShell->GetDialogParent(), bEnableExt, RID_SCDLG_DAPITYPE));
 
+        // Populate named ranges (if any).
+        ScRangeName* pRangeName = pDoc->GetRangeName();
+        if (pRangeName)
+        {
+            USHORT n = pRangeName->GetCount();
+            for (USHORT i = 0; i < n; ++i)
+            {
+                ScRangeData* p = (*pRangeName)[i];
+                if (!p)
+                    // This shouldn't happen, but just in case....
+                    continue;
+
+                pTypeDlg->AppendNamedRange(p->GetName());
+            }
+        }
+
         DBG_ASSERT(pTypeDlg, "Dialog create fail!");
         if ( pTypeDlg->Execute() == RET_OK )
         {
@@ -2195,6 +2212,14 @@ void ScCellShell::ExecuteDataPilotDialog()
                     pNewDPObject.reset(new ScDPObject(pDoc));
                     pNewDPObject->SetImportDesc( aImpDesc );
                 }
+            }
+            else if (pTypeDlg->IsNamedRange())
+            {
+                OUString aName = pTypeDlg->GetSelectedNamedRange();
+                ScSheetSourceDesc aShtDesc(pDoc);
+                aShtDesc.SetRangeName(aName);
+                pNewDPObject.reset(new ScDPObject(pDoc));
+                pNewDPObject->SetSheetDesc(aShtDesc);
             }
             else        // selection
             {

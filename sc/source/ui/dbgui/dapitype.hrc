@@ -29,27 +29,26 @@
 #define BTN_CANCEL      2
 #define BTN_HELP        3
 #define BTN_SELECTION   4
-#define BTN_DATABASE    5
-#define BTN_EXTERNAL    6
-#define FL_FRAME        7
+#define BTN_NAMED_RANGE 5
+#define BTN_DATABASE    6
+#define BTN_EXTERNAL    7
 
-#define FT_SERVICE      8
-#define LB_SERVICE      9
-#define FT_SOURCE       10
-#define ED_SOURCE       11
-#define FT_NAME         12
-#define ED_NAME         13
-#define FT_USER         14
-#define ED_USER         15
-#define FT_PASSWD       16
-#define ED_PASSWD       17
+#define FL_FRAME        8
+#define FT_SERVICE      9
+#define LB_SERVICE      10
+#define FT_SOURCE       11
+#define ED_SOURCE       12
+#define FT_NAME         13
+#define ED_NAME         14
+#define FT_USER         15
+#define ED_USER         16
+#define FT_PASSWD       17
+#define ED_PASSWD       18
+#define FT_DATABASE     19
+#define LB_DATABASE     20
+#define FT_OBJECT       21
+#define CB_OBJECT       22
+#define FT_OBJTYPE      23
+#define LB_OBJTYPE      24
 
-#define FT_DATABASE     18
-#define LB_DATABASE     19
-#define FT_OBJECT       20
-#define CB_OBJECT       21
-#define FT_OBJTYPE      22
-#define LB_OBJTYPE      23
-
-#define BTN_NAMED_RANGE 24
 #define LB_NAMED_RANGE  25

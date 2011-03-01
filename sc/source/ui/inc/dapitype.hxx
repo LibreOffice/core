@@ -36,8 +36,6 @@
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <vector>
-
 //------------------------------------------------------------------------
 
 class ScDataPilotSourceTypeDlg : public ModalDialog
@@ -46,9 +44,9 @@ private:
     FixedLine       aFlFrame;
     RadioButton     aBtnSelection;
     RadioButton     aBtnNamedRange;
-    ListBox         aLbNamedRange;
     RadioButton     aBtnDatabase;
     RadioButton     aBtnExternal;
+    ListBox         aLbNamedRange;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
@@ -61,7 +59,10 @@ public:
     bool IsExternal() const;
     bool IsNamedRange() const;
     rtl::OUString GetSelectedNamedRange() const;
-    void SetNamedRanges(const ::std::vector<rtl::OUString>& rNames);
+    void AppendNamedRange(const rtl::OUString& rNames);
+
+private:
+    DECL_LINK( RadioClickHdl, RadioButton * );
 };
 
 

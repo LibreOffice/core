@@ -270,9 +270,9 @@ rtl::OUString AbstractScDataPilotSourceTypeDlg_Impl::GetSelectedNamedRange() con
     return pDlg->GetSelectedNamedRange();
 }
 
-void AbstractScDataPilotSourceTypeDlg_Impl::SetNamedRanges(const std::vector<rtl::OUString>& rNames)
+void AbstractScDataPilotSourceTypeDlg_Impl::AppendNamedRange(const ::rtl::OUString& rName)
 {
-    pDlg->SetNamedRanges(rNames);
+    pDlg->AppendNamedRange(rName);
 }
 
 //AbstractScDataPilotSourceTypeDlg_Impl end
