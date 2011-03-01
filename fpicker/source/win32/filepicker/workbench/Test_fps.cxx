@@ -281,14 +281,6 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
     //-------------------------------------------------
 
     Sequence< Any > arguments(1);
-        //arguments[0] = makeAny( FILEOPEN_SIMPLE );
-        //arguments[0] = makeAny( FILESAVE_SIMPLE );
-        //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_PASSWORD );
-        //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS );
-        //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_SELECTION );
-        //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_TEMPLATE );
-        //arguments[0] = makeAny( FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE );
-        //arguments[0] = makeAny( FILEOPEN_PLAY );
         arguments[0] = makeAny( FILEOPEN_READONLY_VERSION );
 
     Reference< XFilePicker > xFilePicker = Reference< XFilePicker >(
