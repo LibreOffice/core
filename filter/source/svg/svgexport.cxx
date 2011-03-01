@@ -221,7 +221,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                     catch( ... )
                     {
                         delete mpSVGDoc, mpSVGDoc = NULL;
-                        DBG_ERROR( "Exception caught" );
+                        OSL_FAIL( "Exception caught" );
                     }
 
                     if( mpSdrModel )

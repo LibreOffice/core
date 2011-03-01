@@ -1171,7 +1171,7 @@ class ContainerRecReader
             }
             else
             {
-                DBG_ERROR("Terminating import, unexpected error");
+                OSL_FAIL("Terminating import, unexpected error");
                 return false;
             }
         }
@@ -3855,7 +3855,7 @@ void OCX_MultiPage::ProcessControl(OCX_Control* pControl, SvStorageStream* /* pS
     else
     {
         OSL_TRACE("!!!! Unsupported Control 0x%x ", rec.nTypeIdent);
-        DBG_ERROR("MultiPage error expected Page control");
+        OSL_FAIL("MultiPage error expected Page control");
     }
 
 }
@@ -6181,7 +6181,7 @@ bool OCX_ParentControl::createFromContainerRecord( const ContainerRecord& record
                 break;
             default:
                 OSL_TRACE( "**** Unknown control 0x%x", record.nTypeIdent );
-                DBG_ERROR( "Unknown control");
+                OSL_FAIL( "Unknown control");
                 return false;
         }
         pControl->sName = record.cName;

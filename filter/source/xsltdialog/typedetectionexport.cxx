@@ -229,7 +229,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
     }
     catch( Exception& )
     {
-        DBG_ERROR( "TypeDetectionExporter::doExport exception catched!" );
+        OSL_FAIL( "TypeDetectionExporter::doExport exception catched!" );
     }
 }
 
@@ -259,7 +259,7 @@ void TypeDetectionExporter::addProperty( Reference< XDocumentHandler > xHandler,
     }
     catch( Exception& )
     {
-        DBG_ERROR( "TypeDetectionExporter::addProperty exception catched!" );
+        OSL_FAIL( "TypeDetectionExporter::addProperty exception catched!" );
     }
 }
 
@@ -290,7 +290,7 @@ void TypeDetectionExporter::addLocaleProperty( Reference< XDocumentHandler > xHa
     }
     catch( Exception& )
     {
-        DBG_ERROR( "TypeDetectionExporter::addLocaleProperty exception catched!" );
+        OSL_FAIL( "TypeDetectionExporter::addLocaleProperty exception catched!" );
     }
 }
 

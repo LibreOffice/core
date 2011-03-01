@@ -225,7 +225,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
                     {
                     // in case of same named import / export XSLT the latter
                     // is ignored
-                        DBG_ERROR( "XMLFilterJarHelper::same named xslt filter exception!" );
+                        OSL_FAIL( "XMLFilterJarHelper::same named xslt filter exception!" );
                     }
 
                     if( pFilter->maImportTemplate.getLength() )
@@ -262,7 +262,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
     }
     catch( Exception& )
     {
-        DBG_ERROR( "XMLFilterJarHelper::savePackage exception catched!" );
+        OSL_FAIL( "XMLFilterJarHelper::savePackage exception catched!" );
     }
 
     osl::File::remove( rPackageURL );
@@ -338,7 +338,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
     }
     catch( Exception& )
     {
-        DBG_ERROR( "XMLFilterJarHelper::savePackage exception catched!" );
+        OSL_FAIL( "XMLFilterJarHelper::savePackage exception catched!" );
     }
 }
 
@@ -400,7 +400,7 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
     }
     catch( Exception& )
     {
-        DBG_ERROR( "XMLFilterJarHelper::copyFile exception catched" );
+        OSL_FAIL( "XMLFilterJarHelper::copyFile exception catched" );
     }
     return false;
 }

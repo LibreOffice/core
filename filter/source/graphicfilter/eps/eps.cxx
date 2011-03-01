@@ -787,7 +787,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_TEXTRECT_ACTION:
             {
-                DBG_ERROR( "Unsupported action: TextRect...Action!" );
+                OSL_FAIL( "Unsupported action: TextRect...Action!" );
             }
             break;
 
@@ -892,7 +892,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_MASKSCALE_ACTION:
             case META_MASKSCALEPART_ACTION:
             {
-                DBG_ERROR( "Unsupported action: MetaMask...Action!" );
+                OSL_FAIL( "Unsupported action: MetaMask...Action!" );
             }
             break;
 

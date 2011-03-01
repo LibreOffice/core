@@ -1517,7 +1517,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 case( META_MASKSCALE_ACTION ):
                 case( META_MASKSCALEPART_ACTION ):
                 {
-                    DBG_ERROR( "MetaMask...Action not supported yet" );
+                    OSL_FAIL( "MetaMask...Action not supported yet" );
                 }
                 break;
 
@@ -1738,7 +1738,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                     if( !bAssertionFired )
                     {
                         bAssertionFired = true;
-                        DBG_ERROR( "PDFExport::ImplWriteActions: deprecated and unsupported MetaAction encountered" );
+                        OSL_FAIL( "PDFExport::ImplWriteActions: deprecated and unsupported MetaAction encountered" );
                     }
                 break;
             }

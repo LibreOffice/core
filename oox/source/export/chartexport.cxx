@@ -396,7 +396,7 @@ bool lcl_hasChartType( const Reference< chart2::XDiagram > & xDiagram, const OUS
     }
     catch( uno::Exception & )
     {
-        DBG_ERROR( "Exception while searching for chart type in diagram" );
+        OSL_FAIL( "Exception while searching for chart type in diagram" );
     }
     return false;
 }
@@ -886,7 +886,7 @@ void ChartExport::_ExportContent()
                         }
                         catch( beans::UnknownPropertyException & )
                         {
-                            DBG_ERROR( "Property ChartRangeAddress not supported by ChartDocument" );
+                            OSL_FAIL( "Property ChartRangeAddress not supported by ChartDocument" );
                         }
                     }
                 }
@@ -896,7 +896,7 @@ void ChartExport::_ExportContent()
     }
     else
     {
-        DBG_ERROR( "Couldn't export chart due to wrong XModel" );
+        OSL_FAIL( "Couldn't export chart due to wrong XModel" );
     }
 }
 

@@ -562,7 +562,7 @@ void SVGActionWriter::ImplWriteLine( const Point& rPt1, const Point& rPt2, const
     if( pLineColor )
     {
         // !!! mrExport.AddAttribute( XML_NAMESPACE_NONE, ... )
-        DBG_ERROR( "SVGActionWriter::ImplWriteLine: Line color not implemented" );
+        OSL_FAIL( "SVGActionWriter::ImplWriteLine: Line color not implemented" );
     }
 
     {
@@ -1819,7 +1819,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             break;
 
             default:
-                DBG_ERROR( "SVGActionWriter::ImplWriteActions: unsupported MetaAction #" );
+                OSL_FAIL( "SVGActionWriter::ImplWriteActions: unsupported MetaAction #" );
             break;
         }
     }

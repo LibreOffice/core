@@ -162,7 +162,7 @@ bool XMLFilterTabDialog::onOk()
             }
             catch( Exception& )
             {
-                DBG_ERROR( "XMLFilterTabDialog::onOk exception catched!" );
+                OSL_FAIL( "XMLFilterTabDialog::onOk exception catched!" );
             }
         }
     }
@@ -220,7 +220,7 @@ bool XMLFilterTabDialog::onOk()
             }
             catch( Exception& )
             {
-                DBG_ERROR( "XMLFilterTabDialog::onOk exception catched!" );
+                OSL_FAIL( "XMLFilterTabDialog::onOk exception catched!" );
             }
         }
     }

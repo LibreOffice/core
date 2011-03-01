@@ -1965,7 +1965,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_TEXTRECT_ACTION:
             {
-//              DBG_ERROR( "Unsupported MET-Action: META_TEXTRECT_ACTION!" );
+//              OSL_FAIL( "Unsupported MET-Action: META_TEXTRECT_ACTION!" );
             }
             break;
 

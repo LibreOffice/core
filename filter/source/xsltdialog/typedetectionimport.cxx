@@ -91,7 +91,7 @@ void TypeDetectionImporter::doImport( Reference< XMultiServiceFactory >& xMSF, R
     }
     catch( Exception& /* e */ )
     {
-        DBG_ERROR( "TypeDetectionImporter::doImport exception catched!" );
+        OSL_FAIL( "TypeDetectionImporter::doImport exception catched!" );
     }
 }
 

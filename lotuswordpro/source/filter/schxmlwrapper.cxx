@@ -268,7 +268,7 @@ sal_Int32 SchXMLWrapper::Import()
 
     if( !mxModel.is() )
     {
-        DBG_ERROR("Got NO Model in XMLImport");
+        OSL_FAIL("Got NO Model in XMLImport");
         return sal_False;
     }
 
@@ -276,7 +276,7 @@ sal_Int32 SchXMLWrapper::Import()
 
     if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.ChartDocument" ) ) ) )
     {
-        DBG_ERROR( "Model is no ChartDocument in XMLImport" );
+        OSL_FAIL( "Model is no ChartDocument in XMLImport" );
         return sal_False;
     }
 
@@ -284,7 +284,7 @@ sal_Int32 SchXMLWrapper::Import()
 
     if( !xServiceFactory.is() )
     {
-        DBG_ERROR( "XMLReader::Read: got no service manager" );
+        OSL_FAIL( "XMLReader::Read: got no service manager" );
         return sal_False;
     }
 
@@ -295,7 +295,7 @@ sal_Int32 SchXMLWrapper::Import()
 
     if( ! xXMLParser.is() )
     {
-        DBG_ERROR( "com.sun.star.xml.sax.Parser service missing" );
+        OSL_FAIL( "com.sun.star.xml.sax.Parser service missing" );
         return sal_False;
     }
 
@@ -403,7 +403,7 @@ sal_Bool SchXMLWrapper::Export()
     {
         if( !mxModel.is() )
         {
-            DBG_ERROR("Got NO Model in XMLExport");
+            OSL_FAIL("Got NO Model in XMLExport");
             return sal_False;
         }
 
@@ -412,7 +412,7 @@ sal_Bool SchXMLWrapper::Export()
         if( ! xServiceInfo.is() || !xServiceInfo->supportsService(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.ChartDocument" ) ) ) )
         {
-            DBG_ERROR( "Model is no ChartDocument in XMLExport" );
+            OSL_FAIL( "Model is no ChartDocument in XMLExport" );
             return sal_False;
         }
 
@@ -420,7 +420,7 @@ sal_Bool SchXMLWrapper::Export()
 
         if( !xServiceFactory.is() )
         {
-            DBG_ERROR( "got no service manager" );
+            OSL_FAIL( "got no service manager" );
             return sal_False;
         }
 
@@ -429,7 +429,7 @@ sal_Bool SchXMLWrapper::Export()
 
         if( !xWriter.is() )
         {
-            DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
+            OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
             return sal_False;
         }
         uno::Reference<xml::sax::XDocumentHandler > xHandler( xWriter, uno::UNO_QUERY );

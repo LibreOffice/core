@@ -1044,7 +1044,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
 #ifdef DBG_UTIL
         if (0xFF != *pJpgSearch)
         {
-            DBG_ERROR( "Expected JPEG marker." ); ((void)0);
+            OSL_FAIL( "Expected JPEG marker." ); ((void)0);
         }
 #endif
 
@@ -1114,7 +1114,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
             break;
 
         default:
-            DBG_ERROR( "JPEG marker I didn't handle!" );
+            OSL_FAIL( "JPEG marker I didn't handle!" );
 
         }
     }

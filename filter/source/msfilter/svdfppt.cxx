@@ -1410,7 +1410,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
                                     if ( pPersistPtr[ nOfs ] > nStreamLen )
                                     {
                                         bOk = FALSE;
-                                        DBG_ERROR("SdrPowerPointImport::Ctor(): Ungueltiger Eintrag im Persist-Directory!");
+                                        OSL_FAIL("SdrPowerPointImport::Ctor(): Ungueltiger Eintrag im Persist-Directory!");
                                     }
                                 }
                                 nAnz--;
@@ -1418,7 +1418,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
                             }
                             if ( bOk && nAnz > 0 )
                             {
-                                DBG_ERROR("SdrPowerPointImport::Ctor(): Nicht alle Persist-Directory Entraege gelesen!");
+                                OSL_FAIL("SdrPowerPointImport::Ctor(): Nicht alle Persist-Directory Entraege gelesen!");
                                 bOk = FALSE;
                             }
                         }
@@ -1440,7 +1440,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
         nDocStreamPos = aUserEditAtom.nDocumentRef;
         if ( nDocStreamPos > nPersistPtrAnz )
         {
-            DBG_ERROR("SdrPowerPointImport::Ctor(): aUserEditAtom.nDocumentRef ungueltig!");
+            OSL_FAIL("SdrPowerPointImport::Ctor(): aUserEditAtom.nDocumentRef ungueltig!");
             bOk = FALSE;
         }
     }
@@ -1449,7 +1449,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
         nDocStreamPos = pPersistPtr[ nDocStreamPos ];
         if ( nDocStreamPos >= nStreamLen )
         {
-            DBG_ERROR("SdrPowerPointImport::Ctor(): nDocStreamPos >= nStreamLen!");
+            OSL_FAIL("SdrPowerPointImport::Ctor(): nDocStreamPos >= nStreamLen!");
             bOk = FALSE;
         }
     }
@@ -1499,7 +1499,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
                     {
                         if (!(rImportParam.nImportFlags & PPT_IMPORTFLAGS_NO_TEXT_ASSERT ))
                         {
-                            DBG_ERROR( "SdrTextSpecInfoAtomInterpreter::Ctor(): parsing error, this document needs to be analysed (SJ)" );
+                            OSL_FAIL( "SdrTextSpecInfoAtomInterpreter::Ctor(): parsing error, this document needs to be analysed (SJ)" );
                         }
                     }
 #endif
@@ -1629,12 +1629,12 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
                                 rStCtrl >> pE2->aColorScheme;
                             else
                             {
-                                DBG_ERROR( "SdrPowerPointImport::Ctor(): could not get SlideColorScheme! (SJ)" );
+                                OSL_FAIL( "SdrPowerPointImport::Ctor(): could not get SlideColorScheme! (SJ)" );
                             }
                         }
                         else
                         {
-                            DBG_ERROR("SdrPowerPointImport::Ctor(): Persist-Eintrag fehlerhaft! (SJ)");
+                            OSL_FAIL("SdrPowerPointImport::Ctor(): Persist-Eintrag fehlerhaft! (SJ)");
                         }
                     }
                 }
@@ -3300,11 +3300,11 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                                 aBuGraList.Insert( pBuGra, (UINT32)n );
                             }
 #ifdef DBG_UTIL
-                            else DBG_ERROR( "PPTExParaProv::PPTExParaProv - bullet graphic is not valid (SJ)" );
+                            else OSL_FAIL( "PPTExParaProv::PPTExParaProv - bullet graphic is not valid (SJ)" );
 #endif
                         }
 #ifdef DBG_UTIL
-                        else DBG_ERROR( "PPTExParaProv::PPTExParaProv - unknown atom interpreting the PPT_PST_ExtendedBuGraContainer (SJ)" );
+                        else OSL_FAIL( "PPTExParaProv::PPTExParaProv - unknown atom interpreting the PPT_PST_ExtendedBuGraContainer (SJ)" );
 #endif
                         aBuGraAtomHd.SeekToEndOfRecord( rSt );
                     }
@@ -3318,7 +3318,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                 break;
 #ifdef DBG_UTIL
                 default :
-                    DBG_ERROR( "PPTExParaProv::PPTExParaProv - unknown atom reading ppt2000 num rules (SJ)" );
+                    OSL_FAIL( "PPTExParaProv::PPTExParaProv - unknown atom reading ppt2000 num rules (SJ)" );
                 case PPT_PST_MasterText :   // first seen in: ms-tt02.ppt
                 case PPT_PST_SrKinsoku :
                 case PPT_PST_NewlyAddedAtom4016 :
@@ -3360,20 +3360,20 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                             }
 #ifdef DBG_UTIL
                             if ( rSt.Tell() != aHd.GetRecEndFilePos() )
-                                DBG_ERROR( "PPTExParaProv::PPTExParaProv - error reading PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
+                                OSL_FAIL( "PPTExParaProv::PPTExParaProv - error reading PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
 #endif
                         }
 #ifdef DBG_UTIL
-                        else DBG_ERROR( "PPTExParaProv::PPTExParaProv - depth is greater than 5 (SJ)" );
+                        else OSL_FAIL( "PPTExParaProv::PPTExParaProv - depth is greater than 5 (SJ)" );
 #endif
                     }
 #ifdef DBG_UTIL
-                    else DBG_ERROR( "PPTExParaProv::PPTExParaProv - instance out of range (SJ)" );
+                    else OSL_FAIL( "PPTExParaProv::PPTExParaProv - instance out of range (SJ)" );
 #endif
                 }
                 break;
                 default :
-                    DBG_ERROR( "PPTExParaProv::PPTExParaProv - unknown atom, assuming PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
+                    OSL_FAIL( "PPTExParaProv::PPTExParaProv - unknown atom, assuming PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
                 case PPT_PST_NewlyAddedAtomByXP11008 :
                 case PPT_PST_NewlyAddedAtomByXP11010 :
                 case PPT_PST_NewlyAddedAtomByXP12010 :
@@ -3809,7 +3809,7 @@ void PPTCharSheet::Read( SvStream& rIn, sal_Bool /*bMasterStyle*/, sal_uInt32 nL
     {
         if ( nCMask & 1 )
         {
-            DBG_ERROR( "PPTCharSheet::Read - unknown attribute, send me this document (SJ)" );
+            OSL_FAIL( "PPTCharSheet::Read - unknown attribute, send me this document (SJ)" );
             rIn >> nVal16;
         }
         nCMask >>= 1;
@@ -3985,7 +3985,7 @@ void PPTParaSheet::Read( SdrPowerPointImport&
 #ifdef DBG_UTIL
             if (!(rManager.rImportParam.nImportFlags & PPT_IMPORTFLAGS_NO_TEXT_ASSERT))
             {
-                DBG_ERROR( "PPTParaSheet::Read - unknown attribute, send me this document (SJ)" );
+                OSL_FAIL( "PPTParaSheet::Read - unknown attribute, send me this document (SJ)" );
             }
 #endif
             rIn >> nVal16;
@@ -4128,7 +4128,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             rIn >> nLevelAnz;
             if ( nLevelAnz > 5 )
             {
-                DBG_ERROR( "PPTStyleSheet::Ppt-TextStylesheet hat mehr als 5 Ebenen! (SJ)" );
+                OSL_FAIL( "PPTStyleSheet::Ppt-TextStylesheet hat mehr als 5 Ebenen! (SJ)" );
                 nLevelAnz = 5;
             }
             sal_uInt16  nLev = 0;
@@ -4901,7 +4901,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
             // it should be a const reference
             PPTParaPropSet aTmpPPTParaPropSet;
             aParaPropSet = aTmpPPTParaPropSet;
-            DBG_ERROR( "SJ:PPTStyleTextPropReader::could not get this PPT_PST_StyleTextPropAtom by reading the paragraph attributes" );
+            OSL_FAIL( "SJ:PPTStyleTextPropReader::could not get this PPT_PST_StyleTextPropAtom by reading the paragraph attributes" );
         }
         PPTParaPropSet* pPara = new PPTParaPropSet( aParaPropSet );
         pPara->mnOriginalTextPos = nCharAnzRead;
@@ -4948,7 +4948,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
         if ( nCharsToRead < -1 )
         {
             bTextPropAtom = sal_False;
-            DBG_ERROR( "SJ:PPTStyleTextPropReader::could not get this PPT_PST_StyleTextPropAtom by reading the character attributes" );
+            OSL_FAIL( "SJ:PPTStyleTextPropReader::could not get this PPT_PST_StyleTextPropAtom by reading the character attributes" );
         }
     }
     ImplPPTCharPropSet& aSet = *aCharPropSet.pCharSet;
@@ -5345,7 +5345,7 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nDestinat
                 nRetValue = pCharSet->mnEscapement;
             break;
             default :
-                DBG_ERROR( "SJ:PPTPortionObj::GetAttrib ( hard attribute does not exist )" );
+                OSL_FAIL( "SJ:PPTPortionObj::GetAttrib ( hard attribute does not exist )" );
         }
     }
     else
@@ -5411,7 +5411,7 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nDestinat
             }
             break;
             default :
-                DBG_ERROR( "SJ:PPTPortionObj::GetAttrib ( attribute does not exist )" );
+                OSL_FAIL( "SJ:PPTPortionObj::GetAttrib ( attribute does not exist )" );
         }
     }
     return (BOOL)bIsHardAttribute;
@@ -5690,7 +5690,7 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader, const PPT
             }
             else
             {
-                DBG_ERROR( "SJ:PPTParagraphObj::It seems that there are missing some textportions" );
+                OSL_FAIL( "SJ:PPTParagraphObj::It seems that there are missing some textportions" );
                 mpPortionList[ i ] = NULL;
             }
             pCharPropSet = (PPTCharPropSet*)rPropReader.aCharPropList.Next();
@@ -5741,7 +5741,7 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nDestin
 
     if ( nAttr > 21 )
     {
-        DBG_ERROR( "SJ:PPTParagraphObj::GetAttrib - attribute does not exist" );
+        OSL_FAIL( "SJ:PPTParagraphObj::GetAttrib - attribute does not exist" );
         return FALSE;
     }
 
@@ -5830,7 +5830,7 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nDestin
             case PPT_ParaAttr_BuHardFont :
             case PPT_ParaAttr_BuHardColor :
             case PPT_ParaAttr_BuHardHeight :
-                DBG_ERROR( "SJ:PPTParagraphObj::GetAttrib - this attribute does not make sense" );
+                OSL_FAIL( "SJ:PPTParagraphObj::GetAttrib - this attribute does not make sense" );
             break;
             case PPT_ParaAttr_BulletChar :
             {
@@ -6550,7 +6550,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 {
                                     if (!(rSdrPowerPointImport.rImportParam.nImportFlags & PPT_IMPORTFLAGS_NO_TEXT_ASSERT))
                                     {
-                                        DBG_ERROR( "SdrTextSpecInfoAtomInterpreter::Ctor(): parsing error, this document needs to be analysed (SJ)" );
+                                        OSL_FAIL( "SdrTextSpecInfoAtomInterpreter::Ctor(): parsing error, this document needs to be analysed (SJ)" );
                                     }
                                 }
 #endif

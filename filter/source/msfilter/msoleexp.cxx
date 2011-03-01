@@ -233,7 +233,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
         catch( uno::Exception& )
         {
             // TODO/LATER: Error handling
-            DBG_ERROR( "The object could not be exported!" );
+            OSL_FAIL( "The object could not be exported!" );
         }
     }
     else if( aOwnGlobalName != SvGlobalName() )
@@ -323,14 +323,14 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                     catch( uno::Exception& )
                     {
                         // TODO/LATER: Error handling
-                        DBG_ERROR( "The object could not be exported!" );
+                        OSL_FAIL( "The object could not be exported!" );
                     }
                 }
             }
         }
         else
         {
-            DBG_ERROR("Own binary format inside own container document!");
+            OSL_FAIL("Own binary format inside own container document!");
         }
     }
     else

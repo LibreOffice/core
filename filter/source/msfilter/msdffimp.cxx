@@ -307,7 +307,7 @@ void Impl_OlePres::Write( SvStream & rStm )
     }
     else
     {
-        DBG_ERROR( "unknown format" );
+        OSL_FAIL( "unknown format" );
     }
     ULONG nEndPos = rStm.Tell();
     rStm.Seek( nPos );

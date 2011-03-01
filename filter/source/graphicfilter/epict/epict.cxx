@@ -1630,7 +1630,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_CHORD_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_CHORD_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_CHORD_ACTION!" );
             }
             break;
 
@@ -1805,7 +1805,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_TEXTRECT_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_TEXTRECT_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_TEXTRECT_ACTION!" );
             }
             break;
 
@@ -1884,7 +1884,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             case META_MASKSCALE_ACTION:
             case META_MASKSCALEPART_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_MASK..._ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_MASK..._ACTION!" );
             }
             break;
 
@@ -1914,13 +1914,13 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_WALLPAPER_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_WALLPAPER_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_WALLPAPER_ACTION!" );
             }
             break;
 
             case META_CLIPREGION_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_CLIPREGION_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_CLIPREGION_ACTION!" );
             }
             break;
 
@@ -1933,13 +1933,13 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_ISECTREGIONCLIPREGION_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_ISECTREGIONCLIPREGION_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_ISECTREGIONCLIPREGION_ACTION!" );
             }
             break;
 
             case META_MOVECLIPREGION_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_MOVECLIPREGION_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_MOVECLIPREGION_ACTION!" );
             }
             break;
 
@@ -1985,7 +1985,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_TEXTALIGN_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_TEXTALIGN_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_TEXTALIGN_ACTION!" );
             }
             break;
 
