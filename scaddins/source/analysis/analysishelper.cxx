@@ -1708,7 +1708,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
 {
     rCompl.c = '\0';    // do not force a symbol, if only real part present
 
-    const sal_Unicode*      pStr = ( const sal_Unicode * ) rStr;
+    const sal_Unicode* pStr = rStr.getStr();
 
     if( IsImagUnit( *pStr ) && rStr.getLength() == 1)
     {
