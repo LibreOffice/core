@@ -202,7 +202,7 @@ ControlDef::ControlDef(const String &aOldName, const String &aNewName, ControlDe
             pNewDef = new ControlDef( aOldName, aNewName, pOriginal->SonGetObject(i) ,TRUE );
             if (! SonInsert(pNewDef))
             {
-                DBG_ERROR("Name Doppelt im CopyConstructor. Neuer Name = Controlname!!");
+                OSL_FAIL("Name Doppelt im CopyConstructor. Neuer Name = Controlname!!");
                 delete pNewDef;
             }
         }
@@ -233,7 +233,7 @@ void CRevNames::Insert( String aName, SmartId aUId, ULONG nSeq )
 
     if ( !CNames::C40_PTR_INSERT( ControlItem, pRN) )
     {
-        DBG_ERROR("Interner Fehler beim Speichern der Lokalen KurzNamen");
+        OSL_FAIL("Interner Fehler beim Speichern der Lokalen KurzNamen");
         delete pRN;
     }
 
@@ -541,7 +541,7 @@ void TestToolObj::InitTestToolObj()
     }
     else
     {
-        DBG_ERROR("Testtool: Could not replace Wait method");
+        OSL_FAIL("Testtool: Could not replace Wait method");
     }
 
     MAKE_TT_KEYWORD( "Kontext", SbxCLASS_METHOD, SbxNULL, ID_Kontext );
@@ -927,7 +927,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
                     aUId = SmartId( aLongname );
                 else
                 {
-                    DBG_ERROR("Unknown URL schema");
+                    OSL_FAIL("Unknown URL schema");
                 }
             }
 
@@ -948,7 +948,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
                     if (!pNewDef->SonInsert( pNewDef2 ))         // Dialog in eigenen Namespace eintragen
                     {
                         delete pNewDef2;
-                        DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einf�gen in leere Liste!");
+                        OSL_FAIL(" !!!! ACHTUNG !!!!  Fehler beim einf�gen in leere Liste!");
                     }
                 }
 
@@ -1215,7 +1215,7 @@ void TestToolObj::SendViaSocket()
 {
     if ( !pCommunicationManager )
     {
-        DBG_ERROR("Kein CommunicationManager vorhanden!!");
+        OSL_FAIL("Kein CommunicationManager vorhanden!!");
         return;
     }
 
@@ -1300,7 +1300,7 @@ void TestToolObj::EndBlock()
     }
     else
     {
-        DBG_ERROR("EndBlock au�erhalb eines Blockes");
+        OSL_FAIL("EndBlock au�erhalb eines Blockes");
     }
 }
 
@@ -1415,14 +1415,14 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
                 if (!pNewDef->SonInsert(pNewDef2))                              // Dialog in eigenen Namespace eintragen
                 {
                     delete pNewDef2;
-                    DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einf�gen in leere Liste!");
+                    OSL_FAIL(" !!!! ACHTUNG !!!!  Fehler beim einf�gen in leere Liste!");
                 }
             }
 
             const ControlItem *pItem = pNewDef;
             if (! pNames->Insert(pItem))
             {
-                DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einf�gen eines namens!");
+                OSL_FAIL(" !!!! ACHTUNG !!!!  Fehler beim einf�gen eines namens!");
                 delete pNewDef;
                 pFatherDef = NULL;
             }
@@ -1435,7 +1435,7 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
         {
             if (!pFatherDef)
             {
-                DBG_ERROR( "Internal Error: Erster Kurzname mu� mit * beginnen. �berspringe." );
+                OSL_FAIL( "Internal Error: Erster Kurzname mu� mit * beginnen. �berspringe." );
             }
             else
             {
@@ -1443,7 +1443,7 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
                 if (! pFatherDef->SonInsert(pNewDef))
                 {
                     delete pNewDef;
-                    DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einf�gen eines namens!");
+                    OSL_FAIL(" !!!! ACHTUNG !!!!  Fehler beim einf�gen eines namens!");
                 }
             }
         }
@@ -3759,7 +3759,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
             pRetStream->Read( nId );
         else
         {
-            DBG_ERROR( "truncated input stream" );
+            OSL_FAIL( "truncated input stream" );
         }
 
     }

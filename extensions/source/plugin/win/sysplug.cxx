@@ -423,7 +423,7 @@ NPError PluginComm_Impl::NPP_SetValue( NPP instance, NPNVariable variable, void 
 //--------------------------------------------------------------------------------------------------
 void * PluginComm_Impl::NPP_GetJavaClass()
 {
-    DBG_ERROR( "no java class available!" );
+    OSL_FAIL( "no java class available!" );
     return 0;
 }
 

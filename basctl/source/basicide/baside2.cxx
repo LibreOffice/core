@@ -1628,7 +1628,7 @@ void ModulWindowLayout::DockaWindow( DockingWindow* pDockingWindow )
     }
 #ifdef DBG_UTIL
     else
-        DBG_ERROR( "Wer will sich denn hier andocken ?" );
+        OSL_FAIL( "Wer will sich denn hier andocken ?" );
 #endif
 }
 

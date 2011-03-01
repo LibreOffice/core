@@ -145,7 +145,7 @@ namespace abp
         }
         catch(const Exception&)
         {
-            DBG_ERROR( "lcl_implCreateAndSetURL: caught an exception while creating the data source!" );
+            OSL_FAIL( "lcl_implCreateAndSetURL: caught an exception while creating the data source!" );
         }
 
         return aReturn;
@@ -217,7 +217,7 @@ namespace abp
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "ODataSourceContext::ODataSourceContext: caught an exception!" );
+            OSL_FAIL( "ODataSourceContext::ODataSourceContext: caught an exception!" );
         }
     }
 
@@ -395,7 +395,7 @@ namespace abp
         }
         catch(const Exception&)
         {
-            DBG_ERROR( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
+            OSL_FAIL( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
         }
     }
     //---------------------------------------------------------------------
@@ -412,7 +412,7 @@ namespace abp
         }
         catch(const Exception&)
         {
-            DBG_ERROR( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
+            OSL_FAIL( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
         }
     }
 
@@ -444,7 +444,7 @@ namespace abp
         }
         catch(const Exception&)
         {
-            DBG_ERROR( "ODataSource::remove: caught an exception while creating the data source!" );
+            OSL_FAIL( "ODataSource::remove: caught an exception while creating the data source!" );
         }
     }
 
@@ -483,7 +483,7 @@ namespace abp
         m_pImpl->aTables.clear();
         if ( !isConnected() )
         {
-            DBG_ERROR( "ODataSource::getTableNames: not connected!" );
+            OSL_FAIL( "ODataSource::getTableNames: not connected!" );
         }
         else
         {
@@ -564,7 +564,7 @@ namespace abp
         catch( const SQLException& e ) { aError <<= e; }
         catch( const Exception& )
         {
-            DBG_ERROR( "ODataSource::connect: caught a generic exception!" );
+            OSL_FAIL( "ODataSource::connect: caught a generic exception!" );
         }
 
         // ................................................................
@@ -593,7 +593,7 @@ namespace abp
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "ODataSource::connect: caught an exception while trying to display the error!" );
+                OSL_FAIL( "ODataSource::connect: caught an exception while trying to display the error!" );
             }
         }
 

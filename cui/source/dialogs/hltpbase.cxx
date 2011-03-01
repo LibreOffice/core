@@ -532,7 +532,7 @@ BOOL SvxHyperlinkTabPageBase::FileExists( const INetURLObject& rURL )
         }
         catch( ... )
         {
-            DBG_ERROR( "FileExists: ucb error" );
+            OSL_FAIL( "FileExists: ucb error" );
         }
     }
 

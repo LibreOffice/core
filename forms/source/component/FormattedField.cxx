@@ -659,7 +659,7 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
 
     if (!xNextParentForm.is())
     {
-        DBG_ERROR("OFormattedModel::calcFormFormatsSupplier : have no ancestor which is a form !");
+        OSL_FAIL("OFormattedModel::calcFormFormatsSupplier : have no ancestor which is a form !");
         return NULL;
     }
 
@@ -977,7 +977,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
                         case 2:
                             break;
                         case 3:
-                            DBG_ERROR("FmXFormattedModel::read : unknown effective value type !");
+                            OSL_FAIL("FmXFormattedModel::read : unknown effective value type !");
                     }
                 }
 
@@ -997,7 +997,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
         }
         break;
         default :
-            DBG_ERROR("OFormattedModel::read : unknown version !");
+            OSL_FAIL("OFormattedModel::read : unknown version !");
             // dann bleibt das Format des aggregierten Sets, wie es bei der Erzeugung ist : void
             defaultCommonEditProperties();
             break;

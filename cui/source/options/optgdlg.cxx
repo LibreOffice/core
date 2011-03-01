@@ -940,7 +940,7 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
             case 1: eSet = SFX_SYMBOLS_SIZE_SMALL; break;
             case 2: eSet = SFX_SYMBOLS_SIZE_LARGE; break;
             default:
-                DBG_ERROR( "OfaViewTabPage::FillItemSet(): This state of aIconSizeLB should not be possible!" );
+                OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of aIconSizeLB should not be possible!" );
         }
         aMiscOptions.SetSymbolsSize( eSet );
     }

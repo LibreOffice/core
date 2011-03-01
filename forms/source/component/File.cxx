@@ -248,7 +248,7 @@ void OFileControlModel::read(const Reference<stario::XObjectInputStream>& _rxInS
             readHelpTextCompatibly(_rxInStream);
             break;
         default:
-            DBG_ERROR("OFileControlModel::read : unknown version !");
+            OSL_FAIL("OFileControlModel::read : unknown version !");
             m_sDefaultValue = ::rtl::OUString();
     }
 

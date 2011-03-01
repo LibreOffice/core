@@ -161,7 +161,7 @@ PropBrw::PropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _
     }
     catch (Exception&)
     {
-        DBG_ERROR("PropBrw::PropBrw: could not create/initialize my frame!");
+        OSL_FAIL("PropBrw::PropBrw: could not create/initialize my frame!");
         m_xMeAsFrame.clear();
     }
 
@@ -236,7 +236,7 @@ void PropBrw::ImplReCreateController()
     }
     catch (Exception&)
     {
-        DBG_ERROR("PropBrw::PropBrw: could not create/initialize the browser controller!");
+        OSL_FAIL("PropBrw::PropBrw: could not create/initialize the browser controller!");
         try
         {
             ::comphelper::disposeComponent(m_xBrowserController);

@@ -1692,7 +1692,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 
         default:
         {
-            DBG_ERROR( "Unhandled option in ApplyItemSet" );
+            OSL_FAIL( "Unhandled option in ApplyItemSet" );
         }
         break;
     }

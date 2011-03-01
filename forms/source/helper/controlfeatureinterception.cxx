@@ -59,7 +59,7 @@ namespace frm
     {
         if ( !_rxInterceptor.is() )
         {
-            DBG_ERROR( "ControlFeatureInterception::registerDispatchProviderInterceptor: invalid interceptor!" );
+            OSL_FAIL( "ControlFeatureInterception::registerDispatchProviderInterceptor: invalid interceptor!" );
             return;
         }
 
@@ -82,7 +82,7 @@ namespace frm
     {
         if ( !_rxInterceptor.is() )
         {
-            DBG_ERROR( "ControlFeatureInterception::releaseDispatchProviderInterceptor: invalid interceptor!" );
+            OSL_FAIL( "ControlFeatureInterception::releaseDispatchProviderInterceptor: invalid interceptor!" );
             return;
         }
 

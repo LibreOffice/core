@@ -163,7 +163,7 @@ namespace pcr
         ::rtl::Reference< XSDDataType > pType = m_pHelper->getValidatingDataType();
         if ( !pType.is() )
         {
-            DBG_ERROR( "XSDValidationPropertyHandler::setPropertyValue: you're trying to set a type facet, without a current type!" );
+            OSL_FAIL( "XSDValidationPropertyHandler::setPropertyValue: you're trying to set a type facet, without a current type!" );
             return;
         }
 
@@ -415,7 +415,7 @@ namespace pcr
             break;
 
         default:
-            DBG_ERROR( "XSDValidationPropertyHandler::describePropertyLine: cannot handle this property!" );
+            OSL_FAIL( "XSDValidationPropertyHandler::describePropertyLine: cannot handle this property!" );
             break;
         }
 
@@ -471,7 +471,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "XSDValidationPropertyHandler::onInteractivePropertySelection: unexpected property to build a dedicated UI!" );
+            OSL_FAIL( "XSDValidationPropertyHandler::onInteractivePropertySelection: unexpected property to build a dedicated UI!" );
             break;
         }
         return InteractiveSelectionResult_Cancelled;
@@ -503,7 +503,7 @@ namespace pcr
         ::rtl::Reference< XSDDataType > pType = m_pHelper->getValidatingDataType();
         if ( !pType.is() )
         {
-            DBG_ERROR( "XSDValidationPropertyHandler::implPrepareCloneDataCurrentType: invalid current data type!" );
+            OSL_FAIL( "XSDValidationPropertyHandler::implPrepareCloneDataCurrentType: invalid current data type!" );
             return false;
         }
 
@@ -542,7 +542,7 @@ namespace pcr
         ::rtl::Reference< XSDDataType > pType = m_pHelper->getValidatingDataType();
         if ( !pType.is() )
         {
-            DBG_ERROR( "XSDValidationPropertyHandler::implPrepareRemoveCurrentDataType: invalid current data type!" );
+            OSL_FAIL( "XSDValidationPropertyHandler::implPrepareRemoveCurrentDataType: invalid current data type!" );
             return false;
         }
 
@@ -656,7 +656,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "XSDValidationPropertyHandler::actuatingPropertyChanged: cannot handle this property!" );
+            OSL_FAIL( "XSDValidationPropertyHandler::actuatingPropertyChanged: cannot handle this property!" );
             return;
         }
 

@@ -268,7 +268,7 @@ BOOL SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             break;
 
             default:
-                DBG_ERROR( "unbekannter Type fuer Zeilenabstand." );
+                OSL_FAIL( "unbekannter Type fuer Zeilenabstand." );
                 break;
         }
         eState = GetItemSet().GetItemState( nWhich );

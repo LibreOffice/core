@@ -1157,7 +1157,7 @@ bool ODatabaseForm::hasValidParent() const
         Reference<XResultSet>  xResultSet(m_xParent, UNO_QUERY);
         if (!xResultSet.is())
         {
-            DBG_ERROR("ODatabaseForm::hasValidParent() : no parent resultset !");
+            OSL_FAIL("ODatabaseForm::hasValidParent() : no parent resultset !");
             return false;
         }
         try
@@ -2339,7 +2339,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
         lcl_dispatch(xFrame,xTransformer,aURLStr,aReferer,aTargetName,aData,osl_getThreadTextEncoding());
     }
     else {
-        DBG_ERROR("ODatabaseForm::submit_Impl : wrong encoding !");
+        OSL_FAIL("ODatabaseForm::submit_Impl : wrong encoding !");
     }
 
 }
@@ -3022,7 +3022,7 @@ void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst, const Reference< XInterac
     }
     catch( const SQLException& e )
     {
-        DBG_ERROR("ODatabaseForm::reload_impl : shouldn't executeRowSet catch this exception?");
+        OSL_FAIL("ODatabaseForm::reload_impl : shouldn't executeRowSet catch this exception?");
         (void)e;
     }
 
@@ -3935,7 +3935,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
                 eTranslated = bEscapeProcessing ? DataSelectionType_SQL : DataSelectionType_SQLPASSTHROUGH;
             }
             break;
-            default : DBG_ERROR("ODatabaseForm::write : wrong CommandType !");
+            default : OSL_FAIL("ODatabaseForm::write : wrong CommandType !");
         }
     }
     _rxOutStream->writeShort((sal_Int16)eTranslated);           // former DataSelectionType
@@ -4041,7 +4041,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
             m_xAggregateSet->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, makeAny((sal_Bool)bEscapeProcessing));
         }
         break;
-        default : DBG_ERROR("ODatabaseForm::read : wrong CommandType !");
+        default : OSL_FAIL("ODatabaseForm::read : wrong CommandType !");
     }
     if (m_xAggregateSet.is())
         m_xAggregateSet->setPropertyValue(PROPERTY_COMMANDTYPE, makeAny(nCommandType));

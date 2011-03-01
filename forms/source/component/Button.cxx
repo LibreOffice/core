@@ -224,7 +224,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
         break;
 
         default:
-            DBG_ERROR("OButtonModel::read : unknown version !");
+            OSL_FAIL("OButtonModel::read : unknown version !");
             m_eButtonType = FormButtonType_PUSH;
             m_sTargetURL = ::rtl::OUString();
             m_sTargetFrame = ::rtl::OUString();
@@ -492,7 +492,7 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
 #endif
                 catch( const Exception& )
                 {
-                    DBG_ERROR( "OButtonControl::OnClick: caught a exception other than RuntimeException!" );
+                    OSL_FAIL( "OButtonControl::OnClick: caught a exception other than RuntimeException!" );
                 }
             }
         }

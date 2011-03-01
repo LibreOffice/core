@@ -266,7 +266,7 @@ namespace pcr
                     ||  ( pAssignedEvent->ScriptType.getLength() == 0 )
                     )
                 {
-                    DBG_ERROR( "lcl_getAssignedScriptEvent: me thinks this should not happen!" );
+                    OSL_FAIL( "lcl_getAssignedScriptEvent: me thinks this should not happen!" );
                     continue;
                 }
 
@@ -305,7 +305,7 @@ namespace pcr
             EventDescription aKnownEvent;
             if ( lcl_getEventDescriptionForMethod( _rFormComponentEventDescriptor.EventMethod, aKnownEvent ) )
                 return aKnownEvent.sListenerClassName;
-            DBG_ERROR( "lcl_getQualifiedKnownListenerName: unknown method name!" );
+            OSL_FAIL( "lcl_getQualifiedKnownListenerName: unknown method name!" );
                 // somebody assigned an script to a form component event which we don't know
                 // Speaking strictly, this is not really an error - it is possible to do
                 // this programmatically -, but it should rarely happen, since it's not possible
@@ -972,7 +972,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL EventHandler::actuatingPropertyChanged( const ::rtl::OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
-        DBG_ERROR( "EventHandler::actuatingPropertyChanged: no actuating properties -> no callback (well, this is how it *should* be!)" );
+        OSL_FAIL( "EventHandler::actuatingPropertyChanged: no actuating properties -> no callback (well, this is how it *should* be!)" );
     }
 
     //--------------------------------------------------------------------

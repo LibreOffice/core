@@ -403,7 +403,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
 
     if (nVersion > 0x0006)
     {
-        DBG_ERROR("OComboBoxModel::read : invalid (means unknown) version !");
+        OSL_FAIL("OComboBoxModel::read : invalid (means unknown) version !");
         m_aListSource = ::rtl::OUString();
         m_aBoundColumn <<= (sal_Int16)0;
         m_aDefaultText = ::rtl::OUString();
@@ -498,7 +498,7 @@ void OComboBoxModel::loadData( bool _bForce )
     Reference<XServiceInfo> xServiceInfo(xConnection, UNO_QUERY);
     if (!xServiceInfo.is() || !xServiceInfo->supportsService(SRV_SDB_CONNECTION))
     {
-        DBG_ERROR("OComboBoxModel::loadData : invalid connection !");
+        OSL_FAIL("OComboBoxModel::loadData : invalid connection !");
         return;
     }
 

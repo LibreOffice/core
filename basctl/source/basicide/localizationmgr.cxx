@@ -762,7 +762,7 @@ void LocalizationMgr::handleSetDefaultLocale( Locale aLocale )
         }
         catch(IllegalArgumentException&)
         {
-            DBG_ERROR( "LocalizationMgr::handleSetDefaultLocale: Invalid locale" );
+            OSL_FAIL( "LocalizationMgr::handleSetDefaultLocale: Invalid locale" );
         }
 
         // update locale toolbar
@@ -782,7 +782,7 @@ void LocalizationMgr::handleSetCurrentLocale( ::com::sun::star::lang::Locale aLo
         }
         catch(IllegalArgumentException&)
         {
-            DBG_ERROR( "LocalizationMgr::handleSetCurrentLocale: Invalid locale" );
+            OSL_FAIL( "LocalizationMgr::handleSetCurrentLocale: Invalid locale" );
         }
 
         // update locale toolbar

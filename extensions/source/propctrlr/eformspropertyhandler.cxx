@@ -153,7 +153,7 @@ namespace pcr
             break;
 
             default:
-                DBG_ERROR( "EFormsPropertyHandler::getPropertyValue: cannot handle this property!" );
+                OSL_FAIL( "EFormsPropertyHandler::getPropertyValue: cannot handle this property!" );
                 break;
             }
         }
@@ -269,7 +269,7 @@ namespace pcr
             break;
 
             default:
-                DBG_ERROR( "EFormsPropertyHandler::setPropertyValue: cannot handle this property!" );
+                OSL_FAIL( "EFormsPropertyHandler::setPropertyValue: cannot handle this property!" );
                 break;
             }
 
@@ -463,7 +463,7 @@ namespace pcr
         case PROPERTY_ID_XSD_CALCULATION:   aDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_CALCULATION; break;
 
         default:
-            DBG_ERROR( "EFormsPropertyHandler::describePropertyLine: cannot handle this property!" );
+            OSL_FAIL( "EFormsPropertyHandler::describePropertyLine: cannot handle this property!" );
             break;
         }
 
@@ -606,7 +606,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "EFormsPropertyHandler::actuatingPropertyChanged: cannot handle this property!" );
+            OSL_FAIL( "EFormsPropertyHandler::actuatingPropertyChanged: cannot handle this property!" );
             break;
         }
     }

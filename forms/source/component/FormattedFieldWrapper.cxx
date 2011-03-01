@@ -380,7 +380,7 @@ void OFormattedFieldWrapper::ensureAggregate()
             Reference< XServiceInfo > xSI(m_xAggregate, UNO_QUERY);
             if (!xSI.is())
             {
-                DBG_ERROR("OFormattedFieldWrapper::ensureAggregate: the aggregate has no XServiceInfo!");
+                OSL_FAIL("OFormattedFieldWrapper::ensureAggregate: the aggregate has no XServiceInfo!");
                 m_xAggregate.clear();
             }
         }

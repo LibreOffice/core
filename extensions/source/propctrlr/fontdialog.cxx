@@ -281,7 +281,7 @@ namespace pcr
         }
         catch (Exception&)
         {
-            DBG_ERROR("ControlCharacterDialog::translatePropertiesToItems: caught an exception!");
+            OSL_FAIL("ControlCharacterDialog::translatePropertiesToItems: caught an exception!");
         }
 
         _pSet->DisableItem(SID_ATTR_CHAR_CJK_FONT);

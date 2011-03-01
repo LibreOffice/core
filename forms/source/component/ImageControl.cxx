@@ -408,7 +408,7 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
             readCommonProperties(_rxInStream);
             break;
         default :
-            DBG_ERROR("OImageControlModel::read : unknown version !");
+            OSL_FAIL("OImageControlModel::read : unknown version !");
             m_bReadOnly = sal_False;
             defaultCommonProperties();
             break;
@@ -875,7 +875,7 @@ bool OImageControlControl::implInsertGraphics()
     }
     catch(Exception&)
     {
-        DBG_ERROR("OImageControlControl::implInsertGraphics: caught an exception while attempting to execute the FilePicker!");
+        OSL_FAIL("OImageControlControl::implInsertGraphics: caught an exception while attempting to execute the FilePicker!");
     }
     return false;
 }

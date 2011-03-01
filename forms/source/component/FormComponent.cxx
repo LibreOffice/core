@@ -1804,7 +1804,7 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aControlSource);
             break;
         case PROPERTY_ID_BOUNDFIELD:
-            DBG_ERROR( "OBoundControlModel::convertFastPropertyValue: BoundField should be a read-only property !" );
+            OSL_FAIL( "OBoundControlModel::convertFastPropertyValue: BoundField should be a read-only property !" );
             throw com::sun::star::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
             if (!_rValue.hasValue())
@@ -1860,7 +1860,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             OSL_VERIFY( rValue >>= m_aControlSource );
             break;
         case PROPERTY_ID_BOUNDFIELD:
-            DBG_ERROR("OBoundControlModel::setFastPropertyValue_NoBroadcast : BoundField should be a read-only property !");
+            OSL_FAIL("OBoundControlModel::setFastPropertyValue_NoBroadcast : BoundField should be a read-only property !");
             throw com::sun::star::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
         {
@@ -2519,7 +2519,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
         }
         catch(Exception&)
         {
-            DBG_ERROR("OBoundControlModel::reset: this should have succeeded in all cases!");
+            OSL_FAIL("OBoundControlModel::reset: this should have succeeded in all cases!");
         }
 
         sal_Bool bNeedValueTransfer = sal_True;

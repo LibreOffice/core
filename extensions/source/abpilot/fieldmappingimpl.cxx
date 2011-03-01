@@ -148,7 +148,7 @@ namespace abp
             }
             catch(const Exception&)
             {
-                DBG_ERROR("fieldmapping::invokeDialog: caught an exception while executing the dialog!");
+                OSL_FAIL("fieldmapping::invokeDialog: caught an exception while executing the dialog!");
             }
             return sal_False;
         }
@@ -228,20 +228,20 @@ namespace abp
                         aDriverFieldAliasing.getNodeValue( sDriverProgrammatic ) >>= sDriverUI;
                         if ( 0 == sDriverUI.getLength() )
                         {
-                            DBG_ERROR( "fieldmapping::defaultMapping: invalid driver UI column name!");
+                            OSL_FAIL( "fieldmapping::defaultMapping: invalid driver UI column name!");
                         }
                         else
                             _rFieldAssignment[ sAddressProgrammatic ] = sDriverUI;
                     }
                     else
                     {
-                        DBG_ERROR( "fieldmapping::defaultMapping: invalid driver programmatic name!" );
+                        OSL_FAIL( "fieldmapping::defaultMapping: invalid driver programmatic name!" );
                     }
                 }
             }
             catch( const Exception& )
             {
-                DBG_ERROR("fieldmapping::defaultMapping: code is assumed to throw no exceptions!");
+                OSL_FAIL("fieldmapping::defaultMapping: code is assumed to throw no exceptions!");
                     // the config nodes we're using herein should not do this ....
             }
         }

@@ -223,7 +223,7 @@ void SvxMessDialog::SetButtonText( USHORT nBtnId, const String& rNewTxt )
             break;
 
         default:
-            DBG_ERROR( "Falsche Button-Nummer!!!" );
+            OSL_FAIL( "Falsche Button-Nummer!!!" );
     }
 }
 

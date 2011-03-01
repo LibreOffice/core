@@ -121,7 +121,7 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         catch(Exception eEx)
         {
             (void) eEx; // make compiler happy
-            DBG_ERROR("Exception caught in ODatabaseContext::getRegisteredObject()");
+            OSL_FAIL("Exception caught in ODatabaseContext::getRegisteredObject()");
         }
     }
     // build the connection from the data source
@@ -170,7 +170,7 @@ Reference< XConnection >    getConnection(const Reference< XInterface > & xRowSe
     catch(Exception& e )
     {
         (void) e;   // make compiler happy
-        DBG_ERROR("exception in getConnection");
+        OSL_FAIL("exception in getConnection");
     }
 
     return xConn;
@@ -629,7 +629,7 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
     catch(Exception& e )
     {
         (void) e;   // make compiler happy
-        DBG_ERROR("Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl");
+        OSL_FAIL("Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl");
     }
 
 
@@ -861,7 +861,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
     catch(Exception& e )
     {
         (void) e;   // make compiler happy
-        DBG_ERROR("Exception in BibDataManager::InsertFields");
+        OSL_FAIL("Exception in BibDataManager::InsertFields");
     }
 }
 /* --------------------------------------------------
@@ -897,7 +897,7 @@ Reference< awt::XControlModel > BibDataManager::updateGridModel(const Reference<
     catch(Exception& e )
     {
         (void) e;   // make compiler happy
-        DBG_ERROR("::updateGridModel: something went wrong !");
+        OSL_FAIL("::updateGridModel: something went wrong !");
     }
 
 
@@ -983,7 +983,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
     catch(Exception& e )
     {
         (void) e;   // make compiler happy
-        DBG_ERROR("::createDatabaseForm: something went wrong !");
+        OSL_FAIL("::createDatabaseForm: something went wrong !");
     }
 
 
@@ -1006,7 +1006,7 @@ Sequence< ::rtl::OUString > BibDataManager::getDataSources()
     catch(Exception& e )
     {
         (void) e;   // make compiler happy
-        DBG_ERROR("::getDataSources: something went wrong !");
+        OSL_FAIL("::getDataSources: something went wrong !");
     }
 
 
@@ -1248,7 +1248,7 @@ void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
     catch(Exception& e )
     {
         (void) e;   // make compiler happy
-        DBG_ERROR("::setActiveDataTable: something went wrong !");
+        OSL_FAIL("::setActiveDataTable: something went wrong !");
     }
 
 }
@@ -1381,7 +1381,7 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const ::rtl::OUS
     catch(Exception& e )
     {
         (void) e;   // make compiler happy
-        DBG_ERROR("::createGridModel: something went wrong !");
+        OSL_FAIL("::createGridModel: something went wrong !");
     }
 
 
@@ -1503,7 +1503,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
     catch(Exception& e )
     {
         (void) e;   // make compiler happy
-        DBG_ERROR("::loadControlModel: something went wrong !");
+        OSL_FAIL("::loadControlModel: something went wrong !");
     }
     return xModel;
 }
@@ -1543,7 +1543,7 @@ void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw
     catch(Exception& e )
     {
         (void) e;   // make compiler happy
-        DBG_ERROR("::propertyChange: something went wrong !");
+        OSL_FAIL("::propertyChange: something went wrong !");
     }
 
 
@@ -1588,7 +1588,7 @@ try
 catch(Exception& e )
 {
     (void) e;   // make compiler happy
-    DBG_ERROR("Exception in BibDataManager::SetMeAsUidListener");
+    OSL_FAIL("Exception in BibDataManager::SetMeAsUidListener");
 }
 
 
@@ -1634,7 +1634,7 @@ try
 catch(Exception& e )
 {
     (void) e;   // make compiler happy
-    DBG_ERROR("Exception in BibDataManager::RemoveMeAsUidListener");
+    OSL_FAIL("Exception in BibDataManager::RemoveMeAsUidListener");
 }
 
 

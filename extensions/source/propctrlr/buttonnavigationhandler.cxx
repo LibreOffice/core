@@ -121,7 +121,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "ButtonNavigationHandler::getPropertyState: cannot handle this property!" );
+            OSL_FAIL( "ButtonNavigationHandler::getPropertyState: cannot handle this property!" );
             break;
         }
 
@@ -152,7 +152,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "ButtonNavigationHandler::getPropertyValue: cannot handle this property!" );
+            OSL_FAIL( "ButtonNavigationHandler::getPropertyValue: cannot handle this property!" );
             break;
         }
 

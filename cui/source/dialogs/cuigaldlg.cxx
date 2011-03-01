@@ -1058,7 +1058,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickSearchHdl, void *, EMPTYARG )
         catch(IllegalArgumentException)
         {
 #ifdef DBG_UTIL
-            DBG_ERROR( "Folder picker failed with illegal arguments" );
+            OSL_FAIL( "Folder picker failed with illegal arguments" );
 #endif
         }
     }

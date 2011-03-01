@@ -127,7 +127,7 @@ void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
             }
             else
             {
-                DBG_ERROR( "BasicTreeListBox::RequestingChilds: Error loading library!" );
+                OSL_FAIL( "BasicTreeListBox::RequestingChilds: Error loading library!" );
             }
         }
     }
@@ -140,7 +140,7 @@ void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         ImpCreateLibSubSubEntriesInVBAMode( pEntry, aDocument, aLibName );
     }
     else {
-        DBG_ERROR( "BasicTreeListBox::RequestingChilds: Unknown Type!" );
+        OSL_FAIL( "BasicTreeListBox::RequestingChilds: Unknown Type!" );
     }
 }
 
@@ -263,7 +263,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
                 }
                 default:
                 {
-                    DBG_ERROR( "FindVariable: Unbekannter Typ!" );
+                    OSL_FAIL( "FindVariable: Unbekannter Typ!" );
                     pVar = 0;
                 }
                 break;
@@ -365,7 +365,7 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
                 break;
                 default:
                 {
-                    DBG_ERROR( "GetEntryDescriptor: Unbekannter Typ!" );
+                    OSL_FAIL( "GetEntryDescriptor: Unbekannter Typ!" );
                     eType = OBJ_TYPE_UNKNOWN;
                 }
                 break;

@@ -172,7 +172,7 @@ namespace pcr
             _out_rValue = ::cppu::int2enum( aValues[ index ], m_aEnumType );
         else
         {
-            DBG_ERROR( "EnumRepresentation::getValueFromDescription: cannot convert!" );
+            OSL_FAIL( "EnumRepresentation::getValueFromDescription: cannot convert!" );
             _out_rValue.clear();
         }
     }
@@ -196,7 +196,7 @@ namespace pcr
             sDescription = aDescriptions[ index ];
         else
         {
-             DBG_ERROR( "EnumRepresentation::getDescriptionForValue: cannot convert!" );
+             OSL_FAIL( "EnumRepresentation::getDescriptionForValue: cannot convert!" );
         }
         return sDescription;
     }
@@ -695,14 +695,14 @@ namespace pcr
     //--------------------------------------------------------------------
     InteractiveSelectionResult SAL_CALL GenericPropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& /*_rPropertyName*/, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
-        DBG_ERROR( "GenericPropertyHandler::onInteractivePropertySelection: I'm too dumb to know anything about property browse buttons!" );
+        OSL_FAIL( "GenericPropertyHandler::onInteractivePropertySelection: I'm too dumb to know anything about property browse buttons!" );
         return InteractiveSelectionResult_Cancelled;
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL GenericPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
-        DBG_ERROR( "GenericPropertyHandler::actuatingPropertyChanged: no no no, I did not register for any actuating properties!" );
+        OSL_FAIL( "GenericPropertyHandler::actuatingPropertyChanged: no no no, I did not register for any actuating properties!" );
     }
 
     //--------------------------------------------------------------------

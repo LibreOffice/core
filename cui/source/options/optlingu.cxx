@@ -1845,7 +1845,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                     case EID_NUM_POST_BREAK : nRID = STR_NUM_POST_BREAK_DLG; break;
                     case EID_NUM_MIN_WORDLEN: nRID = STR_NUM_MIN_WORDLEN_DLG; break;
                     default:
-                        DBG_ERROR( "unexpected case" );
+                        OSL_FAIL( "unexpected case" );
                 }
 
                 OptionsBreakSet aDlg( this, nRID );
@@ -1865,7 +1865,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     }
     else
     {
-        DBG_ERROR( "pBtn unexpected value" );
+        OSL_FAIL( "pBtn unexpected value" );
     }
 
     return 0;
@@ -1901,7 +1901,7 @@ IMPL_LINK( SvxLinguTabPage, SelectHdl_Impl, SvxCheckListBox *, pBox )
     }
     else
     {
-        DBG_ERROR( "pBox unexpected value" );
+        OSL_FAIL( "pBox unexpected value" );
     }
 
     return 0;
@@ -2122,7 +2122,7 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
     }
     else
     {
-        DBG_ERROR( "pBox unexpected value" );
+        OSL_FAIL( "pBox unexpected value" );
     }
 
     return 0;
@@ -2467,7 +2467,7 @@ IMPL_LINK( SvxEditModulesDlg, ClickHdl_Impl, PushButton *, pBtn )
     }
     else
     {
-        DBG_ERROR( "pBtn unexpected value" );
+        OSL_FAIL( "pBtn unexpected value" );
     }
 
     return 0;

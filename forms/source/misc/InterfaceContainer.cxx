@@ -608,7 +608,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                 }
                 catch( const Exception& )
                 {
-                    DBG_ERROR( "OInterfaceContainerHelper::read: reading succeeded, but not inserting!" );
+                    OSL_FAIL( "OInterfaceContainerHelper::read: reading succeeded, but not inserting!" );
                     // create a placeholder
                     xElement = xElement.query( lcl_createPlaceHolder( m_xServiceFactory ) );
                     if ( !xElement.is() )
@@ -1135,7 +1135,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& _rName, c
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "OInterfaceContainer::insertByName: caught an exception!" );
+        OSL_FAIL( "OInterfaceContainer::insertByName: caught an exception!" );
     }
     implInsert( m_aItems.size(), xElementProps, sal_True, aElementMetaData.get(), sal_True );
 }

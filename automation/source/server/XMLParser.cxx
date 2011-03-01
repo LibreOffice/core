@@ -178,7 +178,7 @@ ElementNode::ElementNode( const String& aName, Reference < XAttributeList > xAtt
             xAttributeList = Reference < XAttributeList > ( xAttributeCloner->createClone() , UNO_QUERY );
         else
         {
-            DBG_ERROR("Unable to clone AttributeList");
+            OSL_FAIL("Unable to clone AttributeList");
         }
     }
 };

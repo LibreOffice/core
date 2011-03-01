@@ -187,7 +187,7 @@ void StatementFlow::SendViaSocket()
 #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "SendViaSocket called recursively. Aborted!!!\n" );
 #endif
-        DBG_ERROR("SendViaSocket called recursively. Aborted!!!");
+        OSL_FAIL("SendViaSocket called recursively. Aborted!!!");
         return;
     }
     bSending = TRUE;
@@ -199,7 +199,7 @@ void StatementFlow::SendViaSocket()
     else
     {
         // Macht nix. Wenn das Basic nicht mehr da ist, ist sowiso alles egal
-        DBG_ERROR("Cannot send results to TestTool");
+        OSL_FAIL("Cannot send results to TestTool");
     }
 
     pRet->Reset();
@@ -263,7 +263,7 @@ BOOL StatementFlow::Execute()
 
         break;
     default:
-        DBG_ERROR( "Unknown Flowcontrol" );
+        OSL_FAIL( "Unknown Flowcontrol" );
         break;
     }
 
@@ -2417,7 +2417,7 @@ BOOL StatementCommand::Execute()
                                     break;
                                 }
                             default:
-                                DBG_ERROR( "Unknown Windowtype" );
+                                OSL_FAIL( "Unknown Windowtype" );
                                 REPORT_WIN_CLOSEDc(pControl, "Unknown Windowtype");
                                 ReportError( GEN_RES_STR0( S_RESETAPPLICATION_FAILED_UNKNOWN ), pControl->GetType() );
                                 #if OSL_DEBUG_LEVEL > 1
@@ -3448,7 +3448,7 @@ StatementControl::StatementControl( SCmdStream *pCmdIn, USHORT nControlIdType )
     }
     else
     {
-        DBG_ERROR( "Wrong ControlType" );
+        OSL_FAIL( "Wrong ControlType" );
     }
 
     pCmdIn->Read( nMethodId );
@@ -6029,7 +6029,7 @@ BOOL StatementControl::Execute()
                                         pFloat = pControl->GET_REAL_PARENT();
                                     else
                                     {
-                                        DBG_ERROR("FloatingMode set but Parent is no FloatingWindow");
+                                        OSL_FAIL("FloatingMode set but Parent is no FloatingWindow");
                                     }
                                 }
                                 if ( pFloat && pFloat->GetType() == WINDOW_FLOATINGWINDOW )
@@ -6375,7 +6375,7 @@ BOOL StatementControl::Execute()
                         break;
                     }
                 default:
-                    DBG_ERROR( "Unknown Objekttype from UId or Method not suported" );
+                    OSL_FAIL( "Unknown Objekttype from UId or Method not suported" );
                     ReportError( aUId, GEN_RES_STR2( S_UNKNOWN_TYPE, UniString::CreateFromInt32( nRT ), MethodString(nMethodId) ) );
 #if OSL_DEBUG_LEVEL > 1
                     m_pDbgWin->AddText( " Unknown Objekttype from UId or Method not suported" );

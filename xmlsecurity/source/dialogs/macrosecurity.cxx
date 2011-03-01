@@ -140,7 +140,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
         pCheck->Check();
     else
     {
-        DBG_ERROR("illegal macro security level");
+        OSL_FAIL("illegal macro security level");
     }
     maSecReadonlyFI.Show(bReadonly);
     if(bReadonly)

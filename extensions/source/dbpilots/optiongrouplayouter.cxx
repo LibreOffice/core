@@ -78,14 +78,14 @@ namespace dbp
         Reference< XShapes > xPageShapes(_rContext.xDrawPage, UNO_QUERY);
         if (!xPageShapes.is())
         {
-            DBG_ERROR("OOptionGroupLayouter::OOptionGroupLayouter: missing the XShapes interface for the page!");
+            OSL_FAIL("OOptionGroupLayouter::OOptionGroupLayouter: missing the XShapes interface for the page!");
             return;
         }
 
         Reference< XMultiServiceFactory > xDocFactory(_rContext.xDocumentModel, UNO_QUERY);
         if (!xDocFactory.is())
         {
-            DBG_ERROR("OOptionGroupLayouter::OOptionGroupLayouter: no document service factory!");
+            OSL_FAIL("OOptionGroupLayouter::OOptionGroupLayouter: no document service factory!");
             return;
         }
 
@@ -196,7 +196,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OOptionGroupLayouter::doLayout: caught an exception while grouping the shapes!");
+            OSL_FAIL("OOptionGroupLayouter::doLayout: caught an exception while grouping the shapes!");
         }
     }
 

@@ -444,7 +444,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
             rtl::OUString aCertSerial = xSerialNumberAdapter->toString( xCert->getSerialNumber() );
             if ( !aCertSerial.getLength() )
             {
-                DBG_ERROR( "Error in Certificate, problem with serial number!" );
+                OSL_FAIL( "Error in Certificate, problem with serial number!" );
                 return -1;
             }
 
@@ -519,7 +519,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
     }
     catch ( uno::Exception& )
     {
-        DBG_ERROR( "Exception while adding a signature!" );
+        OSL_FAIL( "Exception while adding a signature!" );
         // Don't keep invalid entries...
         ImplGetSignatureInformations(true);
         ImplFillSignaturesBox();
@@ -561,7 +561,7 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "Exception while removing a signature!" );
+            OSL_FAIL( "Exception while removing a signature!" );
             // Don't keep invalid entries...
             ImplGetSignatureInformations(true);
             ImplFillSignaturesBox();

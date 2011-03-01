@@ -495,7 +495,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                         case  APP_IMPRESS       : sReplace = C2U("com.sun.star.presentation.PresentationDocument");break;
                         case  APP_DRAW          : sReplace = C2U("com.sun.star.drawing.DrawingDocument");break;
                         case  APP_MATH          : sReplace = C2U("com.sun.star.formula.FormulaProperties");break;
-                        default: DBG_ERROR("illegal user data");
+                        default: OSL_FAIL("illegal user data");
                     }
                     String sTmp(sCommand);
                     sTmp.SearchAndReplaceAscii("%1", sReplace);

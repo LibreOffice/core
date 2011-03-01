@@ -990,7 +990,7 @@ namespace pcr
 
         catch(Exception&)
         {
-            DBG_ERROR("OPropertyBrowserController::impl_rebindToInspectee_nothrow: caught an exception !");
+            OSL_FAIL("OPropertyBrowserController::impl_rebindToInspectee_nothrow: caught an exception !");
         }
     }
 
@@ -1121,7 +1121,7 @@ namespace pcr
         }
         catch(Exception&)
         {
-            DBG_ERROR("OPropertyBrowserController::doInspection : caught an exception !");
+            OSL_FAIL("OPropertyBrowserController::doInspection : caught an exception !");
         }
     }
 
@@ -1441,7 +1441,7 @@ namespace pcr
         }
         catch(Exception&)
         {
-            DBG_ERROR("OPropertyBrowserController::Commit : caught an exception !");
+            OSL_FAIL("OPropertyBrowserController::Commit : caught an exception !");
         }
 
         m_sCommittingProperty = ::rtl::OUString();

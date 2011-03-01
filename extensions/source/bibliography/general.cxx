@@ -183,7 +183,7 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
     catch(Exception& rEx)
     {
         (void) rEx; // make compiler happy
-        DBG_ERROR("BibPosListener::positioned: something went wrong !");
+        OSL_FAIL("BibPosListener::positioned: something went wrong !");
     }
 }
 
@@ -569,7 +569,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
     catch(Exception& rEx)
     {
         (void) rEx; // make compiler happy
-        DBG_ERROR("BibGeneralPage::AddXControl: something went wrong !");
+        OSL_FAIL("BibGeneralPage::AddXControl: something went wrong !");
     }
     return xCtrModel;
 }

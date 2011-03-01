@@ -519,7 +519,7 @@ void SVGActionWriter::ImplWriteLine( const Point& rPt1, const Point& rPt2, const
     if( pLineColor )
     {
         // !!! mrExport.AddAttribute( XML_NAMESPACE_NONE, ... )
-        DBG_ERROR( "SVGActionWriter::ImplWriteLine: Line color not implemented" );
+        OSL_FAIL( "SVGActionWriter::ImplWriteLine: Line color not implemented" );
     }
 
     {

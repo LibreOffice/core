@@ -684,7 +684,7 @@ NPError MacPluginComm::NPP_SetValue( NPP instance, NPNVariable variable, void *s
 //--------------------------------------------------------------------------------------------------
 void * MacPluginComm::NPP_GetJavaClass()
 {
-    DBG_ERROR( "no java class available!" );
+    OSL_FAIL( "no java class available!" );
     return 0;
 }
 

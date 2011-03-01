@@ -553,7 +553,7 @@ namespace frm
 
         if (nVersion > 0x0004)
         {
-            DBG_ERROR("OListBoxModel::read : invalid (means unknown) version !");
+            OSL_FAIL("OListBoxModel::read : invalid (means unknown) version !");
             ValueList().swap(m_aListSourceValues);
             m_aBoundColumn <<= (sal_Int16)0;
             ValueList().swap(m_aBoundValues);

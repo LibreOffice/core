@@ -637,7 +637,7 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
                     pDlg->SetOutputSizePixel(Size(150,0));
                     pDlg->SetText( String ( TTProperties::GetSvtResId( TT_GPF ) ) );
                     pDlg->Show();
-                    DBG_ERROR("GPF");
+                    OSL_FAIL("GPF");
                     pC->ReportError( GEN_RES_STR0( S_GPF_ABORT ) );
                     StatementList::bDying = TRUE;
                     while ( StatementList::pFirst )         // Kommandos werden übersprungen
@@ -744,7 +744,7 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
         if( !pIn->IsEof() )
             pCmdStream->Read( nId );
         else {
-            DBG_ERROR( "truncated input stream" );
+            OSL_FAIL( "truncated input stream" );
         }
     }
 

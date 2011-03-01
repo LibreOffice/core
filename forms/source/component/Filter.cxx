@@ -756,7 +756,7 @@ namespace frm
             }
             else
             {
-                DBG_ERROR( "OFilterControl::initialize: unrecognized argument!" );
+                OSL_FAIL( "OFilterControl::initialize: unrecognized argument!" );
                 continue;
             }
 

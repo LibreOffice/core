@@ -319,7 +319,7 @@ namespace abp
             case AST_EVOLUTION_GROUPWISE:
             case AST_EVOLUTION_LDAP     : pGuess = "Personal"; break;
             default:
-                DBG_ERROR( "OAddessBookSourcePilot::implDefaultTableName: unhandled case!" );
+                OSL_FAIL( "OAddessBookSourcePilot::implDefaultTableName: unhandled case!" );
                 return;
         }
         const ::rtl::OUString sGuess = ::rtl::OUString::createFromAscii( pGuess );
@@ -398,7 +398,7 @@ namespace abp
                 break;
 
             case AST_INVALID:
-                DBG_ERROR( "OAddessBookSourcePilot::implCreateDataSource: illegal data source type!" );
+                OSL_FAIL( "OAddessBookSourcePilot::implCreateDataSource: illegal data source type!" );
                 break;
         }
         m_eNewDataSourceType = m_aSettings.eType;
@@ -437,7 +437,7 @@ namespace abp
                 return new FinalPage( this );
 
             default:
-                DBG_ERROR("OAddessBookSourcePilot::createPage: invalid state!");
+                OSL_FAIL("OAddessBookSourcePilot::createPage: invalid state!");
                 return NULL;
         }
     }

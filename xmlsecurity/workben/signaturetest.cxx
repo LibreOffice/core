@@ -93,7 +93,7 @@ void Main();
         uno::Reference< uno::XComponentContext > xCtx( cppu::defaultBootstrap_InitialComponentContext() );
         if ( !xCtx.is() )
         {
-            DBG_ERROR( "Error creating initial component context!" );
+            OSL_FAIL( "Error creating initial component context!" );
             return -1;
         }
 
@@ -101,7 +101,7 @@ void Main();
 
         if ( !xMSF.is() )
         {
-            DBG_ERROR( "No service manager!" );
+            OSL_FAIL( "No service manager!" );
             return -1;
         }
 
@@ -112,14 +112,14 @@ void Main();
         sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xMSF, aArgs );
         if ( !bSuccess )
         {
-            DBG_ERROR( "Error creating UCB!" );
+            OSL_FAIL( "Error creating UCB!" );
             return -1;
         }
 
     }
     catch ( uno::Exception const & )
     {
-        DBG_ERROR( "Exception during creation of initial component context!" );
+        OSL_FAIL( "Exception during creation of initial component context!" );
         return -1;
     }
     comphelper::setProcessServiceFactory( xMSF );

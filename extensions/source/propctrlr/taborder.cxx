@@ -171,7 +171,7 @@ namespace pcr
             case FormComponentType::SPINBUTTON:     nImageId = RID_SVXIMG_SPINBUTTON; break;
             case FormComponentType::NAVIGATIONBAR:  nImageId = RID_SVXIMG_NAVIGATIONBAR; break;
             default:
-                DBG_ERROR( "TabOrderDialog::GetImage: unknown control type" );
+                OSL_FAIL( "TabOrderDialog::GetImage: unknown control type" );
             }
         }
 
@@ -215,7 +215,7 @@ namespace pcr
                 else
                 {
                     // no property set -> no tab order
-                    DBG_ERROR( "TabOrderDialog::FillList: invalid control encountered!" );
+                    OSL_FAIL( "TabOrderDialog::FillList: invalid control encountered!" );
                     aLB_Controls.Clear();
                     break;
                 }
@@ -223,7 +223,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "TabOrderDialog::FillList: caught an exception!" );
+            OSL_FAIL( "TabOrderDialog::FillList: caught an exception!" );
         }
 
         // select first entry

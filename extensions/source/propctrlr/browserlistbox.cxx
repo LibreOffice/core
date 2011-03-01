@@ -974,7 +974,7 @@ namespace pcr
             )
             if ( (*search)->second.pLine->getControl().get() == _rxControl.get() )
                 return sal_uInt16( search - m_aOrderedLines.begin() );
-        DBG_ERROR( "OBrowserListBox::impl_getControlPos: invalid control - not part of any of our lines!" );
+        OSL_FAIL( "OBrowserListBox::impl_getControlPos: invalid control - not part of any of our lines!" );
         return (sal_uInt16)-1;
     }
 

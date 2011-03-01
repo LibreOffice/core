@@ -906,7 +906,7 @@ namespace svx
             case HHC::eRubyHangulAbove: m_pHangulAbove->Check(); break;
             case HHC::eRubyHangulBelow: m_pHangulBelow->Check(); break;
         default:
-            DBG_ERROR( "HangulHanjaConversionDialog::SetConversionFormat: unknown type!" );
+            OSL_FAIL( "HangulHanjaConversionDialog::SetConversionFormat: unknown type!" );
         }
     }
 
@@ -928,7 +928,7 @@ namespace svx
         if ( m_pHangulBelow->IsChecked() )
             return HHC::eRubyHangulBelow;
 
-        DBG_ERROR( "HangulHanjaConversionDialog::GetConversionFormat: no radio checked?" );
+        OSL_FAIL( "HangulHanjaConversionDialog::GetConversionFormat: no radio checked?" );
         return HHC::eSimpleConversion;
     }
 

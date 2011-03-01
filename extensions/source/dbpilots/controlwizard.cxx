@@ -246,7 +246,7 @@ namespace dbp
             }
             catch(const Exception&)
             {
-                DBG_ERROR("OControlWizardPage::initializePage: caught an exception!");
+                OSL_FAIL("OControlWizardPage::initializePage: caught an exception!");
             }
 
             INetURLObject aURL( sDataSource );
@@ -310,7 +310,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OControlWizard::activate: could not obtain the class id!");
+            OSL_FAIL("OControlWizard::activate: could not obtain the class id!");
         }
         if (!approveControl(nClassId))
         {
@@ -434,7 +434,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OControlWizard::implDeterminePage: caught an exception!");
+            OSL_FAIL("OControlWizard::implDeterminePage: caught an exception!");
         }
     }
 
@@ -456,7 +456,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OControlWizard::implGetDSContext: invalid database context!");
+            OSL_FAIL("OControlWizard::implGetDSContext: invalid database context!");
         }
     }
 
@@ -476,7 +476,7 @@ namespace dbp
         }
         catch(const Exception&)
         {
-            DBG_ERROR("OControlWizard::getFormConnection: caught an exception!");
+            OSL_FAIL("OControlWizard::getFormConnection: caught an exception!");
         }
         return xConn;
     }
@@ -507,7 +507,7 @@ namespace dbp
         }
         catch(const Exception&)
         {
-            DBG_ERROR("OControlWizard::setFormConnection: caught an exception!");
+            OSL_FAIL("OControlWizard::setFormConnection: caught an exception!");
         }
     }
 
@@ -646,7 +646,7 @@ namespace dbp
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("OControlWizard::initContext: unexpected exception while gathering column information!");
+                        OSL_FAIL("OControlWizard::initContext: unexpected exception while gathering column information!");
                     }
                     m_aContext.aTypes.insert(OControlWizardContext::TNameTypeMap::value_type(*pBegin,nFieldType));
                 }
@@ -657,7 +657,7 @@ namespace dbp
         catch(SQLException& e) { aSQLException <<= e; }
         catch(Exception&)
         {
-            DBG_ERROR("OControlWizard::initContext: could not retrieve the control context (caught an exception)!");
+            OSL_FAIL("OControlWizard::initContext: could not retrieve the control context (caught an exception)!");
         }
 
         ::comphelper::disposeComponent(xStatement);
@@ -710,7 +710,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OControlWizard::commitControlSettings: could not commit the basic control settings!");
+            OSL_FAIL("OControlWizard::commitControlSettings: could not commit the basic control settings!");
         }
     }
 
@@ -735,7 +735,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OControlWizard::initControlSettings: could not retrieve the basic control settings!");
+            OSL_FAIL("OControlWizard::initControlSettings: could not retrieve the basic control settings!");
         }
     }
 

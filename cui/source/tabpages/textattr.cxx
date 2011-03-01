@@ -418,7 +418,7 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
         switch( eState )
         {
             default: ; //prevent warning
-                DBG_ERROR( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
+                OSL_FAIL( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
             case STATE_NOCHECK: eFTS = SDRTEXTFIT_NONE; break;
             case STATE_CHECK: eFTS = SDRTEXTFIT_AUTOFIT; break;
         }

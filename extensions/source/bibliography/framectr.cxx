@@ -410,7 +410,7 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::X
         }
         catch(Exception&)
         {
-            DBG_ERROR("SaveModified: Exception occurred!");
+            OSL_FAIL("SaveModified: Exception occurred!");
         }
     }
     return bResult;
@@ -464,7 +464,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 }
                 catch(const Exception&)
                 {
-                    DBG_ERROR("Exception catched while changing the data source");
+                    OSL_FAIL("Exception catched while changing the data source");
                 }
             }
         }
@@ -554,7 +554,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             }
             catch( const uno::Exception& )
             {
-                DBG_ERROR( "BibFrameController_Impl::dispatch: caught an exception!" );
+                OSL_FAIL( "BibFrameController_Impl::dispatch: caught an exception!" );
             }
 
             sal_uInt16 nCount = aStatusListeners.Count();
@@ -598,7 +598,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("Exception in last() or moveToInsertRow()");
+                    OSL_FAIL("Exception in last() or moveToInsertRow()");
                 }
             }
         }
@@ -658,7 +658,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                         }
                         catch(Exception&)
                         {
-                            DBG_ERROR("DeleteRecord : exception caught !");
+                            OSL_FAIL("DeleteRecord : exception caught !");
                         }
                     }
                 }

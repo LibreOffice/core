@@ -676,7 +676,7 @@ short SvInsertAppletDialog::Execute()
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "No Applet!" );
+            OSL_FAIL( "No Applet!" );
         }
     }
     else
@@ -726,7 +726,7 @@ short SvInsertAppletDialog::Execute()
             }
             catch ( uno::Exception& )
             {
-                DBG_ERROR( "No Applet!" );
+                OSL_FAIL( "No Applet!" );
             }
         }
     }
@@ -909,7 +909,7 @@ short SfxInsertFloatingFrameDialog::Execute()
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "No IFrame!" );
+            OSL_FAIL( "No IFrame!" );
         }
     }
     else
@@ -996,7 +996,7 @@ short SfxInsertFloatingFrameDialog::Execute()
             }
             catch ( uno::Exception& )
             {
-                DBG_ERROR( "No IFrame!" );
+                OSL_FAIL( "No IFrame!" );
             }
         }
     }

@@ -164,7 +164,7 @@ ErrCode ImgProdLockBytes::SetSize( sal_Size nSize )
         return SvLockBytes::SetSize( nSize );
     else
     {
-        DBG_ERROR( "ImgProdLockBytes::SetSize not supported for xInputStream..." );
+        OSL_FAIL( "ImgProdLockBytes::SetSize not supported for xInputStream..." );
         return ERRCODE_IO_CANTWRITE;
     }
 }

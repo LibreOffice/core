@@ -175,7 +175,7 @@ void _SfxMacroTabPage::EnableButtons( const String& rLangName )
         sEventMacro = ((SvLBoxString*)pE->GetItem( LB_MACROS_ITEMPOS ))->GetText();
         if ( rLangName.EqualsAscii("JavaScript") )
         {
-            DBG_ERROR( "_SfxMacroTabPage::EnableButtons(): this is not an up to date usage!" );
+            OSL_FAIL( "_SfxMacroTabPage::EnableButtons(): this is not an up to date usage!" );
         }
         else
         {

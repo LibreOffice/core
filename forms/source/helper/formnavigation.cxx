@@ -133,7 +133,7 @@ namespace frm
         }
 
         // unreachable
-        DBG_ERROR( "OFormNavigationHelper::statusChanged: huh? An invalid/unknown URL?" );
+        OSL_FAIL( "OFormNavigationHelper::statusChanged: huh? An invalid/unknown URL?" );
     }
 
     //------------------------------------------------------------------

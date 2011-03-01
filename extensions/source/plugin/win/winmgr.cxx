@@ -435,7 +435,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                 }
 #if OSL_DEBUG_LEVEL > 1
                 else
-                    DBG_ERROR( "### cannot get MIME type or extensions!" );
+                    OSL_FAIL( "### cannot get MIME type or extensions!" );
 #endif
             }
             if (pVersionData)

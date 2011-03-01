@@ -598,7 +598,7 @@ uno::Reference< frame::XFrame > ImpTwain::ImplGetActiveFrame()
                     catch( const beans::UnknownPropertyException& )
                     {
                         // property unknown.
-                        DBG_ERROR("ImpTwain::ImplGetActiveFrame: ActiveFrame property unknown, cannot determine active frame!");
+                        OSL_FAIL("ImpTwain::ImplGetActiveFrame: ActiveFrame property unknown, cannot determine active frame!");
                         return uno::Reference< frame::XFrame >();
                     }
 
@@ -617,7 +617,7 @@ uno::Reference< frame::XFrame > ImpTwain::ImplGetActiveFrame()
     {
     }
 
-    DBG_ERROR("ImpTwain::ImplGetActiveFrame: Could not determine active frame!");
+    OSL_FAIL("ImpTwain::ImplGetActiveFrame: Could not determine active frame!");
     return uno::Reference< frame::XFrame >();
 }
 
@@ -633,7 +633,7 @@ uno::Reference< util::XCloseBroadcaster > ImpTwain::ImplGetActiveFrameCloseBroad
     {
     }
 
-    DBG_ERROR("ImpTwain::ImplGetActiveFrameCloseBroadcaster: Could determine close broadcaster on active frame!");
+    OSL_FAIL("ImpTwain::ImplGetActiveFrameCloseBroadcaster: Could determine close broadcaster on active frame!");
     return uno::Reference< util::XCloseBroadcaster >();
 }
 
@@ -653,7 +653,7 @@ void ImpTwain::ImplRegisterCloseListener()
         else
         {
             // interface unknown. don't register, then
-            DBG_ERROR("ImpTwain::ImplRegisterCloseListener: XFrame has no XCloseBroadcaster!");
+            OSL_FAIL("ImpTwain::ImplRegisterCloseListener: XFrame has no XCloseBroadcaster!");
             return;
         }
     }
@@ -661,7 +661,7 @@ void ImpTwain::ImplRegisterCloseListener()
     {
     }
 
-    DBG_ERROR("ImpTwain::ImplRegisterCloseListener: Could not register as close listener!");
+    OSL_FAIL("ImpTwain::ImplRegisterCloseListener: Could not register as close listener!");
 }
 
 // -----------------------------------------------------------------------------
@@ -681,7 +681,7 @@ void ImpTwain::ImplDeregisterCloseListener()
         else
         {
             // interface unknown. don't deregister, then
-            DBG_ERROR("ImpTwain::ImplDeregisterCloseListener: XFrame has no XCloseBroadcaster!");
+            OSL_FAIL("ImpTwain::ImplDeregisterCloseListener: XFrame has no XCloseBroadcaster!");
             return;
         }
     }
@@ -689,7 +689,7 @@ void ImpTwain::ImplDeregisterCloseListener()
     {
     }
 
-    DBG_ERROR("ImpTwain::ImplDeregisterCloseListener: Could not deregister as close listener!");
+    OSL_FAIL("ImpTwain::ImplDeregisterCloseListener: Could not deregister as close listener!");
 }
 
 // -----------------------------------------------------------------------------
@@ -708,7 +708,7 @@ void SAL_CALL ImpTwain::queryClosing( const lang::EventObject& /*Source*/, sal_B
 void SAL_CALL ImpTwain::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
     // should not happen
-    DBG_ERROR("ImpTwain::notifyClosing called, but we vetoed the closing before!");
+    OSL_FAIL("ImpTwain::notifyClosing called, but we vetoed the closing before!");
 }
 
 // -----------------------------------------------------------------------------
@@ -733,7 +733,7 @@ void ImpTwain::ImplSendCloseEvent()
     {
     }
 
-    DBG_ERROR("ImpTwain::ImplSendCloseEvent: Could not send required close broadcast!");
+    OSL_FAIL("ImpTwain::ImplSendCloseEvent: Could not send required close broadcast!");
 }
 
 

@@ -165,7 +165,7 @@ void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) t
         break;
 
         default :
-            DBG_ERROR("OImageButtonModel::read : unknown version !");
+            OSL_FAIL("OImageButtonModel::read : unknown version !");
             m_eButtonType = FormButtonType_PUSH;
             m_sTargetURL = ::rtl::OUString();
             m_sTargetFrame = ::rtl::OUString();

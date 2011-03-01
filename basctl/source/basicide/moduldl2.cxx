@@ -1266,7 +1266,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ), UNO_QUERY );
         if( !xSFA.is() )
         {
-            DBG_ERROR( "No simpleFileAccess" );
+            OSL_FAIL( "No simpleFileAccess" );
             return;
         }
 

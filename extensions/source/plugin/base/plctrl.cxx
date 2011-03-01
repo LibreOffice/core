@@ -162,7 +162,7 @@ void PluginControl_Impl::createPeer( const Reference< ::com::sun::star::awt::XTo
 {
     if (_xPeer.is())
     {
-        DBG_ERROR( "### Peer is already set!" );
+        OSL_FAIL( "### Peer is already set!" );
         return;
     }
 
@@ -190,7 +190,7 @@ void PluginControl_Impl::createPeer( const Reference< ::com::sun::star::awt::XTo
     }
     else
     {
-        DBG_ERROR( "### cannot get implementation of parent peer!" );
+        OSL_FAIL( "### cannot get implementation of parent peer!" );
     }
 
     getMultiplexer()->setPeer( _xPeerWindow );

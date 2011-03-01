@@ -99,7 +99,7 @@ rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName )
     if (nShortLen < nShortBufSize) // conversion successful?
         aRes = rtl::OString( OU2ENC( rtl::OUString( aShortBuffer, nShortLen ), osl_getThreadTextEncoding()) );
     else
-        DBG_ERROR( "Win_GetShortPathName: buffer to short" );
+        OSL_FAIL( "Win_GetShortPathName: buffer to short" );
 
     return aRes;
 }
@@ -248,7 +248,7 @@ void MergeNewStyleDicsAndOldStyleDics(
 
             if (nLang == LANGUAGE_DONTKNOW || nLang == LANGUAGE_NONE)
             {
-                DBG_ERROR( "old style dictionary with invalid language found!" );
+                OSL_FAIL( "old style dictionary with invalid language found!" );
                 continue;
             }
 
@@ -258,7 +258,7 @@ void MergeNewStyleDicsAndOldStyleDics(
         }
         else
         {
-            DBG_ERROR( "old style dictionary with no language found!" );
+            OSL_FAIL( "old style dictionary with no language found!" );
         }
     }
 }
