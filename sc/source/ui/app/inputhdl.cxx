@@ -2092,7 +2092,7 @@ sal_Bool ScInputHandler::DataChanging( sal_Unicode cTyped, sal_Bool bFromCommand
         return sal_False;
 }
 
-void ScInputHandler::DataChanged( sal_Bool bFromTopNotify )
+void ScInputHandler::DataChanged( sal_Bool bFromTopNotify, sal_Bool bSetModified )
 {
     ImplCreateEditEngine();
 
@@ -2111,7 +2111,8 @@ void ScInputHandler::DataChanged( sal_Bool bFromTopNotify )
         pTopView->ShowCursor();
     }
 
-    bModified = sal_True;
+    if (bSetModified)
+        bModified = sal_True;
     bSelIsRef = sal_False;
 
     if ( pRangeFindList && !bInRangeUpdate )
@@ -3202,7 +3203,9 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
                 }
             }
 
-            DataChanged();              //  ruft auch UpdateParenthesis()
+            // #i114511# don't count cursor keys as modification
+            sal_Bool bSetModified = !bCursorKey;
+            DataChanged(sal_False, bSetModified);  // also calls UpdateParenthesis()
             InvalidateAttribs();        //! in DataChanged ?
         }
     }
