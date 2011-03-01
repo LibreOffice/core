@@ -280,7 +280,7 @@ End
 
 /* ** Script provider for JavaScript ** */
 
-#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
+#ifndef WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
 
 Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Javascript
     ParentID = gid_Brand_Dir_Share_Extensions;
@@ -291,7 +291,7 @@ End
 
 /* ** Script provider for Python ** */
 
-#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
+#ifndef WITHOUT_EXTENSION_SCRIPTING_PYTHON
 
 Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Python
     ParentID = gid_Brand_Dir_Share_Extensions;
