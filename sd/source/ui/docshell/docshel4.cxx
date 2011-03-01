@@ -51,10 +51,6 @@
 #include <sot/clsids.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/request.hxx>
-#ifdef TF_STARONE
-#include "unomodel.hxx"
-#endif
-
 #include <unotools/fltrcfg.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
