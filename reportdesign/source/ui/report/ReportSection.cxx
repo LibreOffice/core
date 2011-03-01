@@ -95,14 +95,18 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
 ,m_pMulti(NULL)
 ,m_pReportListener(NULL)
 ,m_xSection(_xSection)
+,m_nPaintEntranceCount(0)
 ,m_eMode(RPTUI_SELECT)
 ,m_bDialogModelChanged(sal_False)
 ,m_bInDrag(sal_False)
 {
     DBG_CTOR( rpt_OReportSection,NULL);
-    EnableChildTransparentMode();
+    //EnableChildTransparentMode();
     SetHelpId(HID_REPORTSECTION);
     SetMapMode( MapMode( MAP_100TH_MM ) );
+    SetParentClipMode( PARENTCLIPMODE_CLIP );
+    EnableChildTransparentMode( sal_False );
+    SetPaintTransparent( sal_False );
 
     try
     {
@@ -142,8 +146,9 @@ void OReportSection::Paint( const Rectangle& rRect )
 {
     Window::Paint(rRect);
 
-    if ( m_pView )
+    if ( m_pView && m_nPaintEntranceCount == 0)
     {
+        ++m_nPaintEntranceCount;
          // repaint, get PageView and prepare Region
         SdrPageView* pPgView = m_pView->GetSdrPageView();
         const Region aPaintRectRegion(rRect);
@@ -158,10 +163,7 @@ void OReportSection::Paint( const Rectangle& rRect )
             OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
             // draw background self using wallpaper
             OutputDevice& rTargetOutDev = pTargetPaintWindow->GetTargetOutputDevice();
-            sal_Int32 nColor = m_xSection->getBackColor();
-            if ( nColor == (sal_Int32)COL_TRANSPARENT )
-                nColor = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_BACKCOLOR);
-            rTargetOutDev.DrawWallpaper(rRect, Wallpaper(Color(nColor)));
+            rTargetOutDev.DrawWallpaper(rRect, Wallpaper(pPgView->GetApplicationDocumentColor()));
         }
 
         // do paint (unbuffered) and mark repaint end
@@ -172,21 +174,13 @@ void OReportSection::Paint( const Rectangle& rRect )
         }
 
         m_pView->CompleteRedraw(this,aPaintRectRegion);
+        --m_nPaintEntranceCount;
     }
 }
 //------------------------------------------------------------------------------
 void OReportSection::Resize()
 {
     Window::Resize();
-    if ( m_xSection.is() && m_pPage && m_pView )
-    {
-        uno::Reference<report::XReportDefinition> xReportDefinition = m_xSection->getReportDefinition();
-        m_pPage->SetSize( Size( getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,5*m_xSection->getHeight()) );
-        const Size aPageSize = m_pPage->GetSize();
-        const sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
-        const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
-        m_pView->SetWorkArea( Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
-    }
 }
 //------------------------------------------------------------------------------
 void OReportSection::fill()
@@ -235,8 +229,9 @@ void OReportSection::fill()
         nColor = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_BACKCOLOR);
     m_pView->SetApplicationDocumentColor(nColor);
 
-    const sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_LEFTMARGIN);
-    const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_RIGHTMARGIN);
+    uno::Reference<report::XReportDefinition> xReportDefinition = m_xSection->getReportDefinition();
+    const sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
+    const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
     m_pPage->SetLftBorder(nLeftMargin);
     m_pPage->SetRgtBorder(nRightMargin);
 
@@ -247,15 +242,9 @@ void OReportSection::fill()
 
     m_pView->StartListening( *m_pModel  );
     /*Resize();*/
-    if ( m_xSection.is() && m_pPage && m_pView )
-    {
-        uno::Reference<report::XReportDefinition> xReportDefinition = m_xSection->getReportDefinition();
-        m_pPage->SetSize( Size( getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,5*m_xSection->getHeight()) );
-        const Size aPageSize = m_pPage->GetSize();
-        const sal_Int32 nWorkAreaLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
-        const sal_Int32 nWorkAreaRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
-        m_pView->SetWorkArea( Rectangle( Point( nWorkAreaLeftMargin, 0), Size(aPageSize.Width() - nWorkAreaLeftMargin - nWorkAreaRightMargin,aPageSize.Height()) ) );
-    } // if ( m_xSection.is() && m_pPage && m_pView )
+    m_pPage->SetSize( Size( getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,5*m_xSection->getHeight()) );
+    const Size aPageSize = m_pPage->GetSize();
+    m_pView->SetWorkArea( Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
 
     //SetBackground( Wallpaper( COL_BLUE ));
 }
@@ -556,67 +545,77 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
             {
                 m_pPage->SetRgtBorder(nRightMargin);
             }
-
-            try
+            const Size aOldPageSize = m_pPage->GetSize();
+            sal_Int32 nNewHeight = 5*m_xSection->getHeight();
+            if ( aOldPageSize.Height() != nNewHeight || nPaperWidth != aOldPageSize.Width() )
             {
-                sal_Int32 nRightBorder = nPaperWidth - nRightMargin;
-                const sal_Int32 nCount = m_xSection->getCount();
-                for (sal_Int32 i = 0; i < nCount; ++i)
-                {
-                    bool bChanged = false;
-                    uno::Reference< report::XReportComponent> xReportComponent(m_xSection->getByIndex(i),uno::UNO_QUERY_THROW);
-                    awt::Point aPos = xReportComponent->getPosition();
-                    awt::Size aSize = xReportComponent->getSize();
-                    SvxShape* pShape = SvxShape::getImplementation( xReportComponent );
-                    SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
-                    if ( pObject )
-                    {
-                        OObjectBase* pBase = dynamic_cast<OObjectBase*>(pObject);
-                        pBase->EndListening(sal_False);
-                        if ( aPos.X < nLeftMargin )
-                        {
-                            aPos.X  = nLeftMargin;
-                            bChanged = true;
-                        }
-                        if ( (aPos.X + aSize.Width) > nRightBorder )
-                        {
-                            aPos.X = nRightBorder - aSize.Width;
-                            if ( aPos.X < nLeftMargin )
-                            {
-                                aSize.Width += aPos.X - nLeftMargin;
-                                aPos.X = nLeftMargin;
-                                // add listener around
-                                pBase->StartListening();
-                                xReportComponent->setSize(aSize);
-                                pBase->EndListening(sal_False);
-                            }
-                            bChanged = true;
-                        }
-                        if ( aPos.Y < 0 )
-                            aPos.Y = 0;
-                        if ( bChanged )
-                        {
-                            xReportComponent->setPosition(aPos);
-                            correctOverlapping(pObject,*this,false);
-                            Rectangle aRet(VCLPoint(xReportComponent->getPosition()),VCLSize(xReportComponent->getSize()));
-                            aRet.setHeight(aRet.getHeight() + 1);
-                            aRet.setWidth(aRet.getWidth() + 1);
-                            if ( m_xSection.is() && (static_cast<sal_uInt32>(aRet.getHeight() + aRet.Top()) > m_xSection->getHeight()) )
-                                m_xSection->setHeight(aRet.getHeight() + aRet.Top());
-
-                            pObject->RecalcBoundRect();
-                        }
-                        pBase->StartListening();
-                    }
-                } // for (sal_Int32 i = 0; i < nCount; ++i)
+                m_pPage->SetSize( Size( nPaperWidth,nNewHeight) );
+                const Size aPageSize = m_pPage->GetSize();
+                m_pView->SetWorkArea( Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
             }
-            catch(uno::Exception)
-            {
-                OSL_ENSURE(0,"Exception caught: OReportSection::_propertyChanged(");
-            }
-
-            Resize();
+            impl_adjustObjectSizePosition(nPaperWidth,nLeftMargin,nRightMargin);
+            m_pParent->Invalidate(INVALIDATE_UPDATE | INVALIDATE_TRANSPARENT);
         }
+    }
+}
+void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_Int32 i_nLeftMargin,sal_Int32 i_nRightMargin)
+{
+    try
+    {
+        sal_Int32 nRightBorder = i_nPaperWidth - i_nRightMargin;
+        const sal_Int32 nCount = m_xSection->getCount();
+        for (sal_Int32 i = 0; i < nCount; ++i)
+        {
+            bool bChanged = false;
+            uno::Reference< report::XReportComponent> xReportComponent(m_xSection->getByIndex(i),uno::UNO_QUERY_THROW);
+            awt::Point aPos = xReportComponent->getPosition();
+            awt::Size aSize = xReportComponent->getSize();
+            SvxShape* pShape = SvxShape::getImplementation( xReportComponent );
+            SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
+            if ( pObject )
+            {
+                OObjectBase* pBase = dynamic_cast<OObjectBase*>(pObject);
+                pBase->EndListening(sal_False);
+                if ( aPos.X < i_nLeftMargin )
+                {
+                    aPos.X  = i_nLeftMargin;
+                    bChanged = true;
+                }
+                if ( (aPos.X + aSize.Width) > nRightBorder )
+                {
+                    aPos.X = nRightBorder - aSize.Width;
+                    if ( aPos.X < i_nLeftMargin )
+                    {
+                        aSize.Width += aPos.X - i_nLeftMargin;
+                        aPos.X = i_nLeftMargin;
+                        // add listener around
+                        pBase->StartListening();
+                        xReportComponent->setSize(aSize);
+                        pBase->EndListening(sal_False);
+                    }
+                    bChanged = true;
+                }
+                if ( aPos.Y < 0 )
+                    aPos.Y = 0;
+                if ( bChanged )
+                {
+                    xReportComponent->setPosition(aPos);
+                    correctOverlapping(pObject,*this,false);
+                    Rectangle aRet(VCLPoint(xReportComponent->getPosition()),VCLSize(xReportComponent->getSize()));
+                    aRet.setHeight(aRet.getHeight() + 1);
+                    aRet.setWidth(aRet.getWidth() + 1);
+                    if ( m_xSection.is() && (static_cast<sal_uInt32>(aRet.getHeight() + aRet.Top()) > m_xSection->getHeight()) )
+                        m_xSection->setHeight(aRet.getHeight() + aRet.Top());
+
+                    pObject->RecalcBoundRect();
+                }
+                pBase->StartListening();
+            }
+        } // for (sal_Int32 i = 0; i < nCount; ++i)
+    }
+    catch(uno::Exception)
+    {
+        OSL_ENSURE(0,"Exception caught: OReportSection::_propertyChanged(");
     }
 }
 //------------------------------------------------------------------------------

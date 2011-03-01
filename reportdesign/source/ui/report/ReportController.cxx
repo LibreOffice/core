@@ -107,6 +107,7 @@
 
 #include <svx/fmview.hxx>
 #include <editeng/paperinf.hxx>
+#include <editeng/memberids.hrc>
 #include <svx/svxids.hrc>
 #include <svx/svdobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
@@ -2494,8 +2495,11 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
 
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_LRSPACE,sal_True,&pItem))
                     {
-                        xProp->setPropertyValue(PROPERTY_LEFTMARGIN,uno::makeAny(static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft()));
-                        xProp->setPropertyValue(PROPERTY_RIGHTMARGIN,uno::makeAny(static_cast<const SvxLRSpaceItem*>(pItem)->GetRight()));
+                        Any aValue;
+                        static_cast<const SvxLRSpaceItem*>(pItem)->QueryValue(aValue,MID_L_MARGIN);
+                        xProp->setPropertyValue(PROPERTY_LEFTMARGIN,aValue);
+                        static_cast<const SvxLRSpaceItem*>(pItem)->QueryValue(aValue,MID_R_MARGIN);
+                        xProp->setPropertyValue(PROPERTY_RIGHTMARGIN,aValue);
                     }
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_ULSPACE,sal_True,&pItem))
                     {

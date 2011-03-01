@@ -765,14 +765,7 @@ void OUnoObject::NbcMove( const Size& rSize )
         }
         if (bPositionFixed)
         {
-            // OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
-            // if ( pRptModel )
-            // {
-            //    if (! pRptModel->GetUndoEnv().IsLocked())
-            //    {
-                    GetModel()->AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*this, aUndoSize));
-            //    }
-            // }
+            GetModel()->AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*this, aUndoSize));
         }
         // set geometry properties
         SetPropsFromRect(GetLogicRect());
@@ -1040,14 +1033,40 @@ void OOle2Obj::NbcMove( const Size& rSize )
         // stop listening
         OObjectBase::EndListening(sal_False);
 
+        bool bPositionFixed = false;
+        Size aUndoSize(0,0);
+        bool bUndoMode = false;
         if ( m_xReportComponent.is() )
         {
             OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+            if (pRptModel->GetUndoEnv().IsUndoMode())
+            {
+                // if we are locked from outside, then we must not handle wrong moves, we are in UNDO mode
+                bUndoMode = true;
+            }
             OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
-            m_xReportComponent->setPositionX(m_xReportComponent->getPositionX() + rSize.A());
-            m_xReportComponent->setPositionY(m_xReportComponent->getPositionY() + rSize.B());
-        }
 
+            // LLA: why there exists getPositionX and getPositionY and NOT getPosition() which return a Point?
+            int nNewX = m_xReportComponent->getPositionX() + rSize.A();
+            // can this hinder us to set components outside the area?
+            // if (nNewX < 0)
+            // {
+            //     nNewX = 0;
+            // }
+            m_xReportComponent->setPositionX(nNewX);
+            int nNewY = m_xReportComponent->getPositionY() + rSize.B();
+            if (nNewY < 0 && !bUndoMode)
+            {
+                aUndoSize.B() = abs(nNewY);
+                bPositionFixed = true;
+                nNewY = 0;
+            }
+            m_xReportComponent->setPositionY(nNewY);
+        }
+        if (bPositionFixed)
+        {
+            GetModel()->AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*this, aUndoSize));
+        }
         // set geometry properties
         SetPropsFromRect(GetLogicRect());
 

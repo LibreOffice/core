@@ -71,6 +71,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sCol
     initDefaultNodeImages();
     ImplInitSettings();
     m_aText.SetHelpId(HID_RPT_START_TITLE);
+    m_aText.SetPaintTransparent(sal_True);
     m_aImage.SetHelpId(HID_RPT_START_IMAGE);
     m_aText.Show();
     m_aImage.Show();
@@ -83,7 +84,9 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sCol
     m_aVRuler.SetMargin2();
     const MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     m_aVRuler.SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
-    SetPaintTransparent(sal_True);
+    EnableChildTransparentMode( sal_True );
+    SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+    SetPaintTransparent( sal_True );
 }
 // -----------------------------------------------------------------------------
 OStartMarker::~OStartMarker()
@@ -107,21 +110,23 @@ sal_Int32 OStartMarker::getMinHeight() const
 // -----------------------------------------------------------------------------
 void OStartMarker::Paint( const Rectangle& rRect )
 {
-    Window::Paint( rRect );
+    (void)rRect;
     //SetUpdateMode(sal_False);
     Size aSize = GetOutputSizePixel();
     long nSize = aSize.Width();
     const long nCornerWidth = long(CORNER_SPACE * (double)GetMapMode().GetScaleX());
 
-    if ( !isCollapsed() )
+    if ( isCollapsed() )
+    {
+        SetClipRegion();
+    }
+    else
     {
         const long nVRulerWidth = m_aVRuler.GetSizePixel().Width();
         nSize = aSize.Width() - nVRulerWidth/* - m_nCornerSize*/;
-        SetClipRegion(Region(PixelToLogic(Rectangle(Point(),Size( nSize,aSize.Height())))));
         aSize.Width() += nCornerWidth;
-    } // if ( !isCollapsed() )
-    else
-        SetClipRegion();
+        SetClipRegion(Region(PixelToLogic(Rectangle(Point(),Size(nSize,aSize.Height())))));
+    }
 
     const Point aGcc3WorkaroundTemporary;
     Rectangle aWholeRect(aGcc3WorkaroundTemporary,aSize);
@@ -272,7 +277,6 @@ void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
             == SFX_HINT_COLORS_CHANGED))
     {
         setColor();
-        //m_aText.Invalidate();
         Invalidate(INVALIDATE_CHILDREN);
     }
 }

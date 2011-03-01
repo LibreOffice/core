@@ -95,6 +95,7 @@ namespace dbaui
         ,m_pIgnoreCurrency(NULL)
         ,m_pEscapeDateTime(NULL)
         ,m_pPrimaryKeySupport(NULL)
+        ,m_pRespectDriverResultSetType(NULL)
         ,m_pBooleanComparisonModeLabel( NULL )
         ,m_pBooleanComparisonMode( NULL )
         ,m_pMaxRowScanLabel( NULL )
@@ -206,6 +207,7 @@ namespace dbaui
         DELETEZ( m_pIgnoreCurrency );
         DELETEZ( m_pEscapeDateTime );
         DELETEZ( m_pPrimaryKeySupport );
+        DELETEZ( m_pRespectDriverResultSetType );
         DELETEZ( m_pBooleanComparisonModeLabel );
         DELETEZ( m_pBooleanComparisonMode );
         DELETEZ( m_pMaxRowScanLabel );
@@ -219,21 +221,22 @@ namespace dbaui
 
         // for easier maintainance, write the table in this form, then copy it to m_aBooleanSettings
         BooleanSettingDesc aSettings[] = {
-            { &m_pIsSQL92Check,             CB_SQL92CHECK,          DSID_SQL92CHECK,            false },
-            { &m_pAppendTableAlias,         CB_APPENDTABLEALIAS,    DSID_APPEND_TABLE_ALIAS,    false },
-            { &m_pAsBeforeCorrelationName,  CB_AS_BEFORE_CORR_NAME, DSID_AS_BEFORE_CORRNAME,    false },
-            { &m_pEnableOuterJoin,          CB_ENABLEOUTERJOIN,     DSID_ENABLEOUTERJOIN,       false },
-            { &m_pIgnoreDriverPrivileges,   CB_IGNOREDRIVER_PRIV,   DSID_IGNOREDRIVER_PRIV,     false },
-            { &m_pParameterSubstitution,    CB_PARAMETERNAMESUBST,  DSID_PARAMETERNAMESUBST,    false },
-            { &m_pSuppressVersionColumn,    CB_SUPPRESVERSIONCL,    DSID_SUPPRESSVERSIONCL,     true },
-            { &m_pCatalog,                  CB_CATALOG,             DSID_CATALOG,               false },
-            { &m_pSchema,                   CB_SCHEMA,              DSID_SCHEMA,                false },
-            { &m_pIndexAppendix,            CB_IGNOREINDEXAPPENDIX, DSID_INDEXAPPENDIX,         false },
-            { &m_pDosLineEnds,              CB_DOSLINEENDS,         DSID_DOSLINEENDS,           false },
-            { &m_pCheckRequiredFields,      CB_CHECK_REQUIRED,      DSID_CHECK_REQUIRED_FIELDS, false },
-            { &m_pIgnoreCurrency,           CB_IGNORECURRENCY,      DSID_IGNORECURRENCY,        false },
-            { &m_pEscapeDateTime,           CB_ESCAPE_DATETIME,     DSID_ESCAPE_DATETIME,       false },
-            { &m_pPrimaryKeySupport,        CB_PRIMARY_KEY_SUPPORT, DSID_PRIMARY_KEY_SUPPORT,   false },
+            { &m_pIsSQL92Check,                 CB_SQL92CHECK,          DSID_SQL92CHECK,            false },
+            { &m_pAppendTableAlias,             CB_APPENDTABLEALIAS,    DSID_APPEND_TABLE_ALIAS,    false },
+            { &m_pAsBeforeCorrelationName,      CB_AS_BEFORE_CORR_NAME, DSID_AS_BEFORE_CORRNAME,    false },
+            { &m_pEnableOuterJoin,              CB_ENABLEOUTERJOIN,     DSID_ENABLEOUTERJOIN,       false },
+            { &m_pIgnoreDriverPrivileges,       CB_IGNOREDRIVER_PRIV,   DSID_IGNOREDRIVER_PRIV,     false },
+            { &m_pParameterSubstitution,        CB_PARAMETERNAMESUBST,  DSID_PARAMETERNAMESUBST,    false },
+            { &m_pSuppressVersionColumn,        CB_SUPPRESVERSIONCL,    DSID_SUPPRESSVERSIONCL,     true },
+            { &m_pCatalog,                      CB_CATALOG,             DSID_CATALOG,               false },
+            { &m_pSchema,                       CB_SCHEMA,              DSID_SCHEMA,                false },
+            { &m_pIndexAppendix,                CB_IGNOREINDEXAPPENDIX, DSID_INDEXAPPENDIX,         false },
+            { &m_pDosLineEnds,                  CB_DOSLINEENDS,         DSID_DOSLINEENDS,           false },
+            { &m_pCheckRequiredFields,          CB_CHECK_REQUIRED,      DSID_CHECK_REQUIRED_FIELDS, false },
+            { &m_pIgnoreCurrency,               CB_IGNORECURRENCY,      DSID_IGNORECURRENCY,        false },
+            { &m_pEscapeDateTime,               CB_ESCAPE_DATETIME,     DSID_ESCAPE_DATETIME,       false },
+            { &m_pPrimaryKeySupport,            CB_PRIMARY_KEY_SUPPORT, DSID_PRIMARY_KEY_SUPPORT,   false },
+            { &m_pRespectDriverResultSetType,   CB_RESPECTRESULTSETTYPE,DSID_RESPECTRESULTSETTYPE,  false },
             { NULL,                         0,                      0,                          false }
         };
 
