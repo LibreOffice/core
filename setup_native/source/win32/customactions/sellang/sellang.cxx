@@ -49,8 +49,6 @@
 #include <sal/macros.h>
 #include <systools/win32/uwinapi.h>
 
-/* #define VERBOSE_DEBUG_OUTPUT 1 */
-
 static const char *
 langid_to_string( LANGID langid, int *have_default_lang )
 {
@@ -195,9 +193,6 @@ present_in_ui_langs(const char *lang)
 
 extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
 {
-#ifdef VERBOSE_DEBUG_OUTPUT
-    char tem[2000];
-#endif
     char feature[100];
     MSIHANDLE database, view, record;
     DWORD length;
@@ -211,19 +206,11 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
         return ERROR_SUCCESS;
     }
 
-#ifdef VERBOSE_DEBUG_OUTPUT
-    MessageBoxA(NULL, "MsiDatabaseOpenViewA success!", "SelectLanguage", MB_OK);
-#endif
-
     if (MsiViewExecute(view, NULL) != ERROR_SUCCESS) {
         MsiCloseHandle(view);
         MsiCloseHandle(database);
         return ERROR_SUCCESS;
     }
-
-#ifdef VERBOSE_DEBUG_OUTPUT
-    MessageBoxA(NULL, "MsiViewExecute success!", "SelectLanguage", MB_OK);
-#endif
 
     while (nlangs < MAX_LANGUAGES &&
            MsiViewFetch(view, &record) == ERROR_SUCCESS) {
@@ -256,23 +243,7 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
         const char *system_default_lang = langid_to_string(GetSystemDefaultUILanguage(), &have_system_default_lang);
         const char *user_locale_lang = langid_to_string(LANGIDFROMLCID(GetThreadLocale()), NULL);
 
-#ifdef VERBOSE_DEBUG_OUTPUT
-        sprintf(tem, "GetSystemDefaultUILanguage(): %#x = %s", GetSystemDefaultUILanguage(), system_default_lang);
-        MessageBoxA(NULL, tem, "SelectLanguage", MB_OK);
-#endif
-
         EnumUILanguagesA(enum_ui_lang_proc, 0, 0);
-
-#ifdef VERBOSE_DEBUG_OUTPUT
-        sprintf(tem, "Have %d UI languages: ", num_ui_langs);
-        for (i = 0; i < num_ui_langs; i++) {
-            char *p = tem + strlen(tem);
-            sprintf(p, "%s%s",
-                    ui_langs[i],
-                    (i + 1 < num_ui_langs) ? ", " : "");
-        }
-        MessageBoxA(NULL, tem, "SelectLanguage", MB_OK);
-#endif
 
         /* If one of the alternative languages in a multi-language installer
          * is the system default UI language, deselect those languages that
@@ -293,20 +264,12 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
         if (system_default_lang[0]) {
             for (i = 0; i < nlangs; i++) {
                 if (memcmp (system_default_lang, langs[i], 2) == 0) {
-#ifdef VERBOSE_DEBUG_OUTPUT
-                    sprintf(tem, "We have the system default language %s in the installer", system_default_lang);
-                    MessageBoxA(NULL, tem, "SelectLanguage", MB_OK);
-#endif
                     have_system_default_lang = 1;
                 }
             }
         }
 
         if (!have_system_default_lang) {
-#ifdef VERBOSE_DEBUG_OUTPUT
-            sprintf(tem, "We don't have the system default language %s in the installer, so pretend that English is the system default, sigh.", system_default_lang);
-            MessageBoxA(NULL, tem, "SelectLanguage", MB_OK);
-#endif
             system_default_lang = "en";
             have_system_default_lang = 1;
         }
@@ -318,17 +281,6 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
                     UINT rc;
                     sprintf(feature, "gm_Langpack_r_%s", langs[i]);
                     rc = MsiSetFeatureStateA(handle, feature, INSTALLSTATE_ABSENT);
-                    if (rc != ERROR_SUCCESS) {
-#ifdef VERBOSE_DEBUG_OUTPUT
-                        sprintf(tem, "MsiSetFeatureStateA %s failed: %d", feature, rc);
-                        MessageBoxA(NULL, tem, "SelectLanguage", MB_OK);
-#endif
-                    } else {
-#ifdef VERBOSE_DEBUG_OUTPUT
-                        sprintf(tem, "MsiSetFeatureStateA %s OK!", feature);
-                        MessageBoxA(NULL, tem, "SelectLanguage", MB_OK);
-#endif
-                    }
                 }
             }
         }
