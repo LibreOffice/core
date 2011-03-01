@@ -30,8 +30,11 @@
 #include "precompiled_editeng.hxx"
 
 #include <paralist.hxx>
+
 #include <editeng/outliner.hxx>  // only because of Paragraph, this must be changed!
 #include <editeng/numdef.hxx>
+
+#include <osl/diagnose.h>
 
 DBG_NAME(Paragraph)
 
@@ -138,21 +141,27 @@ void ParagraphList::Append( Paragraph* pPara)
 
 void ParagraphList::Insert( Paragraph* pPara, ULONG nAbsPos)
 {
+    OSL_ASSERT(nAbsPos != ULONG_MAX && nAbsPos <= maEntries.size());
+
     maEntries.insert(maEntries.begin()+nAbsPos,pPara);
 }
 
 void ParagraphList::Remove( ULONG nPara )
 {
+    OSL_ASSERT(nPara < maEntries.size());
+
     maEntries.erase(maEntries.begin() + nPara );
 }
 
 void ParagraphList::MoveParagraphs( ULONG nStart, ULONG nDest, ULONG _nCount )
 {
+    OSL_ASSERT(nStart < maEntries.size() && nDest < maEntries.size());
+
     if ( ( nDest < nStart ) || ( nDest >= ( nStart + _nCount ) ) )
     {
         std::vector<Paragraph*> aParas;
         std::vector<Paragraph*>::iterator iterBeg = maEntries.begin() + nStart;
-        std::vector<Paragraph*>::iterator iterEnd = iterBeg + _nCount + 1;
+        std::vector<Paragraph*>::iterator iterEnd = iterBeg + _nCount;
 
         std::copy(iterBeg,iterEnd,std::back_inserter(aParas));
 

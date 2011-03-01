@@ -65,7 +65,7 @@
 
 // calculate if it's RTL or not
 #include <unicode/ubidi.h>
-
+#include <cassert>
 using ::std::advance;
 
 #define DEFAULT_SCALE   75
@@ -646,7 +646,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
     for( USHORT n = 0; n < rPObj.Count(); n++ )
     {
         pPara = new Paragraph( rPObj.GetParagraphData(n) );
-        pParaList->Insert( pPara, LIST_APPEND );
+        pParaList->Append(pPara);
         USHORT nP = sal::static_int_cast< USHORT >(nPara+n);
         DBG_ASSERT(pParaList->GetAbsPos(pPara)==nP,"AddText:Out of sync");
         ImplInitDepth( nP, pPara->GetDepth(), FALSE );
@@ -1178,7 +1178,7 @@ ULONG Outliner::Read( SvStream& rInput, const String& rBaseURL, USHORT eFormat, 
     for ( n = 0; n < nParas; n++ )
     {
         Paragraph* pPara = new Paragraph( 0 );
-        pParaList->Insert( pPara, LIST_APPEND );
+        pParaList->Append(pPara);
 
         if ( eFormat == EE_FORMAT_BIN )
         {
@@ -1341,7 +1341,7 @@ Outliner::Outliner( SfxItemPool* pPool, USHORT nMode )
     pParaList = new ParagraphList;
     pParaList->SetVisibleStateChangedHdl( LINK( this, Outliner, ParaVisibleStateChangedHdl ) );
     Paragraph* pPara = new Paragraph( 0 );
-    pParaList->Insert( pPara, LIST_APPEND );
+    pParaList->Append(pPara);
     bFirstParaIsEmpty = TRUE;
 
     pEditEngine = new OutlinerEditEng( this, pPool );
@@ -2025,7 +2025,7 @@ void Outliner::Clear()
         ImplBlockInsertionCallbacks( TRUE );
         pEditEngine->Clear();
         pParaList->Clear( TRUE );
-        pParaList->Insert( new Paragraph( nMinDepth ), LIST_APPEND );
+        pParaList->Append( new Paragraph( nMinDepth ));
         bFirstParaIsEmpty = TRUE;
         ImplBlockInsertionCallbacks( FALSE );
     }
