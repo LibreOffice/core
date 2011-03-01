@@ -40,8 +40,6 @@
 #include <math.h>
 #include <sal/macros.h>
 
-#define USE_SAVE_STATE
-
 ResId SaneResId( sal_uInt32 nID )
 {
     static ResMgr* pResMgr = ResMgr::CreateResMgr( "san" );
@@ -1169,7 +1167,6 @@ void SaneDlg::UpdateScanArea( BOOL bSend )
 
 BOOL SaneDlg::LoadState()
 {
-#ifdef USE_SAVE_STATE
     int i;
 
     if( ! Sane::IsSane() )
@@ -1235,14 +1232,10 @@ BOOL SaneDlg::LoadState()
     InitFields();
 
     return TRUE;
-#else
-    return FALSE;
-#endif
 }
 
 void SaneDlg::SaveState()
 {
-#ifdef USE_SAVE_STATE
     if( ! Sane::IsSane() )
         return;
 
@@ -1319,7 +1312,6 @@ void SaneDlg::SaveState()
             }
         }
     }
-#endif
 }
 
 BOOL SaneDlg::SetAdjustedNumericalValue(
