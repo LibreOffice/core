@@ -544,7 +544,7 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
         }
         else
         {
-            DBG_ERROR( "symbol read error" );
+            OSL_FAIL( "symbol read error" );
         }
     }
 }

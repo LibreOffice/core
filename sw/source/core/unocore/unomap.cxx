@@ -2485,7 +2485,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             break;
 
             default:
-                DBG_ERROR( "unexpected property map ID" );
+                OSL_FAIL( "unexpected property map ID" );
         }
         //fill the character pointers and types into the arrays
         SfxItemPropertyMapEntry* p = aMapEntriesArr[nPropertyId];

@@ -97,7 +97,7 @@ String GetDefaultFontName( LanguageType nLang, USHORT nIdent )
             case SCRIPTTYPE_COMPLEX :   pTable = aCTLDefFnts; break;
             default :
                 pTable = aLatinDefFnts;
-                DBG_ERROR( "unknown script-type" );
+                OSL_FAIL( "unknown script-type" );
         }
 
         return Application::GetDefaultDevice()->GetDefaultFont(

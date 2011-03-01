@@ -1108,7 +1108,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         uno::Reference< chart2::data::XLabeledDataSequence > xLabeledDataSequence( pDS_LDS[nDS1] );
         if( !xLabeledDataSequence.is() )
         {
-            DBG_ERROR("got NULL for XLabeledDataSequence from Data source");
+            OSL_FAIL("got NULL for XLabeledDataSequence from Data source");
             continue;
         }
         const uno::Reference< chart2::data::XDataSequence > xCurLabel( xLabeledDataSequence->getLabel(), uno::UNO_QUERY );
@@ -1182,7 +1182,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                 nDirection = 0;
             else
             {
-                DBG_ERROR( "trying to determine 'DataRowSource': unexpected case found" );
+                OSL_FAIL( "trying to determine 'DataRowSource': unexpected case found" );
                 nDirection = -2;
             }
         }
@@ -1956,7 +1956,7 @@ SwChartDataSequence::SwChartDataSequence(
             pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
         }
         else {
-            DBG_ERROR( "table missing" );
+            OSL_FAIL( "table missing" );
         }
     }
     catch (uno::RuntimeException &)
@@ -2006,7 +2006,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
             pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
         }
         else {
-            DBG_ERROR( "table missing" );
+            OSL_FAIL( "table missing" );
         }
     }
     catch (uno::RuntimeException &)
@@ -2154,7 +2154,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                 bReturnEmptyTxt = nColSpan == nRowSpan;
             }
             else {
-                DBG_ERROR( "unexpected case" );
+                OSL_FAIL( "unexpected case" );
             }
 
             // build label sequence
@@ -2340,7 +2340,7 @@ void SAL_CALL SwChartDataSequence::addPropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
 }
 
 void SAL_CALL SwChartDataSequence::removePropertyChangeListener(
@@ -2348,7 +2348,7 @@ void SAL_CALL SwChartDataSequence::removePropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
 }
 
 void SAL_CALL SwChartDataSequence::addVetoableChangeListener(
@@ -2356,7 +2356,7 @@ void SAL_CALL SwChartDataSequence::addVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
 }
 
 void SAL_CALL SwChartDataSequence::removeVetoableChangeListener(
@@ -2364,7 +2364,7 @@ void SAL_CALL SwChartDataSequence::removeVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
 }
 
 OUString SAL_CALL SwChartDataSequence::getImplementationName(  )
@@ -2479,7 +2479,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
                 pDataProvider->RemoveDataSequence( *pTable, xRef );
             }
             else {
-                DBG_ERROR( "table missing" );
+                OSL_FAIL( "table missing" );
             }
         }
 
@@ -2566,7 +2566,7 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
                 bMoveLeft = nMarkCol > nPointCol;
         }
         else {
-            DBG_ERROR( "neither vertical nor horizontal movement" );
+            OSL_FAIL( "neither vertical nor horizontal movement" );
         }
 
         // get new box (position) to use...
@@ -2605,11 +2605,11 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
                 pPos->nContent  = aNewPos.nContent;
             }
             else {
-                DBG_ERROR( "neither point nor mark available for change" );
+                OSL_FAIL( "neither point nor mark available for change" );
             }
         }
         else {
-            DBG_ERROR( "failed to get position" );
+            OSL_FAIL( "failed to get position" );
         }
     }
 

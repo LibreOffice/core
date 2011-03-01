@@ -215,7 +215,7 @@ bool SwRotationGrf::PutValue( const uno::Any& rVal, BYTE )
         return true;
     }
 
-    DBG_ERROR( "SwRotationGrf::PutValue - Wrong type!" );
+    OSL_FAIL( "SwRotationGrf::PutValue - Wrong type!" );
     return false;
 }
 

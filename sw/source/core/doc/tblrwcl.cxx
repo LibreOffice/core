@@ -3482,7 +3482,7 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
 
     if( Abs( nAktSize - nSize ) > ( COLFUZZY * rBoxes.Count() ) )
     {
-        DBG_ERROR( "Boxen der Line zu klein/gross" );
+        OSL_FAIL( "Boxen der Line zu klein/gross" );
     }
 }
 

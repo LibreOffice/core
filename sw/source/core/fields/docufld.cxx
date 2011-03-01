@@ -275,7 +275,7 @@ bool SwPageNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -320,7 +320,7 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return bRet;
 }
@@ -396,7 +396,7 @@ bool SwAuthorField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -421,7 +421,7 @@ bool SwAuthorField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -552,7 +552,7 @@ bool SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= OUString(GetContent());
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -600,7 +600,7 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -709,7 +709,7 @@ bool SwTemplNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -747,7 +747,7 @@ bool SwTemplNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -846,7 +846,7 @@ bool SwDocStatField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= (sal_Int16)GetFormat();
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -871,7 +871,7 @@ bool SwDocStatField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return bRet;
 }
@@ -1608,7 +1608,7 @@ bool SwHiddenTxtField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     if( pOut )
         rAny <<= OUString( *pOut );
@@ -1641,7 +1641,7 @@ bool SwHiddenTxtField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         bValid = TRUE;
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -1737,7 +1737,7 @@ bool SwHiddenParaField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -1754,7 +1754,7 @@ bool SwHiddenParaField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -1937,7 +1937,7 @@ bool SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -1959,7 +1959,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         }
         break;
     case FIELD_PROP_TEXT:
-        DBG_ERROR("Not implemented!");
+        OSL_FAIL("Not implemented!");
         break;
     case FIELD_PROP_DATE:
         if( rAny.getValueType() == ::getCppuType((util::Date*)0) )
@@ -1983,7 +1983,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     }
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2103,7 +2103,7 @@ bool SwExtUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2130,7 +2130,7 @@ bool SwExtUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             SetFormat(GetFormat() & ~AF_FIXED);
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2208,7 +2208,7 @@ bool SwRefPageSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= (sal_Int16)nOffset;
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2224,7 +2224,7 @@ bool SwRefPageSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         rAny >>=nOffset;
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2475,7 +2475,7 @@ bool SwRefPageGetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
             rAny <<= OUString(sTxt);
         break;
         default:
-            DBG_ERROR("illegal property");
+            OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2502,7 +2502,7 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2619,7 +2619,7 @@ bool SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
          rAny <<= OUString(sTxt);
          break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2652,7 +2652,7 @@ bool SwJumpEditField::PutValue( const uno::Any& rAny, USHORT nWhichId )
          ::GetString( rAny, sTxt);
          break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2711,7 +2711,7 @@ bool SwCombinedCharField::QueryValue( uno::Any& rAny,
         rAny <<= rtl::OUString( sCharacters );
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2725,7 +2725,7 @@ bool SwCombinedCharField::PutValue( const uno::Any& rAny,
         ::GetString( rAny, sCharacters ).Erase( MAX_COMBINED_CHARACTERS );
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }

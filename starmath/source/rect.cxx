@@ -193,7 +193,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 #if OSL_DEBUG_LEVEL > 1
     if (!bSuccess)
     {
-        DBG_ERROR( "Sm : Ooops... (fehlt evtl. der Font?)");
+        OSL_FAIL( "Sm : Ooops... (fehlt evtl. der Font?)");
     }
 #endif
 

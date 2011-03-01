@@ -455,7 +455,7 @@ bool    SwAuthorityFieldType::QueryValue( Any& rVal, USHORT nWhichId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -528,7 +528,7 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, USHORT nWhichId )
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return bRet;
 }

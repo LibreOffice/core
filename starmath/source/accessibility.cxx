@@ -1033,7 +1033,7 @@ SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAt
             nFlags = GETATTRIBS_CHARATTRIBS;
             break;
         default:
-            DBG_ERROR("unknown flags for SmTextForwarder::GetAttribs");
+            OSL_FAIL("unknown flags for SmTextForwarder::GetAttribs");
         }
 
         return pEditEngine->GetAttribs( rSel.nStartPara, rSel.nStartPos, rSel.nEndPos, nFlags );

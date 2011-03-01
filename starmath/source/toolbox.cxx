@@ -61,7 +61,7 @@ static USHORT  GetImageListRID( USHORT nCategoryRID )
         case RID_FORMAT_CAT         : nRes = RID_IL_FORMAT; break;
         case RID_MISC_CAT           : nRes = RID_IL_MISC; break;
         default :
-            DBG_ERROR( "unkown category" );
+            OSL_FAIL( "unkown category" );
     }
     return nRes;
 }
@@ -106,7 +106,7 @@ static USHORT  GetCategoryRID( USHORT nResId )
             if (nResId != RID_IL_CATALOG)
             {
 #if OSL_DEBUG_LEVEL > 1
-                DBG_ERROR( "unkown category" );
+                OSL_FAIL( "unkown category" );
 #endif
             }
     }

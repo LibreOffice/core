@@ -143,7 +143,7 @@ void SwXMLImport::SetStatistics(
                     }
                     nTokens |= pStat->token;
                 } else {
-                    DBG_ERROR("SwXMLImport::SetStatistics: invalid entry");
+                    OSL_FAIL("SwXMLImport::SetStatistics: invalid entry");
                 }
             }
         }

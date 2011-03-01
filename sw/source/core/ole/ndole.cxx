@@ -312,7 +312,7 @@ BOOL SwOLENode::RestorePersistentData()
         {
             if ( xChild.is() )
                 xChild->setParent( 0 );
-            DBG_ERROR( "InsertObject failed" );
+            OSL_FAIL( "InsertObject failed" );
         }
         else
         {
@@ -747,7 +747,7 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
             xChild->setParent( p->GetModel() );
         if (!p->GetEmbeddedObjectContainer().InsertEmbeddedObject( xOLERef.GetObject(), aObjName ) )
         {
-            DBG_ERROR( "InsertObject failed" );
+            OSL_FAIL( "InsertObject failed" );
         if ( xChild.is() )
             xChild->setParent( 0 );
         }
@@ -863,7 +863,7 @@ BOOL SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, cons
                         if ( xPers.is() )
                             xPers->storeOwn();
                         else {
-                            DBG_ERROR("Modified object without persistance in cache!");
+                            OSL_FAIL("Modified object without persistance in cache!");
                         }
                     }
 

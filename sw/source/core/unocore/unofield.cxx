@@ -196,7 +196,7 @@ sal_uInt16 lcl_ServiceIdToResId(sal_uInt16 nServiceId)
             ++pMap;
 #if OSL_DEBUG_LEVEL > 1
     if( USHRT_MAX == pMap->nServiceId )
-        DBG_ERROR("service id not found");
+        OSL_FAIL("service id not found");
 #endif
     return pMap->nResId;
 }
@@ -276,7 +276,7 @@ sal_uInt16 lcl_GetServiceForField( const SwField& rFld )
     }
 #if OSL_DEBUG_LEVEL > 1
     if( USHRT_MAX == nSrvId )
-        DBG_ERROR("resid not found");
+        OSL_FAIL("resid not found");
 #endif
     return nSrvId;
 }
@@ -384,7 +384,7 @@ USHORT lcl_GetPropertyMapOfService( USHORT nServiceId )
     case SW_SERVICE_FIELDMASTER_DUMMY5: nRet = PROPERTY_MAP_FLDMSTR_DUMMY0; break;
     case SW_SERVICE_FIELDTYPE_HIDDEN_TEXT: nRet = PROPERTY_MAP_FLDTYP_HIDDEN_TEXT; break;
     default:
-        DBG_ERROR( "wrong service id" );
+        OSL_FAIL( "wrong service id" );
         nRet = USHRT_MAX;
     }
     return nRet;
@@ -1579,7 +1579,7 @@ void SwXTextField::attachToRange(
                     //case text::SetVariableType::SEQUENCE:   nSubType = nsSwGetSetExpType::GSE_SEQ;  break;
                     case text::SetVariableType::FORMULA:    nSubType = nsSwGetSetExpType::GSE_FORMULA; break;
                     default:
-                        DBG_ERROR("wrong value");
+                        OSL_FAIL("wrong value");
                         nSubType = nsSwGetSetExpType::GSE_EXPR;
                 }
                 //make sure the SubType matches the field type
@@ -1715,7 +1715,7 @@ void SwXTextField::attachToRange(
                ((SwTblField*)pFld)->ChgExpStr(m_pProps->sPar1);
             }
             break;
-            default: DBG_ERROR("was ist das fuer ein Typ?");
+            default: OSL_FAIL("was ist das fuer ein Typ?");
         }
         if(pFld)
         {

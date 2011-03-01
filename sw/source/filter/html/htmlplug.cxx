@@ -1019,7 +1019,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     if( !xSet.is() )
     {
-        DBG_ERROR("Unknown Object" );
+        OSL_FAIL("Unknown Object" );
         return rWrt;
     }
 

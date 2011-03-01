@@ -135,7 +135,7 @@ bool SwFmtCharFmt::QueryValue( uno::Any& rVal, BYTE ) const
 }
 bool SwFmtCharFmt::PutValue( const uno::Any& , BYTE   )
 {
-    DBG_ERROR("Zeichenvorlage kann mit PutValue nicht gesetzt werden!");
+    OSL_FAIL("Zeichenvorlage kann mit PutValue nicht gesetzt werden!");
     return false;
 }
 

@@ -254,7 +254,7 @@ SwFmt::~SwFmt()
         SwFmt *pParentFmt = DerivedFrom();
         if (!pParentFmt)
         {
-            DBG_ERROR( "~SwFmt: parent format missing" );
+            OSL_FAIL( "~SwFmt: parent format missing" );
         }
         else
         {

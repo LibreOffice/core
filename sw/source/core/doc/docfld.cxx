@@ -1557,7 +1557,7 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
     }
     else
     {
-        DBG_ERROR("TODO: what should happen with unnamed DBFields?");
+        OSL_FAIL("TODO: what should happen with unnamed DBFields?");
     }
 }
 

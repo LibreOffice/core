@@ -1333,7 +1333,7 @@ SwSbxValue SwCalc::Prim()
                                     nErg.PutLong( nErg.GetDouble() == 0.0 ? 1 : 0 );
                                 else
                                 {
-                                    DBG_ERROR( "unexpected case. computing binary NOT" );
+                                    OSL_FAIL( "unexpected case. computing binary NOT" );
                                     //!! computes a binary NOT
                                     nErg.Compute( SbxNOT, nErg );
                                 }

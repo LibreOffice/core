@@ -1475,7 +1475,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                     }
                     else
                     {
-                        DBG_ERROR("OLE-object nicht geladen?");
+                        OSL_FAIL("OLE-object nicht geladen?");
                         bInclude = FALSE;
                     }
                 }
@@ -2258,7 +2258,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
             }
 #if OSL_DEBUG_LEVEL > 1
             else
-                DBG_ERROR("Bibliography entries cannot be found here");
+                OSL_FAIL("Bibliography entries cannot be found here");
 #endif
         }
         if(*pNew < *pOld)

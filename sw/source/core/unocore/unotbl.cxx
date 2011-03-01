@@ -964,7 +964,7 @@ table::CellContentType SwXCell::getType(void) throw( uno::RuntimeException )
         case RES_BOXATR_VALUE :     nRes = table::CellContentType_VALUE; break;
         case RES_BOXATR_FORMULA :   nRes = table::CellContentType_FORMULA; break;
         default :
-            DBG_ERROR( "unexpected case" );
+            OSL_FAIL( "unexpected case" );
     }
     return  nRes;
 }
@@ -2787,7 +2787,7 @@ uno::Sequence< OUString > SwXTextTable::getRowDescriptions(void) throw( uno::Run
         }
         else
         {
-            DBG_ERROR("Wo kommen die Labels her?");
+            OSL_FAIL("Wo kommen die Labels her?");
         }
     }
     else
@@ -2823,7 +2823,7 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
         }
         else
         {
-            DBG_ERROR("Wohin mit den Labels?");
+            OSL_FAIL("Wohin mit den Labels?");
         }
     }
     else
@@ -2863,7 +2863,7 @@ uno::Sequence< OUString > SwXTextTable::getColumnDescriptions(void)
         }
         else
         {
-            DBG_ERROR("Wo kommen die Labels her?");
+            OSL_FAIL("Wo kommen die Labels her?");
         }
     }
     else
@@ -2901,7 +2901,7 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence< OUString >& rColum
         }
         else
         {
-            DBG_ERROR("Wo kommen die Labels her?");
+            OSL_FAIL("Wo kommen die Labels her?");
         }
     }
     else
@@ -4044,7 +4044,7 @@ void SwXCellRange::GetDataSequence(
         pDblSeq->realloc( nSize );
     else
     {
-        DBG_ERROR( "argument missing" );
+        OSL_FAIL( "argument missing" );
         return;
     }
     uno::Any   *pAnyData = pAnySeq ? pAnySeq->getArray() : 0;
@@ -4141,7 +4141,7 @@ void SwXCellRange::GetDataSequence(
                         pDblData[nDtaCnt++] = fVal;
                     }
                     else {
-                        DBG_ERROR( "output sequence missing" );
+                        OSL_FAIL( "output sequence missing" );
                     }
                 }
             }
@@ -4398,7 +4398,7 @@ uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
         }
         else
         {
-            DBG_ERROR("Wo kommen die Labels her?");
+            OSL_FAIL("Wo kommen die Labels her?");
         }
     }
     else
@@ -4435,7 +4435,7 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
         }
         else
         {
-            DBG_ERROR("Wohin mit den Labels?");
+            OSL_FAIL("Wohin mit den Labels?");
         }
     }
 }
@@ -4472,7 +4472,7 @@ uno::Sequence< OUString > SwXCellRange::getColumnDescriptions(void)
         }
         else
         {
-            DBG_ERROR("Wo kommen die Labels her?");
+            OSL_FAIL("Wo kommen die Labels her?");
         }
     }
     else
@@ -4506,7 +4506,7 @@ void SwXCellRange::setColumnDescriptions(const uno::Sequence< OUString >& Column
         }
         else
         {
-            DBG_ERROR("Wo kommen die Labels her?");
+            OSL_FAIL("Wo kommen die Labels her?");
         }
     }
 }

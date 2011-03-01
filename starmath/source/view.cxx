@@ -1478,7 +1478,7 @@ bool SmViewShell::Insert( SfxMedium& rMedium )
             pEditWin->InsertText( aText );
         else
         {
-            DBG_ERROR( "EditWindow missing" );
+            OSL_FAIL( "EditWindow missing" );
             aTemp += aText;
             aText  = aTemp;
         }
@@ -1523,7 +1523,7 @@ bool SmViewShell::InsertFrom(SfxMedium &rMedium)
             pEditWin->InsertText( aText );
         else
         {
-            DBG_ERROR( "EditWindow missing" );
+            OSL_FAIL( "EditWindow missing" );
             aTemp += aText;
             aText  = aTemp;
         }
@@ -1644,7 +1644,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 }
                 catch (uno::Exception &)
                 {
-                    DBG_ERROR( "SmViewShell::Execute (SID_PASTEOBJECT): failed to get storage from input stream" );
+                    OSL_FAIL( "SmViewShell::Execute (SID_PASTEOBJECT): failed to get storage from input stream" );
                 }
             }
         }

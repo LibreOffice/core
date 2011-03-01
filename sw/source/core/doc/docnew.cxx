@@ -148,7 +148,7 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
             }
             catch (uno::Exception &)
             {
-                DBG_ERROR( "No GCIterator" );
+                OSL_FAIL( "No GCIterator" );
             }
         }
     }

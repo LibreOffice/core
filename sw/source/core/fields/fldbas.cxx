@@ -325,7 +325,7 @@ bool  SwField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
         }
         break;
         default:
-            DBG_ERROR("illegal property");
+            OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -341,7 +341,7 @@ bool SwField::PutValue( const uno::Any& rVal, USHORT nWhichId )
         }
         break;
         default:
-            DBG_ERROR("illegal property");
+            OSL_FAIL("illegal property");
     }
     return true;
 }

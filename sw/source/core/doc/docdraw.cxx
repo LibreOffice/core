@@ -898,7 +898,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         }
         else
         {
-            DBG_ERROR("unbekannter Feldbefehl");
+            OSL_FAIL("unbekannter Feldbefehl");
             pInfo->SetRepresentation( String( '?' ) );
         }
     }

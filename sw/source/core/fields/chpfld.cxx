@@ -229,7 +229,7 @@ bool SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -271,7 +271,7 @@ bool SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
         bRet = false;
     }
     return bRet;

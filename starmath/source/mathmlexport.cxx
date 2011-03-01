@@ -344,7 +344,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     }
     catch ( uno::Exception& )
     {
-        DBG_ERROR( "Can't create output stream in package!" );
+        OSL_FAIL( "Can't create output stream in package!" );
         return sal_False;
     }
 

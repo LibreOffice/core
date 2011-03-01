@@ -3131,7 +3131,7 @@ void SwXOLEListener::disposing( const lang::EventObject& rEvent )
     }
     catch(uno::Exception const &)
     {
-        DBG_ERROR("OLE Listener couldn't be removed");
+        OSL_FAIL("OLE Listener couldn't be removed");
     }
 }
 

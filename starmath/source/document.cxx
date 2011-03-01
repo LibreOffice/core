@@ -273,7 +273,7 @@ void SmDocShell::ArrangeFormula()
     if (!pOutDev)
     {
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ERROR("!! SmDocShell::ArrangeFormula: reference device missing !!");
+        OSL_FAIL("!! SmDocShell::ArrangeFormula: reference device missing !!");
 #endif
     }
 

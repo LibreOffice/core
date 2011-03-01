@@ -101,7 +101,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
         }
         catch( const uno::Exception& )
         {
-            DBG_ERROR("exception while creating AutoText storage");
+            OSL_FAIL("exception while creating AutoText storage");
         }
     }
     InitBlockMode ( refStg );

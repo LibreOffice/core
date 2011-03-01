@@ -142,7 +142,7 @@ bool SwDBFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= aDBData.nCommandType;
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -185,7 +185,7 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
         rAny >>= aDBData.nCommandType;
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -423,7 +423,7 @@ bool SwDBField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= OUString(sFieldCode);
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 
@@ -483,7 +483,7 @@ bool SwDBField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         ::GetString( rAny, sFieldCode );
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -555,7 +555,7 @@ bool SwDBNameInfField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -587,7 +587,7 @@ bool SwDBNameInfField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     }
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }

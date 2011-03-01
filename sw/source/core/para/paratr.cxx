@@ -234,7 +234,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             bWholeWord = *(sal_Bool*)rVal.getValue();
         break;
         case MID_DROPCAP_CHAR_STYLE_NAME :
-            DBG_ERROR("char format cannot be set in PutValue()!");
+            OSL_FAIL("char format cannot be set in PutValue()!");
         break;
     }
     return true;

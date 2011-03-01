@@ -470,7 +470,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
         break;
     // <--
     default:
-        DBG_ERROR("<SwGetRefField::UpdateField(..)> - unknown format type");
+        OSL_FAIL("<SwGetRefField::UpdateField(..)> - unknown format type");
     }
 }
 
@@ -615,7 +615,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
             case  REF_SETREFATTR : nSource = ReferenceFieldSource::REFERENCE_MARK; break;
             case  REF_SEQUENCEFLD: nSource = ReferenceFieldSource::SEQUENCE_FIELD; break;
             case  REF_BOOKMARK   : nSource = ReferenceFieldSource::BOOKMARK; break;
-            case  REF_OUTLINE    : DBG_ERROR("not implemented"); break;
+            case  REF_OUTLINE    : OSL_FAIL("not implemented"); break;
             case  REF_FOOTNOTE   : nSource = ReferenceFieldSource::FOOTNOTE; break;
             case  REF_ENDNOTE    : nSource = ReferenceFieldSource::ENDNOTE; break;
             }
@@ -648,7 +648,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= (sal_Int16)nSeqNo;
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -723,7 +723,7 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }

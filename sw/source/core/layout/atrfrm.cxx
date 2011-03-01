@@ -1008,7 +1008,7 @@ bool SwFmtCol::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     if(MID_COLUMN_SEPARATOR_LINE == nMemberId)
     {
-        DBG_ERROR("not implemented");
+        OSL_FAIL("not implemented");
     }
     else
     {
@@ -1025,7 +1025,7 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
     bool bRet = false;
     if(MID_COLUMN_SEPARATOR_LINE == nMemberId)
     {
-        DBG_ERROR("not implemented");
+        OSL_FAIL("not implemented");
     }
     else
     {
@@ -2233,7 +2233,7 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                     rVal <<= text::TextGridMode::LINES_AND_CHARS;
                     break;
                 default:
-                    DBG_ERROR("unknown SwTextGrid value");
+                    OSL_FAIL("unknown SwTextGrid value");
                     bRet = false;
                     break;
             }
@@ -2248,7 +2248,7 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             }
             break;
         default:
-            DBG_ERROR("Unknown SwTextGridItem member");
+            OSL_FAIL("Unknown SwTextGridItem member");
             bRet = false;
             break;
     }
@@ -2342,7 +2342,7 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             break;
         }
         default:
-            DBG_ERROR("Unknown SwTextGridItem member");
+            OSL_FAIL("Unknown SwTextGridItem member");
             bRet = false;
     }
 

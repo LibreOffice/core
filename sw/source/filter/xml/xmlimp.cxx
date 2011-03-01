@@ -1287,7 +1287,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             }
             catch( Exception& )
             {
-                DBG_ERROR( "SwXMLImport::SetConfigurationSettings: Exception!" );
+                OSL_FAIL( "SwXMLImport::SetConfigurationSettings: Exception!" );
             }
         }
         pValues++;

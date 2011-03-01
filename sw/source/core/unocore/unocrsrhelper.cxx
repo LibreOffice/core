@@ -1002,12 +1002,12 @@ sal_Bool DocInsertStringSplitCR(
         if (aTxt.getLength() &&
             !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
         {
-            DBG_ERROR( "Doc->Insert(Str) failed." );
+            OSL_FAIL( "Doc->Insert(Str) failed." );
             bOK = sal_False;
         }
         if (!rDoc.SplitNode( *rNewCursor.GetPoint(), false ) )
         {
-            DBG_ERROR( "SplitNode failed" );
+            OSL_FAIL( "SplitNode failed" );
             bOK = sal_False;
         }
         nStartIdx = nIdx + 1;
@@ -1017,7 +1017,7 @@ sal_Bool DocInsertStringSplitCR(
     if (aTxt.getLength() &&
         !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
     {
-        DBG_ERROR( "Doc->Insert(Str) failed." );
+        OSL_FAIL( "Doc->Insert(Str) failed." );
         bOK = sal_False;
     }
 

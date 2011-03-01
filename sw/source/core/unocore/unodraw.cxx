@@ -1101,7 +1101,7 @@ uno::Sequence< sal_Int8 > SwXShape::getImplementationId(  ) throw(uno::RuntimeEx
     }
     if( NULL == pImplementationId )
     {
-        DBG_ERROR( "Could not create an implementation id for a SwXShape!" );
+        OSL_FAIL( "Could not create an implementation id for a SwXShape!" );
         return uno::Sequence< sal_Int8 > ();
     }
     else

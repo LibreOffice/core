@@ -617,7 +617,7 @@ namespace sw
 
                 if(nPointCount > 0x0000ffff)
                 {
-                    DBG_ERROR("PolygonFromPolyPolygon: too many points for a single polygon (!)");
+                    OSL_FAIL("PolygonFromPolyPolygon: too many points for a single polygon (!)");
                     nPointCount = 0x0000ffff;
                 }
 

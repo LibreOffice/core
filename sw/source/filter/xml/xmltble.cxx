@@ -727,7 +727,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                     }
                 }
                 else {
-                    DBG_ERROR("here should be a XCell");
+                    OSL_FAIL("here should be a XCell");
                 }
             }
             else
@@ -905,7 +905,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
             }
             else
             {
-                DBG_ERROR("here should be a XCell");
+                OSL_FAIL("here should be a XCell");
                 ClearAttrList();
             }
         }
