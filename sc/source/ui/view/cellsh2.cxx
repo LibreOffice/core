@@ -68,10 +68,6 @@
 #include "pvlaydlg.hxx"
 #include "validat.hxx"
 #include "scresid.hxx"
-#include "pivot.hxx"
-#include "dpobject.hxx"
-#include "dpsdbtab.hxx"     // ScImportSourceDesc
-#include "dpshttab.hxx"     // ScSheetSourceDesc
 
 #include "validate.hrc" // ScValidationDlg
 #include "scui_def.hxx"
@@ -746,143 +742,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             break;
 
         case SID_OPENDLG_PIVOTTABLE:
-            {
-                ScViewData* pData = GetViewData();
-                ScDocument* pDoc = pData->GetDocument();
-
-                ScDPObject* pNewDPObject = NULL;
-
-                // ScPivot is no longer used...
-                ScDPObject* pDPObj = pDoc->GetDPAtCursor(
-                                            pData->GetCurX(), pData->GetCurY(),
-                                            pData->GetTabNo() );
-                if ( pDPObj )   // on an existing table?
-                {
-                    pNewDPObject = new ScDPObject( *pDPObj );
-                }
-                else            // create new table
-                {
-                    //  select database range or data
-                    pTabViewShell->GetDBData( TRUE, SC_DB_OLD );
-                    ScMarkData& rMark = GetViewData()->GetMarkData();
-                    if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
-                        pTabViewShell->MarkDataArea( FALSE );
-
-                    //  output to cursor position for non-sheet data
-                    ScAddress aDestPos( pData->GetCurX(), pData->GetCurY(),
-                                            pData->GetTabNo() );
-
-                    //  first select type of source data
-
-                    BOOL bEnableExt = ScDPObject::HasRegisteredSources();
-
-                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
-
-                    AbstractScDataPilotSourceTypeDlg* pTypeDlg = pFact->CreateScDataPilotSourceTypeDlg( pTabViewShell->GetDialogParent(), bEnableExt, RID_SCDLG_DAPITYPE );
-                    DBG_ASSERT(pTypeDlg, "Dialog create fail!");
-                    if ( pTypeDlg->Execute() == RET_OK )
-                    {
-                        if ( pTypeDlg->IsExternal() )
-                        {
-                            uno::Sequence<rtl::OUString> aSources = ScDPObject::GetRegisteredSources();
-                            AbstractScDataPilotServiceDlg* pServDlg = pFact->CreateScDataPilotServiceDlg( pTabViewShell->GetDialogParent(), aSources, RID_SCDLG_DAPISERVICE );
-                            DBG_ASSERT(pServDlg, "Dialog create fail!");
-                            if ( pServDlg->Execute() == RET_OK )
-                            {
-                                ScDPServiceDesc aServDesc(
-                                        pServDlg->GetServiceName(),
-                                        pServDlg->GetParSource(),
-                                        pServDlg->GetParName(),
-                                        pServDlg->GetParUser(),
-                                        pServDlg->GetParPass() );
-                                pNewDPObject = new ScDPObject( pDoc );
-                                pNewDPObject->SetServiceData( aServDesc );
-                            }
-                            delete pServDlg;
-                        }
-                        else if ( pTypeDlg->IsDatabase() )
-                        {
-                            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
-
-                            AbstractScDataPilotDatabaseDlg* pDataDlg = pFact->CreateScDataPilotDatabaseDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_DAPIDATA);
-                            DBG_ASSERT(pDataDlg, "Dialog create fail!");
-                            if ( pDataDlg->Execute() == RET_OK )
-                            {
-                                ScImportSourceDesc aImpDesc(pDoc);
-                                pDataDlg->GetValues( aImpDesc );
-                                pNewDPObject = new ScDPObject( pDoc );
-                                pNewDPObject->SetImportDesc( aImpDesc );
-                            }
-                            delete pDataDlg;
-                        }
-                        else        // selection
-                        {
-                            //! use database ranges (select before type dialog?)
-                            ScRange aRange;
-                            ScMarkType eType = GetViewData()->GetSimpleArea(aRange);
-                            if ( (eType & SC_MARK_SIMPLE) == SC_MARK_SIMPLE )
-                            {
-                                // Shrink the range to the data area.
-                                SCCOL nStartCol = aRange.aStart.Col(), nEndCol = aRange.aEnd.Col();
-                                SCROW nStartRow = aRange.aStart.Row(), nEndRow = aRange.aEnd.Row();
-                                if (pDoc->ShrinkToDataArea(aRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow))
-                                {
-                                    aRange.aStart.SetCol(nStartCol);
-                                    aRange.aStart.SetRow(nStartRow);
-                                    aRange.aEnd.SetCol(nEndCol);
-                                    aRange.aEnd.SetRow(nEndRow);
-                                    rMark.SetMarkArea(aRange);
-                                    pTabViewShell->MarkRange(aRange);
-                                }
-
-                                BOOL bOK = TRUE;
-                                if ( pDoc->HasSubTotalCells( aRange ) )
-                                {
-                                    //  confirm selection if it contains SubTotal cells
-
-                                    QueryBox aBox( pTabViewShell->GetDialogParent(),
-                                                    WinBits(WB_YES_NO | WB_DEF_YES),
-                                                    ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL) );
-                                    if (aBox.Execute() == RET_NO)
-                                        bOK = FALSE;
-                                }
-                                if (bOK)
-                                {
-                                    ScSheetSourceDesc aShtDesc(pDoc);
-                                    aShtDesc.SetSourceRange(aRange);
-                                    pNewDPObject = new ScDPObject( pDoc );
-                                    pNewDPObject->SetSheetDesc( aShtDesc );
-
-                                    //  output below source data
-                                    if ( aRange.aEnd.Row()+2 <= MAXROW - 4 )
-                                        aDestPos = ScAddress( aRange.aStart.Col(),
-                                                                aRange.aEnd.Row()+2,
-                                                                aRange.aStart.Tab() );
-                                }
-                            }
-                        }
-                    }
-                    delete pTypeDlg;
-
-                    if ( pNewDPObject )
-                        pNewDPObject->SetOutRange( aDestPos );
-                }
-
-                pTabViewShell->SetDialogDPObject( pNewDPObject );   // is copied
-                if ( pNewDPObject )
-                {
-                    //  start layout dialog
-
-                    USHORT nId  = ScPivotLayoutWrapper::GetChildWindowId();
-                    SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                    SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
-                    pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
-                }
-                delete pNewDPObject;
-            }
+            ExecuteDataPilotDialog();
             break;
-
         case SID_DEFINE_DBNAME:
             {
 

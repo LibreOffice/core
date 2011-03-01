@@ -66,6 +66,8 @@ private:
                     const String& _rFile, const String& _rFilter, const String& _rOptions,
                     const String& _rSource, ULONG _nRefresh, SfxRequest& _rRequest );
 
+    void ExecuteDataPilotDialog();
+
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
     DECL_LINK( DialogClosed, AbstractScLinkedAreaDlg* );
 
