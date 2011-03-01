@@ -2874,7 +2874,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 mpPptEscherEx->AddAtom( 4, EPP_TextHeaderAtom );
                                 *mpStrm << (sal_uInt32)EPP_TEXTTYPE_Title;
                                 mpPptEscherEx->AddAtom( mnTextSize << 1, EPP_TextCharsAtom );
-                                const sal_Unicode* pString = aUString;
+                                const sal_Unicode* pString = aUString.getStr();
                                 for ( sal_uInt32 i = 0; i < mnTextSize; i++ )
                                 {
                                     nChar = pString[ i ];       // 0xa -> 0xb weicher Zeilenumbruch
