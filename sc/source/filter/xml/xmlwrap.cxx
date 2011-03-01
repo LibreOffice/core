@@ -429,6 +429,8 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             { MAP_LEN( "BuildId" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "VBACompatibilityMode" ), 0, &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "ScriptConfiguration" ), 0, &::getCppuType((uno::Reference<container::XNameAccess> *)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "OrganizerMode" ), 0, &::getBooleanCppuType(),
+                ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
 
             { NULL, 0, 0, NULL, 0, 0 }
         };
@@ -488,26 +490,32 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             }
         }
 
+        if (bStylesOnly)
+        {
+            ::rtl::OUString const sOrganizerMode(
+                RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
+            xInfoSet->setPropertyValue(sOrganizerMode, uno::makeAny(sal_True));
+        }
+
         sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
+        // #i103539#: always read meta.xml for generator
         sal_uInt32 nMetaRetval(0);
-        if(!bStylesOnly)
-        {
-            uno::Sequence<uno::Any> aMetaArgs(1);
-            uno::Any* pMetaArgs = aMetaArgs.getArray();
-            pMetaArgs[0] <<= xInfoSet;
+        uno::Sequence<uno::Any> aMetaArgs(1);
+        uno::Any* pMetaArgs = aMetaArgs.getArray();
+        pMetaArgs[0] <<= xInfoSet;
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import start" );
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import start" );
 
-            nMetaRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
-                bOasis ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLOasisMetaImporter"))
-                       : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaImporter")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Meta.xml")), aMetaArgs,
-                sal_False);
+        nMetaRetval = ImportFromComponent(
+            xServiceFactory, xModel, xXMLParser, aParserInput,
+            bOasis ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLOasisMetaImporter"))
+                   : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaImporter")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Meta.xml")), aMetaArgs,
+            sal_False);
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import end" );
-        }
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import end" );
 
         SvXMLGraphicHelper* pGraphicHelper = NULL;
         uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
