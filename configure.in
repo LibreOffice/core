@@ -1155,6 +1155,27 @@ AC_SUBST(PRODUCT)
 AC_SUBST(PROFULLSWITCH)
 AC_SUBST(PROEXT)
 
+if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
+   dnl Test $prefix (currently only testing for /usr and /usr/local)
+   dnl so that VALGRIND_CFLAGS = -I$prefix/include/valgrind
+   VALGRIND_CFLAGS=""
+   prev_cppflags=$CPPFLAGS
+   if test -z "$VALGRIND_CFLAGS"; then
+      CPPFLAGS="-I/usr/include/valgrind"
+      AC_CHECK_HEADER([valgrind.h], [VALGRIND_CFLAGS=$CPPFLAGS], [unset ac_cv_header_valgrind_h])
+   fi
+   if test -z "$VALGRIND_CFLAGS"; then
+      CPPFLAGS="-I/usr/local/include/valgrind"
+      AC_CHECK_HEADER([valgrind.h], [VALGRIND_CFLAGS=$CPPFLAGS], [])
+   fi
+   if test -n "$VALGRIND_CFLAGS"; then
+      CPPFLAGS=$VALGRIND_CFLAGS
+      AC_CHECK_HEADER([memcheck.h], [], [VALGRIND_CFLAGS=""])
+   fi
+   CPPFLAGS=$prev_cppflags
+fi
+AC_SUBST([VALGRIND_CFLAGS])
+
 dnl ===================================================================
 dnl First setting is whether to include symbols into final build.
 dnl ===================================================================
