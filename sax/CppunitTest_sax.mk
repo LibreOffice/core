@@ -35,6 +35,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sax_cppunit, \
 	cppunit \
 	sax \
 	sal \
+	stl \
     $(gb_STDLIBS) \
 ))
 

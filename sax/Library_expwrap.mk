@@ -46,25 +46,32 @@ $(eval $(call gb_Library_set_defs,expwrap,\
 ))
 endif
 
+$(eval $(call gb_Library_add_linked_libs,expwrap,\
+	sal \
+	cppu \
+	cppuhelper \
+	stl \
+    $(gb_STDLIBS) \
+))
+
 ifeq ($(SYSTEM_EXPAT),YES)
 $(eval $(call gb_Library_set_defs,expwrap,\
 	$$(DEFS) \
 	-DSYSTEM_EXPAT \
+))
+$(eval $(call gb_Library_add_linked_libs,expwrap,\
+	expat \
 ))
 else
 $(eval $(call gb_Library_set_defs,expwrap,\
 	$$(DEFS) \
 	-DXML_UNICODE \
 ))
-endif
-
 $(eval $(call gb_Library_add_linked_libs,expwrap,\
-	sal \
-	cppu \
-	cppuhelper \
-	expat \
-    $(gb_STDLIBS) \
+	expat_xmlparse \
+	expat_xmltok \
 ))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,expwrap,\
 	sax/source/expatwrap/attrlistimpl \

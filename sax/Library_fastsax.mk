@@ -39,6 +39,15 @@ $(eval $(call gb_Library_set_defs,fastsax,\
 	$$(DEFS) \
 ))
 
+$(eval $(call gb_Library_add_linked_libs,fastsax,\
+	sal \
+	cppu \
+	cppuhelper \
+	sax \
+	stl \
+    $(gb_STDLIBS) \
+))
+
 ifeq ($(SYSTEM_ZLIB),YES)
 $(eval $(call gb_Library_set_defs,fastsax,\
 	$$(DEFS) \
@@ -51,16 +60,15 @@ $(eval $(call gb_Library_set_defs,fastsax,\
 	$$(DEFS) \
 	-DSYSTEM_EXPAT \
 ))
-endif
-
 $(eval $(call gb_Library_add_linked_libs,fastsax,\
-	sal \
-	cppu \
-	cppuhelper \
 	expat \
-	sax \
-    $(gb_STDLIBS) \
 ))
+else
+$(eval $(call gb_Library_add_linked_libs,fastsax,\
+	expat_xmlparse \
+	expat_xmltok \
+))
+endif
 
 # re-uses xml2utf object from sax.uno lib (see below)
 $(eval $(call gb_Library_add_exception_objects,fastsax,\
