@@ -278,6 +278,8 @@ endif
 gb_Library_PLAINLIBS_NONE += \
 	cairo \
 	expat \
+	expat_xmltok \
+	expat_xmlparse \
 	fontconfig \
 	Xrender \
 	pixman-1 \
