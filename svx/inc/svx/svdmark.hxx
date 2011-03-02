@@ -29,9 +29,10 @@
 #ifndef _SVDMARK_HXX
 #define _SVDMARK_HXX
 
+#include <vector>
+
 #include <tools/contnr.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include "svx/svxdllapi.h"
 #include <svx/sdrobjectuser.hxx>
 
@@ -378,7 +379,7 @@ namespace sdr
         SdrMarkList                 maMarkedObjectList;
         SdrMarkList                 maEdgesOfMarkedNodes;
         SdrMarkList                 maMarkedEdgesOfMarkedNodes;
-        List                        maAllMarkedObjects;
+        std::vector<SdrObject*>     maAllMarkedObjects;
 
         // bitfield
         unsigned                    mbEdgesOfMarkedNodesDirty : 1;
@@ -398,7 +399,7 @@ namespace sdr
 
         const SdrMarkList& GetEdgesOfMarkedNodes() const;
         const SdrMarkList& GetMarkedEdgesOfMarkedNodes() const;
-        const List& GetAllMarkedObjects() const;
+        const std::vector<SdrObject*>& GetAllMarkedObjects() const;
 
         SdrMarkList& GetMarkedObjectListWriteAccess()
         {

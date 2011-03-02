@@ -341,37 +341,44 @@ void SdrEditView::EndUndo()
 
 void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
 {
-    const List& rAllMarkedObjects = GetTransitiveHullOfMarkedObjects();
+    std::vector<SdrObject*>::const_iterator iterPos;
+    const std::vector<SdrObject*>& rAllMarkedObjects = GetTransitiveHullOfMarkedObjects();
 
     // #i13033#
     // New mechanism to search for necessary disconnections for
     // changed connectors inside the transitive hull of all at
     // the beginning of UNDO selected objects
-    for(sal_uInt32 a(0L); a < rAllMarkedObjects.Count(); a++)
+    for(sal_uInt32 a(0L); a < rAllMarkedObjects.size(); a++)
     {
-        SdrEdgeObj* pEdge = PTR_CAST(SdrEdgeObj, (SdrObject*)rAllMarkedObjects.GetObject(a));
+        SdrEdgeObj* pEdge = PTR_CAST(SdrEdgeObj, rAllMarkedObjects[a]);
 
         if(pEdge)
         {
             SdrObject* pObj1 = pEdge->GetConnectedNode(sal_False);
             SdrObject* pObj2 = pEdge->GetConnectedNode(sal_True);
 
-            if(pObj1
-                && LIST_ENTRY_NOTFOUND == rAllMarkedObjects.GetPos(pObj1)
-                && !pEdge->CheckNodeConnection(sal_False))
+            if(pObj1 && !pEdge->CheckNodeConnection(sal_False))
             {
-                if( IsUndoEnabled() )
-                    AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pEdge));
-                pEdge->DisconnectFromNode(sal_False);
+                iterPos = std::find(rAllMarkedObjects.begin(),rAllMarkedObjects.end(),pObj1);
+
+                if (iterPos == rAllMarkedObjects.end())
+                {
+                    if( IsUndoEnabled() )
+                        AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pEdge));
+                    pEdge->DisconnectFromNode(sal_False);
+                }
             }
 
-            if(pObj2
-                && LIST_ENTRY_NOTFOUND == rAllMarkedObjects.GetPos(pObj2)
-                && !pEdge->CheckNodeConnection(sal_True))
+            if(pObj2 && !pEdge->CheckNodeConnection(sal_True))
             {
-                if( IsUndoEnabled() )
-                    AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pEdge));
-                pEdge->DisconnectFromNode(sal_True);
+                iterPos = std::find(rAllMarkedObjects.begin(),rAllMarkedObjects.end(),pObj2);
+
+                if (iterPos == rAllMarkedObjects.end())
+                {
+                    if( IsUndoEnabled() )
+                        AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pEdge));
+                    pEdge->DisconnectFromNode(sal_True);
+                }
             }
         }
     }
