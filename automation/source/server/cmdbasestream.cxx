@@ -37,6 +37,7 @@
  *
  ************************************************************************/
 #include <osl/endian.h>
+#include <osl/diagnose.h>
 
 #include "cmdbasestream.hxx"
 #include "rcontrol.hxx"

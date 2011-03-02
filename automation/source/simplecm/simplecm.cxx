@@ -33,6 +33,7 @@
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <tools/solar.h>
 #include <automation/simplecm.hxx>
+#include <osl/diagnose.h>
 
 #include <automation/commdefines.hxx>
 #include "packethandler.hxx"

@@ -41,6 +41,7 @@
 #include <automation/commtypes.hxx>
 #include <automation/commdefines.hxx>
 #include "communiio.hxx"
+#include <osl/diagnose.h>
 
 /**
 Forces switch to multichannel headers even for old communication Method
