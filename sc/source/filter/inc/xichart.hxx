@@ -1422,9 +1422,9 @@ private:
     XDiagramRef         CreateDiagram() const;
 
 private:
-    typedef ::std::vector< XclImpChSeriesRef >                  XclImpChSeriesVec;
-    typedef ScfRefMap< XclChDataPointPos, XclImpChDataFormat >  XclImpChDataFormatMap;
-    typedef ::boost::ptr_map<sal_uInt16, XclImpChText>          XclImpChTextMap;
+    typedef ::std::vector< XclImpChSeriesRef >                   XclImpChSeriesVec;
+    typedef ::std::map<XclChDataPointPos, XclImpChDataFormatRef> XclImpChDataFormatMap;
+    typedef ::boost::ptr_map<sal_uInt16, XclImpChText>           XclImpChTextMap;
 
     XclChRectangle      maRect;             /// Position of the chart on the sheet (CHCHART record).
     XclImpChSeriesVec   maSeries;           /// List of series data (CHSERIES groups).
