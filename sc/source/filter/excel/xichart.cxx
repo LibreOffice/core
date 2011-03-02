@@ -137,6 +137,7 @@ using ::formula::FormulaToken;
 using ::formula::StackVar;
 using ::boost::shared_ptr;
 using ::std::pair;
+using ::std::auto_ptr;
 
 namespace cssc = ::com::sun::star::chart;
 namespace cssc2 = ::com::sun::star::chart2;
@@ -2009,16 +2010,10 @@ void XclImpChSeries::ReadChSerTrendLine( XclImpStream& rStrm )
 
 void XclImpChSeries::ReadChSerErrorBar( XclImpStream& rStrm )
 {
-    XclImpChSerErrorBarRef xErrorBar( new XclImpChSerErrorBar( GetChRoot() ) );
-    xErrorBar->ReadChSerErrorBar( rStrm );
-    sal_uInt8 nBarType = xErrorBar->GetBarType();
-    XclImpChSerErrorBarMap::iterator itr = maErrorBars.lower_bound(nBarType);
-    if (itr != maErrorBars.end() && !maErrorBars.key_comp()(nBarType, itr->first))
-        // Overwrite the existing element.
-        itr->second = xErrorBar;
-    else
-        maErrorBars.insert(
-            itr, XclImpChSerErrorBarMap::value_type(nBarType, xErrorBar));
+    auto_ptr<XclImpChSerErrorBar> pErrorBar(new XclImpChSerErrorBar(GetChRoot()));
+    pErrorBar->ReadChSerErrorBar(rStrm);
+    sal_uInt8 nBarType = pErrorBar->GetBarType();
+    maErrorBars.insert(nBarType, pErrorBar);
 }
 
 XclImpChDataFormatRef XclImpChSeries::CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx )
@@ -2086,7 +2081,13 @@ void XclImpChSeries::ConvertTrendLines( Reference< XDataSeries > xDataSeries ) c
 
 Reference< XPropertySet > XclImpChSeries::CreateErrorBar( sal_uInt8 nPosBarId, sal_uInt8 nNegBarId ) const
 {
-    return XclImpChSerErrorBar::CreateErrorBar( maErrorBars.get( nPosBarId ).get(), maErrorBars.get( nNegBarId ).get() );
+    XclImpChSerErrorBarMap::const_iterator itrPosBar = maErrorBars.find(nPosBarId);
+    XclImpChSerErrorBarMap::const_iterator itrNegBar = maErrorBars.find(nNegBarId);
+    XclImpChSerErrorBarMap::const_iterator itrEnd = maErrorBars.end();
+    if (itrPosBar == itrEnd || itrNegBar == itrEnd)
+        return Reference<XPropertySet>();
+
+    return XclImpChSerErrorBar::CreateErrorBar(itrPosBar->second, itrNegBar->second);
 }
 
 // Chart type groups ==========================================================

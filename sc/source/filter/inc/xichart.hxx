@@ -873,7 +873,7 @@ private:
     typedef ScfRefMap< sal_uInt16, XclImpChDataFormat > XclImpChDataFormatMap;
     typedef ScfRefMap< sal_uInt16, XclImpChText >       XclImpChTextMap;
     typedef ::std::list< XclImpChSerTrendLineRef >      XclImpChSerTrendLineList;
-    typedef ScfRefMap< sal_uInt8, XclImpChSerErrorBar > XclImpChSerErrorBarMap;
+    typedef ::boost::ptr_map<sal_uInt8, XclImpChSerErrorBar> XclImpChSerErrorBarMap;
 
     XclChSeries         maData;             /// Contents of the CHSERIES record.
     XclImpChSourceLinkRef mxValueLink;      /// Link data for series values.
