@@ -1470,7 +1470,7 @@ class UnoObjectDefinition{
         public String getFinalHeaderStatements(){
             String sReturn = "";
             sReturn += "\nnamespace " + getCSSNameSpaceString() + " = com::sun::star;\n";
-            sReturn += "using namespace rtl;\n";
+            sReturn += "using ::rtl::OUString;\n";
             return sReturn;
         }
 

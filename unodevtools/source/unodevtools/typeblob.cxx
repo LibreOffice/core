@@ -52,8 +52,12 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::reflection;
-using namespace rtl;
 using namespace codemaker;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringToOString;
 
 namespace unodevtools {
 

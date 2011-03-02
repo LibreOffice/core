@@ -58,7 +58,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::document;
 using namespace com::sun::star::lang;
@@ -70,6 +69,9 @@ using namespace com::sun::star::task;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::container;
 using namespace com::sun::star::ucb;
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 
 OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )

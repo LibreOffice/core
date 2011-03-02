@@ -45,8 +45,10 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge;
-using namespace rtl;
 using namespace cppu;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 SAL_IMPLEMENT_MAIN()
 {
