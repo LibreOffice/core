@@ -824,7 +824,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
         if ( nXWidth <= nTmpWidth ) // while muss 1x durchlaufen werden
             nXWidth = nTmpWidth+1;
 
-        SvLongsPtr pTextRanges = 0;
+        LongDqPtr pTextRanges = 0;
         long nTextExtraYOffset = 0;
         long nTextXOffset = 0;
         long nTextLineHeight = 0;
@@ -871,11 +871,11 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 // Der breiteste Bereich koennte etwas verwirren, also
                 // generell den ersten. Am besten mal richtig mit Luecken.
 //              for ( sal_uInt16 n = 0; n < pTextRanges->Count(); )
-                if ( pTextRanges->Count() )
+                if ( pTextRanges->size() )
                 {
                     sal_uInt16 n = 0;
-                    long nA = pTextRanges->GetObject( n++ );
-                    long nB = pTextRanges->GetObject( n++ );
+                    long nA = pTextRanges->at(n++);
+                    long nB = pTextRanges->at(n++);
                     DBG_ASSERT( nA <= nB, "TextRange verdreht?" );
                     long nW = nB - nA;
                     if ( nW > nMaxRangeWidth )

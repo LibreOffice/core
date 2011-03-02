@@ -42,12 +42,12 @@
 #pragma optimize ( "", off )
 #endif
 
-TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon,
-    USHORT nCacheSz, USHORT nLft, USHORT nRght, BOOL bSimpl, BOOL bInnr,
-    BOOL bVert ) :
+TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
+                        const basegfx::B2DPolyPolygon* pLinePolyPolygon,
+                        USHORT nCacheSz, USHORT nLft, USHORT nRght,
+                        BOOL bSimpl, BOOL bInnr, BOOL bVert ) :
     pBound( NULL ),
     nCacheSize( nCacheSz ),
-    nCacheIdx( 0 ),
     nRight( nRght ),
     nLeft( nLft ),
     nUpper( 0 ),
@@ -60,10 +60,6 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const baseg
 #ifdef DBG_UTIL
     bFlag3 = bFlag4 = bFlag5 = bFlag6 = bFlag7 = FALSE;
 #endif
-    pRangeArr = new Range[ nCacheSize ];
-    pCache = new SvLongsPtr[ nCacheSize ];
-    memset( pRangeArr, 0, nCacheSize * sizeof( Range ) );
-    memset( pCache, 0, nCacheSize * sizeof( SvLongsPtr ) );
     sal_uInt32 nCount(rPolyPolygon.count());
     mpPolyPolygon = new PolyPolygon( (sal_uInt16)nCount );
 
@@ -96,10 +92,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const baseg
 
 TextRanger::~TextRanger()
 {
-    for( USHORT i = 0; i < nCacheSize; ++i )
-        delete pCache[i];
-    delete[] pCache;
-    delete[] pRangeArr;
+    mRangeCache.clear();
     delete mpPolyPolygon;
     delete mpLinePolyPolygon;
 }
@@ -113,17 +106,16 @@ void TextRanger::SetVertical( BOOL bNew )
     if( IsVertical() != bNew )
     {
         bVertical = bNew;
-        for( USHORT i = 0; i < nCacheSize; ++i )
-            delete pCache[i];
-        memset( pRangeArr, 0, nCacheSize * sizeof( Range ) );
-        memset( pCache, 0, nCacheSize * sizeof( SvLongsPtr ) );
+        mRangeCache.clear();
     }
 }
 
+//! SvxBoundArgs is used to perform temporary calculations on a range array.
+//! Temporary instances are created in TextRanger::GetTextRanges()
 class SvxBoundArgs
 {
     std::vector<bool> aBoolArr;
-    SvLongs *pLongArr;
+    LongDqPtr pLongArr;
     TextRanger *pTextRanger;
     long nMin;
     long nMax;
@@ -156,7 +148,7 @@ class SvxBoundArgs
     inline long A( const Point& rP ) const { return bRotate ? rP.Y() : rP.X(); }
     inline long B( const Point& rP ) const { return bRotate ? rP.X() : rP.Y(); }
 public:
-    SvxBoundArgs( TextRanger* pRanger, SvLongs *pLong, const Range& rRange );
+    SvxBoundArgs( TextRanger* pRanger, LongDqPtr pLong, const Range& rRange );
     void NotePoint( const long nA ) { NoteMargin( nA - nStart, nA + nEnd ); }
     void NoteMargin( const long nL, const long nR )
         { if( nMin > nL ) nMin = nL; if( nMax < nR ) nMax = nR; }
@@ -173,7 +165,7 @@ public:
     BYTE GetAct() const { return nAct; }
 };
 
-SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, SvLongs *pLong,
+SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, LongDqPtr pLong,
     const Range& rRange )
     : pLongArr( pLong ), pTextRanger( pRanger ),
     nTop( rRange.Min() ), nBottom( rRange.Max() ),
@@ -196,7 +188,7 @@ SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, SvLongs *pLong,
     }
     nUpper = nTop - nUpDiff;
     nLower = nBottom + nLowDiff;
-    pLongArr->Remove( 0, pLongArr->Count() );
+    pLongArr->clear();
 }
 
 long SvxBoundArgs::CalcMax( const Point& rPt1, const Point& rPt2,
@@ -269,7 +261,7 @@ void SvxBoundArgs::NoteRange( BOOL bToggle )
     if( !bClosed )
         bToggle = FALSE;
     USHORT nIdx = 0;
-    USHORT nCount = pLongArr->Count();
+    USHORT nCount = pLongArr->size();
     DBG_ASSERT( nCount == 2 * aBoolArr.size(), "NoteRange: Incompatible Sizes" );
     while( nIdx < nCount && (*pLongArr)[ nIdx ] < nMin )
         ++nIdx;
@@ -277,8 +269,8 @@ void SvxBoundArgs::NoteRange( BOOL bToggle )
     // No overlap with existing intervals?
     if( nIdx == nCount || ( !bOdd && nMax < (*pLongArr)[ nIdx ] ) )
     {   // Then a new one is inserted ...
-        pLongArr->Insert( nMin, nIdx );
-        pLongArr->Insert( nMax, nIdx + 1 );
+        pLongArr->insert( pLongArr->begin() + nIdx, nMin );
+        pLongArr->insert( pLongArr->begin() + nIdx + 1, nMax );
         aBoolArr.insert( aBoolArr.begin() + (nIdx/2), bToggle );
     }
     else
@@ -304,7 +296,7 @@ void SvxBoundArgs::NoteRange( BOOL bToggle )
         nMaxIdx = nIdx / 2; // From here on is nMaxIdx the Index in BoolArray.
         if( nDiff )
         {
-            (*pLongArr).Remove( nIdx + 1, nDiff );
+            pLongArr->erase( pLongArr->begin() + nIdx + 1, pLongArr->begin() + nIdx + 1 + nDiff );
             nDiff /= 2;
             USHORT nStop = nMaxIdx + nDiff;
             for( USHORT i = nMaxIdx; i < nStop; ++i )
@@ -437,15 +429,15 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
                     nTmpMax = nMax - 2 * nEnd;
                     if( nTmpMin <= nTmpMax )
                     {
-                        pLongArr->Insert( nTmpMin, 0 );
-                        pLongArr->Insert( nTmpMax, 1 );
+                        pLongArr->push_front(nTmpMax);
+                        pLongArr->push_front(nTmpMin);
                     }
                 }
             }
             else
             {
-                pLongArr->Insert( nMin, 0 );
-                pLongArr->Insert( nMax, 1 );
+                pLongArr->push_front(nMax);
+                pLongArr->push_front(nMin);
             }
         }
     }
@@ -470,7 +462,7 @@ void SvxBoundArgs::Add()
                 while( nBoolIdx < nCount && !aBoolArr[ nBoolIdx++ ] &&
                        (!bInner || nBoolIdx < nCount ) )
                     next += 2;
-                pLongArr->Remove( nLongIdx, next );
+                pLongArr->erase( pLongArr->begin() + nLongIdx, pLongArr->begin() + nLongIdx + next );
                 next /= 2;
                 nBoolIdx = nBoolIdx - next;
                 nCount = nCount - next;
@@ -489,19 +481,19 @@ void SvxBoundArgs::Add()
                         "BoundArgs: Array-Count: Confusion" );
         }
     }
-    if( 0 != ( nCount = pLongArr->Count() ) )
+    if( 0 != ( nCount = pLongArr->size() ) )
     {
         if( bInner )
         {
-            pLongArr->Remove( 0, 1 );
-            pLongArr->Remove( pLongArr->Count() - 1, 1 );
+            pLongArr->pop_front();
+            pLongArr->pop_back();
 
             // Here the line is held inside a large rectangle for "simple"
             // contour wrap. Currently (April 1999) the EditEngine evaluates
             // only the first rectangle. If it one day is able to output a line
             // in several parts, it may be advisable to delete the following lines.
-            if( pTextRanger->IsSimple() && pLongArr->Count() > 2 )
-                pLongArr->Remove( 1, pLongArr->Count() - 2 );
+            if( pTextRanger->IsSimple() && pLongArr->size() > 2 )
+                pLongArr->erase( pLongArr->begin() + 1, pLongArr->end() - 1 );
 
         }
     }
@@ -511,22 +503,22 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
 {
     SetConcat( TRUE );
     DBG_ASSERT( pPoly, "Nothing to do?" );
-    SvLongs *pOld = pLongArr;
-    pLongArr = new SvLongs( 2, 8 );
+    LongDqPtr pOld = pLongArr;
+    pLongArr = new std::deque<long>();
     aBoolArr.clear();
     bInner = FALSE;
-    Calc( *pPoly );
-    USHORT nCount = pLongArr->Count();
+    Calc( *pPoly ); // Note that this updates pLongArr, which is why we swapped it out earlier.
+    USHORT nCount = pLongArr->size();
     USHORT nIdx = 0;
     USHORT i = 0;
     BOOL bSubtract = pTextRanger->IsInner();
     while( i < nCount )
     {
-        USHORT nOldCount = pOld->Count();
+        ULONG nOldCount = pOld->size();
         if( nIdx == nOldCount )
         {   // Reached the end of the old Array...
             if( !bSubtract )
-                pOld->Insert( pLongArr, nIdx, i, USHRT_MAX );
+                pOld->insert( pOld->begin() + nIdx, pLongArr->begin() + i, pLongArr->end() );
             break;
         }
         long nLeft = (*pLongArr)[ i++ ];
@@ -537,7 +529,7 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
         if( nLeftPos >= nOldCount )
         {   // The current interval belongs to the end of the old array ...
             if( !bSubtract )
-                pOld->Insert( pLongArr, nOldCount, i - 2, USHRT_MAX );
+                pOld->insert( pOld->begin() + nOldCount, pLongArr->begin() + i - 2, pLongArr->end() );
             break;
         }
         USHORT nRightPos = nLeftPos - 1;
@@ -546,7 +538,7 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
         if( nRightPos < nLeftPos )
         {   // The current interval belongs between two old intervals
             if( !bSubtract )
-                pOld->Insert( pLongArr, nRightPos, i - 2, i );
+                pOld->insert( pOld->begin() + nRightPos, pLongArr->begin() + i - 2, pLongArr->begin() + i );
             nIdx = nRightPos + 2;
         }
         else if( bSubtract ) // Subtract, if necessary separate
@@ -556,16 +548,16 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
             {   // Now we split the left part...
                 if( nLeft - 1 > nOld )
                 {
-                    pOld->Insert( nOld, nLeftPos - 1 );
-                    pOld->Insert( nLeft - 1, nLeftPos );
+                    pOld->insert( pOld->begin() + nLeftPos - 1, nOld );
+                    pOld->insert( pOld->begin() + nLeftPos, nLeft - 1 );
                     nLeftPos += 2;
                     nRightPos += 2;
                 }
             }
             if( nRightPos - nLeftPos > 1 )
-                pOld->Remove( nLeftPos, nRightPos - nLeftPos - 1 );
+                pOld->erase( pOld->begin() + nLeftPos, pOld->begin() + nRightPos - 1 );
             if( ++nRight >= ( nOld = (*pOld)[ nLeftPos ] ) )
-                pOld->Remove( nLeftPos - 1, 2 );
+                pOld->erase( pOld->begin() + nLeftPos - 1, pOld->begin() + nLeftPos + 1 );
             else
                 (*pOld)[ nLeftPos - 1 ] = nRight;
         }
@@ -576,7 +568,7 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
             if( nRight > (*pOld)[ nRightPos - 1 ] )
                 (*pOld)[ nRightPos - 1 ] = nRight;
             if( nRightPos - nLeftPos > 1 )
-                pOld->Remove( nLeftPos, nRightPos - nLeftPos - 1 );
+                pOld->erase( pOld->begin() + nLeftPos, pOld->begin() + nRightPos - 1 );
 
         }
         nIdx = nLeftPos - 1;
@@ -654,26 +646,26 @@ void SvxBoundArgs::NoteUpLow( long nA, const BYTE nArea )
     }
 }
 
-SvLongsPtr TextRanger::GetTextRanges( const Range& rRange )
+LongDqPtr TextRanger::GetTextRanges( const Range& rRange )
 {
     DBG_ASSERT( rRange.Min() || rRange.Max(), "Zero-Range not allowed, Bye Bye" );
-    USHORT nIndex = 0;
-    while( nIndex < nCacheSize && rRange != pRangeArr[ nIndex ] )
-        ++nIndex;
-    if( nIndex >= nCacheSize )
+    //Can we find the result we need in the cache?
+    for (std::deque<RangeCache>::iterator it = mRangeCache.begin(); it < mRangeCache.end(); ++it)
     {
-        ++nCacheIdx;
-        nCacheIdx %= nCacheSize;
-        pRangeArr[ nCacheIdx ] = rRange;
-        if( !pCache[ nCacheIdx ] )
-            pCache[ nCacheIdx ] = new SvLongs( 2, 8 );
-        nIndex = nCacheIdx;
-        SvxBoundArgs aArg( this, pCache[ nCacheIdx ], rRange );
-        aArg.Calc( *mpPolyPolygon );
-        if( mpLinePolyPolygon )
-            aArg.Concat( mpLinePolyPolygon );
+        if (it->range == rRange)
+            return &(it->results);
     }
-    return pCache[ nIndex ];
+    //Calculate a new result
+    RangeCache rngCache(rRange);
+    SvxBoundArgs aArg( this, &(rngCache.results), rRange );
+    aArg.Calc( *mpPolyPolygon );
+    if( mpLinePolyPolygon )
+        aArg.Concat( mpLinePolyPolygon );
+    //Add new result to the cache
+    mRangeCache.push_back(rngCache);
+    if (mRangeCache.size() > nCacheSize)
+        mRangeCache.pop_front();
+    return &(mRangeCache.back().results);
 }
 
 const Rectangle& TextRanger::_GetBoundRect()

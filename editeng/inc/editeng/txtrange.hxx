@@ -29,12 +29,10 @@
 #ifndef _MyTXTRANGE_HXX
 #define _MyTXTRANGE_HXX
 
-#ifndef _TXTRANGE_HXX
-#define _SVSTDARR_BOOLS
-#define _SVSTDARR_LONGS
-#include <svl/svstdarr.hxx>
-#endif
 #include "editeng/editengdllapi.h"
+#include "tools/solar.h"
+
+#include <deque>
 
 class PolyPolygon;
 class Range;
@@ -44,7 +42,7 @@ namespace basegfx {
     class B2DPolyPolygon;
 }
 
-typedef SvLongs* SvLongsPtr;
+typedef std::deque<long>* LongDqPtr;
 
 /*************************************************************************
 |*
@@ -53,13 +51,18 @@ typedef SvLongs* SvLongsPtr;
 *************************************************************************/
 class EDITENG_DLLPUBLIC TextRanger
 {
-    Range *pRangeArr;
-    SvLongsPtr *pCache;
+    //! The RangeCache class is used to cache the result of a single range calculation.
+    struct RangeCache
+    {
+        const Range& range;        //!< Range for which we calculated results.
+        std::deque<long> results;  //!< Calculated results for the range.
+        inline RangeCache(const Range& rng) : range(rng) {};
+    };
+    std::deque<RangeCache> mRangeCache; //!< Cached range calculations.
     PolyPolygon *mpPolyPolygon; // Surface polygon
     PolyPolygon *mpLinePolyPolygon; // Line polygon
     Rectangle *pBound;  // Comprehensive rectangle
     USHORT nCacheSize;  // Cache-Size
-    USHORT nCacheIdx;   // Cache-Index
     USHORT nRight;      // Distance Contour-Text
     USHORT nLeft;       // Distance Text-Contour
     USHORT nUpper;      // Distance Contour-Text
@@ -77,11 +80,12 @@ class EDITENG_DLLPUBLIC TextRanger
     TextRanger( const TextRanger& ); // not implemented
     const Rectangle& _GetBoundRect();
 public:
-    TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon,
+    TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
+                const basegfx::B2DPolyPolygon* pLinePolyPolygon,
                 USHORT nCacheSize, USHORT nLeft, USHORT nRight,
                 BOOL bSimple, BOOL bInner, BOOL bVert = sal_False );
     ~TextRanger();
-    SvLongsPtr GetTextRanges( const Range& rRange );
+    LongDqPtr GetTextRanges( const Range& rRange );
     USHORT GetRight() const { return nRight; }
     USHORT GetLeft() const { return nLeft; }
     USHORT GetUpper() const { return nUpper; }
