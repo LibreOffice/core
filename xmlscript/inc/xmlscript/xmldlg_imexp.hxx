@@ -41,13 +41,13 @@
 #endif
 
 #include "xmlscript/xmlns.h"
-
+#include "xmlscript/xcrdllapi.h"
 
 namespace xmlscript
 {
 
 //==============================================================================
-void SAL_CALL exportDialogModel(
+XCR_DLLPUBLIC void SAL_CALL exportDialogModel(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
     ::com::sun::star::uno::Reference<
@@ -55,7 +55,7 @@ void SAL_CALL exportDialogModel(
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 //==============================================================================
-::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
+XCR_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importDialogModel(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::container::XNameContainer > const & xDialogModel,
@@ -66,7 +66,7 @@ SAL_CALL importDialogModel(
 // additional functions for convenience
 
 //==============================================================================
-::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >
+XCR_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >
 SAL_CALL exportDialogModel(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::container::XNameContainer > const & xDialogModel,
@@ -75,7 +75,7 @@ SAL_CALL exportDialogModel(
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 //==============================================================================
-void SAL_CALL importDialogModel(
+XCR_DLLPUBLIC void SAL_CALL importDialogModel(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::io::XInputStream > xInput,
     ::com::sun::star::uno::Reference<

@@ -33,7 +33,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <xmlscript/xml_import.hxx>
+#include <xml_import.hxx>
 #include <comphelper/processfactory.hxx>
 
 

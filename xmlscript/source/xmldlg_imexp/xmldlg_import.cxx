@@ -35,7 +35,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <xmlscript/xml_import.hxx>
+#include <xml_import.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/awt/CharSet.hpp>

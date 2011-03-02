@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,27 +24,11 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
 
-PRJNAME=xmlscript
-TARGET=xmllib_imexp
-NO_BSYMBOLIC=TRUE
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_Package_Package,xmlscript_inc,$(SRCDIR)/xmlscript/dtd))
+$(eval $(call gb_Package_add_file,xmlscript_inc,bin/dialog.dtd,dialog.dtd))
+$(eval $(call gb_Package_add_file,xmlscript_inc,bin/libraries.dtd,libraries.dtd))
+$(eval $(call gb_Package_add_file,xmlscript_inc,bin/library.dtd,library.dtd))
+$(eval $(call gb_Package_add_file,xmlscript_inc,bin/module.dtd,module.dtd))
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-.IF "$(L10N_framework)"==""
-#-----------------------------------------------------------
-
-SLOFILES = \
-    $(SLO)$/xmllib_import.obj		\
-    $(SLO)$/xmllib_export.obj
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	$(PRJ)$/util$/target.pmk
-
-.ENDIF # L10N_framework
-
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:

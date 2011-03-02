@@ -30,7 +30,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <xmlscript/xmlns.h>
-
+#include "xmlscript/xcrdllapi.h"
 
 namespace xmlscript
 {
@@ -40,7 +40,7 @@ namespace xmlscript
 // HACK C++ struct to transport info. Later the container
 // itself should do the export/import and use exportet XML
 // functionality from xmlscript
-struct ModuleDescriptor
+struct XCR_DLLPUBLIC ModuleDescriptor
 {
     ::rtl::OUString aName;
     ::rtl::OUString aLanguage;
@@ -48,14 +48,14 @@ struct ModuleDescriptor
     ::rtl::OUString aModuleType; // VBA
 };
 
-void
+XCR_DLLPUBLIC void
 SAL_CALL exportScriptModule(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
     const ModuleDescriptor& rMod )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
-::com::sun::star::uno::Reference<
+XCR_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importScriptModule( ModuleDescriptor& rMod )
     SAL_THROW( (::com::sun::star::uno::Exception) );

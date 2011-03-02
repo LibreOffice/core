@@ -24,27 +24,17 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
 
-PRJNAME=xmlscript
-TARGET=xml_helper
-NO_BSYMBOLIC=TRUE
-ENABLE_EXCEPTIONS=TRUE
+PRJ=..
+TARGET=prj
 
-# --- Settings -----------------------------------------------------
+.INCLUDE : settings.mk
 
-.INCLUDE :  settings.mk
-.IF "$(L10N_framework)"==""
-#-----------------------------------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-SLOFILES = \
-    $(SLO)$/xml_impctx.obj		\
-    $(SLO)$/xml_element.obj		\
-    $(SLO)$/xml_byteseq.obj
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	$(PRJ)$/util$/target.pmk
-.ENDIF # L10N_framework
-
-.INCLUDE :	target.mk
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

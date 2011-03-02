@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,24 +24,14 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..
 
-PRJNAME=xmlscript
-TARGET=inc
+$(eval $(call gb_Package_Package,xmlscript_inc,$(SRCDIR)/xmlscript/inc))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Package_add_file,xmlscript_inc,inc/xmlscript/xmldlg_imexp.hxx,xmlscript/xmldlg_imexp.hxx))
+$(eval $(call gb_Package_add_file,xmlscript_inc,inc/xmlscript/xml_helper.hxx,xmlscript/xml_helper.hxx))
+$(eval $(call gb_Package_add_file,xmlscript_inc,inc/xmlscript/xmllib_imexp.hxx,xmlscript/xmllib_imexp.hxx))
+$(eval $(call gb_Package_add_file,xmlscript_inc,inc/xmlscript/xmlmod_imexp.hxx,xmlscript/xmlmod_imexp.hxx))
+$(eval $(call gb_Package_add_file,xmlscript_inc,inc/xmlscript/xmlns.h,xmlscript/xmlns.h))
+$(eval $(call gb_Package_add_file,xmlscript_inc,inc/xmlscript/xcrdllapi.h,xmlscript/xcrdllapi.h))
 
-.INCLUDE :  settings.mk
-
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
-
+# vim: set noet sw=4 ts=4:

@@ -30,7 +30,6 @@
 #include "com/sun/star/xml/input/XRoot.hpp"
 #include "com/sun/star/xml/sax/XExtendedDocumentHandler.hpp"
 
-
 namespace xmlscript
 {
 

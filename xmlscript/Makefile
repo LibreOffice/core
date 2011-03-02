@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,12 +24,15 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-.IF "$(debug)" != ""
 
-# msvc++: no inlining
-.IF "$(COM)" == "MSC"
-CFLAGS += /Ob0
-.ENDIF
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-.ENDIF
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
+
+# vim: set noet sw=4 ts=4:
