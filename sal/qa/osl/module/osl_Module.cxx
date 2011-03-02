@@ -35,9 +35,10 @@
 #include <osl_Module_Const.h>
 
 using namespace osl;
-using namespace rtl;
 
-
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 //------------------------------------------------------------------------
 // helper functions and classes
 //------------------------------------------------------------------------

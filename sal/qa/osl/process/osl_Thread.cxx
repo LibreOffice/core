@@ -60,7 +60,8 @@
 #define t_print printf
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OString;
 
 // -----------------------------------------------------------------------------
 // Kleine Stopuhr

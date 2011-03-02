@@ -87,7 +87,10 @@ std::string OUString_to_std_string(const rtl::OUString& oustr)
 
 //########################################
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 /** print a UNI_CODE String.
 */
