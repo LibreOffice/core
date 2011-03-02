@@ -647,7 +647,7 @@ public:
     /** Reads the CHATTACHEDLABEL record (data series/point labels). */
     void                ReadChAttachedLabel( XclImpStream& rStrm );
     /** Creates a CHTEXT group for the label. Clones xParentText and sets additional label settings */
-    XclImpChTextRef     CreateDataLabel( XclImpChTextRef xParent ) const;
+    XclImpChTextRef     CreateDataLabel( const XclImpChText* pParent ) const;
 
 private:
     sal_uInt16          mnFlags;            /// Additional flags.
@@ -696,7 +696,7 @@ public:
     /** Returns true, if the series line is smoothed. */
     inline bool         HasSpline() const { return mxSeriesFmt && mxSeriesFmt->HasSpline(); }
     /** Returns the data label text object. */
-    inline XclImpChTextRef GetDataLabel() const { return mxLabel; }
+    inline const XclImpChText* GetDataLabel() const { return mxLabel.get(); }
 
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo ) const;
@@ -1387,7 +1387,7 @@ public:
     /** Returns the specified chart type group. */
     XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const;
     /** Returns the specified default text. */
-    XclImpChTextRef     GetDefaultText( XclChTextType eTextType ) const;
+    const XclImpChText*  GetDefaultText( XclChTextType eTextType ) const;
     /** Returns true, if the plot area has benn moved and/or resized manually. */
     bool                IsManualPlotArea() const;
     /** Returns the number of units on the progress bar needed for the chart. */
@@ -1424,7 +1424,7 @@ private:
 private:
     typedef ::std::vector< XclImpChSeriesRef >                  XclImpChSeriesVec;
     typedef ScfRefMap< XclChDataPointPos, XclImpChDataFormat >  XclImpChDataFormatMap;
-    typedef ScfRefMap< sal_uInt16, XclImpChText >               XclImpChTextMap;
+    typedef ::boost::ptr_map<sal_uInt16, XclImpChText>          XclImpChTextMap;
 
     XclChRectangle      maRect;             /// Position of the chart on the sheet (CHCHART record).
     XclImpChSeriesVec   maSeries;           /// List of series data (CHSERIES groups).
