@@ -101,6 +101,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     xml2 \
+	xmlreader \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
