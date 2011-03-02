@@ -13,3 +13,26 @@
  }
  
  template<class OptionalPointee>
+--- misc/boost_1_44_0/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2011-03-02 12:22:47.222870106 +0000
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2011-03-02 12:22:47.222870106 +0000
+@@ -219,6 +219,20 @@
+             }
+         };
+ 
++        template <int Radix>
++        struct negative_accumulate<unsigned char, Radix>
++        {
++            //  Use this accumulator if number is negative
++            static bool add(unsigned char& n, unsigned digit)
++            {
++                n *= Radix;
++                if (n < digit)
++                    return false;
++                n -= digit;
++                return true;
++            }
++        };
++
+         template <int MaxDigits>
+         inline bool allow_more_digits(std::size_t i)
+         {
