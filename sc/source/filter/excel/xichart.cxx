@@ -1805,7 +1805,11 @@ void XclImpChSeries::FinalizeDataFormats()
         if( mxSeriesFmt )
         {
             // #i83100# set text label format, e.g. for trend line equations
-            mxSeriesFmt->SetDataLabel( maLabels.get( EXC_CHDATAFORMAT_ALLPOINTS ) );
+            XclImpChTextRef xLabel;
+            XclImpChTextMap::iterator itr = maLabels.find(EXC_CHDATAFORMAT_ALLPOINTS);
+            if (itr != maLabels.end())
+                xLabel = itr->second;
+            mxSeriesFmt->SetDataLabel(xLabel);
             // create missing automatic formats
             mxSeriesFmt->UpdateTrendLineFormat();
         }

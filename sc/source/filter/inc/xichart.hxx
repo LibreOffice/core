@@ -870,9 +870,9 @@ private:
     XPropertySetRef     CreateErrorBar( sal_uInt8 nPosBarId, sal_uInt8 nNegBarId ) const;
 
 private:
-    typedef ScfRefMap< sal_uInt16, XclImpChDataFormat > XclImpChDataFormatMap;
-    typedef ScfRefMap< sal_uInt16, XclImpChText >       XclImpChTextMap;
-    typedef ::std::list< XclImpChSerTrendLineRef >      XclImpChSerTrendLineList;
+    typedef ::std::map<sal_uInt16, XclImpChDataFormatRef> XclImpChDataFormatMap;
+    typedef ::std::map<sal_uInt16, XclImpChTextRef>       XclImpChTextMap;
+    typedef ::std::list< XclImpChSerTrendLineRef >        XclImpChSerTrendLineList;
     typedef ::boost::ptr_map<sal_uInt8, XclImpChSerErrorBar> XclImpChSerErrorBarMap;
 
     XclChSeries         maData;             /// Contents of the CHSERIES record.
