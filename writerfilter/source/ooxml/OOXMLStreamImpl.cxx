@@ -115,11 +115,15 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("Target"));
     static rtl::OUString sTargetMode(RTL_CONSTASCII_USTRINGPARAM("TargetMode"));
     static rtl::OUString sExternal(RTL_CONSTASCII_USTRINGPARAM("External"));
+    static rtl::OUString sVBAProjectType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.microsoft.com/office/2006/relationships/vbaProject"));
 
     rtl::OUString sStreamType;
 
     switch (nStreamType)
     {
+        case VBAPROJECT:
+            sStreamType = sVBAProjectType;
+            break;
         case DOCUMENT:
             sStreamType = sDocumentType;
             break;

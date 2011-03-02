@@ -84,7 +84,7 @@ class WRITERFILTER_DLLPUBLIC OOXMLStream
 {
 public:
     enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, FONTTABLE, NUMBERING,
-        FOOTNOTES, ENDNOTES, COMMENTS, THEME, SETTINGS };
+        FOOTNOTES, ENDNOTES, COMMENTS, THEME, SETTINGS, VBAPROJECT };
     typedef boost::shared_ptr<OOXMLStream> Pointer_t;
 
     virtual ~OOXMLStream() {}
