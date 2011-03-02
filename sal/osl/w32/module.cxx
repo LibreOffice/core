@@ -36,6 +36,7 @@
 #include <osl/thread.h>
 #include <osl/file.h>
 #include <rtl/logfile.h>
+#include <vector>
 
 /*
     under WIN32, we use the void* oslModule
@@ -72,21 +73,22 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
 
     //In case of long path names (\\?\c:\...) try to shorten the filename.
     //LoadLibrary cannot handle file names which exceed 260 letters.
-    if (hInstance == NULL && GetLastError() == ERROR_FILENAME_EXCED_RANGE)
+    //In case the path is to long, the function will fail. However, the error
+    //code can be different. For example, it returned  ERROR_FILENAME_EXCED_RANGE
+    //on Windows XP and ERROR_INSUFFICIENT_BUFFER on Windows 7 (64bit)
+    if (hInstance == NULL && Module->length > 260)
     {
-        wchar_t * buff = new wchar_t[Module->length + 1];
+        std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > vec(Module->length + 1);
         DWORD len = GetShortPathNameW(reinterpret_cast<LPCWSTR>(Module->buffer),
-            buff, Module->length + 1);
+                                      vec.begin(), Module->length + 1);
         if (len )
         {
-            hInstance = LoadLibraryW(buff);
+            hInstance = LoadLibraryW(vec.begin());
 
             if (hInstance == NULL)
-                hInstance = LoadLibraryExW(buff, NULL,
+                hInstance = LoadLibraryExW(vec.begin(), NULL,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
-
         }
-        delete[] buff;
     }
 
 
