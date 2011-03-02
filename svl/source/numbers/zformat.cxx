@@ -34,6 +34,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <i18npool/mslangid.hxx>
 #include <rtl/math.hxx>
 #include <rtl/instance.hxx>
