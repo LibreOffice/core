@@ -33,7 +33,11 @@
 
 namespace vcl
 {
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
     enum UnicodeCoverage
+#else
+    struct UnicodeCoverage { enum
+#endif
     {
         BASIC_LATIN                                 = 0,
         LATIN_1_SUPPLEMENT                          = 1,
@@ -165,8 +169,15 @@ namespace vcl
         RESERVED5                                   = 127,
         MAX_UC_ENUM                                 = 128
     };
+#ifndef __GXX_EXPERIMENTAL_CXX0X__
+    };
+#endif
 
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
     enum CodePageCoverage
+#else
+    struct CodePageCoverage { enum
+#endif
     {
         CP1252       = 0,
         CP1250       = 1,
@@ -201,6 +212,9 @@ namespace vcl
         CP437        = 63,
         MAX_CP_ENUM  = 64
     };
+#ifndef __GXX_EXPERIMENTAL_CXX0X__
+    };
+#endif
 
     struct FontCapabilities
     {
