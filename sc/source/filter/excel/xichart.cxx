@@ -2702,15 +2702,15 @@ void XclImpChTypeGroup::ReadChDropBar( XclImpStream& rStrm )
 {
     if (maDropBars.find(EXC_CHDROPBAR_UP) == maDropBars.end())
     {
-        XclImpChDropBarRef p(new XclImpChDropBar(EXC_CHDROPBAR_UP));
+        auto_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_UP));
         p->ReadRecordGroup(rStrm);
-        maDropBars.insert(XclImpChDropBarMap::value_type(EXC_CHDROPBAR_UP, p));
+        maDropBars.insert(EXC_CHDROPBAR_UP, p);
     }
     else if(maDropBars.find(EXC_CHDROPBAR_DOWN) == maDropBars.end())
     {
-        XclImpChDropBarRef p(new XclImpChDropBar(EXC_CHDROPBAR_DOWN));
+        auto_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_DOWN));
         p->ReadRecordGroup(rStrm);
-        maDropBars.insert(XclImpChDropBarMap::value_type(EXC_CHDROPBAR_DOWN, p));
+        maDropBars.insert(EXC_CHDROPBAR_DOWN, p);
     }
 }
 
@@ -2829,20 +2829,20 @@ void XclImpChTypeGroup::CreateStockSeries( Reference< XChartType > xChartType, s
             xHiLoLine->second->Convert( GetChRoot(), aSeriesProp, EXC_CHOBJTYPE_HILOLINE );
         }
         // white dropbar format
-        XclImpChDropBarRef xUpBar = maDropBars.get( EXC_CHDROPBAR_UP );
-        Reference< XPropertySet > xWhitePropSet;
-        if( xUpBar && aTypeProp.GetProperty( xWhitePropSet, EXC_CHPROP_WHITEDAY ) )
+        XclImpChDropBarMap::const_iterator itr = maDropBars.find(EXC_CHDROPBAR_UP);
+        Reference<XPropertySet> xWhitePropSet;
+        if (itr != maDropBars.end() && aTypeProp.GetProperty(xWhitePropSet, EXC_CHPROP_WHITEDAY))
         {
             ScfPropertySet aBarProp( xWhitePropSet );
-            xUpBar->Convert( GetChRoot(), aBarProp );
+            itr->second->Convert(GetChRoot(), aBarProp);
         }
         // black dropbar format
-        XclImpChDropBarRef xDownBar = maDropBars.get( EXC_CHDROPBAR_DOWN );
-        Reference< XPropertySet > xBlackPropSet;
-        if( xDownBar && aTypeProp.GetProperty( xBlackPropSet, EXC_CHPROP_BLACKDAY ) )
+        itr = maDropBars.find(EXC_CHDROPBAR_DOWN);
+        Reference<XPropertySet> xBlackPropSet;
+        if (itr != maDropBars.end() && aTypeProp.GetProperty(xBlackPropSet, EXC_CHPROP_BLACKDAY))
         {
             ScfPropertySet aBarProp( xBlackPropSet );
-            xDownBar->Convert( GetChRoot(), aBarProp );
+            itr->second->Convert(GetChRoot(), aBarProp);
         }
 
         // insert the series into the chart type object

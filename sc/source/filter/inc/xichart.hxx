@@ -1107,8 +1107,8 @@ private:
 
 private:
     typedef ::std::vector< XclImpChSeriesRef >               XclImpChSeriesVec;
-    typedef ScfRefMap< sal_uInt16, XclImpChDropBar >         XclImpChDropBarMap;
-    typedef boost::ptr_map< sal_uInt16, XclImpChLineFormat > XclImpChLineFormatMap;
+    typedef boost::ptr_map<sal_uInt16, XclImpChDropBar>      XclImpChDropBarMap;
+    typedef boost::ptr_map<sal_uInt16, XclImpChLineFormat>   XclImpChLineFormatMap;
     typedef ::std::set< sal_uInt16 >                         UInt16Set;
 
     XclChTypeGroup      maData;             /// Contents of the CHTYPEGROUP record.
