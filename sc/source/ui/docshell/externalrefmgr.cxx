@@ -1655,6 +1655,41 @@ void putRangeDataIntoCache(
     }
 }
 
+/**
+ * When accessing an external document for the first time, we need to
+ * populate the cache with all its sheet names (whether they are referenced
+ * or not) in the correct order.  Many client codes that use external
+ * references make this assumption.
+ *
+ * @param rRefCache cache table set.
+ * @param pSrcDoc source document instance.
+ * @param nFileId external file ID associated with the source document.
+ */
+void initDocInCache(ScExternalRefCache& rRefCache, const ScDocument* pSrcDoc, sal_uInt16 nFileId)
+{
+    if (!pSrcDoc)
+        return;
+
+    if (rRefCache.isDocInitialized(nFileId))
+        // Already initialized.  No need to do this twice.
+        return;
+
+    SCTAB nTabCount = pSrcDoc->GetTableCount();
+    if (nTabCount)
+    {
+        // Populate the cache with all table names in the source document.
+        vector<String> aTabNames;
+        aTabNames.reserve(nTabCount);
+        for (SCTAB i = 0; i < nTabCount; ++i)
+        {
+            String aName;
+            pSrcDoc->GetName(i, aName);
+            aTabNames.push_back(aName);
+        }
+        rRefCache.initializeDoc(nFileId, aTabNames);
+    }
+}
+
 }
 
 ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
@@ -2027,6 +2062,7 @@ const ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileI
     if (!pFileName)
         return NULL;
 
+    ScDocument* pSrcDoc = NULL;
     TypeId aType(TYPE(ScDocShell));
     ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(&aType, false));
     while (pShell)
@@ -2039,12 +2075,15 @@ const ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileI
             if (pFileName->EqualsIgnoreCaseAscii(aName))
             {
                 // Found !
-                return pShell->GetDocument();
+                pSrcDoc = pShell->GetDocument();
+                break;
             }
         }
         pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, &aType, false));
     }
-    return NULL;
+
+    initDocInCache(maRefCache, pSrcDoc, nFileId);
+    return pSrcDoc;
 }
 
 const ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
@@ -2087,21 +2126,7 @@ const ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
     maDocShells.insert(DocShellMap::value_type(nFileId, aSrcDoc));
     SfxObjectShell* p = aSrcDoc.maShell;
     ScDocument* pSrcDoc = static_cast<ScDocShell*>(p)->GetDocument();
-
-    SCTAB nTabCount = pSrcDoc->GetTableCount();
-    if (!maRefCache.isDocInitialized(nFileId) && nTabCount)
-    {
-        // Populate the cache with all table names in the source document.
-        vector<String> aTabNames;
-        aTabNames.reserve(nTabCount);
-        for (SCTAB i = 0; i < nTabCount; ++i)
-        {
-            String aName;
-            pSrcDoc->GetName(i, aName);
-            aTabNames.push_back(aName);
-        }
-        maRefCache.initializeDoc(nFileId, aTabNames);
-    }
+    initDocInCache(maRefCache, pSrcDoc, nFileId);
     return pSrcDoc;
 }
 
