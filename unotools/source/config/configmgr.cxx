@@ -154,7 +154,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
                         UNISTRING("com.sun.star.configuration.ConfigurationProvider")),
                      UNO_QUERY);
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     catch(Exception& rEx)
     {
         static sal_Bool bMessage = sal_True;
@@ -216,7 +216,7 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
 void    ConfigManager::RegisterConfigItem(utl::ConfigItem& rCfgItem)
 {
     ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
     {
         ConfigItemListEntry_Impl& rEntry = *aListIter;
@@ -229,7 +229,7 @@ void    ConfigManager::RegisterConfigItem(utl::ConfigItem& rCfgItem)
 
 Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& rCfgItem)
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool bFound = sal_False;
     ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
     for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
@@ -290,7 +290,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
 
                 throw;
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             if(0 == (CONFIG_MODE_IGNORE_ERRORS & rCfgItem.GetMode()))
             {
                 OString sMsg("CreateInstance exception: ");
@@ -629,7 +629,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
                     OUString::createFromAscii(pAccessSrvc),
                     aArgs);
         }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         catch(Exception& rEx)
         {
             OString sMsg("CreateInstance exception: ");
@@ -660,7 +660,7 @@ Any ConfigManager::GetLocalProperty(const OUString& rProperty)
         if(xAccess.is())
             aRet = xAccess->getByName(sProperty);
     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     catch(Exception& rEx)
     {
         OString sMsg("GetLocalProperty: ");
@@ -690,7 +690,7 @@ void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValu
         {
             xNodeReplace->replaceByName(sProperty, rValue);
         }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         catch(Exception& rEx)
         {
             OString sMsg("PutLocalProperty: ");
