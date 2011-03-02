@@ -138,59 +138,6 @@ void insert_value( Type& rnBitField, InsertType nValue, sal_uInt8 nStartBit, sal
 
 // ============================================================================
 
-/**
- * Template for a map of ref-counted objects with additional accessor functions.
- *
- * Note that unlike <c>std::map</c> or ,c>boost::ptr_map</c> this map can be
- * used for classes that do not have a default constructor.
- *
- * @tparam KeyType The key type used to access elements.
- * @tparam ObjType The element type to be stored. Note that this is stored
- *                 internally as <c>boost::shared_ptr&lt;ObjType&gt;</c>
- **/
-template< typename KeyType, typename ObjType >
-class ScfRefMap : public ::std::map< KeyType, boost::shared_ptr< ObjType > >
-{
-public:
-    typedef KeyType                             key_type;
-    typedef boost::shared_ptr< ObjType >        ref_type;
-    typedef ::std::map< key_type, ref_type >    map_type;
-
-    /**
-     * Does a valid object with the passed key exist in the map?
-     *
-     * @param nKey The key to look for in the map.
-     * @return true if the key exists in the map and points to a valid instance
-     *         of <c>ObjType<c>.
-     **/
-    inline bool         has( key_type nKey ) const
-                        {
-                            typename map_type::const_iterator aIt = find( nKey );
-                            return (aIt != this->end()) && aIt->second;
-                        }
-
-    /**
-     * Returns a reference to the object associated to the passed key.
-     *
-     * If the key does not exist in the map, a new (empty) instance of ref_type
-     * is created and returned.
-     *
-     * Note: This method differs from the behaviour of <c>std::map::operator[]</c>
-     * in that if a new instance is returned, it is NOT added to the map.
-     *
-     * @param nKey The key to look for in the map.
-     * @return The instance of <c>ref_type</c> corresponding to nKey or a new instance.
-     **/
-    inline ref_type     get( key_type nKey ) const
-                        {
-                            typename map_type::const_iterator aIt = find( nKey );
-                            if( aIt != this->end() ) return aIt->second;
-                            return ref_type();
-                        }
-};
-
-// ============================================================================
-
 class Color;
 class SfxPoolItem;
 class SfxItemSet;
