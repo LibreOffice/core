@@ -423,9 +423,6 @@ bool Test::testLoad(const rtl::OUString &rFilter, const rtl::OUString &rURL)
 
 void Test::testCVEs()
 {
-//To-Do: I know this works on Linux, please check if this test works under
-//windows and enable it if so
-#ifndef WNT
     bool bResult;
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
@@ -439,7 +436,6 @@ void Test::testCVEs()
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
         m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2007-5747-1.wb2")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2007-5747 regression", bResult == false);
-#endif
 }
 
 template<typename Evaluator>
