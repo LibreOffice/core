@@ -3396,6 +3396,12 @@ void XclImpChAxesSet::Finalize()
     }
 }
 
+XclImpChTypeGroupRef XclImpChAxesSet::GetTypeGroup( sal_uInt16 nGroupIdx ) const
+{
+    XclImpChTypeGroupMap::const_iterator itr = maTypeGroups.find(nGroupIdx);
+    return itr == maTypeGroups.end() ? XclImpChTypeGroupRef() : itr->second;
+}
+
 XclImpChTypeGroupRef XclImpChAxesSet::GetFirstTypeGroup() const
 {
     XclImpChTypeGroupRef xTypeGroup;

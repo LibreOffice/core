@@ -1301,7 +1301,7 @@ public:
     /** Returns the outer plot area position, if existing. */
     inline XclImpChFramePosRef GetPlotAreaFramePos() const { return mxFramePos; }
     /** Returns the specified chart type group. */
-    inline XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const { return maTypeGroups.get( nGroupIdx ); }
+    XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const;
     /** Returns the first chart type group. */
     XclImpChTypeGroupRef GetFirstTypeGroup() const;
     /** Looks for a legend in all chart type groups and returns it. */
@@ -1338,7 +1338,7 @@ private:
     void                ConvertBackground( XDiagramRef xDiagram ) const;
 
 private:
-    typedef ScfRefMap< sal_uInt16, XclImpChTypeGroup > XclImpChTypeGroupMap;
+    typedef ::std::map<sal_uInt16, XclImpChTypeGroupRef> XclImpChTypeGroupMap;
 
     XclChAxesSet        maData;             /// Contents of the CHAXESSET record.
     XclImpChFramePosRef mxFramePos;         /// Outer plot area position (CHFRAMEPOS record).
