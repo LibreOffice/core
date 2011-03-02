@@ -596,6 +596,9 @@ void TickmarkHelper::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rA
     sal_Int32 nDepthCount = this->getTickDepth();
     sal_Int32 nMaxMajorTickCount = this->getMaxTickCount( 0 );
 
+    if (nDepthCount <= 0 || nMaxMajorTickCount <= 0)
+        return;
+
     aAllTicks.realloc(nDepthCount);
     aAllTicks[0].realloc(nMaxMajorTickCount);
 
