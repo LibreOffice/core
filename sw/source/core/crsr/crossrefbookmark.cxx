@@ -32,8 +32,7 @@
 #include <crossrefbookmark.hxx>
 #include <ndtxt.hxx>
 
-using namespace rtl;
-
+using ::rtl::OUString;
 namespace sw { namespace mark
 {
     CrossRefBookmark::CrossRefBookmark(const SwPaM& rPaM,

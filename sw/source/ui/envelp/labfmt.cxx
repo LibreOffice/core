@@ -49,9 +49,10 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+
+using ::rtl::OUString;
 
 #define ROUND(x) ((USHORT) ((x) + .5))
 

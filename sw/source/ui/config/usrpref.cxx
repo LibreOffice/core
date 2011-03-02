@@ -48,9 +48,10 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 
 void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
