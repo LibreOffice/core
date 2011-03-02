@@ -981,10 +981,10 @@ void DomainMapper::attribute(Id nName, Value & val)
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_ASIAN, true, uno::makeAny( sStringValue ));
             break;
-    case NS_ooxml::LN_CT_Fonts_eastAsiaTheme:
-        if (m_pImpl->GetTopContext())
-            m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, true, uno::makeAny( m_pImpl->GetThemeTable()->getFontNameForTheme(nIntValue) ) );
-        break;
+        case NS_ooxml::LN_CT_Fonts_eastAsiaTheme:
+            if (m_pImpl->GetTopContext())
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, true, uno::makeAny( m_pImpl->GetThemeTable()->getFontNameForTheme(nIntValue) ) );
+            break;
         case NS_ooxml::LN_CT_Fonts_cs:
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, true, uno::makeAny( sStringValue ));
@@ -1371,36 +1371,36 @@ void DomainMapper::attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Color_themeShade:
             //unsupported
         break;
-    case NS_ooxml::LN_endtrackchange:
-        m_pImpl->RemoveCurrentRedline( );
-    break;
-    case NS_ooxml::LN_CT_DocGrid_linePitch:
-            {
-                //see SwWW8ImplReader::SetDocumentGrid
-                OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-                if(pSectionContext)
-                {
-                    pSectionContext->SetGridLinePitch( ConversionHelper::convertTwipToMM100( nIntValue ) );
-                }
-            }
+        case NS_ooxml::LN_endtrackchange:
+            m_pImpl->RemoveCurrentRedline( );
         break;
-            case NS_ooxml::LN_CT_DocGrid_charSpace:
+        case NS_ooxml::LN_CT_DocGrid_linePitch:
+        {
+            //see SwWW8ImplReader::SetDocumentGrid
+            OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+            if(pSectionContext)
             {
-                OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-                if(pSectionContext)
-                {
-                    pSectionContext->SetDxtCharSpace( nIntValue );
-                }
+                pSectionContext->SetGridLinePitch( ConversionHelper::convertTwipToMM100( nIntValue ) );
             }
-            break;
-            case NS_ooxml::LN_CT_DocGrid_type:
+        }
+        break;
+        case NS_ooxml::LN_CT_DocGrid_charSpace:
+        {
+            OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+            if(pSectionContext)
             {
-                if (pSectionContext != NULL)
-                {
-                    pSectionContext->SetGridType(nIntValue);
-                }
+                pSectionContext->SetDxtCharSpace( nIntValue );
             }
-            break;
+        }
+        break;
+        case NS_ooxml::LN_CT_DocGrid_type:
+        {
+            if (pSectionContext != NULL)
+            {
+                pSectionContext->SetGridType(nIntValue);
+            }
+        }
+        break;
         default:
             {
 #if OSL_DEBUG_LEVEL > 0
