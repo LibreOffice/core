@@ -33,6 +33,7 @@
 #endif
 #include <vector>
 #include <stdio.h>
+#include <rtl/tencinfo.h>
 
 namespace writerfilter {
 namespace dmapper
@@ -116,12 +117,20 @@ void FontTable::sprm(Sprm& rSprm)
     if(!m_pImpl->pCurrentEntry)
         return ;
     sal_uInt32 nSprmId = rSprm.getId();
-    (void)nSprmId;
 
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     (void)nIntValue;
     rtl::OUString sStringValue = pValue->getString();
+    switch(nSprmId)
+    {
+        case NS_ooxml::LN_CT_Font_charset:
+            m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromWindowsCharset( nIntValue );
+        break;
+        default:
+        break;
+    }
+
 }
 
 void FontTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)

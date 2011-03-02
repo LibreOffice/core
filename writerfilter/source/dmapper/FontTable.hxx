@@ -57,7 +57,7 @@ struct FontEntry
     FontEntry() :
         bTrueType(false),
         nPitchRequest( 0 ),
-        nTextEncoding( 0 ),
+        nTextEncoding( RTL_TEXTENCODING_DONTKNOW ),
         nFontFamilyId( 0 ),
         nBaseWeight( 0 ),
         nAltFontIndex( 0 )
