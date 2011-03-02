@@ -37,8 +37,7 @@
 #include <uno/mapping.h>
 #include <uno/lbnames.h>
 
-using namespace rtl;
-
+using ::rtl::OUString;
 
 namespace pseudo_uno
 {

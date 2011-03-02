@@ -72,7 +72,6 @@
 
 #define NLOOP 200000000
 
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -82,6 +81,10 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::container;
 using namespace com::sun::star::test::performance;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 #define SERVICENAME     "com.sun.star.test.performance.PerformanceTest"
 #define IMPLNAME        "com.sun.star.comp.performance.PerformanceTest"

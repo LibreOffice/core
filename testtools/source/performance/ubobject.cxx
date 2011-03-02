@@ -40,13 +40,14 @@
 
 #include <com/sun/star/test/performance/XPerformanceTest.hpp>
 
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::test::performance;
+
+using ::rtl::OUString;
 
 #define SERVICENAME     "com.sun.star.test.performance.PerformanceTestObject"
 #define IMPLNAME        "com.sun.star.comp.performance.PerformanceTestObject"
