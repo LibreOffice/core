@@ -242,7 +242,7 @@ public:
 #ifdef WNT     //We need _wfopen to support long file paths on Windows XP
         FILE* pFile = _wfopen( rFileName.native_file_string_w(), L"wb" );
 #else
-        FILE* pFile = fopen( rFileName.native_file_string_w().c_str(), "wb" );
+        FILE* pFile = fopen( rFileName.native_file_string().c_str(), "wb" );
 #endif
         if( pFile == NULL )
             return;
