@@ -1711,8 +1711,6 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     if (pSrcDoc)
     {
         // source document already loaded in memory.  Re-use this instance.
-        // We don't even cache data when the document is loaded.
-
         SCTAB nTab;
         if (!pSrcDoc->GetTable(rTabName, nTab))
         {
