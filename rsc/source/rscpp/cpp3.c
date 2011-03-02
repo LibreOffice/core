@@ -86,16 +86,14 @@ void addfile(FILE* fp, char* filename)
  */
 {
         register FILEINFO       *file;
-/* #ifndef _NO_PROTO */
-                extern FILEINFO         *getfile( int bufsize, char *filename ); /* BP */
-/* #endif */
+        extern FILEINFO         *getfile( int bufsize, char *filename );
         file = getfile(NBUFF, filename);
         file->fp = fp;                  /* Better remember FILE *       */
         file->buffer[0] = EOS;          /* Initialize for first read    */
         line = 1;                       /* Working on line 1 now        */
         wrongline = TRUE;               /* Force out initial #line      */
 }
-
+
 void setincdirs()
 /*
  * Append system-specific directories to the include directory list.
@@ -159,7 +157,7 @@ void setincdirs()
 
 #if HOST == SYS_UNKNOWN
 /*
- * BP: 25.07.91, Kontext: GenMake
+ * Kontext: GenMake
  * Unter DOS wird nun auch die Environment-Variable INCLUDE ausgewetet.
  * Es kommt erschwerend hinzu, dass alle Eintraege, die mit ';' getrennt
  * sind, mit in die Liste aufenommen werden muessen.
@@ -184,7 +182,7 @@ void setincdirs()
 
 }
 
-/* BP: 11.09.91, Kontext: Erweiterung des INCLUDE-Services
+/* Kontext: Erweiterung des INCLUDE-Services
  * Bislang konnte der cpp keine Include-Angaben in der Kommandozeile
  * vertragen, bei denen die directries mit ';' getrennt wurden.
  * Dies ist auch verstaendlich, da dieses cpp fuer UNIX-Systeme
@@ -210,9 +208,6 @@ int AddInclude( char* pIncStr )
     return( 1 );
 }
 
-
-
-
 int
 dooptions(int argc, char** argv)
 /*
@@ -248,9 +243,6 @@ dooptions(int argc, char** argv)
                     break;
 
                 case 'D':                       /* Define symbol        */
-#if HOST != SYS_UNIX
-/*                   zap_uc(ap); */             /* Force define to U.C. */
-#endif
                     /*
                      * If the option is just "-Dfoo", make it -Dfoo=1
                      */
@@ -311,9 +303,6 @@ dooptions(int argc, char** argv)
                     break;
 
                 case 'U':                       /* Undefine symbol      */
-#if HOST != SYS_UNIX
-/*                    zap_uc(ap);*/
-#endif
                     if (defendel(ap, TRUE) == NULL)
                         cwarn("\"%s\" wasn't defined", ap);
                     break;
@@ -363,7 +352,7 @@ dooptions(int argc, char** argv)
         }
         return (j);                     /* Return new argc              */
 }
-
+
 int
 readoptions(char* filename, char*** pfargv)
 {
@@ -426,8 +415,6 @@ readoptions(char* filename, char*** pfargv)
         return (back);
 }
 
-
-
 #if HOST != SYS_UNIX
 FILE_LOCAL void
 zap_uc(char* ap)
@@ -508,7 +495,7 @@ void initdefines()
 #endif
         }
 }
-
+
 #if HOST == SYS_VMS
 /*
  * getredirection() is intended to aid in porting C programs

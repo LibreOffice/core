@@ -82,7 +82,7 @@
  *              cierror & ciwarn take a format and a single int (char) argument.
  *              cfatal takes a format and a single string argument.
  */
-
+
 /*
  * This table must be rewritten for a non-Ascii machine.
  *
@@ -169,7 +169,6 @@ OP_LPA,OP_RPA,OP_MUL,OP_ADD,   000,OP_SUB,   DOT,OP_DIV, /* 28 ()*+,-./ */
 
 #endif
 
-
 /*
  *                      C P P   S y m b o l   T a b l e s
  */
@@ -227,7 +226,7 @@ skipws()
 #endif
         return (c);
 }
-
+
 void scanid(int c)
 /*
  * Get the next token (an id) into the token buffer.
@@ -268,7 +267,7 @@ macroid(int c)
         }
         return (c);
 }
-
+
 int
 catenate()
 /*
@@ -334,7 +333,7 @@ catenate()
         return (FALSE);                         /* Not supported        */
 #endif
 }
-
+
 int
 scanstring(int delim,
 #ifndef _NO_PROTO
@@ -373,7 +372,7 @@ void         (*outfun)() /* BP */
             return (FALSE);
         }
 }
-
+
 void scannumber(int c,
 #ifndef _NO_PROTO
 register void    (*outfun)( int )  /* BP */    /* Output/store func    */
@@ -503,7 +502,7 @@ nomore: unget();                                /* Not part of a number */
         if (octal89 && radix == 8)
             cwarn("Illegal digit in octal number", NULLST);
 }
-
+
 void save(int c)
 {
         if (workp >= &work[NWORK]) {
@@ -564,7 +563,6 @@ getmem(int size)
             cfatal("Out of memory", NULLST);
         return (result);
 }
-
 
 DEFBUF *
 lookid(int c)
@@ -604,7 +602,7 @@ lookid(int c)
         }
         return ((temp == 0) ? dp : NULL);
 }
-
+
 DEFBUF *
 defendel(char* name, int delete)
 /*
@@ -772,7 +770,7 @@ void dumpadef(char *why, register DEFBUF *dp)
             pCppOut = pRememberOut;
 }
 #endif
-
+
 /*
  *                      G E T
  */
@@ -1053,7 +1051,7 @@ cget()
 #endif
         return (c);
 }
-
+
 /*
  * Error messages and other hacks.  The first byte of severity
  * is 'S' for string arguments and 'I' for int arguments.  This
