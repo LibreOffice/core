@@ -42,7 +42,6 @@ FloatingWindow RID_INSERT_CTRL
     Hide = TRUE ;
     SVLook = TRUE ;
     HelpID = HID_INSERT_CTRL ;
-    /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
     ToolBox TBX_INSERT
     {
         MenuStrings = TRUE ;
@@ -120,7 +119,6 @@ FloatingWindow RID_INSERT_OBJ_CTRL
     Hide = TRUE ;
     SVLook = TRUE ;
     HelpID = HID_INSERT_OBJ_CTRL ;
-    /* ### ACHTUNG: Neuer Text in Resource? Objekt einfügen : Objekt einf³gen */
     ToolBox TBX_OBJ_INSERT
     {
         MenuStrings = TRUE ;
@@ -310,7 +308,6 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     };
     String ST_OUTL
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Überschrift : šberschrift */
         Text [ en-US ] = "Headings" ;
     };
     String ST_SEL
@@ -319,7 +316,6 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     };
     String ST_FTN
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Fußnote : Fu˜note */
         Text [ en-US ] = "Footnote" ;
     };
     String ST_MARK
@@ -361,72 +357,58 @@ String STR_IMGBTN_PREV_DOWN
 };
 String STR_IMGBTN_TBL_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächste Tabelle : Nõchste Tabelle */
     Text [ en-US ] = "Next table" ;
 };
 String STR_IMGBTN_FRM_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächster Textrahmen : Nõchster Textrahmen */
     Text [ en-US ] = "Next text frame" ;
 };
 String STR_IMGBTN_PGE_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächste Seite : Nõchste Seite */
     Text [ en-US ] = "Next page" ;
 };
 String STR_IMGBTN_DRW_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächstes Zeichenobjekt : Nõchstes Zeichenobjekt */
     Text [ en-US ] = "Next drawing" ;
 };
 String STR_IMGBTN_CTRL_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächstes Kontrollfeld : Nõchstes Kontrollfeld */
     Text [ en-US ] = "Next control" ;
 };
 String STR_IMGBTN_REG_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächster Bereich : Nõchster Bereich */
     Text [ en-US ] = "Next section" ;
 };
 String STR_IMGBTN_BKM_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächste Textmarke : Nõchste Textmarke */
     Text [ en-US ] = "Next bookmark" ;
 };
 String STR_IMGBTN_GRF_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächste Grafik : Nõchste Grafik */
     Text [ en-US ] = "Next graphic" ;
 };
 String STR_IMGBTN_OLE_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächstes OLE-Objekt : Nõchstes OLE-Objekt */
     Text [ en-US ] = "Next OLE object" ;
 };
 String STR_IMGBTN_OUTL_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächste Überschrift : Nõchste šberschrift */
     Text [ en-US ] = "Next heading" ;
 };
 String STR_IMGBTN_SEL_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächste Markierung : Nõchste Markierung */
     Text [ en-US ] = "Next selection" ;
 };
 String STR_IMGBTN_FTN_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächste Fußnote : Nõchste Fu˜note */
     Text [ en-US ] = "Next footnote" ;
 };
 String STR_IMGBTN_MARK_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächster Merker : Nõchster Merker */
     Text [ en-US ] = "Next Reminder" ;
 };
 String STR_IMGBTN_POSTIT_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächste Notiz : Nõchste Notiz */
     Text [ en-US ] = "Next Note" ;
 };
 String STR_IMGBTN_SRCH_REP_DOWN
@@ -479,12 +461,10 @@ String STR_IMGBTN_GRF_UP
 };
 String STR_IMGBTN_OLE_UP
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Voriges OLE-Objekt : Voriges OLE object */
     Text [ en-US ] = "Previous OLE object" ;
 };
 String STR_IMGBTN_OUTL_UP
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Vorige Überschrift : Vorige šberschrift */
     Text [ en-US ] = "Previous heading" ;
 };
 String STR_IMGBTN_SEL_UP
@@ -493,7 +473,6 @@ String STR_IMGBTN_SEL_UP
 };
 String STR_IMGBTN_FTN_UP
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Vorige Fußnote : Vorige Fu˜note */
     Text [ en-US ] = "Previous footnote" ;
 };
 String STR_IMGBTN_MARK_UP

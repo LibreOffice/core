@@ -103,11 +103,6 @@ String STR_INPUTFLD
 };
 String STR_SETINPUTFLD
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
-    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
-    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
-    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
-    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
     Text [ en-US ] = "Input field (variable)" ;
 };
 String STR_USRINPUTFLD
@@ -406,7 +401,6 @@ String FMT_CHAPTER_NO_NOSEPARATOR
 };
 String FMT_CHAPTER_NAMENO
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Kapitelnummer und Name : Nummer und Name */
     Text [ en-US ] = "Chapter number and name" ;
 };
 /*--------------------------------------------------------------------

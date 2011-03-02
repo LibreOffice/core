@@ -35,7 +35,6 @@ ModalDialog DLG_ROW_HEIGHT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 157 , 60 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Zeilenhöhe : Zellenhöhe */
     Text [ en-US ] = "Row Height" ;
     Moveable = TRUE ;
     OKButton BT_OK
@@ -78,7 +77,6 @@ ModalDialog DLG_ROW_HEIGHT
     {
         Pos = MAP_APPFONT ( 12 , 34 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~dynamisch anpassen : auto. H~öhe */
         TabStop = TRUE ;
         Text [ en-US ] = "~Fit to size" ;
     };

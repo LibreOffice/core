@@ -1634,7 +1634,6 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XSIMEQY ;
                 HelpId = HID_SMA_XSIMEQY ;
-                /* ### ACHTUNG: Neuer Text in Resource? ist �hnlich oder gleich : ist �hnlich oder glech */
                 Text [ en-US ] = "Is Similar Or Equal" ;
             };
             ToolBoxItem

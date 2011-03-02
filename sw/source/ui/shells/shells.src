@@ -152,7 +152,6 @@ String STR_PAGE
 };
 String RID_TEXT_TOOLBOX
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Textobjektleiste : Textleiste */
         Text [ en-US ] = "Text Object Bar" ;
     Text [ x-comment ] = " ";
 };

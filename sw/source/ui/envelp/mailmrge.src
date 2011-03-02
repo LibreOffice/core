@@ -268,7 +268,6 @@ ModalDialog DLG_MAILMERGE
         Pos = MAP_APPFONT ( 220 , 156 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Disable = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? HTM~L : HTML */
         TabStop = TRUE ;
         Text [ en-US ] = "HTM~L" ;
     };

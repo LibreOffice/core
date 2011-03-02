@@ -407,7 +407,6 @@ String STR_IDXMRK_EDIT
 };
 String STR_IDXMRK_INSERT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Verzeichniseintrag einfügen : Verzeichniseintrag einf³gen */
     Text [ en-US ] = "Insert Index Entry" ;
 };
 

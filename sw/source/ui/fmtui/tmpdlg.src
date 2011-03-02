@@ -89,7 +89,6 @@ TabDialog DLG_TEMPLATE_2
             PageItem
             {
                 Identifier = TP_PARA_STD ;
-                /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = TP_PARA_STD ;
             };
@@ -102,7 +101,6 @@ TabDialog DLG_TEMPLATE_2
             PageItem
             {
                 Identifier = TP_PARA_EXT ;
-                /* ### ACHTUNG: Neuer Text in Resource? Textflu?: Textflu?*/
                 Text [ en-US ] = "Text Flow" ;
                 PageResID = TP_PARA_EXT ;
             };
@@ -253,7 +251,6 @@ String STR_PAGE_HEADER
 };
 String STR_PAGE_FOOTER
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
     Text [ en-US ] = "Footer" ;
 };
 String STR_PAGE_TEXTGRID
@@ -266,7 +263,6 @@ String STR_PAGE_COLUMN
 };
 String STR_PAGE_FOOTNOTE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Fußnote : Fu˜note */
     Text [ en-US ] = "Footnote" ;
 };
 TabDialog DLG_TEMPLATE_3
@@ -300,7 +296,6 @@ TabDialog DLG_TEMPLATE_3
             {
                 Identifier = TP_FRM_ADD ;
                 PageResID = TP_FRM_ADD ;
-                /* ### ACHTUNG: Neuer Text in Resource? Zusätze : Zusõtze */
                 Text [ en-US ] = "Options" ;
             };
             PageItem
