@@ -1034,10 +1034,6 @@ void SAL_CALL ScHeaderFieldsObj::refresh(  )
                     }
                     catch(uno::RuntimeException&)
                     {
-<<<<<<< HEAD
-=======
-//                      OSL_FAIL("a object is gone without to remove from Broadcaster");
->>>>>>> Move DBG_ERROR to OSL_FAIL
                         ++pInterfaces;
                         ++i;
                     }
