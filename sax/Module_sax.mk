@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,43 +25,17 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+$(eval $(call gb_Module_Module,sax))
 
-PRJNAME=sax
-TARGET=sax
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_Module_add_targets,sax,\
+	Library_sax \
+	Library_expwrap \
+	Library_fastsax \
+	Package_inc \
+))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_add_check_targets,sax,\
+	CppunitTest_sax \
+))
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-# --- Files --------------------------------------------------------
-
-SLOFILES =	\
-        $(SLO)$/converter.obj				\
-        $(SLO)$/fastattribs.obj				\
-        $(SLO)$/fastserializer.obj			\
-        $(SLO)$/fshelper.obj
-
-SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
-SHL1IMPLIB= i$(TARGET)
-
-SHL1STDLIBS= \
-                $(CPPULIB)		\
-                $(CPPUHELPERLIB)\
-                $(COMPHELPERLIB)\
-                $(RTLLIB)		\
-                $(SALLIB)		\
-                $(ONELIB)
-
-SHL1DEPN=
-SHL1OBJS=       $(SLOFILES)
-SHL1USE_EXPORTS=name
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=		$(SHL1TARGET)
-DEFLIB1NAME=    $(TARGET)
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:

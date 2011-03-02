@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "preextstl.h"
+#include <sal/cppunit.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>

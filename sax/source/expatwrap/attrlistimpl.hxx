@@ -29,10 +29,7 @@
 #define _SAX_ATTRLISTIMPL_HXX
 
 #include "sal/config.h"
-//#include "sax/saxdllapi.h"
-
 #include <cppuhelper/implbase2.hxx>
-
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>

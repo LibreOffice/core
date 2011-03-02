@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,44 +25,52 @@
 #
 #*************************************************************************
 
-PRJ=..
+$(eval $(call gb_Library_Library,expwrap))
 
-PRJNAME=sax
-TARGET=sax
+$(eval $(call gb_Library_set_componentfile,expwrap,sax/source/expatwrap/expwrap))
 
-USE_DEFFILE=TRUE
+$(eval $(call gb_Library_set_include,expwrap,\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc/offuh \
+	-I$(SRCDIR)/sax/inc \
+))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Library_set_defs,expwrap,\
+	$$(DEFS) \
+))
 
-.INCLUDE :  settings.mk
+ifeq ($(SYSTEM_ZLIB),YES)
+$(eval $(call gb_Library_set_defs,expwrap,\
+	$$(DEFS) \
+	-DSYSTEM_ZLIB \
+))
+endif
 
-# ------------------------------------------------------------------
+ifeq ($(SYSTEM_EXPAT),YES)
+$(eval $(call gb_Library_set_defs,expwrap,\
+	$$(DEFS) \
+	-DSYSTEM_EXPAT \
+))
+else
+$(eval $(call gb_Library_set_defs,expwrap,\
+	$$(DEFS) \
+	-DXML_UNICODE \
+))
+endif
 
-LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1FILES=\
-            $(SLB)$/saxtools.lib
+$(eval $(call gb_Library_add_linked_libs,expwrap,\
+	sal \
+	cppu \
+	cppuhelper \
+	expat \
+    $(gb_STDLIBS) \
+))
 
-# sax
+$(eval $(call gb_Library_add_exception_objects,expwrap,\
+	sax/source/expatwrap/attrlistimpl \
+	sax/source/expatwrap/sax_expat \
+	sax/source/expatwrap/saxwriter \
+	sax/source/expatwrap/xml2utf \
+))
 
-SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
-SHL1IMPLIB= i$(TARGET)
-SHL1USE_EXPORTS=name
-
-SHL1LIBS=	$(LIB1TARGET)
-SHL1STDLIBS= \
-                $(VOSLIB)		\
-                $(CPPULIB)		\
-                $(CPPUHELPERLIB)\
-                $(COMPHELPERLIB)\
-                $(RTLLIB)		\
-                $(SALLIB)		\
-                $(ONELIB)		\
-                $(SALHELPERLIB)
-
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=	$(SHL1TARGET)
-DEFLIB1NAME=$(TARGET)
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:

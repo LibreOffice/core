@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,6 +25,32 @@
 #
 #*************************************************************************
 
-# Reduction of exported symbols:
-CDEFS += -DSAX_DLLIMPLEMENTATION
-VISIBILITY_HIDDEN=TRUE
+$(eval $(call gb_Library_Library,sax))
+
+$(eval $(call gb_Library_set_include,sax,\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc/offuh \
+	-I$(SRCDIR)/sax/inc \
+))
+
+$(eval $(call gb_Library_set_defs,sax,\
+	$$(DEFS) \
+	-DSAX_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_linked_libs,sax,\
+	sal \
+	cppu \
+	cppuhelper \
+	comphelper \
+    $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,sax,\
+	sax/source/tools/converter \
+	sax/source/tools/fastattribs \
+	sax/source/tools/fastserializer \
+	sax/source/tools/fshelper \
+))
+
+# vim: set noet sw=4 ts=4:
