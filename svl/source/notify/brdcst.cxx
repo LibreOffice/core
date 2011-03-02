@@ -30,6 +30,7 @@
 #include "precompiled_svl.hxx"
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <svl/hint.hxx>
 #include <svl/smplhint.hxx>
