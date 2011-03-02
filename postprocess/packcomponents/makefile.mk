@@ -62,6 +62,8 @@ my_components = \
     component/framework/util/fwm \
     component/linguistic/source/lng \
     component/vbahelper/util/msforms \
+    component/sax/source/expatwrap/expwrap \
+    component/sax/source/fastparser/fastsax \
     component/sfx2/util/sfx \
     component/sot/util/sot \
     component/starmath/util/sm \
@@ -102,7 +104,6 @@ my_components = \
     dlgprov \
     embobj \
     evtatt \
-    fastsax \
     fileacc \
     filterconfig1 \
     flash \
