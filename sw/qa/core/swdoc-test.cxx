@@ -47,9 +47,12 @@
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
+
 #include <sfx2/app.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
+
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/contentbroker.hxx>
@@ -82,14 +85,22 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
+    bool testLoad(const rtl::OUString &rFilter, const rtl::OUString &rURL);
+
     void randomTest();
     void testPageDescName();
     void testFileNameFields();
+
+    /**
+     * Ensure CVEs remain unbroken
+     */
+    void testCVEs();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
     CPPUNIT_TEST(randomTest);
     CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST(testFileNameFields);
+    CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -97,6 +108,7 @@ private:
     uno::Reference<lang::XMultiComponentFactory> m_xFactory;
     SwDoc *m_pDoc;
     SwDocShellRef m_xDocShRef;
+    ::rtl::OUString m_aPWDURL;
 };
 
 void SwDocTest::testPageDescName()
@@ -170,6 +182,32 @@ void SwDocTest::testFileNameFields()
     m_xDocShRef->DoInitNew(0);
 }
 
+bool SwDocTest::testLoad(const rtl::OUString &rFilter, const rtl::OUString &rURL)
+{
+    SfxFilter aFilter(
+        rFilter,
+        rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
+        rtl::OUString(), rtl::OUString() );
+
+    SwDocShellRef xDocShRef = new SwDocShell;
+    SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
+    aSrcMed.SetFilter(&aFilter);
+    return xDocShRef->DoLoad(&aSrcMed);
+}
+
+void SwDocTest::testCVEs()
+{
+//To-Do: I know this works on Linux, please check if this test works under
+//windows and enable it if so
+#ifndef WNT
+    bool bResult;
+
+    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice XML (Writer)")),
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2006-3117-1.sxw")));
+    CPPUNIT_ASSERT_MESSAGE("CVE-2006-3117 regression", bResult == false);
+#endif
+}
+
 void SwDocTest::randomTest()
 {
     CPPUNIT_ASSERT_MESSAGE("SwDoc::IsRedlineOn()", !m_pDoc->IsRedlineOn());
@@ -190,6 +228,9 @@ SwDocTest::SwDocTest()
     InitVCL(xSM);
 
     SwDLL::Init();
+
+    oslProcessError err = osl_getProcessWorkingDir(&m_aPWDURL.pData);
+    CPPUNIT_ASSERT_MESSAGE("no PWD!", err == osl_Process_E_None);
 
     ErrorHandler::RegisterDisplay(&aWndFunc);
 }
