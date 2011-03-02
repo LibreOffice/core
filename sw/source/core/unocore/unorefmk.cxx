@@ -261,8 +261,10 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     }
     else
     {
-        pTxtAttr = rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
-                rPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_REFMARK);
+        SwTxtNode *pTxtNd = rPam.GetNode()->GetTxtNode();
+        OSL_ASSERT(pTxtNd);
+        pTxtAttr = pTxtNd ? rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+                rPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_REFMARK) : NULL;
     }
 
     if (!pTxtAttr)
