@@ -695,15 +695,15 @@ static String lcl_makeExternalNameStr( const String& rFile, const String& rName,
     return String( aBuf.makeStringAndClear());
 }
 
-static bool lcl_getLastTabName( String& rTabName2, const String& rTabName1,
-                                const vector<String>& rTabNames, const ScComplexRefData& rRef )
+static bool lcl_getLastTabName( OUString& rTabName2, const OUString& rTabName1,
+                                const vector<OUString>& rTabNames, const ScComplexRefData& rRef )
 {
     SCsTAB nTabSpan = rRef.Ref2.nTab - rRef.Ref1.nTab;
     if (nTabSpan > 0)
     {
         size_t nCount = rTabNames.size();
-        vector<String>::const_iterator itrBeg = rTabNames.begin(), itrEnd = rTabNames.end();
-        vector<String>::const_iterator itr = ::std::find(itrBeg, itrEnd, rTabName1);
+        vector<OUString>::const_iterator itrBeg = rTabNames.begin(), itrEnd = rTabNames.end();
+        vector<OUString>::const_iterator itr = ::std::find(itrBeg, itrEnd, rTabName1);
         if (itr == rTabNames.end())
         {
             rTabName2 = ScGlobal::GetRscString(STR_NO_REF_TABLE);
@@ -1033,12 +1033,12 @@ struct ConventionOOO_A1 : public Convention_A1
 
             rBuffer.append(sal_Unicode(':'));
 
-            String aLastTabName;
+            OUString aLastTabName;
             bool bDisplayTabName = (aRef.Ref1.nTab != aRef.Ref2.nTab);
             if (bDisplayTabName)
             {
                 // Get the name of the last table.
-                vector<String> aTabNames;
+                vector<OUString> aTabNames;
                 pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
                 if (aTabNames.empty())
                 {
@@ -1246,11 +1246,11 @@ struct ConventionXL
         rBuffer.append(sal_Unicode(']'));
     }
 
-    static void makeExternalTabNameRange( ::rtl::OUStringBuffer& rBuf, const String& rTabName,
-                                          const vector<String>& rTabNames,
+    static void makeExternalTabNameRange( ::rtl::OUStringBuffer& rBuf, const OUString& rTabName,
+                                          const vector<OUString>& rTabNames,
                                           const ScComplexRefData& rRef )
     {
-        String aLastTabName;
+        OUString aLastTabName;
         if (!lcl_getLastTabName(aLastTabName, rTabName, rTabNames, rRef))
         {
             ScRangeStringConverter::AppendTableName(rBuf, aLastTabName);
@@ -1463,7 +1463,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         if (!pFullName)
             return;
 
-        vector<String> aTabNames;
+        vector<OUString> aTabNames;
         pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
         if (aTabNames.empty())
             return;
@@ -1670,7 +1670,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         if (!pFullName)
             return;
 
-        vector<String> aTabNames;
+        vector<OUString> aTabNames;
         pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
         if (aTabNames.empty())
             return;

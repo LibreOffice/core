@@ -3790,12 +3790,12 @@ void ScXMLExport::WriteExternalRefCaches()
         if (!pUrl)
             continue;
 
-        vector<String> aTabNames;
+        vector<OUString> aTabNames;
         pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
         if (aTabNames.empty())
             continue;
 
-        for (vector<String>::const_iterator itr = aTabNames.begin(), itrEnd = aTabNames.end();
+        for (vector<OUString>::const_iterator itr = aTabNames.begin(), itrEnd = aTabNames.end();
               itr != itrEnd; ++itr)
         {
             ScExternalRefCache::TableTypeRef pTable = pRefMgr->getCacheTable(nFileId, *itr, false);

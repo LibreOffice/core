@@ -255,7 +255,7 @@ public:
     bool isDocInitialized(sal_uInt16 nFileId);
     void initializeDoc(sal_uInt16 nFileId, const ::std::vector<String>& rTabNames);
     String getTableName(sal_uInt16 nFileId, size_t nCacheId) const;
-    void getAllTableNames(sal_uInt16 nFileId, ::std::vector<String>& rTabNames) const;
+    void getAllTableNames(sal_uInt16 nFileId, ::std::vector<rtl::OUString>& rTabNames) const;
     SCsTAB getTabSpan( sal_uInt16 nFileId, const String& rStartTabName, const String& rEndTabName ) const;
     void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
     bool hasCacheTable(sal_uInt16 nFileId, const String& rTabName) const;
@@ -481,7 +481,7 @@ public:
         The index in the returned vector corresponds to the table index used to
         access the cache table, e.g. in getCacheTable().
      */
-    void getAllCachedTableNames(sal_uInt16 nFileId, ::std::vector<String>& rTabNames) const;
+    void getAllCachedTableNames(sal_uInt16 nFileId, ::std::vector<rtl::OUString>& rTabNames) const;
 
     /**
      * Get the span (distance+sign(distance)) of two sheets of a specified

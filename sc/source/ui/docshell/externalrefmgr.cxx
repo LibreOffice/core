@@ -827,7 +827,7 @@ String ScExternalRefCache::getTableName(sal_uInt16 nFileId, size_t nCacheId) con
     return EMPTY_STRING;
 }
 
-void ScExternalRefCache::getAllTableNames(sal_uInt16 nFileId, vector<String>& rTabNames) const
+void ScExternalRefCache::getAllTableNames(sal_uInt16 nFileId, vector<OUString>& rTabNames) const
 {
     rTabNames.clear();
     DocItem* pDoc = getDocItem(nFileId);
@@ -1507,7 +1507,7 @@ ScExternalRefManager::ApiGuard::~ApiGuard()
 
 // ----------------------------------------------------------------------------
 
-void ScExternalRefManager::getAllCachedTableNames(sal_uInt16 nFileId, vector<String>& rTabNames) const
+void ScExternalRefManager::getAllCachedTableNames(sal_uInt16 nFileId, vector<OUString>& rTabNames) const
 {
     maRefCache.getAllTableNames(nFileId, rTabNames);
 }

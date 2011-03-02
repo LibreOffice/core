@@ -1636,7 +1636,7 @@ Sequence< OUString > SAL_CALL ScExternalDocLinkObj::getElementNames()
         throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
-    vector<String> aTabNames;
+    vector<OUString> aTabNames;
     mpRefMgr->getAllCachedTableNames(mnFileId, aTabNames);
     size_t n = aTabNames.size();
     Sequence<OUString> aSeq(n);

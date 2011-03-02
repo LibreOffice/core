@@ -293,9 +293,7 @@ typedef ::std::vector< sal_Int16 >                  ScfInt16Vec;
 typedef ::std::vector< sal_uInt16 >                 ScfUInt16Vec;
 typedef ::std::vector< sal_Int32 >                  ScfInt32Vec;
 typedef ::std::vector< sal_uInt32 >                 ScfUInt32Vec;
-typedef ::std::vector< sal_Int64 >                  ScfInt64Vec;
-typedef ::std::vector< sal_uInt64 >                 ScfUInt64Vec;
-typedef ::std::vector< String >                     ScfStringVec;
+typedef ::std::vector< ::rtl::OUString >            ScfStringVec;
 
 // ----------------------------------------------------------------------------
 
