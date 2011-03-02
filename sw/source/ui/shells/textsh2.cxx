@@ -97,11 +97,6 @@ struct DBTextStruct_Impl
     Reference<XConnection>  xConnection;
 };
 
-inline void AddSelList( List& rLst, long nRow )
-{
-    rLst.Insert( (void*)nRow , LIST_APPEND );
-}
-
 void SwTextShell::ExecDB(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
