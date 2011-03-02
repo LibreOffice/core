@@ -450,7 +450,6 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
     if ( pSet && pSet->Count() )
     {
-        bool bGotItem =
         if ( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem ) &&
              dynamic_cast<const SwFmtPageDesc*>(pItem)->GetRegisteredIn() != NULL)
         {
