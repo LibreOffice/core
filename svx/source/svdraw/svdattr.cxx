@@ -1482,9 +1482,6 @@ SdrCustomShapeAdjustmentItem::SdrCustomShapeAdjustmentItem( SvStream& rIn, sal_u
 
 SdrCustomShapeAdjustmentItem::~SdrCustomShapeAdjustmentItem()
 {
-    void* pPtr;
-    for ( pPtr = aAdjustmentValueList.First(); pPtr; pPtr = aAdjustmentValueList.Next() )
-        delete (SdrCustomShapeAdjustmentValue*)pPtr;
 }
 
 int SdrCustomShapeAdjustmentItem::operator==( const SfxPoolItem& rCmp ) const
@@ -1492,18 +1489,13 @@ int SdrCustomShapeAdjustmentItem::operator==( const SfxPoolItem& rCmp ) const
     int bRet = SfxPoolItem::operator==( rCmp );
     if ( bRet )
     {
-        bRet = ((SdrCustomShapeAdjustmentItem&)rCmp).GetCount() == GetCount();
-        if ( bRet )
+        bRet = GetCount() == ((SdrCustomShapeAdjustmentItem&)rCmp).GetCount();
+
+        if (bRet)
         {
-            sal_uInt32 i;
-            for ( i = 0; i < GetCount(); i++ )
-            {
-                if ( ((SdrCustomShapeAdjustmentItem&)rCmp).GetValue( i ).nValue != GetValue( i ).nValue )
-                {
-                    bRet = 0;
-                    break;
-                }
-            }
+            for (sal_uInt32 i = 0; i < GetCount(); ++i)
+                if (aAdjustmentValueList[i].nValue != ((SdrCustomShapeAdjustmentItem&)rCmp).aAdjustmentValueList[i].nValue)
+                    return false;
         }
     }
     return bRet;
@@ -1550,13 +1542,11 @@ SvStream& SdrCustomShapeAdjustmentItem::Store( SvStream& rOut, sal_uInt16 nItemV
 
 SfxPoolItem* SdrCustomShapeAdjustmentItem::Clone( SfxItemPool * /*pPool*/) const
 {
-    sal_uInt32 i;
     SdrCustomShapeAdjustmentItem* pItem = new SdrCustomShapeAdjustmentItem;
-    for ( i = 0; i < GetCount(); i++ )
-    {
-        const SdrCustomShapeAdjustmentValue& rVal = GetValue( i );
-        pItem->SetValue( i, rVal );
-    }
+
+    if (pItem)
+        pItem->aAdjustmentValueList = aAdjustmentValueList;
+
     return pItem;
 }
 
@@ -1566,19 +1556,15 @@ const SdrCustomShapeAdjustmentValue& SdrCustomShapeAdjustmentItem::GetValue( sal
     if ( aAdjustmentValueList.Count() <= nIndex )
         OSL_FAIL( "SdrCustomShapeAdjustemntItem::GetValue - nIndex out of range (SJ)" );
 #endif
-    return *(SdrCustomShapeAdjustmentValue*)aAdjustmentValueList.GetObject( nIndex );
+    return aAdjustmentValueList[nIndex];
 }
 
 void SdrCustomShapeAdjustmentItem::SetValue( sal_uInt32 nIndex, const SdrCustomShapeAdjustmentValue& rVal )
 {
-    sal_uInt32 i;
-    for ( i = GetCount(); i <= nIndex; i++ )
-    {
-        SdrCustomShapeAdjustmentValue* pItem = new SdrCustomShapeAdjustmentValue;
-        aAdjustmentValueList.Insert( pItem, LIST_APPEND );
-    }
-    SdrCustomShapeAdjustmentValue& rValue = *(SdrCustomShapeAdjustmentValue*)aAdjustmentValueList.GetObject( nIndex );
-    rValue.nValue = rVal.nValue;
+    for (sal_uInt32 i = aAdjustmentValueList.size(); i <= nIndex; i++ )
+        aAdjustmentValueList.push_back(SdrCustomShapeAdjustmentValue());
+
+    aAdjustmentValueList[nIndex] = rVal;
 }
 
 sal_uInt16 SdrCustomShapeAdjustmentItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
@@ -1606,19 +1592,17 @@ bool SdrCustomShapeAdjustmentItem::PutValue( const uno::Any& rVal, BYTE /*nMembe
     if( !( rVal >>= aSequence ) )
         return false;
 
-    void* pPtr;
-    for ( pPtr = aAdjustmentValueList.First(); pPtr; pPtr = aAdjustmentValueList.Next() )
-        delete (SdrCustomShapeAdjustmentValue*)pPtr;
+    aAdjustmentValueList.clear();
 
     sal_uInt32 i, nCount = aSequence.getLength();
     if ( nCount )
     {
+        SdrCustomShapeAdjustmentValue val;
         const sal_Int32* pPtr2 = aSequence.getConstArray();
         for ( i = 0; i < nCount; i++ )
         {
-            SdrCustomShapeAdjustmentValue* pItem = new SdrCustomShapeAdjustmentValue;
-            pItem->nValue = *pPtr2++;
-            aAdjustmentValueList.Insert( pItem, LIST_APPEND );
+            val.nValue = *pPtr2++;
+            aAdjustmentValueList.push_back(val);
         }
     }
     return true;

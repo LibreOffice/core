@@ -29,8 +29,9 @@
 #ifndef _SDASAITM_HXX
 #define _SDASAITM_HXX
 
+#include <vector>
+
 #include <svl/poolitem.hxx>
-#include <tools/list.hxx>
 
 class SdrCustomShapeAdjustmentValue
 {
@@ -47,7 +48,7 @@ class SdrCustomShapeAdjustmentValue
 
 class SdrCustomShapeAdjustmentItem : public SfxPoolItem
 {
-            List    aAdjustmentValueList;
+            std::vector<SdrCustomShapeAdjustmentValue>  aAdjustmentValueList;
 
     public :
 
@@ -68,7 +69,7 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
             virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
             virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-            sal_uInt32                          GetCount() const { return aAdjustmentValueList.Count(); };
+            sal_uInt32                          GetCount() const { return aAdjustmentValueList.size(); };
             SVX_DLLPUBLIC const SdrCustomShapeAdjustmentValue&  GetValue( sal_uInt32 nIndex ) const;
             SVX_DLLPUBLIC void                              SetValue( sal_uInt32 nIndex,
                                                         const SdrCustomShapeAdjustmentValue& rVal );
