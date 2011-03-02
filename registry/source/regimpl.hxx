@@ -62,9 +62,6 @@
 #define REG_GUARD(mutex) \
     osl::Guard< osl::Mutex > aGuard( mutex );
 
-// @@@ using namespace rtl;
-// @@@ using namespace osl;
-
 class ORegKey;
 class RegistryTypeReader;
 

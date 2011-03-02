@@ -36,8 +36,7 @@ sal_Bool SAL_CALL initTypeMapper( const sal_Char* pRegName );
 sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop);
 }
 
-using namespace rtl;
-
+using ::rtl::OString;
 SpecialTypeManager::SpecialTypeManager()
 {
     m_pImpl = new SpecialTypeManagerImpl();

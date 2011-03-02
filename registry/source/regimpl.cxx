@@ -61,9 +61,13 @@
 #include    <rtl/ustrbuf.hxx>
 #include    <osl/file.hxx>
 
-using namespace rtl;
 using namespace osl;
 using namespace store;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
 
 namespace {
 

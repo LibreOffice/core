@@ -37,7 +37,9 @@
 #include    <rtl/alloc.h>
 
 using namespace std;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 #if (defined UNX) || (defined OS2)
 int main()

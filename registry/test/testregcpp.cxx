@@ -41,7 +41,10 @@
 #include <rtl/ustring.hxx>
 
 using namespace std;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 void test_coreReflection()
 {

@@ -43,11 +43,11 @@
 
 #include "reflcnst.hxx"
 
-using namespace rtl;
+using ::rtl::OString;
+
 
 namespace {
 
-// Throws std::bad_alloc:
 inline rtl::OString toByteString(rtl_uString const * str) {
     return rtl::OString(
         str->buffer, str->length, RTL_TEXTENCODING_UTF8,

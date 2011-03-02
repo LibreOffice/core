@@ -34,8 +34,9 @@
 #include    "rdbtype.hxx"
 #include    "rdboptions.hxx"
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
 sal_Bool isBaseType(const OString& type)
 {
     if ( type.equals("long") ||
@@ -119,12 +120,6 @@ sal_Bool produceType(const OString& typeName,
 {
     if (typeDependencies.isGenerated(typeName) )
         return sal_True;
-/*
-    RegistryKey     typeKey = typeMgr.getTypeKey(typeName);
-
-    if (!typeKey.isValid())
-        return sal_False;
-*/
     if( !checkTypeDependencies(typeMgr, typeDependencies, typeName, bDepend))
         return sal_False;
 
@@ -135,26 +130,6 @@ sal_Bool produceType(const OString& typeName,
             o << typeName.getStr() << "\n";
         } else
         {
-/*
-            RegValueType    valueType;
-            sal_uInt32      valueSize;
-
-            if (typeKey.getValueInfo(OUString(), &valueType, &valueSize))
-            {
-                if (typeName.equals("/"))
-                    return sal_True;
-                else
-                    return sal_False;
-            }
-
-            sal_uInt8* pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
-
-            if (typeKey.getValue(OUString(), pBuffer))
-            {
-                rtl_freeMemory(pBuffer);
-                return sal_False;
-            }
-*/
             TypeReader reader = typeMgr.getTypeReader(typeName);
 
             if (!reader.isValid())
@@ -170,18 +145,14 @@ sal_Bool produceType(const OString& typeName,
             RegistryKey typeKey;
             if ( regKey.createKey( OStringToOUString(typeName, RTL_TEXTENCODING_UTF8), typeKey) )
             {
-//              rtl_freeMemory(pBuffer);
                 return sal_False;
             }
 
             if ( typeKey.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)reader.getBlop(), reader.getBlopSize()) )
-//          if ( typeKey.setValue(OUString(), valueType, pBuffer, valueSize) )
             {
-//              rtl_freeMemory(pBuffer);
                 return sal_False;
             }
 
-//          rtl_freeMemory(pBuffer);
         }
     }
 

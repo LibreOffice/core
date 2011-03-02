@@ -50,7 +50,8 @@ using namespace com::sun::star::reflection;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace cppu;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 static Reference< XHierarchicalNameAccess > xNameAccess;
 
