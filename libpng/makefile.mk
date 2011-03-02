@@ -48,16 +48,14 @@ TARFILE_NAME=$(PRJNAME)-$(LIBPNGVERSION)
 TARFILE_MD5=220035f111ea045a51e290906025e8b5
 
 PATCH_FILES=libpng.patch
-ADDITIONAL_FILES=makefile.mk 
+ADDITIONAL_FILES=makefile.mk pnglibconf.h
 
 #relative to CONFIGURE_DIR
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
-OUT2INC=png.h			\
-        pngconfig.h   	\
-        pnglibconfig.h
+OUT2INC=png.h   pnglibconf.h
 
 # --- Targets ------------------------------------------------------
 

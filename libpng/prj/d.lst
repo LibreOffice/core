@@ -1,12 +1,9 @@
-mkdir: %_DEST%\inc%_EXT%\libpng
-..\%__SRC%\inc\png*.h %_DEST%\inc%_EXT%\libpng\png*.h
+mkdir: %_DEST%\inc%_EXT%\external
+mkdir: %_DEST%\inc%_EXT%\external\libpng
 
-..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
-..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%\lib*.so.*
-..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%\lib*.dylib
-..\%__SRC%\lib\lib*.a %_DEST%\lib%_EXT%\lib*.a
-..\%__SRC%\lib\lib*.la %_DEST%\lib%_EXT%\lib*.la
-..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
-..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\lib\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\bin\*.dll.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\slb\libpng.lib %_DEST%\lib%_EXT%\libpng.lib
+..\%__SRC%\lib\libpng.a %_DEST%\lib%_EXT%\libpng.a
+
+..\%__SRC%\inc\png.h %_DEST%\inc%_EXT%\external\libpng\png.h
+..\%__SRC%\inc\pnglibconf.h %_DEST%\inc%_EXT%\external\libpng\pnglibconf.h
+
