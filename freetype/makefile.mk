@@ -49,13 +49,15 @@ CONFIGURE_DIR=
 .IF "$(OS)"=="WNT"
 CONFIGURE_ACTION=
 ADDITIONAL_FILES=config.mk \
-            objs/ftmodule.h
+            objs/ftmodule.h \
+            freetype.def
 PATCH_FILES=freetype-2.4.4.patch
+LIBS= -l $(STDLIBGUIMT) -l $(LIBSTLPORT)
 .ELSE
 CONFIGURE_ACTION=.$/configure
 .ENDIF
 
-BUILD_ACTION=make 
+BUILD_ACTION=$(GNUMAKE)
 
 # --- Targets ------------------------------------------------------
 
