@@ -82,7 +82,7 @@ void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
     if ( rRect.Top()    < rVisible.Top()-1 )    rRect.Top()    = rVisible.Top()-1;
     if ( rRect.Bottom() > rVisible.Bottom()+1 ) rRect.Bottom() = rVisible.Bottom()+1;
 
-    // #51122# auch wenn das inner-Rectangle nicht sichtbar ist, muss evtl.
+    // auch wenn das inner-Rectangle nicht sichtbar ist, muss evtl.
     // die Titelzeile gezeichnet werden, darum kein Rueckgabewert mehr.
     // Wenn's weit daneben liegt, wird lcl_DrawOneFrame erst gar nicht gerufen.
 }
@@ -700,7 +700,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     aOutputData.DrawBackground();
     if ( bPageMode )
     {
-        // #87655# DrawPagePreview draws complete lines/page numbers, must always be clipped
+        // DrawPagePreview draws complete lines/page numbers, must always be clipped
         if ( aOutputData.SetChangedClip() )
         {
             DrawPagePreview(nX1,nY1,nX2,nY2, pContentDev);

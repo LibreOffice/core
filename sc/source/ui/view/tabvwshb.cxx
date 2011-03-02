@@ -89,7 +89,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     Window* pWin = GetActiveWin();
 
-    //  #41412# wenn schon connected ist, nicht nochmal SetObjArea/SetSizeScale
+    //  wenn schon connected ist, nicht nochmal SetObjArea/SetSizeScale
 
     SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
     if ( !pClient )
@@ -117,7 +117,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 
 BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 {
-    // #41081# Gueltigkeits-Hinweisfenster nicht ueber dem Objekt stehenlassen
+    // Gueltigkeits-Hinweisfenster nicht ueber dem Objekt stehenlassen
     RemoveHintWindow();
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();

@@ -101,7 +101,7 @@ ScCellShell::~ScCellShell()
     {
         pImpl->m_pClipEvtLstnr->AddRemoveListener( GetViewData()->GetActiveWin(), FALSE );
 
-        //  #103849# The listener may just now be waiting for the SolarMutex and call the link
+        //  The listener may just now be waiting for the SolarMutex and call the link
         //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
         pImpl->m_pClipEvtLstnr->ClearCallbackLink();
 
@@ -343,7 +343,7 @@ sal_Bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHe
 {
     if ( rDataHelper.HasFormat( nFormatId ) )
     {
-        //  #90675# translated format name strings are no longer inserted here,
+        //  translated format name strings are no longer inserted here,
         //  handled by "paste special" dialog / toolbox controller instead.
         //  Only the object type name has to be set here:
         String aStrVal;
@@ -557,7 +557,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_RANGE_NOTETEXT:
                 {
-                    //  #43343# always take cursor position, do not use top-left cell of selection
+                    //  always take cursor position, do not use top-left cell of selection
                     ScAddress aPos( nPosX, nPosY, nTab );
                     String aNoteText;
                     if ( const ScPostIt* pNote = pDoc->GetNote( aPos ) )

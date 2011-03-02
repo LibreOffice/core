@@ -130,7 +130,7 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
             }
             else if ( nFormats & SGA_FORMAT_SOUND )
             {
-                //  #98115# for sounds (linked or not), insert a hyperlink button,
+                //  for sounds (linked or not), insert a hyperlink button,
                 //  like in Impress and Writer
 
                 GalleryExplorer* pGal = SVX_GALLERY();

@@ -304,7 +304,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         pTabViewShell->MarkRange(aNewRange);
                     }
 
-                    if ( bContinue )        // #41905# Fehler beim Import -> Abbruch
+                    if ( bContinue )        // Fehler beim Import -> Abbruch
                     {
                         //  interne Operationen, wenn welche gespeichert
 

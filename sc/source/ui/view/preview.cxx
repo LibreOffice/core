@@ -169,7 +169,7 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
         if ( !pDrawView )                                   // neu anlegen?
         {
             pDrawView = new FmFormView( pModel, this );
-            // #55259# die DrawView uebernimmt den Design-Modus vom Model
+            // die DrawView uebernimmt den Design-Modus vom Model
             // (Einstellung "Im Entwurfsmodus oeffnen"), darum hier zuruecksetzen
             pDrawView->SetDesignMode( TRUE );
             pDrawView->SetPrintPreview( TRUE );

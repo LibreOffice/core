@@ -212,7 +212,7 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
     bPixelToLogic( bPTL )
 {
     ScModule* pScMod = SC_MOD();
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     bCellContrast = pOutput->bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -749,7 +749,7 @@ double ScOutputData::GetStretch()
 {
     if ( pRefDevice->IsMapMode() )
     {
-        //  #95920# If a non-trivial MapMode is set, its scale is now already
+        //  If a non-trivial MapMode is set, its scale is now already
         //  taken into account in the OutputDevice's font handling
         //  (OutputDevice::ImplNewFont, see #95414#).
         //  The old handling below is only needed for pixel output.
@@ -2365,7 +2365,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 
     ScModule* pScMod = SC_MOD();
     sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -2944,7 +2944,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     if (aAlignParam.meOrient==SVX_ORIENTATION_STANDARD && !aAlignParam.mbAsianVertical)
                                     {
                                         if (aAlignParam.adjustHorAlignment(pEngine))
-                                            // #55142# reset adjustment for the next cell
+                                            // reset adjustment for the next cell
                                             pOldPattern = NULL;
                                     }
                                     else
@@ -3167,7 +3167,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
 
     ScModule* pScMod = SC_MOD();
     sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -3479,7 +3479,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                 double nAbsCos = fabs( nCos );
                                 double nAbsSin = fabs( nSin );
 
-                                // #47740# adjust witdh of papersize for height of text
+                                // adjust witdh of papersize for height of text
                                 int nSteps = 5;
                                 while (nSteps > 0)
                                 {

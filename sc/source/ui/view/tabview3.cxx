@@ -1437,7 +1437,7 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
 
     if ( nTab != aViewData.GetTabNo() || bNew )
     {
-        //  #57724# Die FormShell moechte vor dem Umschalten benachrichtigt werden
+        //  Die FormShell moechte vor dem Umschalten benachrichtigt werden
         FmFormShell* pFormSh = aViewData.GetViewShell()->GetFormShell();
         if (pFormSh)
         {
@@ -1616,7 +1616,7 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
         if ( aViewData.IsPagebreakMode() )
             UpdatePageBreakData();              //! asynchron ??
 
-        //  #53551# Form-Layer muss den sichtbaren Ausschnitt der neuen Tabelle kennen
+        //  Form-Layer muss den sichtbaren Ausschnitt der neuen Tabelle kennen
         //  dafuer muss hier schon der MapMode stimmen
         for (USHORT i=0; i<4; i++)
             if (pGridWin[i])
@@ -1679,7 +1679,7 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
                      ( nCol >= nScrX && nCol <= nScrX + aViewData.VisibleCellsX(eHWhich) + 1 &&
                        nRow >= nScrY && nRow <= nScrY + aViewData.VisibleCellsY(eVWhich) + 1 );
 
-                //  #102421# for the active part, create edit view even if outside the visible area,
+                //  for the active part, create edit view even if outside the visible area,
                 //  so input isn't lost (and the edit view may be scrolled into the visible area)
 
                 //  #i26433# during spelling, the spelling view must be active
@@ -1866,7 +1866,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
                 if (nCol1 < nScrX) nCol1 = nScrX;
                 if (nCol2 < nScrX)
                 {
-                    if ( eMode == SC_UPDATE_ALL )   // #91240# for UPDATE_ALL, paint anyway
+                    if ( eMode == SC_UPDATE_ALL )   // for UPDATE_ALL, paint anyway
                         nCol2 = nScrX;              // (because of extending strings to the right)
                     else
                         bOut = TRUE;                // completely outside the window
@@ -2349,7 +2349,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
 
         BOOL bRefMode = SC_MOD()->IsFormulaMode();
 
-        //  #40565# the HasEditView call during SetCursor would fail otherwise
+        //  the HasEditView call during SetCursor would fail otherwise
         if ( aViewData.HasEditView(eOld) && !bRefMode )
             UpdateInputLine();
 
@@ -2413,7 +2413,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         SfxInPlaceClient* pClient = aViewData.GetViewShell()->GetIPClient();
         BOOL bOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
-        //  #103823# don't switch ViewShell's active window during RefInput, because the focus
+        //  don't switch ViewShell's active window during RefInput, because the focus
         //  might change, and subsequent SetReference calls wouldn't find the right EditView
         if ( !bRefMode && !bOleActive )
             aViewData.GetViewShell()->SetWindow( pGridWin[eWhich] );
@@ -2500,7 +2500,7 @@ void ScTabView::ZoomChanged()
 
     SetNewVisArea();
 
-    InterpretVisible();     // #69343# have everything calculated before painting
+    InterpretVisible();     // have everything calculated before painting
 
     SfxBindings& rBindings = aViewData.GetBindings();
     rBindings.Invalidate( SID_ATTR_ZOOM );
@@ -2516,7 +2516,7 @@ void ScTabView::ZoomChanged()
         // flush OverlayManager before changing the MapMode
         pWin->flushOverlayManager();
 
-        //  #93650# make sure the EditView's position and size are updated
+        //  make sure the EditView's position and size are updated
         //  with the right (logic, not drawing) MapMode
         pWin->SetMapMode( aViewData.GetLogicMode() );
         UpdateEditView();

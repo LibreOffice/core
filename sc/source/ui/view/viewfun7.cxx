@@ -92,7 +92,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     MakeDrawLayer();
     Point aPos( rLogicPos );
 
-    //  #64184# MapMode am Outliner-RefDevice muss stimmen (wie in FuText::MakeOutliner)
+    //  MapMode am Outliner-RefDevice muss stimmen (wie in FuText::MakeOutliner)
     //! mit FuText::MakeOutliner zusammenfassen?
     MapMode aOldMapMode;
     OutputDevice* pRef = GetViewData()->GetDocument()->GetDrawLayer()->GetRefDevice();
@@ -166,7 +166,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                     pNeuObj->SetModel(pDrawModel);
                     pNeuObj->SetPage(pDestPage);
 
-                    //  #68787# copy graphics within the same model - always needs new name
+                    //  copy graphics within the same model - always needs new name
                     if ( pNeuObj->ISA(SdrGrafObj) && !bPasteIsMove )
                         pNeuObj->SetName(((ScDrawLayer*)pDrawModel)->GetNewGraphicName());
 
@@ -194,7 +194,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         Size aSize = aView.GetAllMarkedRect().GetSize();
         lcl_AdjustInsertPos( GetViewData(), aPos, aSize );
 
-        //  #41333# Markierung nicht aendern, wenn Ole-Objekt aktiv
+        //  Markierung nicht aendern, wenn Ole-Objekt aktiv
         //  (bei Drop aus Ole-Objekt wuerde sonst mitten im ExecuteDrag deaktiviert!)
 
         ULONG nOptions = 0;
@@ -202,7 +202,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         if ( pClient && pClient->IsObjectInPlaceActive() )
             nOptions |= SDRINSERT_DONTMARK;
 
-        // #89247# Set flag for ScDocument::UpdateChartListeners() which is
+        // Set flag for ScDocument::UpdateChartListeners() which is
         // called during paste.
         if ( !bSameDocClipboard )
             GetViewData()->GetDocument()->SetPastingDrawFromOtherDoc( TRUE );
@@ -212,7 +212,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         if ( !bSameDocClipboard )
             GetViewData()->GetDocument()->SetPastingDrawFromOtherDoc( FALSE );
 
-        // #68991# Paste puts all objects on the active (front) layer
+        // Paste puts all objects on the active (front) layer
         // controls must be on SC_LAYER_CONTROLS
 
         SCTAB nTab = GetViewData()->GetTabNo();
@@ -230,7 +230,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             }
         }
 
-        // #75299# all graphics objects must have names
+        // all graphics objects must have names
         GetViewData()->GetDocument()->EnsureGraphicNames();
     }
 
@@ -244,7 +244,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         pRef->SetMapMode( aOldMapMode );
 
     // GetViewData()->GetViewShell()->SetDrawShell( TRUE );
-    // #99759# It is not sufficient to just set the DrawShell if we pasted, for
+    // It is not sufficient to just set the DrawShell if we pasted, for
     // example, a chart.  SetDrawShellOrSub() would only work for D&D in the
     // same document but not if inserting from the clipboard, therefore
     // MarkListHasChanged() is what we need.
@@ -380,9 +380,9 @@ BOOL ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     Rectangle aRect(aPos, aSize);
     SdrGrafObj* pGrafObj = new SdrGrafObj(rGraphic, aRect);
 
-    // #118522# calling SetGraphicLink here doesn't work
+    // calling SetGraphicLink here doesn't work
 
-    //  #49961# Pfad wird nicht mehr als Name der Grafik gesetzt
+    //  Pfad wird nicht mehr als Name der Grafik gesetzt
 
     ScDrawLayer* pLayer = (ScDrawLayer*) pScDrawView->GetModel();
     String aName = pLayer->GetNewGraphicName();                 // "Grafik x"
@@ -391,7 +391,7 @@ BOOL ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     // nicht markieren wenn Ole
     pScDrawView->InsertObjectSafe(pGrafObj, *pScDrawView->GetSdrPageView());
 
-    // #118522# SetGraphicLink has to be used after inserting the object,
+    // SetGraphicLink has to be used after inserting the object,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
     // See #i37444#.
     if (rFile.Len())

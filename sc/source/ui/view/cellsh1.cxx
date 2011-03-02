@@ -851,7 +851,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else    // Aufruf per Maus
                 {
-                    //  #55284# nicht innerhalb einer zusammengefassten Zelle
+                    //  nicht innerhalb einer zusammengefassten Zelle
 
                     if ( nStartCol == nEndCol && nStartRow == nEndRow )
                     {
@@ -1220,7 +1220,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
                 if ( pOwnClip )
                 {
-                    // #129384# keep a reference in case the clipboard is changed during dialog or PasteFromClip
+                    // keep a reference in case the clipboard is changed during dialog or PasteFromClip
                     uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
                     if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                     {
@@ -1278,9 +1278,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                                                                                     RID_SCDLG_INSCONT);
                             DBG_ASSERT(pDlg, "Dialog create fail!");
                             pDlg->SetOtherDoc( bOtherDoc );
-                            // #53661# bei ChangeTrack MoveMode disablen
+                            // bei ChangeTrack MoveMode disablen
                             pDlg->SetChangeTrack( pDoc->GetChangeTrack() != NULL );
-                            // #72930# cut/move references may disable shift
+                            // cut/move references may disable shift
                             // directions if source and destination ranges intersect
                             if ( !bOtherDoc )
                             {
@@ -1836,7 +1836,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 const SfxStringItem& rTextItem = (const SfxStringItem&)pReqArgs->Get( SID_RANGE_NOTETEXT );
 
-                //  #43343# immer Cursorposition
+                //  immer Cursorposition
                 ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
                 pTabViewShell->SetNoteText( aPos, rTextItem.GetValue() );
                 rReq.Done();

@@ -523,7 +523,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     pObject = aIter.Next();
                 }
 
-                nObjCount += pPage->GetObjCount();          // #105888# count group object only once
+                nObjCount += pPage->GetObjCount();          // count group object only once
             }
 
             PasteDraw( aPos, pModel, (nObjCount > 1) );     // grouped if more than 1 object
@@ -557,7 +557,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     // ensure correct sheet indexes
                     aSource.aStart.SetTab( nSrcTab );
                     aSource.aEnd.SetTab( nSrcTab );
-// #92240# don't use selection area: if cursor is moved in Excel after Copy, selection
+// don't use selection area: if cursor is moved in Excel after Copy, selection
 // represents the new cursor position and not the copied area
                 }
                 else

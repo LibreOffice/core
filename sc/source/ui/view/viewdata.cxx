@@ -741,7 +741,7 @@ ScMarkType ScViewData::GetSimpleArea( SCCOL& rStartCol, SCROW& rStartRow, SCTAB&
 {
     //  parameter bMergeMark is no longer needed: The view's selection is never modified
     //  (a local copy is used), and a multi selection that adds to a single range can always
-    //  be treated like a single selection (#108266# - GetSimpleArea isn't used in selection
+    //  be treated like a single selection (GetSimpleArea isn't used in selection
     //  handling itself)
 
     ScRange aRange;
@@ -1013,7 +1013,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         Size aPaperSize = pView->GetActiveWin()->PixelToLogic( Size( nSizeXPix, nSizeYPix ), GetLogicMode() );
         if ( bBreak && !bAsianVertical && SC_MOD()->GetInputOptions().GetTextWysiwyg() )
         {
-            //  #95593# if text is formatted for printer, use the exact same paper width
+            //  if text is formatted for printer, use the exact same paper width
             //  (and same line breaks) as for output.
 
             Fraction aFract(1,1);
@@ -1318,7 +1318,7 @@ void ScViewData::EditGrowY( BOOL bInitial )
     long        nOldBottom = aArea.Bottom();
     long        nTextHeight = pEngine->GetTextHeight();
 
-    //  #106635# When editing a formula in a cell with optimal height, allow a larger portion
+    //  When editing a formula in a cell with optimal height, allow a larger portion
     //  to be clipped before extending to following rows, to avoid obscuring cells for
     //  reference input (next row is likely to be useful in formulas).
     long nAllowedExtra = SC_GROWY_SMALL_EXTRA;
@@ -2114,7 +2114,7 @@ void ScViewData::CalcPPT()
         nPPTX = nPPTX / pDocShell->GetOutputFactor();   // Faktor ist Drucker zu Bildschirm
     nPPTY = ScGlobal::nScreenPPTY * (double) GetZoomY();
 
-    //  #83616# if detective objects are present,
+    //  if detective objects are present,
     //  try to adjust horizontal scale so the most common column width has minimal rounding errors,
     //  to avoid differences between cell and drawing layer output
 
@@ -2232,7 +2232,7 @@ void ScViewData::ReadUserData(const String& rData)
     xub_StrLen nCount = rData.GetTokenCount(';');
     if ( nCount <= 2 )
     {
-        //  #45208# beim Reload in der Seitenansicht sind evtl. die Preview-UserData
+        //  beim Reload in der Seitenansicht sind evtl. die Preview-UserData
         //  stehengelassen worden. Den Zoom von der Preview will man hier nicht...
         OSL_FAIL("ReadUserData: das sind nicht meine Daten");
         return;
@@ -2503,7 +2503,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
             {
                 Point aPixel = Application::GetDefaultDevice()->LogicToPixel(
                                 rTabSett.maSplitPos, MapMode( MAP_TWIP ) );  //! Zoom?
-                // #109648# - the test for use of printer metrics for text formatting here
+                // the test for use of printer metrics for text formatting here
                 // effectively results in the nFactor = 1.0 regardless of the Option setting.
                 if( pDocShell && SC_MOD()->GetInputOptions().GetTextWysiwyg())
                 {
@@ -2917,7 +2917,7 @@ BOOL ScViewData::UpdateFixX( SCTAB nTab )               // TRUE = Wert geaendert
         return FALSE;
 
     ScDocument* pLocalDoc = GetDocument();
-    if (!pLocalDoc->HasTable(nTab))          // #114007# if called from reload, the sheet may not exist
+    if (!pLocalDoc->HasTable(nTab))          // if called from reload, the sheet may not exist
         return FALSE;
 
     SCCOL nFix = pTabData[nTab]->nFixPosX;
@@ -2952,7 +2952,7 @@ BOOL ScViewData::UpdateFixY( SCTAB nTab )               // TRUE = Wert geaendert
         return FALSE;
 
     ScDocument* pLocalDoc = GetDocument();
-    if (!pLocalDoc->HasTable(nTab))          // #114007# if called from reload, the sheet may not exist
+    if (!pLocalDoc->HasTable(nTab))          // if called from reload, the sheet may not exist
         return FALSE;
 
     SCROW nFix = pTabData[nTab]->nFixPosY;
@@ -2995,7 +2995,7 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
 
     rOutl.SetCalcFieldValueHdl( LINK( SC_MOD(), ScModule, CalcFieldValueHdl ) );
 
-    //  #97417# don't call GetSpellChecker if online spelling isn't enabled.
+    //  don't call GetSpellChecker if online spelling isn't enabled.
     //  The language for AutoCorrect etc. is taken from the pool defaults
     //  (set in ScDocument::UpdateDrawLanguages)
 

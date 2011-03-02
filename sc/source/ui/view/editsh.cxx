@@ -124,7 +124,7 @@ ScEditShell::~ScEditShell()
     {
         pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), FALSE );
 
-        //  #122057# The listener may just now be waiting for the SolarMutex and call the link
+        //  The listener may just now be waiting for the SolarMutex and call the link
         //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
         pClipEvtLstnr->ClearCallbackLink();
 
@@ -156,7 +156,7 @@ void lcl_RemoveAttribs( EditView& rEditView )
     pEngine->GetUndoManager().EnterListAction( aName, aName );
 
     rEditView.RemoveAttribs(TRUE);
-    pEngine->RepeatDefaults();      // #97226# paragraph attributes from cell formats must be preserved
+    pEngine->RepeatDefaults();      // paragraph attributes from cell formats must be preserved
 
     pEngine->GetUndoManager().LeaveListAction();
 
@@ -548,7 +548,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             pTableView->InsertField( aURLItem );
                             pTableView->SetSelection( aSel );       // select inserted field
 
-                            //  #57254# jetzt doch auch Felder in der Top-View
+                            //  jetzt doch auch Felder in der Top-View
 
                             if ( pTopView )
                             {
@@ -628,7 +628,7 @@ void lcl_DisableAll( SfxItemSet& rSet )    // disable all slots
 
 void ScEditShell::GetState( SfxItemSet& rSet )
 {
-    // #125326# When deactivating the view, edit mode is stopped, but the EditShell is left active
+    // When deactivating the view, edit mode is stopped, but the EditShell is left active
     // (a shell can't be removed from within Deactivate). In that state, the EditView isn't inserted
     // into the EditEngine, so it can have an invalid selection and must not be used.
     if ( !pViewData->HasEditView( pViewData->GetActivePart() ) )
@@ -1099,7 +1099,7 @@ String ScEditShell::GetSelectionText( BOOL bWholeWord )
 
 void ScEditShell::ExecuteUndo(SfxRequest& rReq)
 {
-    //  #81733# Undo must be handled here because it's called for both EditViews
+    //  Undo must be handled here because it's called for both EditViews
 
     ScInputHandler* pHdl = GetMyInputHdl();
     DBG_ASSERT(pHdl,"no ScInputHandler");

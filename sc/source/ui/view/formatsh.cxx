@@ -712,7 +712,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 SfxAbstractTabDialog* pDlg    = NULL;
                 USHORT          nRsc    = 0;
 
-                //  #37034#/#37245# alte Items aus der Vorlage merken
+                // alte Items aus der Vorlage merken
                 SfxItemSet aOldSet = pStyleSheet->GetItemSet();
                 String aOldName = pStyleSheet->GetName();
 
@@ -776,7 +776,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 Window* pParent = Application::GetDefDialogParent();
                 if ( !pParent || !pParent->IsDialog() )
                 {
-                    //  #107256# GetDefDialogParent currently doesn't return the window
+                    //  GetDefDialogParent currently doesn't return the window
                     //  that was set with SetDefDialogParent (but dynamically finds the
                     //  topmost parent of the focus window), so IsDialog above is FALSE
                     //  even if called from the style catalog.
@@ -806,7 +806,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     {
                         nRetMask = pStyleSheet->GetMask();
 
-                        //  #37034#/#37245# Attribut-Vergleiche (frueher in ModifyStyleSheet)
+                        //  Attribut-Vergleiche (frueher in ModifyStyleSheet)
                         //  jetzt hier mit den alten Werten (Style ist schon veraendert)
 
                         if ( SFX_STYLE_FAMILY_PARA == eFam )
@@ -1585,7 +1585,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     if ( pNewAttrs->GetItemState( ATTR_BORDER, TRUE, &pItem )
                          == SFX_ITEM_SET )
                     {
-                        //  #100959# The SvxFrameToolBoxControl toolbox controller uses a default
+                        //  The SvxFrameToolBoxControl toolbox controller uses a default
                         //  SvxBorderLine (all widths 0) to mark the lines that should be set.
                         //  Macro recording uses a SvxBoxItem with the real values (OutWidth > 0)
                         //  or NULL pointers for no lines.

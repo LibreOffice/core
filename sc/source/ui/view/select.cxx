@@ -456,7 +456,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
 
     if (bRefMode)
     {
-        // #90910# if no input is possible from this doc, don't move the reference cursor around
+        // if no input is possible from this doc, don't move the reference cursor around
         if ( !pScMod->IsModalMode(pViewData->GetSfxDocShell()) )
         {
             if (!bAnchor)
@@ -544,7 +544,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
             long nSizeX = 0;
             if ( bNegX )
             {
-                //  #94321# in SetCursorAtPoint hidden columns are skipped.
+                //  in SetCursorAtPoint hidden columns are skipped.
                 //  They must be skipped here too, or the result will always be the first hidden column.
                 do ++nPosX; while ( nPosX<nStartX && pDoc->ColHidden(nPosX, nTab) );
                 for (SCCOL i=nPosX; i<nStartX; i++)
@@ -557,7 +557,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
             long nSizeY = 0;
             if ( bNegY )
             {
-                //  #94321# in SetCursorAtPoint hidden rows are skipped.
+                //  in SetCursorAtPoint hidden rows are skipped.
                 //  They must be skipped here too, or the result will always be the first hidden row.
                 if (++nPosY < nStartY)
                 {

@@ -583,7 +583,7 @@ String lcl_MakePivotTabName( const String& rPrefix, SCTAB nNumber )
 bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
                                 const ScDPObject& rSource, BOOL bApi )
 {
-    //  #70096# error message if no fields are set
+    //  error message if no fields are set
     //  this must be removed when drag&drop of fields from a toolbox is available
 
     if ( rData.IsEmpty() && !bApi )

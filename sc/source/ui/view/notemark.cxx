@@ -111,7 +111,7 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
             if( pObject )
                 aRect = pObject->GetCurrentBoundRect();
 
-            // #39351# Page einfuegen damit das Model sie kennt und auch deleted
+            // Page einfuegen damit das Model sie kennt und auch deleted
             pModel->InsertPage( pPage );
 
         }

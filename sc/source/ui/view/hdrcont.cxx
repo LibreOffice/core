@@ -81,8 +81,8 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
 {
     // --- RTL --- no default mirroring for this window, the spreadsheet itself
     // is also not mirrored
-    // #107811# mirror the vertical window for correct border drawing
-    // #106948# table layout depends on sheet format, not UI setting, so the
+    // mirror the vertical window for correct border drawing
+    // table layout depends on sheet format, not UI setting, so the
     // borders of the vertical window have to be handled manually, too.
     EnableRTL( FALSE );
 
@@ -470,7 +470,7 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                 if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && bHighContrast && !bDark )
                 {
                     //  Transparent selection background is drawn after lines, before text.
-                    //  #109814# Use DrawSelectionBackground to make sure there is a visible
+                    //  Use DrawSelectionBackground to make sure there is a visible
                     //  difference. The case of a dark face color, where DrawSelectionBackground
                     //  would just paint over the lines, is handled separately (bDark).
                     //  Otherwise, GetHighlightColor is used with 80% transparency.
@@ -730,7 +730,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
         SetMarking( TRUE );     //  muss vor SelMouseButtonDown sein
         pSelEngine->SelMouseButtonDown( rMEvt );
 
-        //  #74215# In column/row headers a simple click already is a selection.
+        //  In column/row headers a simple click already is a selection.
         //  -> Call SelMouseMove to ensure CreateAnchor is called (and DestroyAnchor
         //  if the next click is somewhere else with Control key).
         pSelEngine->SelMouseMove( rMEvt );
@@ -915,7 +915,7 @@ void ScHeaderControl::StopMarking()
     SetMarking( FALSE );
     bIgnoreMove = TRUE;
 
-    //  #86260# don't call pSelEngine->Reset, so selection across the parts of
+    //  don't call pSelEngine->Reset, so selection across the parts of
     //  a split/frozen view is possible
 
     ReleaseMouse();

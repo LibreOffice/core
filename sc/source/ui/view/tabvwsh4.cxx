@@ -129,7 +129,7 @@ void ScTabViewShell::Activate(BOOL bMDI)
         ActivateView( TRUE, bFirstActivate );
         ActivateOlk( GetViewData() );
 
-        //  #56870# AutoCorrect umsetzen, falls der Writer seins neu angelegt hat
+        //  AutoCorrect umsetzen, falls der Writer seins neu angelegt hat
         UpdateDrawTextOutliner();
 
         //  RegisterNewTargetNames gibts nicht mehr
@@ -174,9 +174,9 @@ void ScTabViewShell::Activate(BOOL bMDI)
             SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_NAVIGATOR_UPDATEALL ) );
             bFirstActivate = FALSE;
 
-            // #116278# ReadExtOptions (view settings from Excel import) must also be done
+            // ReadExtOptions (view settings from Excel import) must also be done
             // after the ctor, because of the potential calls to Window::Show.
-            // Even after the fix for #104887# (Window::Show no longer notifies the access
+            // Even after a bugfix (Window::Show no longer notifies the access
             // bridge, it's done in ImplSetReallyVisible), there are problems if Window::Show
             // is called during the ViewShell ctor and reschedules asynchronous calls
             // (for example from the FmFormShell ctor).
@@ -248,7 +248,7 @@ void ScTabViewShell::Deactivate(BOOL bMDI)
 
     if( bMDI )
     {
-        //  #85421# during shell deactivation, shells must not be switched, or the loop
+        //  during shell deactivation, shells must not be switched, or the loop
         //  through the shell stack (in SfxDispatcher::DoDeactivate_Impl) will not work
         BOOL bOldDontSwitch = bDontSwitch;
         bDontSwitch = TRUE;
@@ -292,7 +292,7 @@ USHORT ScTabViewShell::PrepareClose(BOOL bUI, BOOL bForBrowsing)
     if ( pHdl && pHdl->IsInputMode() )
         pHdl->EnterHandler();
 
-    // #110797# draw text edit mode must be closed
+    // draw text edit mode must be closed
     FuPoor* pPoor = GetDrawFuncPtr();
     if ( pPoor && ( IsDrawTextShell() || pPoor->GetSlotID() == SID_DRAW_NOTEEDIT ) )
     {
@@ -304,7 +304,7 @@ USHORT ScTabViewShell::PrepareClose(BOOL bUI, BOOL bForBrowsing)
     if ( pDrView )
     {
         // force end of text edit, to be safe
-        // #128314# ScEndTextEdit must always be used, to ensure correct UndoManager
+        // ScEndTextEdit must always be used, to ensure correct UndoManager
         pDrView->ScEndTextEdit();
     }
 
@@ -704,7 +704,7 @@ void ScTabViewShell::SetPivotShell( BOOL bActive )
 {
     bActivePivotSh = bActive;
 
-    //  #68771# #76198# SetPivotShell is called from CursorPosChanged every time
+    //  SetPivotShell is called from CursorPosChanged every time
     //  -> don't change anything except switching between cell and pivot shell
 
     if ( eCurOST == OST_Pivot || eCurOST == OST_Cell )
@@ -1175,7 +1175,7 @@ void ScTabViewShell::PreparePrint( PrintDialog* pPrintDialog )
 ErrCode ScTabViewShell::DoPrint( SfxPrinter *pPrinter,
                                  PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI )
 {
-    //  #72527# if SID_PRINTDOCDIRECT is executed and there's a selection,
+    //  if SID_PRINTDOCDIRECT is executed and there's a selection,
     //  ask if only the selection should be printed
 
     const ScMarkData& rMarkData = GetViewData()->GetMarkData();
@@ -1433,7 +1433,7 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
     }
     else
     {
-        //  #51889# Spezialfall: Copy/Cut bei Mehrfachselektion -> Fehlermeldung
+        //  Spezialfall: Copy/Cut bei Mehrfachselektion -> Fehlermeldung
         //  (Slot ist disabled, SfxViewShell::KeyInput wuerde also kommentarlos verschluckt)
         KeyFuncType eFunc = aCode.GetFunction();
         if ( eFunc == KEYFUNC_CUT )
@@ -1450,7 +1450,7 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         if (!bUsed)
             bUsed = sal::static_int_cast<BOOL>(SfxViewShell::KeyInput( rKEvt ));    // accelerators
 
-        //  #74696# during inplace editing, some slots are handled by the
+        //  during inplace editing, some slots are handled by the
         //  container app and are executed during Window::KeyInput.
         //  -> don't pass keys to input handler that would be used there
         //  but should call slots instead.
@@ -1676,7 +1676,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
     }
 
     // ViewInputHandler
-    //  #48721# jeder Task hat neuerdings sein eigenes InputWindow,
+    //  jeder Task hat neuerdings sein eigenes InputWindow,
     //  darum muesste eigentlich entweder jeder Task seinen InputHandler bekommen,
     //  oder das InputWindow muesste sich beim App-InputHandler anmelden, wenn der
     //  Task aktiv wird, oder das InputWindow muesste sich den InputHandler selbst
@@ -1832,9 +1832,9 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
 
     //  if switching back from print preview,
     //  restore the view settings that were active when creating the preview
-    //  #89897# ReadUserData must not happen from ctor, because the view's edit window
+    //  ReadUserData must not happen from ctor, because the view's edit window
     //  has to be shown by the sfx. ReadUserData is deferred until the first Activate call.
-    //  #106334# old DesignMode state from form layer must be restored, too
+    //  old DesignMode state from form layer must be restored, too
 
     BYTE nForceDesignMode = SC_FORCEMODE_NONE;
     if ( pOldSh && pOldSh->ISA( ScPreviewShell ) )
@@ -1885,7 +1885,7 @@ ScTabViewShell::~ScTabViewShell()
     RemoveSubShell();           // alle
     SetWindow(0);
 
-    //  #54104# alles auf NULL, falls aus dem TabView-dtor noch darauf zugegriffen wird
+    //  alles auf NULL, falls aus dem TabView-dtor noch darauf zugegriffen wird
     //! (soll eigentlich nicht !??!?!)
 
     DELETEZ(pFontworkBarShell);

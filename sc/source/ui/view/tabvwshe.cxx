@@ -75,7 +75,7 @@ String ScTabViewShell::GetSelectionText( BOOL bWholeWord )
             if ( bInFormatDialog && aRange.aStart.Row() != aRange.aEnd.Row() )
             {
                 // Range auf eine Datenzeile begrenzen
-                // (#48613# nur wenn der Aufruf aus einem Format-Dialog kommt)
+                // (nur wenn der Aufruf aus einem Format-Dialog kommt)
                 ScHorizontalCellIterator aIter( pDoc, aRange.aStart.Tab(),
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(), aRange.aEnd.Row() );
@@ -157,7 +157,7 @@ void ScTabViewShell::InsertURL( const String& rName, const String& rURL, const S
         }
         else
         {
-            //  #91216# if the view is not active, InsertURLField doesn't work
+            //  if the view is not active, InsertURLField doesn't work
             //  -> use InsertBookmark to directly manipulate cell content
             //  bTryReplace=TRUE -> if cell contains only one URL, replace it
 

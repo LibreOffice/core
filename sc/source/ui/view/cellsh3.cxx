@@ -85,7 +85,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             //  beim Oeffnen eines Referenz-Dialogs darf die SubShell nicht umgeschaltet werden
             //  (beim Schliessen des Dialogs wird StopEditShell gerufen)
             case SID_OPENDLG_FUNCTION:
-                    //  #53318# inplace macht die EditShell Aerger...
+                    //  inplace macht die EditShell Aerger...
                     //! kann nicht immer umgeschaltet werden ????
                     if (!pTabViewShell->GetViewFrame()->GetFrame().IsInPlace())
                         pTabViewShell->SetDontSwitch(TRUE);         // EditShell nicht abschalten
@@ -197,7 +197,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pTabViewShell );
                     if ( !pHdl || !pHdl->IsInEnterHandler() )
                     {
-                        //  #101061# UpdateInputHandler is needed after the cell content
+                        //  UpdateInputHandler is needed after the cell content
                         //  has changed, but if called from EnterHandler, UpdateInputHandler
                         //  will be called later when moving the cursor.
 

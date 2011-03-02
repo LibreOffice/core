@@ -801,7 +801,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
         UpdateScrollBars();     // Scrollbars nicht beim Scrollen neu setzen
         UpdateHeaderWidth();
 
-        InterpretVisible();     // #69343# have everything calculated before painting
+        InterpretVisible();     // have everything calculated before painting
     }
 
     if (bHasHint)
@@ -1760,7 +1760,7 @@ void ScTabView::DoHSplit(long nSplitPos)
                     SC_SPLIT_BOTTOMRIGHT : SC_SPLIT_TOPRIGHT );
         }
 
-        //  #61410# Form-Layer muss den sichtbaren Ausschnitt aller Fenster kennen
+        //  Form-Layer muss den sichtbaren Ausschnitt aller Fenster kennen
         //  dafuer muss hier schon der MapMode stimmen
         for (USHORT i=0; i<4; i++)
             if (pGridWin[i])
@@ -1832,7 +1832,7 @@ void ScTabView::DoVSplit(long nSplitPos)
                     SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT );
         }
 
-        //  #61410# Form-Layer muss den sichtbaren Ausschnitt aller Fenster kennen
+        //  Form-Layer muss den sichtbaren Ausschnitt aller Fenster kennen
         //  dafuer muss hier schon der MapMode stimmen
         for (USHORT i=0; i<4; i++)
             if (pGridWin[i])
@@ -2116,7 +2116,7 @@ void ScTabView::SnapSplitPos( Point& rScreenPosPixel )
     if (!bOverWin)
         return;
 
-    //  #74761# don't snap to cells if the scale will be modified afterwards
+    //  don't snap to cells if the scale will be modified afterwards
     if ( GetZoomType() != SVX_ZOOM_PERCENT )
         return;
 
@@ -2134,7 +2134,7 @@ void ScTabView::SnapSplitPos( Point& rScreenPosPixel )
     Point aMouse = pWin->NormalizedScreenToOutputPixel( rScreenPosPixel );
     SCsCOL nPosX;
     SCsROW nPosY;
-    //  #52949# bNextIfLarge=FALSE: nicht auf naechste Zelle, wenn ausserhalb des Fensters
+    //  bNextIfLarge=FALSE: nicht auf naechste Zelle, wenn ausserhalb des Fensters
     aViewData.GetPosFromPixel( aMouse.X(), aMouse.Y(), ePos, nPosX, nPosY, TRUE, FALSE, FALSE );
     BOOL bLeft;
     BOOL bTop;
@@ -2243,7 +2243,7 @@ void ScTabView::FreezeSplitters( BOOL bFreeze )
             aViewData.SetVSplitMode( SC_SPLIT_NORMAL );
     }
 
-    //  #61410# Form-Layer muss den sichtbaren Ausschnitt aller Fenster kennen
+    //  Form-Layer muss den sichtbaren Ausschnitt aller Fenster kennen
     //  dafuer muss hier schon der MapMode stimmen
     for (USHORT i=0; i<4; i++)
         if (pGridWin[i])
@@ -2326,7 +2326,7 @@ void ScTabView::InvalidateSplit()
 
 void ScTabView::SetNewVisArea()
 {
-    //  #63854# fuer die Controls muss bei VisAreaChanged der Draw-MapMode eingestellt sein
+    //  fuer die Controls muss bei VisAreaChanged der Draw-MapMode eingestellt sein
     //  (auch wenn ansonsten der Edit-MapMode gesetzt ist)
     MapMode aOldMode[4];
     MapMode aDrawMode[4];

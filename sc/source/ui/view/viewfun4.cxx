@@ -531,7 +531,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
     //  ab hier kein return mehr
 
     BOOL bOldDis = pDoc->IsIdleDisabled();
-    pDoc->DisableIdle( TRUE );   // #42726# stop online spelling
+    pDoc->DisableIdle( TRUE );   // stop online spelling
 
     // *** create and init the edit engine *** --------------------------------
 
@@ -700,7 +700,7 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
         if( xObj.is() )
             return PasteObject( rPos, xObj );
 
-        // #105851# If an OLE object can't be created, insert a URL button
+        // If an OLE object can't be created, insert a URL button
 
         GetViewData()->GetViewShell()->InsertURLButton( aStrURL, aStrURL, EMPTY_STRING, &rPos );
         return TRUE;

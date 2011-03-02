@@ -548,7 +548,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
             USHORT nError = pArr->GetCodeError();
             if ( !nError )
             {
-                //  #68693# update list of recent functions with all functions that
+                //  update list of recent functions with all functions that
                 //  are not within parentheses
 
                 ScModule* pScMod = SC_MOD();
@@ -1055,7 +1055,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     aNewAttrs.DeleteUnchanged( &aOldAttrs );
 
     if ( pDialogSet->GetItemState( ATTR_VALUE_FORMAT ) == SFX_ITEM_SET )
-    {   // #82521# don't reset to default SYSTEM GENERAL if not intended
+    {   // don't reset to default SYSTEM GENERAL if not intended
         sal_uInt32 nOldFormat =
             ((const SfxUInt32Item&)pOldSet->Get( ATTR_VALUE_FORMAT )).GetValue();
         sal_uInt32 nNewFormat =
@@ -1075,7 +1075,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
                 aNewAttrs.GetItemSet().Put(
                     SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
 
-                //  #40606# nur die Sprache geaendert -> Zahlformat-Attribut nicht anfassen
+                //  nur die Sprache geaendert -> Zahlformat-Attribut nicht anfassen
                 sal_uInt32 nNewMod = nNewFormat % SV_COUNTRY_LANGUAGE_OFFSET;
                 if ( nNewMod == ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) &&
                      nNewMod <= SV_MAX_ANZ_STANDARD_FORMATE )
@@ -1709,7 +1709,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, BOOL bRecord )
             }
         }
 
-        //  #58106# Cursor direkt hinter den geloeschten Bereich setzen
+        //  Cursor direkt hinter den geloeschten Bereich setzen
         SCCOL nCurX = GetViewData()->GetCurX();
         SCROW nCurY = GetViewData()->GetCurY();
         if ( eCmd==DEL_CELLSLEFT || eCmd==DEL_DELCOLS )
@@ -1895,7 +1895,7 @@ void ScViewFunc::DeleteMulti( BOOL bRows, BOOL bRecord )
 
     CellContentChanged();
 
-    //  #58106# Cursor direkt hinter den ersten geloeschten Bereich setzen
+    //  Cursor direkt hinter den ersten geloeschten Bereich setzen
     SCCOL nCurX = GetViewData()->GetCurX();
     SCROW nCurY = GetViewData()->GetCurY();
     if ( bRows )
@@ -2033,7 +2033,7 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
         if (nFlags & IDF_EDITATTR)          // Edit-Engine-Attribute
             nUndoDocFlags |= IDF_STRING;    // -> Zellen werden geaendert
         if (nFlags & IDF_NOTE)
-            nUndoDocFlags |= IDF_CONTENTS;  // #68795# copy all cells with their notes
+            nUndoDocFlags |= IDF_CONTENTS;  // copy all cells with their notes
         // do not copy note captions to undo document
         nUndoDocFlags |= IDF_NOCAPTIONS;
         pDoc->CopyToDocument( aCopyRange, nUndoDocFlags, bMulti, pUndoDoc, &aFuncMark );
@@ -2686,7 +2686,7 @@ void ScViewFunc::SetNumberFormat( short nFormatType, ULONG nAdd )
     LanguageType        eLanguage = ScGlobal::eLnge;
     ScPatternAttr       aNewAttrs( pDoc->GetPool() );
 
-    //  #67936# always take language from cursor position, even if there is a selection
+    //  always take language from cursor position, even if there is a selection
 
     sal_uInt32 nCurrentNumberFormat;
     pDoc->GetNumberFormat( pViewData->GetCurX(),

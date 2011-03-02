@@ -412,7 +412,7 @@ ScPrintFunc::~ScPrintFunc()
 
     //  Druckereinstellungen werden jetzt von aussen wiederhergestellt
 
-    //  #64294# Fuer DrawingLayer/Charts muss der MapMode am Drucker (RefDevice) immer stimmen
+    //  Fuer DrawingLayer/Charts muss der MapMode am Drucker (RefDevice) immer stimmen
     SfxPrinter* pDocPrinter = pDoc->GetPrinter();   // auch fuer Preview den Drucker nehmen
     if (pDocPrinter)
         pDocPrinter->SetMapMode(aOldPrinterMode);
@@ -1039,7 +1039,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     }
     else
     {
-        //  #74834# don't print hidden tables if there's no print range defined there
+        //  don't print hidden tables if there's no print range defined there
         if ( pDoc->IsVisible( nPrintTab ) )
         {
             aAreaParam.bPrintArea = FALSE;
@@ -1213,7 +1213,7 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
                       break;
         case GPOS_TILED:
                     {
-                        //  #104004# use GraphicObject::DrawTiled instead of an own loop
+                        //  use GraphicObject::DrawTiled instead of an own loop
                         //  (pixel rounding is handled correctly, and a very small bitmap
                         //  is duplicated into a bigger one for better performance)
 
@@ -1222,7 +1222,7 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
                         if( pOut->GetPDFWriter() &&
                             (aObject.GetType() == GRAPHIC_BITMAP || aObject.GetType() == GRAPHIC_DEFAULT) )
                         {
-                            // #104004# For PDF export, every draw
+                            // For PDF export, every draw
                             // operation for bitmaps takes a noticeable
                             // amount of place (~50 characters). Thus,
                             // optimize between tile bitmap size and
@@ -1320,7 +1320,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     if (nEffHeight<=0 || nEffWidth<=0)
         return;                                         // leer
 
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor;
 
     if ( pBackground && !bCellContrast )
@@ -1750,7 +1750,7 @@ void ScPrintFunc::MakeEditEngine()
         pEditDefaults->Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
         pEditDefaults->Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
         pEditDefaults->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
-        //  #69193# dont use font color, because background color is not used
+        //  dont use font color, because background color is not used
         //! there's no way to set the background for note pages
         pEditDefaults->ClearItem( EE_CHAR_COLOR );
         if (ScGlobal::IsSystemRTL())

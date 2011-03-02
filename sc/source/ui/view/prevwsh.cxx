@@ -163,7 +163,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
         pData->WriteUserDataSequence( aSourceData );
         InitStartTable( pData->GetTabNo() );
 
-        //  #106334# also have to store the TabView's DesignMode state
+        //  also have to store the TabView's DesignMode state
         //  (only if draw view exists)
         SdrView* pDrawView = pTabViewShell->GetSdrView();
         if ( pDrawView )
@@ -189,7 +189,7 @@ ScPreviewShell::~ScPreviewShell()
     delete pVerScroll;
     delete pCorner;
 
-    //  #97612# normal mode of operation is switching back to default view in the same frame,
+    //  normal mode of operation is switching back to default view in the same frame,
     //  so there's no need to activate any other window here anymore
 }
 

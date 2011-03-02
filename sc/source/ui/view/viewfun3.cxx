@@ -611,7 +611,7 @@ void ScViewFunc::PasteFromSystem()
 
     if (pOwnClip)
     {
-        // #129384# keep a reference in case the clipboard is changed during PasteFromClip
+        // keep a reference in case the clipboard is changed during PasteFromClip
         uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
                         PASTE_NOFUNC, FALSE, FALSE, FALSE, INS_NONE, IDF_NONE,
@@ -694,7 +694,7 @@ void ScViewFunc::PasteFromSystem()
                 PasteFromSystem(FORMAT_GDIMETAFILE);
             else if (aDataHelper.HasFormat(FORMAT_BITMAP))
                 PasteFromSystem(FORMAT_BITMAP);
-            // #89579# xxx_OLE formats come last, like in SotExchange tables
+            // xxx_OLE formats come last, like in SotExchange tables
             else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ))
                 PasteFromSystem( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE );
             else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ))
@@ -794,7 +794,7 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
                 nFormatId = FORMAT_GDIMETAFILE;
             else if (aDataHelper.HasFormat(FORMAT_BITMAP))
                 nFormatId = FORMAT_BITMAP;
-            // #89579# xxx_OLE formats come last, like in SotExchange tables
+            // xxx_OLE formats come last, like in SotExchange tables
             else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ))
                 nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
             else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ))
@@ -818,7 +818,7 @@ BOOL ScViewFunc::PasteFromSystem( ULONG nFormatId, BOOL bApi )
     ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
     if ( nFormatId == 0 && pOwnClip )
     {
-        // #129384# keep a reference in case the clipboard is changed during PasteFromClip
+        // keep a reference in case the clipboard is changed during PasteFromClip
         uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
                         PASTE_NOFUNC, FALSE, FALSE, FALSE, INS_NONE, IDF_NONE,
@@ -1119,7 +1119,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         SCCOL nBlockAddX = nEndCol-nStartCol;
         SCROW nBlockAddY = nEndRow-nStartRow;
 
-        //  #58422# Nachfrage, wenn die Selektion groesser als 1 Zeile/Spalte, aber kleiner
+        //  Nachfrage, wenn die Selektion groesser als 1 Zeile/Spalte, aber kleiner
         //  als das Clipboard ist (dann wird ueber die Selektion hinaus eingefuegt)
 
         //  ClipSize is not size, but difference
@@ -1190,12 +1190,12 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     BOOL bInsertCells = ( eMoveMode != INS_NONE && !bOffLimits );
     if ( bInsertCells )
     {
-        //  #94115# Instead of EnterListAction, the paste undo action is merged into the
+        //  Instead of EnterListAction, the paste undo action is merged into the
         //  insert action, so Repeat can insert the right cells
 
         MarkRange( aUserRange );            // wird vor CopyFromClip sowieso gesetzt
 
-        // #72930# CutMode is reset on insertion of cols/rows but needed again on cell move
+        // CutMode is reset on insertion of cols/rows but needed again on cell move
         BOOL bCut = pClipDoc->IsCutMode();
         if (!InsertCells( eMoveMode, bRecord, TRUE ))   // is inserting possible?
         {

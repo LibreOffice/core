@@ -269,7 +269,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 if ( nSlot == SID_JUMPTOMARK )
                 {
-                    //  #106586# URL has to be decoded for escaped characters (%20)
+                    //  URL has to be decoded for escaped characters (%20)
                     aAddress = INetURLObject::decode( aAddress, INET_HEX_ESCAPE,
                                                INetURLObject::DECODE_WITH_CHARSET,
                                             RTL_TEXTENCODING_UTF8 );

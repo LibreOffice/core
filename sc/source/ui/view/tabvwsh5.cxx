@@ -107,20 +107,20 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     //  beim "Save as" kann ein vorher schreibgeschuetztes Dokument
                     //  bearbeitbar werden, deshalb die Layer-Locks neu (#39884#)
                     //  (Invalidate etc. passiert schon vom Sfx her)
-                    //  #42091# bei SID_EDITDOC kommt kein SFX_HINT_TITLECHANGED, darum
+                    //  bei SID_EDITDOC kommt kein SFX_HINT_TITLECHANGED, darum
                     //  der eigene Hint aus DoSaveCompleted
                     //! was ist mit SFX_HINT_SAVECOMPLETED ?
 
                     UpdateLayerLocks();
 
-                    //  #54891# Design-Modus bei jedem Speichern anzupassen, waere zuviel
+                    //  Design-Modus bei jedem Speichern anzupassen, waere zuviel
                     //  (beim Speichern unter gleichem Namen soll er unveraendert bleiben)
                     //  Darum nur bei SFX_HINT_MODECHANGED (vom ViewFrame)
                 }
                 break;
 
             case SFX_HINT_MODECHANGED:
-                //  #54891#/#58510# Da man sich nicht mehr darauf verlassen kann, woher
+                //  Da man sich nicht mehr darauf verlassen kann, woher
                 //  dieser Hint kommt, den Design-Modus immer dann umschalten, wenn der
                 //  ReadOnly-Status sich wirklich geaendert hat:
 

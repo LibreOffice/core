@@ -242,7 +242,7 @@ void ScDrawView::SetMarkedToLayer( BYTE nLayerNo )
 
         pViewData->GetDocShell()->SetDrawModified();
 
-        //  #84073# check mark list now instead of later in a timer
+        //  check mark list now instead of later in a timer
         CheckMarked();
         MarkListHasChanged();
     }
@@ -357,7 +357,7 @@ void ScDrawView::MarkListHasChanged()
     {
         pViewSh->Unmark();      // remove cell selection
 
-        //  #65379# end cell edit mode if drawing objects are selected
+        //  end cell edit mode if drawing objects are selected
         SC_MOD()->InputEnterHandler();
     }
 
@@ -369,7 +369,7 @@ void ScDrawView::MarkListHasChanged()
     ScClient* pClient = (ScClient*) pViewSh->GetIPClient();
     if ( pClient && pClient->IsObjectInPlaceActive() && !bUnoRefDialog )
     {
-        //  #41730# beim ViewShell::Activate aus dem Reset2Open nicht die Handles anzeigen
+        //  beim ViewShell::Activate aus dem Reset2Open nicht die Handles anzeigen
         pClient->DeactivateObject();
         //  Image-Ole wieder durch Grafik ersetzen passiert jetzt in ScClient::UIActivate
     }
@@ -433,7 +433,7 @@ void ScDrawView::MarkListHasChanged()
                 ULONG nListCount = pLst->GetObjCount();
                 if ( nListCount == 0 )
                 {
-                    //  #104156# An empty group (may occur during Undo) is no control or graphics object.
+                    //  An empty group (may occur during Undo) is no control or graphics object.
                     //  Creating the form shell during undo would lead to problems with the undo manager.
                     bOnlyControls = FALSE;
                     bOnlyGraf = FALSE;
@@ -542,7 +542,7 @@ void ScDrawView::ModelHasChanged()
     SdrObject* pEditObj = GetTextEditObject();
     if ( pEditObj && !pEditObj->IsInserted() && pViewData )
     {
-        //  #111700# SdrObjEditView::ModelHasChanged will end text edit in this case,
+        //  SdrObjEditView::ModelHasChanged will end text edit in this case,
         //  so make sure the EditEngine's undo manager is no longer used.
         pViewData->GetViewShell()->SetDrawTextUndo(NULL);
         SetCreateMode();    // don't leave FuText in a funny state
@@ -625,7 +625,7 @@ BOOL ScDrawView::SelectObject( const String& rName )
 
         pView->ScrollToObject( pFound );
 
-        /*  #61585# To select an object on the background layer, the layer has to
+        /*  To select an object on the background layer, the layer has to
             be unlocked even if exclusive drawing selection mode is not active
             (this is reversed in MarkListHasChanged when nothing is selected) */
         if ( pFound->GetLayer() == SC_LAYER_BACK &&

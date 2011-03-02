@@ -160,9 +160,9 @@ void ScTabControl::MouseButtonDown( const MouseEvent& rMEvt )
         pViewData->GetView()->ActiveGrabFocus();
     }
 
-    /*  #47745# Click into free area -> insert new sheet (like in Draw).
+    /*  Click into free area -> insert new sheet (like in Draw).
         Needing clean left click without modifiers (may be context menu).
-        #106948# Remember clicks to all pages, to be able to move mouse pointer later. */
+        Remember clicks to all pages, to be able to move mouse pointer later. */
     if( rMEvt.IsLeft() && (rMEvt.GetModifier() == 0) )
         nMouseClickPageId = GetPageId( rMEvt.GetPosPixel(), true );
     else
@@ -607,7 +607,7 @@ long ScTabControl::AllowRenaming()
         }
         else if ( Application::IsInModalMode() )
         {
-            //  #73472# don't show error message above any modal dialog
+            //  don't show error message above any modal dialog
             //  instead cancel renaming without error message
             nRet = TABBAR_RENAMING_CANCEL;
         }

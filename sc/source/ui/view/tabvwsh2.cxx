@@ -63,7 +63,7 @@
 #include "scmod.hxx"
 #include "appoptio.hxx"
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 #include <svx/svdpagv.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svdpage.hxx>
@@ -179,7 +179,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if (nNewId == SID_INSERT_FRAME)                     // vom Tbx-Button
         nNewId = SID_DRAW_TEXT;
 
-    //  #97016# CTRL-SID_OBJECT_SELECT is used to select the first object,
+    //  CTRL-SID_OBJECT_SELECT is used to select the first object,
     //  but not if SID_OBJECT_SELECT is the result of clicking a create function again,
     //  so this must be tested before changing nNewId below.
     BOOL bSelectFirst = ( nNewId == SID_OBJECT_SELECT && (rReq.GetModifier() & KEY_MOD1) );
@@ -187,8 +187,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     BOOL bEx = IsDrawSelMode();
     if ( rReq.GetModifier() & KEY_MOD1 )
     {
-        //  #97016# always allow keyboard selection also on background layer
-        //  #98185# also allow creation of default objects if the same object type
+        //  always allow keyboard selection also on background layer
+        //  also allow creation of default objects if the same object type
         //  was already active
         bEx = TRUE;
     }
@@ -200,7 +200,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
         //  SID_FM_CREATE_CONTROL mit nNewFormId==0 (ohne Parameter) kommt beim Deaktivieren
         //  aus FuConstruct::SimpleMouseButtonUp
-        //  #59280# Execute fuer die Form-Shell, um im Controller zu deselektieren
+        //  Execute fuer die Form-Shell, um im Controller zu deselektieren
         if ( nNewId == SID_FM_CREATE_CONTROL )
         {
             GetViewData()->GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
@@ -228,7 +228,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     if ( bSelectFirst )
     {
-        //  #97016# select first draw object if none is selected yet
+        //  select first draw object if none is selected yet
         if(!pView->AreObjectsMarked())
         {
             // select first object
@@ -274,7 +274,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     switch (nNewId)
     {
         case SID_OBJECT_SELECT:
-            //@#70206# Nicht immer zurueckschalten
+            // Nicht immer zurueckschalten
             if(pView->GetMarkedObjectList().GetMarkCount() == 0) SetDrawShell(bEx);
             pTabView->SetDrawFuncPtr(new FuSelection(this, pWin, pView, pDoc, aNewReq));
             break;
@@ -359,13 +359,13 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     rBindings.Invalidate( SID_INSERT_DRAW );
     rBindings.Update( SID_INSERT_DRAW );
 
-    // #98185# Create default drawing objects via keyboard
+    // Create default drawing objects via keyboard
     // with qualifier construct directly
     FuPoor* pFuActual = GetDrawFuncPtr();
 
     if(pFuActual && (rReq.GetModifier() & KEY_MOD1))
     {
-        // #98185# Create default drawing objects via keyboard
+        // Create default drawing objects via keyboard
         const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
         sal_uInt32 nDefaultObjectSizeWidth = rAppOpt.GetDefaultObjectSizeWidth();
         sal_uInt32 nDefaultObjectSizeHeight = rAppOpt.GetDefaultObjectSizeHeight();
@@ -395,7 +395,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
                     if ( nNewId == SID_DRAW_CAPTION || nNewId == SID_DRAW_CAPTION_VERTICAL )
                     {
-                        //  #105815# use KeyInput to start edit mode (FuText is created).
+                        //  use KeyInput to start edit mode (FuText is created).
                         //  For FuText objects, edit mode is handled within CreateDefaultObject.
                         //  KEY_F2 is handled in FuDraw::KeyInput.
 

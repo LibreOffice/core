@@ -790,7 +790,7 @@ void ScOutputData::DrawBackground()
     BOOL bShowProt = bSyntaxMode && pDoc->IsTabProtected(nTab);
     BOOL bDoAll = bShowProt || bPagebreakMode || bSolidBackground;
 
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -908,7 +908,7 @@ void ScOutputData::DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBot
     pDev->SetLineColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
     Color aAutoTextColor;
     if ( bCellContrast )
@@ -1119,10 +1119,10 @@ void ScOutputData::DrawFrame()
     Color aSingleColor;
     BOOL bUseSingleColor = FALSE;
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
 
-    //  #107519# if a Calc OLE object is embedded in Draw/Impress, the VCL DrawMode is used
+    //  if a Calc OLE object is embedded in Draw/Impress, the VCL DrawMode is used
     //  for display mode / B&W printing. The VCL DrawMode handling doesn't work for lines
     //  that are drawn with DrawRect, so if the line/background bits are set, the DrawMode
     //  must be reset and the border colors handled here.
@@ -1383,7 +1383,7 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
     const SfxItemSet*    pCondSet;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
 
     //  color (pForceColor) is determined externally, including DrawMode changes
@@ -1527,7 +1527,7 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                         const Color& rColor = pBackground->GetColor();
                         if ( rColor.GetTransparency() != 255 )
                         {
-                            //  #95879# draw background only for the changed row itself
+                            //  draw background only for the changed row itself
                             //  (background doesn't extend into other cells).
                             //  For the borders (rotated and normal), clipping should be
                             //  set if the row isn't changed, but at least the borders

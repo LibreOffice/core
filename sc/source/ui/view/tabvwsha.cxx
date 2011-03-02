@@ -464,7 +464,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_PRINTPREVIEW:
-                // #58924# Toggle-Slot braucht einen State
+                // Toggle-Slot braucht einen State
                 rSet.Put( SfxBoolItem( nWhich, FALSE ) );
                 break;
 
