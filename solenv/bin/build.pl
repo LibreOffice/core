@@ -786,6 +786,8 @@ sub dmake_dir {
         #and try again. dmakes normal failure is 255, while death on signal is 254
         my $real_exit_code = $error_code >> 8;
         if (($real_exit_code == 255) && ($ENV{nodep} eq '') && ($ENV{depend} eq '')) {
+            print "Forcing regeneration of dependency info\n";
+            run_job($dmake, 'depend=t', $job_name);
             print "Retrying $job_name\n";
             $error_code = run_job($dmake, $job_name);
         }
