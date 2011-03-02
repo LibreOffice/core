@@ -67,10 +67,10 @@ public:
     void test_file_004();
 
     CPPUNIT_TEST_SUITE( oldtestfile );
-    CPPUNIT_TEST( test_file_001 );
+//    CPPUNIT_TEST( test_file_001 );
     CPPUNIT_TEST( test_file_002 );
     // so buggy!! CPPUNIT_TEST( test_file_003 );
-    CPPUNIT_TEST( test_file_004 );
+//    CPPUNIT_TEST( test_file_004 );
     CPPUNIT_TEST_SUITE_END( );
 };
 
