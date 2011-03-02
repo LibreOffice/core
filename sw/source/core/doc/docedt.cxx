@@ -2521,8 +2521,6 @@ SetRedlineMode( eOld );
             rPam.GetMark()->nNode = aPtNd;
             rPam.GetMark()->nContent.Assign( aPtNd.GetNode().GetCntntNode(),
                                                 nPtCnt );
-            if( bJoinTxt )
-                rPam.Move( fnMoveBackward );
 
             if( pUndoRpl )
             {
