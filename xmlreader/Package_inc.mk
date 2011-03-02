@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# 
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -23,31 +23,12 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#***********************************************************************/
+#*************************************************************************
 
-PRJ = ..
-PRJNAME = xmlreader
-TARGET = xmlreader
+$(eval $(call gb_Package_Package,xmlreader_inc,$(SRCDIR)/xmlreader/inc))
+$(eval $(call gb_Package_add_file,xmlreader_inc,inc/xmlreader/pad.hxx,xmlreader/pad.hxx))
+$(eval $(call gb_Package_add_file,xmlreader_inc,inc/xmlreader/span.hxx,xmlreader/span.hxx))
+$(eval $(call gb_Package_add_file,xmlreader_inc,inc/xmlreader/xmlreader.hxx,xmlreader/xmlreader.hxx))
+$(eval $(call gb_Package_add_file,xmlreader_inc,inc/xmlreader/detail/xmlreaderdllapi.hxx,xmlreader/detail/xmlreaderdllapi.hxx))
 
-ENABLE_EXCEPTIONS = TRUE
-VISIBILITY_HIDDEN = TRUE
-
-.INCLUDE: settings.mk
-
-CDEFS += -DOOO_DLLIMPLEMENTATION_XMLREADER
-
-SLOFILES = \
-    $(SLO)/pad.obj \
-    $(SLO)/span.obj \
-    $(SLO)/xmlreader.obj
-
-SHL1IMPLIB = i$(SHL1TARGET)
-SHL1OBJS = $(SLOFILES)
-SHL1RPATH = URELIB
-SHL1STDLIBS = \
-    $(SALLIB)
-SHL1TARGET = xmlreader
-SHL1USE_EXPORTS = name
-DEF1NAME = $(SHL1TARGET)
-
-.INCLUDE: target.mk
+# vim: set noet sw=4 ts=4:
