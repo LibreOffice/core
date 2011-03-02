@@ -143,6 +143,7 @@ public:
     void        SetPatternSimple( const ScPatternAttr* pNew, const SfxItemSet* pSet );
 
     BOOL        SetText( ScBaseCell* pCell );   // TRUE -> pOldPattern vergessen
+    void        SetHashText();
     void        SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth );
     void        SetAutoText( const String& rAutoText );
 
@@ -176,7 +177,6 @@ public:
     BOOL    HasEditCharacters() const;
 
 private:
-    void        SetHashText();
     long        GetMaxDigitWidth();     // in logic units
     long        GetSignWidth();
     long        GetDotWidth();
@@ -1677,8 +1677,12 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                 {
                     if ( bCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
                     {
-                        // Adjust the decimals to fit the available column width.
-                        aVars.SetTextToWidthOrHash(pCell, aAreaParam.mnColWidth - nTotalMargin);
+                        if (bShowFormulas)
+                            aVars.SetHashText();
+                        else
+                            // Adjust the decimals to fit the available column width.
+                            aVars.SetTextToWidthOrHash(pCell, aAreaParam.mnColWidth - nTotalMargin);
+
                         nNeededWidth = aVars.GetTextSize().Width() +
                                     (long) ( aVars.GetLeftTotal() * nPPTX ) +
                                     (long) ( aVars.GetMargin()->GetRightMargin() * nPPTX );
