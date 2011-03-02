@@ -212,4 +212,9 @@ gb_Library_TARGETS := $(filter-out cairo,$(gb_Library_TARGETS))
 gb_Library_TARGETS := $(filter-out pixman-1,$(gb_Library_TARGETS))
 endif
 
+ifeq ($(SYSTEM_EXPAT),YES)
+gb_Library_TARGETS := $(filter-out expat,$(gb_Library_TARGETS))
+endif
+
+
 # vim: set noet sw=4 ts=4:

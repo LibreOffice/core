@@ -137,6 +137,8 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	canvasfactory \
 	directx5canvas \
 	directx9canvas \
+	expwrap \
+	fastsax \
     fsstorage \
 	gdipluscanvas \
     hatchwindowfactory \

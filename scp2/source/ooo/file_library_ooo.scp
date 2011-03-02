@@ -1186,14 +1186,14 @@ File gid_File_Lib_Res
     Dir = SCP2_OOO_BIN_DIR;
 End
 
-File gid_File_Lib_Sax_Uno
+File gid_File_Lib_Expwrap_Uno
     TXT_FILE_BODY;
     Styles = (PACKED,DONT_OVERWRITE);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
-    Name = STRING(CONCAT2(sax.uno,UNXSUFFIX));
+    Name = STRING(CONCAT2(expwrap.uno,UNXSUFFIX));
   #else
-    Name = "sax.uno.dll";
+    Name = "expwrap.uno.dll";
   #endif
 End
 
