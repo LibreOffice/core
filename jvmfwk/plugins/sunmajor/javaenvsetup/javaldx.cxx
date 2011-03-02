@@ -39,8 +39,9 @@
 #include "rtl/byteseq.hxx"
 #include "jvmfwk/framework.h"
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 #define OUSTR(x) OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
 static sal_Bool hasOption(char const * szOption, int argc, char** argv);

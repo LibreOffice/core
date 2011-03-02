@@ -36,7 +36,8 @@
 
 namespace sr=System::Reflection;
 namespace css=com::sun::star;
-using namespace rtl;
+
+using ::rtl::OUStringBuffer;
 
 namespace cli_uno
 {

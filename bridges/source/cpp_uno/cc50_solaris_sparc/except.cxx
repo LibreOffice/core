@@ -50,7 +50,12 @@
 #include <hash.cxx>
 
 // need a += operator for OString and sal_Char
-namespace rtl
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
+
 {
     inline OString& operator+=( OString& rString, sal_Char cAdd )
     {
@@ -63,7 +68,6 @@ namespace rtl
 
 using namespace std;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star::uno;
 
 namespace CPPU_CURRENT_NAMESPACE

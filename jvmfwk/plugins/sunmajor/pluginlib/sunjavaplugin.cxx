@@ -66,9 +66,12 @@
 #define SUN_MICRO "Sun Microsystems Inc."
 
 using namespace osl;
-using namespace rtl;
 using namespace std;
 using namespace jfw_plugin;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
 
 namespace {
 

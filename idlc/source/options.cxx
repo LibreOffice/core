@@ -33,8 +33,7 @@
 #include /*MSVC trouble: <cstring>*/ <string.h>
 #include <idlc/options.hxx>
 
-using namespace rtl;
-
+using ::rtl::OString;
 Options::Options(): m_stdin(false), m_verbose(false), m_quiet(false)
 {
 }

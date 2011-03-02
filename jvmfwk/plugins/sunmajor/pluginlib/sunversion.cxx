@@ -36,12 +36,14 @@
 #include <string.h>
 #include <ctype.h>
 #include "diagnostics.h"
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 namespace jfw_plugin  { //stoc_javadetect
 
 
-//extern OUString ::Impl::usPathDelim();
 #define OUSTR( x )  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
 #if OSL_DEBUG_LEVEL >= 2

@@ -38,8 +38,8 @@
 #include "javaoptions.hxx"
 #include "javatype.hxx"
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OString;
 sal_Bool produceAllTypes(RegistryKey& rTypeKey, sal_Bool bIsExtraType,
                          TypeManager const & typeMgr,
                          codemaker::GeneratedTypeSet & generated,

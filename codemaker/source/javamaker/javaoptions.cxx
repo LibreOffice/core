@@ -34,8 +34,9 @@
 #include "osl/process.h"
 #include "osl/thread.h"
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     throw( IllegalArgument )
 {

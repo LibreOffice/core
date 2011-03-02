@@ -42,8 +42,9 @@
 
 #include "cc50_solaris_intel.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 namespace
 {

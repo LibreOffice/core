@@ -56,8 +56,10 @@ namespace sr = System::Reflection;
 namespace st = System::Text;
 namespace ucss = unoidl::com::sun::star;
 
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 
 namespace cli_uno

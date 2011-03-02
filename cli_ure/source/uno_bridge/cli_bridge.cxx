@@ -54,7 +54,9 @@ namespace  cssu= com::sun::star::uno;
 
 
 namespace sri= System::Runtime::InteropServices;
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 namespace cli_uno
 {

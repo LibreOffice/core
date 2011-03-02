@@ -36,10 +36,12 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 namespace cppu
 {

@@ -59,9 +59,14 @@
 #include "sunjre.hxx"
 #include "vendorlist.hxx"
 #include "diagnostics.h"
-using namespace rtl;
 using namespace osl;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::Reference;
+using ::rtl::OString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringToOString;
 
 #define CHAR_POINTER(oustr) ::rtl::OUStringToOString(oustr,RTL_TEXTENCODING_UTF8).pData->buffer
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )

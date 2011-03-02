@@ -53,9 +53,12 @@
 #include <typelib/typedescription.h>
 #include <uno/any2.h>
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
 
 #ifdef SAL_W32
 #pragma pack(push, 8)

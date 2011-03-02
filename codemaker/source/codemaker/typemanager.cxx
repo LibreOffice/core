@@ -34,7 +34,10 @@
 #include "registry/reader.hxx"
 #include "registry/version.h"
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringToOString;
 
 TypeManager::TypeManager()
 {

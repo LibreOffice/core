@@ -34,8 +34,10 @@
 #include "sunversion.hxx"
 #include "diagnostics.h"
 
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::Reference;
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 namespace jfw_plugin

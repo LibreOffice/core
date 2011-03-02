@@ -36,8 +36,9 @@
 #include "sunjre.hxx"
 
 using namespace std;
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
 
 namespace jfw_plugin
 {

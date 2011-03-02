@@ -51,8 +51,11 @@
 #include "dumputils.hxx"
 #include "includes.hxx"
 
-using namespace rtl;
 using namespace codemaker::cpp;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 
 namespace {
 

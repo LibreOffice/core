@@ -39,7 +39,8 @@
 #include "cppuoptions.hxx"
 #include "cpputype.hxx"
 
-using namespace rtl;
+using ::rtl::OString;
+using ::rtl::OUString;
 
 namespace {
 
