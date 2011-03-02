@@ -85,6 +85,7 @@ my_components = \
     component/unoxml/source/service/unoxml \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
+    component/xmlscript/util/xcr \
     configmgr \
     ctl \
     date \
@@ -175,7 +176,6 @@ my_components = \
     vbaobj \
     wpft \
     writerfilter \
-    xcr \
     xmlfa \
     xmlfd \
     xmx \
