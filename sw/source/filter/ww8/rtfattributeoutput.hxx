@@ -32,6 +32,7 @@
 #include <set>
 #include "attributeoutputbase.hxx"
 #include "fields.hxx"
+#include "rtfexport.hxx"
 
 #include <vcl/vclenum.hxx>
 
@@ -40,7 +41,6 @@
 
 #include <vector>
 
-class RtfExport;
 
 class SwGrfNode;
 class SwOLENode;
@@ -542,8 +542,8 @@ public:
     virtual ~RtfAttributeOutput();
 
     /// Return the right export class.
-    virtual MSWordExportBase& GetExport();
-    using AttributeOutputBase::GetExport;
+    virtual RtfExport& GetExport();
+    const RtfExport& GetExport() const { return const_cast< RtfAttributeOutput* >( this )->GetExport(); }
 
     rtl::OStringBuffer m_aTabStop;
 

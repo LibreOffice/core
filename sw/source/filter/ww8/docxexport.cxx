@@ -28,6 +28,7 @@
 
 #include "docxexport.hxx"
 #include "docxexportfilter.hxx"
+#include "docxattributeoutput.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>

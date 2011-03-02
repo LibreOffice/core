@@ -3024,7 +3024,7 @@ RtfAttributeOutput::~RtfAttributeOutput()
     OSL_TRACE("%s", OSL_THIS_FUNC);
 }
 
-MSWordExportBase& RtfAttributeOutput::GetExport()
+RtfExport& RtfAttributeOutput::GetExport()
 {
     return m_rExport;
 }

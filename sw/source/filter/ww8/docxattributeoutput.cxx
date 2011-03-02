@@ -1447,8 +1447,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
     const SwTableBox *pTblBox = pTableTextNodeInfoInner->getTableBox( );
 
-    DocxExport& rExport = dynamic_cast< DocxExport& >( GetExport() );
-    bool bEcma = rExport.GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
+    bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
     // Cell prefered width
     SwTwips nWidth = GetGridCols( pTableTextNodeInfoInner )->at( pTableTextNodeInfoInner->getCell() );
@@ -1621,8 +1620,7 @@ void DocxAttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t /*
 
 void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
-    DocxExport& rExport = dynamic_cast< DocxExport& >( GetExport() );
-    bool bEcma = rExport.GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
+    bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
     // Write the table properties
     m_pSerializer->startElementNS( XML_w, XML_tblPr, FSEND );
@@ -1702,8 +1700,7 @@ void DocxAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Point
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwFrmFmt * pFrmFmt = pTabBox->GetFrmFmt();
 
-    DocxExport& rExport = dynamic_cast< DocxExport& >( GetExport() );
-    bool bEcma = rExport.GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
+    bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
     // the defaults of the table are taken from the top-left cell
     m_pSerializer->startElementNS( XML_w, XML_tblBorders, FSEND );
@@ -2561,8 +2558,7 @@ void DocxAttributeOutput::FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEnc
         aCharSet = OString( "0" ) + aCharSet;
     pAttr->add( FSNS( XML_w, XML_val ), aCharSet.getStr());
 
-    const DocxExport& rExport = dynamic_cast< const DocxExport& >( GetExport() );
-    if( rExport.GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
+    if( GetExport().GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
     {
         if( const char* charset = rtl_getMimeCharsetFromTextEncoding( nEncoding ))
             pAttr->add( FSNS( XML_w, XML_characterSet ), charset );
@@ -3400,10 +3396,9 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
 {
     const char *pAdjustString;
 
-    DocxExport& rExport = dynamic_cast< DocxExport& >( GetExport() );
-    bool bEcma = rExport.GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
+    bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
-    const SfxItemSet* pItems = rExport.GetCurItemSet();
+    const SfxItemSet* pItems = GetExport().GetCurItemSet();
     const SvxFrameDirectionItem* rFrameDir = static_cast< const SvxFrameDirectionItem* >( pItems->GetItem( RES_FRAMEDIR ) );
 
     bool bRtl = false;
@@ -4118,7 +4113,7 @@ DocxAttributeOutput::~DocxAttributeOutput()
     m_pParentFrame = NULL;
 }
 
-MSWordExportBase& DocxAttributeOutput::GetExport()
+DocxExport& DocxAttributeOutput::GetExport()
 {
     return m_rExport;
 }

@@ -32,6 +32,7 @@
 #include "attributeoutputbase.hxx"
 #include "fields.hxx"
 #include "IMark.hxx"
+#include "docxexport.hxx"
 
 #include <sax/fshelper.hxx>
 #include <sax/fastattribs.hxx>
@@ -40,8 +41,6 @@
 #include <fldbas.hxx>
 
 #include <vector>
-
-class DocxExport;
 
 class SwGrfNode;
 class SdrObject;
@@ -586,8 +585,8 @@ public:
     virtual ~DocxAttributeOutput();
 
     /// Return the right export class.
-    virtual MSWordExportBase& GetExport();
-    using AttributeOutputBase::GetExport;
+    virtual DocxExport& GetExport();
+    const DocxExport& GetExport() const { return const_cast< DocxAttributeOutput* >( this )->GetExport(); }
 
     /// For eg. the output of the styles, we need to switch the serializer to enother one.
     void SetSerializer( ::sax_fastparser::FSHelperPtr pSerializer ) { m_pSerializer = pSerializer; }

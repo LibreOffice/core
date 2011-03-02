@@ -427,8 +427,8 @@ public:
     virtual ~WW8AttributeOutput() {}
 
     /// Return the right export class.
-    virtual MSWordExportBase& GetExport() { return m_rWW8Export; }
-    using AttributeOutputBase::GetExport;
+    virtual WW8Export& GetExport() { return m_rWW8Export; }
+    const WW8Export& GetExport() const { return m_rWW8Export; }
 
 protected:
     /// Output the bold etc. attributes

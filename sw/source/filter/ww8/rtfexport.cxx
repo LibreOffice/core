@@ -29,6 +29,7 @@
 #include "rtfexport.hxx"
 #include "rtfexportfilter.hxx"
 #include "rtfsdrexport.hxx"
+#include "rtfattributeoutput.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
