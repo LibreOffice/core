@@ -787,8 +787,10 @@ sub dmake_dir {
         my $real_exit_code = $error_code >> 8;
         if (($real_exit_code == 255) && ($ENV{nodep} eq '') && ($ENV{depend} eq '')) {
             print "Forcing regeneration of dependency info\n";
-            run_job($dmake, 'depend=t', $job_name);
+            $ENV{depend} = 't';
+            run_job($dmake, $job_name);
             print "Retrying $job_name\n";
+            $ENV{depend} = '';
             $error_code = run_job($dmake, $job_name);
         }
 
