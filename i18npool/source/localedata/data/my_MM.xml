@@ -71,6 +71,11 @@
     <FormatElement msgid="FixedFormatskey12" default="false" type="medium" usage="FIXED_NUMBER" formatindex="55">
       <FormatCode>#,###.00</FormatCode>
     </FormatElement>
+    <FormatElement msgid="FixedFormatskey13" default="false" type="short" usage="FIXED_NUMBER" formatindex="56"><FormatCode>#,##0_);(#,##0)</FormatCode>/
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey14" default="false" type="medium" usage="FIXED_NUMBER" formatindex="57">
+      <FormatCode>#,##0.00_);(#,##0.00)</FormatCode>
+    </FormatElement>
     <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
       <FormatCode>0.00E+000</FormatCode>
     </FormatElement>

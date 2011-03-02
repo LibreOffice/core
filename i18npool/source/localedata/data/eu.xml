@@ -53,16 +53,22 @@
     <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER" formatindex="5">
       <FormatCode>#.###,00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
+    <FormatElement msgid="FixedFormatskey7" default="false" type="short" usage="FIXED_NUMBER" formatindex="6">
+      <FormatCode>#.##0_);(#.##0)</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER" formatindex="7">
+      <FormatCode>#.##0,00_);(#.##0,00)</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="8">
       <FormatCode>0,00E+000</FormatCode>
     </FormatElement>
-    <FormatElement msgid="ScientificFormatskey2" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
+    <FormatElement msgid="ScientificFormatskey2" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="9">
       <FormatCode>0,00E+00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER" formatindex="8">
+    <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER" formatindex="10">
       <FormatCode>%0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
+    <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="11">
       <FormatCode>%0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">

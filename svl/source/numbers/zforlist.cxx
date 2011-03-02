@@ -2304,6 +2304,15 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, BOOL bLoadingSO
         CLOffset + SetIndexTable( NF_NUMBER_SYSTEM, ZF_STANDARD+5 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
+    // #,##0_);(#,##0)  -42 => (42)
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_NEG_BRACKET );
+    ImpInsertFormat( aFormatSeq[nIdx],
+        CLOffset + SetIndexTable( NF_NUMBER_NEG_BRACKET, ZF_STANDARD+6 ));
+
+    // #,##0.00_);(#,##0.00)  -42.00 => (42.00)
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_NEG_BRACKET_DEC2 );
+    ImpInsertFormat( aFormatSeq[nIdx],
+        CLOffset + SetIndexTable( NF_NUMBER_NEG_BRACKET_DEC2, ZF_STANDARD+7 ));
 
     // Percent number
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::PERCENT_NUMBER );
@@ -2744,6 +2753,10 @@ void SvNumberFormatter::GenerateFormat(String& sString,
     utl::DigitGroupingIterator aGrouping( xLocaleData->getDigitGrouping());
     const xub_StrLen nDigitsInFirstGroup = static_cast<xub_StrLen>(aGrouping.get());
     const String& rThSep = GetNumThousandSep();
+
+    SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(nIndex);
+    BOOL insertBrackets = pFormat->IsNegativeInBracket();
+
     if (nAnzLeading == 0)
     {
         if (!bThousand)
@@ -2836,15 +2849,35 @@ void SvNumberFormatter::GenerateFormat(String& sString,
             sString += ';';
         sString += sNegStr;
     }
-    if (IsRed && eType != NUMBERFORMAT_CURRENCY)
+    if ( (IsRed || insertBrackets ) && eType != NUMBERFORMAT_CURRENCY)
     {
         String sTmpStr = sString;
+
+        if ( pFormat->HasPositiveBracketPlaceholder() )
+        {
+             sTmpStr += '_';
+             sTmpStr += ')';
+        }
         sTmpStr += ';';
-        sTmpStr += '[';
-        sTmpStr += pFormatScanner->GetRedString();
-        sTmpStr += ']';
-        sTmpStr += '-';
-        sTmpStr +=sString;
+
+        if (IsRed)
+        {
+            sTmpStr += '[';
+            sTmpStr += pFormatScanner->GetRedString();
+            sTmpStr += ']';
+        }
+
+        if (insertBrackets)
+        {
+            sTmpStr += '(';
+            sTmpStr += sString;
+            sTmpStr += ')';
+        }
+        else
+        {
+            sTmpStr += '-';
+            sTmpStr +=sString;
+        }
         sString = sTmpStr;
     }
 }

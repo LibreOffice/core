@@ -114,7 +114,9 @@ enum NfIndexTableOffset
     NF_NUMBER_1000INT,                      // #,##0
     NF_NUMBER_1000DEC2,                     // #,##0.00
     NF_NUMBER_SYSTEM,                       // #,##0.00 or whatever is set in System Regional Settings
-    NF_NUMBER_END = NF_NUMBER_SYSTEM,
+    NF_NUMBER_NEG_BRACKET,                                      // #,##0_);(#,##0)  -42 => (42)
+    NF_NUMBER_NEG_BRACKET_DEC2,                                 // #,##0.00_);(#,##0.00)  -42.00 => (42.00)
+    NF_NUMBER_END = NF_NUMBER_NEG_BRACKET_DEC2,
 
     NF_SCIENTIFIC_START,
     NF_SCIENTIFIC_000E000 = NF_SCIENTIFIC_START,    // 0.00E+000
