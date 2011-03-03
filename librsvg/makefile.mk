@@ -58,14 +58,19 @@ CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) .$/configure \
                  --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC)
 CONFIGURE_FLAGS=--disable-gtk-theme --disable-tools --with-croco --with-svgz \
-                 LIBRSVG_CFLAGS=-I$(SOLARINCDIR)$/external/glib-2.0 \
-                 LIBRSVG_LIBS="-lgdk_pixbuf-2.0 -lpango-1.0 -lpangocairo-1.0 -lgthread-2.0 -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lglib-2.0 $(LIBXML_LIBS) -lcairo -lintl" \
-                 GDK_PIXBUF_CFLAGS=-I$(SOLARINCDIR)$/external/gdk-pixbuf-2.0 \
+                 LIBRSVG_CFLAGS="-I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/gdk-pixbuf-2.0 -I$(SOLARINCDIR)$/external$/pango-1.0 -I$(SOLARINCDIR)$/cairo $(LIBXML_CFLAGS)" \
+                 LIBRSVG_LIBS="-L$(SOLARLIBDIR) -lgdk_pixbuf-2.0 -lpango-1.0 -lpangocairo-1.0 -lgthread-2.0 -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lglib-2.0 $(LIBXML_LIBS) -lcairo -lintl" \
+                 GDK_PIXBUF_CFLAGS="-I$(SOLARINCDIR)$/external$/gdk-pixbuf-2.0" \
                  GDK_PIXBUF_LIBS=-lgdkpixbuf-2.0 \
-                 GTHREAD_CFLAGS=-I$(SOLARINCDIR)$/external/glib-2.0 \
+                 GTHREAD_CFLAGS=-I$(SOLARINCDIR)$/external/$glib-2.0 \
                  GTHREAD_LIBS=-lgthread-2.0 \
-                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external/gdk-pixbuf-2.0 -I$(SOLARINCDIR)$/external/pango-1.0 -I$(SOLARINCDIR)$/cairo" \
+                 LIBCROCO_CFLAGS="-I$(SOLARINCDIR)$/external$/libcroco-0.6" \
+                 LIBCROCO_LIBS=-lcroco-0.6
+                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/gdk-pixbuf-2.0 -I$(SOLARINCDIR)$/external$/pango-1.0 -I$(SOLARINCDIR)$/cairo" \
                  LDFLAGS="$(CONFIGURE_LDFLAGS)"
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS+= CPPFLAGS="$(ARCH_FLAGS) $(EXTRA_CDEFS)"
+.ENDIF
 
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
              $(GNUMAKE)

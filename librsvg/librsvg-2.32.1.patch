@@ -1,5 +1,5 @@
 --- misc/librsvg-2.32.1/configure	2010-11-13 11:52:19.000000000 +0100
-+++ misc/build/librsvg-2.32.1/configure	2011-03-03 13:50:14.000000000 +0100
++++ misc/build/librsvg-2.32.1/configure	2011-03-03 14:28:12.000000000 +0100
 @@ -12288,8 +12288,8 @@
  
  
@@ -29,4 +29,15 @@
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $have_gio_2_24" >&5
  $as_echo "$have_gio_2_24" >&6; }
  
+@@ -12695,8 +12699,8 @@
+ 
+ 
+ 
+-LIBCROCO_CFLAGS=""
+-LIBCROCO_LIBS=""
++#LIBCROCO_CFLAGS=""
++#LIBCROCO_LIBS=""
+ LIBCROCOPKG=""
+ 
+ test_croco=true
 
