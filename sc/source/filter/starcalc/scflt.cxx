@@ -996,7 +996,7 @@ ULONG Sc10Import::Import()
 #ifdef DBG_UTIL
     if (nError)
     {
-        DBG_ERROR( ByteString::CreateFromInt32( nError ).GetBuffer() );
+        OSL_FAIL( ByteString::CreateFromInt32( nError ).GetBuffer() );
     }
 #endif
 
