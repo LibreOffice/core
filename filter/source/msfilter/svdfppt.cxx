@@ -4177,7 +4177,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     {
                         aMsg.Insert( "]:", 0 );
                         aMsg.Insert( "PptStyleSheet::operator>>[", 0 );
-                        DBG_ERROR(aMsg.GetBuffer());
+                        OSL_FAIL(aMsg.GetBuffer());
                     }
                 }
                 if ( rIn.Tell() != aTxMasterStyleHd.GetRecEndFilePos() )
