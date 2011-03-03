@@ -110,8 +110,9 @@ const char * const aSource3[ ] =
     0,0
 };
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 void oldtestfile::test_file_001()
 {
 #ifdef WIN32

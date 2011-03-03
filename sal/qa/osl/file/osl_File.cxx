@@ -47,7 +47,11 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
 
 //------------------------------------------------------------------------
 // helper functions

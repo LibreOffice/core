@@ -37,7 +37,10 @@
 #include <rtl/ustring.hxx>
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 //Use to silence OSL_ warnings for a deliberate error
 extern "C" void SAL_CALL suppressOslDebugMessage( const sal_Char *, sal_Int32, const sal_Char * )

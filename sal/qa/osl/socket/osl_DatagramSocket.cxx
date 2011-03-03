@@ -60,7 +60,8 @@
 #include "sockethelper.hxx"
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 #define IP_PORT_MYPORT9  8897
 #define IP_PORT_MYPORT10 8898

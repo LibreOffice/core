@@ -60,7 +60,10 @@
 #include "sockethelper.hxx"
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 #define IP_PORT_ZERO   0
 #define IP_PORT_FTP    21
