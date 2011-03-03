@@ -532,7 +532,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
         catch( uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (::rtl::OString("sd::SdUnoDrawView::FireSwitchCurrentPage(), "
                     "exception caught: ") +
                     ::rtl::OUStringToOString(

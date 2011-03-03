@@ -1276,7 +1276,7 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) 
             catch( uno::Exception& e )
             {
                 (void)e;
-                DBG_ERROR(
+                OSL_FAIL(
                     (rtl::OString("sd::SdDrawDocument::GetDocumentStream(), "
                             "exception caught: ") +
                     rtl::OUStringToOString(

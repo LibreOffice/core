@@ -258,7 +258,7 @@ void DrawViewShell::SelectionHasChanged (void)
     catch( ::com::sun::star::uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR(
+        OSL_FAIL(
             (rtl::OString("sd::DrawViewShell::SelectionHasChanged(), "
                     "exception caught: ") +
             rtl::OUStringToOString(

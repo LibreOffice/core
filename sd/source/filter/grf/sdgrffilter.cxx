@@ -547,7 +547,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
     }
     catch( Exception& )
     {
-        DBG_ERROR(
+        OSL_FAIL(
             (rtl::OString("SdGRFFilter::SaveGraphic(), "
                     "exception caught: ") +
             rtl::OUStringToOString(

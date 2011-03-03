@@ -140,7 +140,7 @@ namespace sd
         catch( Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("sd::CustomAnimationClonerImpl::Clone(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -225,7 +225,7 @@ namespace sd
         catch( Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("sd::CustomAnimationClonerImpl::transformNode(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -300,7 +300,7 @@ namespace sd
         catch( Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("sd::CustomAnimationClonerImpl::transformValue(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(

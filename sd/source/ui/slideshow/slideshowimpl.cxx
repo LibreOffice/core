@@ -344,7 +344,7 @@ bool AnimationSlideController::getSlideAPI( sal_Int32 nSlideNumber, Reference< X
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::AnimationSlideController::getSlideAPI(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -651,7 +651,7 @@ void SAL_CALL SlideshowImpl::disposing()
     catch( Exception& e )
     {
         static_cast<void>(e);
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::stop(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -786,7 +786,7 @@ bool SlideshowImpl::startPreview(
                 if (supportedServices[pos].equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM(
                             "com.sun.star.drawing.MasterPage") )) {
-                    DBG_ERROR("sd::SlideshowImpl::startPreview() "
+                    OSL_FAIL("sd::SlideshowImpl::startPreview() "
                               "not allowed on master page!");
                     return false;
                 }
@@ -1122,7 +1122,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::startShow(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
@@ -1185,7 +1185,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::startShowImpl(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
@@ -1222,7 +1222,7 @@ void SlideshowImpl::paint( const Rectangle& /* rRect */ )
     catch( Exception& e )
     {
         static_cast<void>(e);
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::paint(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -1277,7 +1277,7 @@ void SlideshowImpl::removeShapeEvents()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::removeShapeEvents(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
@@ -1313,7 +1313,7 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::registerShapeEvents(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
@@ -1393,7 +1393,7 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( 
     catch( Exception& e )
     {
         static_cast<void>(e);
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::registerShapeEvents(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -1473,7 +1473,7 @@ void SAL_CALL SlideshowImpl::pause() throw (RuntimeException)
     catch( Exception& e )
     {
         static_cast<void>(e);
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::pause(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -1510,7 +1510,7 @@ void SAL_CALL SlideshowImpl::resume() throw (RuntimeException)
     catch( Exception& e )
     {
         static_cast<void>(e);
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::resume(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -1927,7 +1927,7 @@ sal_Int32 SlideshowImpl::updateSlideShow (void)
     catch( Exception& e )
     {
         static_cast<void>(e);
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::updateSlideShow(), exception caught: ")
                 + rtl::OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
@@ -2059,7 +2059,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
     {
         bRet = false;
         static_cast<void>(e);
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::keyInput(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -2568,7 +2568,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
     catch( uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::createSlideShow(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
@@ -2778,7 +2778,7 @@ void SlideshowImpl::resize( const Size& rSize )
     catch( Exception& e )
     {
         static_cast<void>(e);
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::resize(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -3156,7 +3156,7 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
     catch( Exception& e )
     {
         static_cast<void>(e);
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::setUsePen(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -3194,7 +3194,7 @@ void SAL_CALL SlideshowImpl::setUseEraser( sal_Bool bMouseAsPen ) throw (Runtime
     catch( Exception& e )
     {
         static_cast<void>(e);
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::setUseEraser(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -3505,7 +3505,7 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
     catch( Exception& e )
     {
         static_cast<void>(e);
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::gotoPreviousSlide(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -3606,7 +3606,7 @@ void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException)
     catch( Exception& e )
     {
         static_cast<void>(e);
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::stopSound(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
