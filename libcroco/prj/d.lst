@@ -1,0 +1,37 @@
+mkdir: %_DEST%\inc%_EXT%\external
+mkdir: %_DEST%\inc%_EXT%\external\libcroco-0.6
+mkdir: %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco
+
+..\%__SRC%\inc\cr-additional-sel.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-additional-sel.h
+..\%__SRC%\inc\cr-input.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-input.h
+..\%__SRC%\inc\cr-rgb.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-rgb.h
+..\%__SRC%\inc\cr-stylesheet.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-stylesheet.h
+..\%__SRC%\inc\cr-attr-sel.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-attr-sel.h
+..\%__SRC%\inc\cr-num.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-num.h
+..\%__SRC%\inc\cr-sel-eng.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-sel-eng.h
+..\%__SRC%\inc\cr-term.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-term.h
+..\%__SRC%\inc\cr-cascade.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-cascade.h
+..\%__SRC%\inc\cr-om-parser.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-om-parser.h
+..\%__SRC%\inc\cr-selector.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-selector.h
+..\%__SRC%\inc\cr-tknzr.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-tknzr.h
+..\%__SRC%\inc\cr-declaration.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-declaration.h
+..\%__SRC%\inc\cr-parser.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-parser.h
+..\%__SRC%\inc\cr-simple-sel.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-simple-sel.h
+..\%__SRC%\inc\cr-token.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-token.h
+..\%__SRC%\inc\cr-doc-handler.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-doc-handler.h
+..\%__SRC%\inc\cr-parsing-location.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-parsing-location.h
+..\%__SRC%\inc\cr-statement.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-statement.h
+..\%__SRC%\inc\cr-utils.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-utils.h
+..\%__SRC%\inc\cr-enc-handler.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-enc-handler.h
+..\%__SRC%\inc\cr-prop-list.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-prop-list.h
+..\%__SRC%\inc\cr-string.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-string.h
+..\%__SRC%\inc\libcroco-config.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\libcroco-config.h
+..\%__SRC%\inc\cr-fonts.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-fonts.h
+..\%__SRC%\inc\cr-pseudo.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-pseudo.h
+..\%__SRC%\inc\cr-style.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-style.h
+..\%__SRC%\inc\libcroco.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\libcroco.h
+
+..\%__SRC%\lib\libcroco-0.6.3.0.1.dylib %_DEST%\lib%_EXT%\libcroco-0.6.3.0.1.dylib
+symlink: %_DEST%\lib%_EXT%\libcroco-0.6.3.0.1.dylib %_DEST%\lib%_EXT%\libcroco-0.6.3.dylib
+symlink: %_DEST%\lib%_EXT%\libcroco-0.6.3.dylib %_DEST%\lib%_EXT%\libcroco-0.6.dylib
+
