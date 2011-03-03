@@ -463,7 +463,7 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
 
             aStr += " Objektverbindungen werden nicht mitkopiert.";
 
-            DBG_ERROR(aStr.GetBuffer());
+            OSL_FAIL(aStr.GetBuffer());
 #endif
         }
     }
@@ -849,7 +849,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 
             aStr += " Objektverbindungen werden nicht mitkopiert.";
 
-            DBG_ERROR(aStr.GetBuffer());
+            OSL_FAIL(aStr.GetBuffer());
 #endif
         }
     }

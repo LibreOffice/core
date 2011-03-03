@@ -826,7 +826,7 @@ namespace sfx2
 #ifdef DBG_UTIL
                 ByteString aMsg( "sfx2::lcl_EnsureAllFilesEntry: could not append Filter" );
                 aMsg += ByteString( String( sAllFilterName ), RTL_TEXTENCODING_UTF8 );
-                DBG_ERROR( aMsg.GetBuffer() );
+                OSL_FAIL( aMsg.GetBuffer() );
 #endif
             }
         }

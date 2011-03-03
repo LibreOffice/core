@@ -216,7 +216,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
             ByteString aStr( "No creator method for item: ");
             aStr += ByteString::CreateFromInt32( nSlotId );
-            DBG_ERROR( aStr.GetBuffer() );
+            OSL_FAIL( aStr.GetBuffer() );
 #endif
             return;
         }
@@ -240,7 +240,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             {
                 ByteString aStr( "Property not convertable: ");
                 aStr += pSlot->pUnoName;
-                DBG_ERROR( aStr.GetBuffer() );
+                OSL_FAIL( aStr.GetBuffer() );
             }
 #endif
         }
@@ -250,7 +250,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             // for a simple property there can be only one parameter and its name *must* match
             ByteString aStr( "Property name does not match: ");
             aStr += ByteString( aName, RTL_TEXTENCODING_UTF8 );
-            DBG_ERROR( aStr.GetBuffer() );
+            OSL_FAIL( aStr.GetBuffer() );
         }
 #endif
         else
@@ -293,7 +293,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         {
                             ByteString aDbgStr( "Property not convertable: ");
                             aDbgStr += pSlot->pUnoName;
-                            DBG_ERROR( aDbgStr.GetBuffer() );
+                            OSL_FAIL( aDbgStr.GetBuffer() );
                         }
 #endif
                         break;
@@ -306,7 +306,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     // there was a parameter with a name that didn't match to any of the members
                     ByteString aStr( "Property name does not match: ");
                     aStr += ByteString( String(rPropValue.Name), RTL_TEXTENCODING_UTF8 );
-                    DBG_ERROR( aStr.GetBuffer() );
+                    OSL_FAIL( aStr.GetBuffer() );
                 }
 #endif
             }
@@ -334,7 +334,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
                 ByteString aStr( "No creator method for argument: ");
                 aStr += rArg.pName;
-                DBG_ERROR( aStr.GetBuffer() );
+                OSL_FAIL( aStr.GetBuffer() );
 #endif
                 return;
             }
@@ -364,7 +364,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         {
                             ByteString aStr( "Property not convertable: ");
                             aStr += rArg.pName;
-                            DBG_ERROR( aStr.GetBuffer() );
+                            OSL_FAIL( aStr.GetBuffer() );
                         }
 #endif
                         break;
@@ -393,7 +393,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         {
                             ByteString aStr( "Property not convertable: ");
                             aStr += rArg.pName;
-                            DBG_ERROR( aStr.GetBuffer() );
+                            OSL_FAIL( aStr.GetBuffer() );
                         }
 #endif
                     }
@@ -432,7 +432,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
                                     ByteString aDbgStr( "Property not convertable: ");
                                     aDbgStr += rArg.pName;
-                                    DBG_ERROR( aDbgStr.GetBuffer() );
+                                    OSL_FAIL( aDbgStr.GetBuffer() );
 #endif
                                 }
 
@@ -937,7 +937,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             // we will not rely on the "toggle" ability of some property slots
             ByteString aStr( "Processing property slot without argument: ");
             aStr += ByteString::CreateFromInt32( nSlotId );
-            DBG_ERROR( aStr.GetBuffer() );
+            OSL_FAIL( aStr.GetBuffer() );
         }
 #endif
 
@@ -1244,7 +1244,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 {
                     ByteString aStr( "Item not convertable: ");
                     aStr += ByteString::CreateFromInt32(nSlotId);
-                    DBG_ERROR( aStr.GetBuffer() );
+                    OSL_FAIL( aStr.GetBuffer() );
                 }
             }
             else
@@ -1267,7 +1267,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         aStr += ByteString::CreateFromInt32( pType->aAttrib[n-1].nAID );
                         aStr += " not convertable in slot: ";
                         aStr += ByteString::CreateFromInt32(nSlotId);
-                        DBG_ERROR( aStr.GetBuffer() );
+                        OSL_FAIL( aStr.GetBuffer() );
                     }
                 }
             }
@@ -1293,7 +1293,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     {
                         ByteString aStr( "Item not convertable: ");
                         aStr += ByteString::CreateFromInt32(rArg.nSlotId);
-                        DBG_ERROR( aStr.GetBuffer() );
+                        OSL_FAIL( aStr.GetBuffer() );
                     }
                 }
                 else
@@ -1316,7 +1316,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                             aStr += ByteString::CreateFromInt32( rArg.pType->aAttrib[n-1].nAID );
                             aStr += " not convertable in slot: ";
                             aStr += ByteString::CreateFromInt32(rArg.nSlotId);
-                            DBG_ERROR( aStr.GetBuffer() );
+                            OSL_FAIL( aStr.GetBuffer() );
                         }
                     }
                 }

@@ -245,7 +245,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
                         aStr += ByteString::CreateFromInt32(pMasterSlot->GetSlotId());
                         aStr += " , ";
                         aStr += ByteString::CreateFromInt32(pSlave->GetSlotId());
-                        DBG_ERROR(aStr.GetBuffer());
+                        OSL_FAIL(aStr.GetBuffer());
                     }
 
                     if ( pSlave->nMasterSlotId != pMasterSlot->GetSlotId() )
@@ -254,7 +254,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
                         aStr += ByteString::CreateFromInt32(pMasterSlot->GetSlotId());
                         aStr += " , ";
                         aStr += ByteString::CreateFromInt32(pSlave->GetSlotId());
-                        DBG_ERROR(aStr.GetBuffer());
+                        OSL_FAIL(aStr.GetBuffer());
                     }
 
                     pSlave = pSlave->pNextSlot;
@@ -271,7 +271,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
                         aStr += ByteString::CreateFromInt32(pIter->GetSlotId());
                         aStr += " , ";
                         aStr += ByteString::CreateFromInt32(pIter->pLinkedSlot->GetSlotId());
-                        DBG_ERROR(aStr.GetBuffer());
+                        OSL_FAIL(aStr.GetBuffer());
                     }
                 }
 
@@ -285,7 +285,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
                         aStr += ByteString::CreateFromInt32(pCurSlot->GetSlotId());
                         aStr += " , ";
                         aStr += ByteString::CreateFromInt32(pIter->GetSlotId());
-                        DBG_ERROR(aStr.GetBuffer());
+                        OSL_FAIL(aStr.GetBuffer());
                     }
                 }
                 while ( pCurSlot != pIter );

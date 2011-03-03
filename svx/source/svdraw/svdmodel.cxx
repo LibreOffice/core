@@ -311,7 +311,7 @@ SdrModel::~SdrModel()
         aStr += ByteString(pAktUndoGroup->GetComment(), gsl_getSystemTextEncoding());
         aStr += '\"';
 
-        DBG_ERROR(aStr.GetBuffer());
+        OSL_FAIL(aStr.GetBuffer());
     }
 #endif
     if (pAktUndoGroup!=NULL)

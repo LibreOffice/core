@@ -221,7 +221,7 @@ SfxRequest::SfxRequest
     {
         ByteString aStr( "Recording unsupported slot: ");
         aStr += ByteString::CreateFromInt32( pImp->pPool->GetSlotId(nSlotId) );
-        DBG_ERROR( aStr.GetBuffer() );
+        OSL_FAIL( aStr.GetBuffer() );
     }
 #endif
 }
@@ -721,7 +721,7 @@ void SfxRequest::Done_Impl
     {
         ByteString aStr( "Recording not exported slot: ");
         aStr += ByteString::CreateFromInt32( pImp->pSlot->GetSlotId() );
-        DBG_ERROR( aStr.GetBuffer() );
+        OSL_FAIL( aStr.GetBuffer() );
     }
 
     if ( !pImp->pSlot->pUnoName ) // playing it safe
@@ -742,7 +742,7 @@ void SfxRequest::Done_Impl
         {
             ByteString aStr( "Recording property not available: ");
             aStr += ByteString::CreateFromInt32( pImp->pSlot->GetSlotId() );
-            DBG_ERROR( aStr.GetBuffer() );
+            OSL_FAIL( aStr.GetBuffer() );
         }
 #endif
         uno::Sequence < beans::PropertyValue > aSeq;

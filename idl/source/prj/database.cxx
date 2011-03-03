@@ -489,7 +489,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
 
             ByteString aStr( "Nicht gefunden : " );
             aStr += pTok->GetString();
-            DBG_ERROR( aStr.GetBuffer() );
+            OSL_FAIL( aStr.GetBuffer() );
         }
     }
 

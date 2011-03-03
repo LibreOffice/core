@@ -399,7 +399,7 @@ if( nErr == 1 || nErr == USHRT_MAX || nErr == ULONG_MAX )       \
         aText += ' ';                                           \
         aText += ByteString(U2S(pFilter->GetFilterName()));     \
     }                                                           \
-    DBG_ERROR( aText.GetBuffer() );                             \
+    OSL_FAIL( aText.GetBuffer() );                              \
     nErr = ERRCODE_ABORT;                                       \
 }
 

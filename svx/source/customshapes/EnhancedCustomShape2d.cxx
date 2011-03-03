@@ -1713,7 +1713,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 {
                     ByteString aString( "CustomShapes::unknown PolyFlagValue :" );
                     aString.Append( ByteString::CreateFromInt32( nCommand ) );
-                    DBG_ERROR( aString.GetBuffer() );
+                    OSL_FAIL( aString.GetBuffer() );
                 }
                 break;
 #endif

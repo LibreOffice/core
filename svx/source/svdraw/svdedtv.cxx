@@ -986,7 +986,7 @@ void SdrEditView::CopyMarkedObj()
         }
 
         aStr += " Objektverbindungen werden nicht mitkopiert.";
-        DBG_ERROR(aStr.GetBuffer());
+        OSL_FAIL(aStr.GetBuffer());
 #endif
     }
     MarkListHasChanged();

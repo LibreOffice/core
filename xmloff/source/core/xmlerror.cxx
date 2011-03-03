@@ -195,7 +195,7 @@ void XMLErrors::AddRecord(
     // convert to byte string and signal the error
     ByteString aError( String( sMessage.makeStringAndClear() ),
                        RTL_TEXTENCODING_ASCII_US );
-    DBG_ERROR( aError.GetBuffer() );
+    OSL_FAIL( aError.GetBuffer() );
 #endif
 }
 
