@@ -1,5 +1,5 @@
 --- misc/librsvg-2.32.1/configure	2010-11-13 11:52:19.000000000 +0100
-+++ misc/build/librsvg-2.32.1/configure	2011-03-02 14:06:41.000000000 +0100
++++ misc/build/librsvg-2.32.1/configure	2011-03-03 13:50:14.000000000 +0100
 @@ -12288,8 +12288,8 @@
  
  
@@ -11,16 +11,22 @@
  
  
  pkg_failed=no
---- misc/librsvg-2.32.1/librsvg-features.h	2010-11-13 11:52:49.000000000 +0100
-+++ misc/build/librsvg-2.32.1/librsvg-features.h	2011-03-02 14:05:37.000000000 +0100
-@@ -11,8 +11,8 @@
-    (LIBRSVG_MAJOR_VERSION == (major) && LIBRSVG_MINOR_VERSION > (minor)) || \
-    (LIBRSVG_MAJOR_VERSION == (major) && LIBRSVG_MINOR_VERSION == (minor) && LIBRSVG_MICRO_VERSION >= (micro)))
+@@ -12562,6 +12562,7 @@
  
--#define LIBRSVG_HAVE_SVGZ  (1)
--#define LIBRSVG_HAVE_CSS   (1)
-+#define LIBRSVG_HAVE_SVGZ  (0)
-+#define LIBRSVG_HAVE_CSS   (0)
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether gio 2.24 is available" >&5
+ $as_echo_n "checking whether gio 2.24 is available... " >&6; }
++if 0 ; then
+ if test -n "$PKG_CONFIG" && \
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gio-2.0 >= 2.24.0\""; } >&5
+   ($PKG_CONFIG --exists --print-errors "gio-2.0 >= 2.24.0") 2>&5
+@@ -12572,6 +12573,9 @@
+ else
+   have_gio_2_24=no
+ fi
++else
++  have_gio_2_24=yes
++fi
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $have_gio_2_24" >&5
+ $as_echo "$have_gio_2_24" >&6; }
  
- #define LIBRSVG_CHECK_FEATURE(FEATURE) (defined(LIBRSVG_HAVE_##FEATURE) && LIBRSVG_HAVE_##FEATURE)
- 
+
