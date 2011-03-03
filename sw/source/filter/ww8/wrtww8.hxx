@@ -584,6 +584,18 @@ public:
 
     USHORT GetId( const SwTOXType& rTOXType );
 
+    /// Return the numeric id of the font (and add it to the font list if needed)
+    USHORT GetId( const SvxFontItem& rFont)
+    {
+        return maFontHelper.GetId(rFont);
+    }
+    /// @overload
+    USHORT GetId( const wwFont& rFont)
+    {
+        return maFontHelper.GetId(rFont);
+    }
+
+
     const SfxPoolItem& GetItem( USHORT nWhich ) const;
 
     /// Find the reference.
@@ -973,12 +985,6 @@ public:
     SwMSConvertControls& GetOCXExp()        { return *pOCXExp; }
     WW8OleMaps& GetOLEMap()                 { return *pOleMap; }
     void ExportDopTypography(WW8DopTypography &rTypo);
-
-    using MSWordExportBase::GetId;
-    USHORT GetId( const SvxFontItem& rFont)
-    {
-        return maFontHelper.GetId(rFont);
-    }
 
     USHORT AddRedlineAuthor( USHORT nId );
 
