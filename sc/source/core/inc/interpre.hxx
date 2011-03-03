@@ -804,13 +804,6 @@ double GetGammaDistPDF(double fX, double fAlpha, double fLambda);
 // cumulative distribution function; fLambda is "scale" parameter
 double GetGammaDist(double fX, double fAlpha, double fLambda);
 
-/**
- * Go through all tokens to see if the array contains a volatile token.  We
- * need to do this since a conditional token such as IF function may skip
- * some tokens and it may incorrectly mark the token array non-volatile.
- */
-void CheckForVolatileToken();
-
 public:
     ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
                     const ScAddress&, ScTokenArray& );
