@@ -20377,7 +20377,12 @@
           </optional>
           <optional>
             <element name="charset">
-              <ref name="CT_UcharHexNumber"/>
+              <ref name="CT_Charset"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="characterSet">
+              <ref name="CT_String"/>
             </element>
           </optional>
           <optional>
@@ -20432,6 +20437,18 @@
             <ref name="CT_Font"/>
           </element>
         </zeroOrMore>
+      </define>
+      <define name="CT_Charset">
+        <optional>
+            <attribute name="val">
+              <ref name="CT_UcharHexNumber"/>
+            </attribute>
+        </optional>
+        <optional>
+          <attribute name="characterSet">
+            <ref name="ST_String"/>
+          </attribute>
+        </optional>
       </define>
       <define name="CT_DivBdr">
         <optional>
@@ -23282,6 +23299,10 @@
       <attribute name="val" tokenid="ooxml:CT_Panose_val" action="setValue"/>
       <action name="start" action="setDefaultHexValue"/>
     </resource>
+    <resource name="CT_Charset" resource="Properties">
+      <attribute name="val" tokenid="ooxml:CT_Charset_val"/>
+      <attribute name="characterSet" tokenid="ooxml:CT_Charset_characterSet"/>
+    </resource>
     <resource name="ST_FontFamily" resource="List">
       <value tokenid="ooxml:Value_ST_FontFamily_decorative">decorative</value>
       <value tokenid="ooxml:Value_ST_FontFamily_modern">modern</value>
@@ -23318,6 +23339,7 @@
       <element name="altName" tokenid="ooxml:CT_Font_altName"/>
       <element name="panose1" tokenid="ooxml:CT_Font_panose1"/>
       <element name="charset" tokenid="ooxml:CT_Font_charset"/>
+      <element name="characterSet" tokenid="ooxml:CT_Font_characterSet"/>
       <element name="family" tokenid="ooxml:CT_Font_family"/>
       <element name="notTrueType" tokenid="ooxml:CT_Font_notTrueType"/>
       <element name="pitch" tokenid="ooxml:CT_Font_pitch"/>

@@ -101,6 +101,18 @@ void FontTable::attribute(Id Name, Value & val)
         case NS_ooxml::LN_CT_Font_name:
             m_pImpl->pCurrentEntry->sFontName = sValue;
         break;
+        case NS_ooxml::LN_CT_Charset_val:
+            // w:characterSet has higher priority, set only if that one is not set
+            if( m_pImpl->pCurrentEntry->nTextEncoding == RTL_TEXTENCODING_DONTKNOW )
+                m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromWindowsCharset( nIntValue );
+        break;
+        case NS_ooxml::LN_CT_Charset_characterSet:
+        {
+            rtl::OString tmp;
+            sValue.convertToString( &tmp, RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
+            m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromMimeCharset( tmp );
+        break;
+        }
         default:
         {
             //----> debug
@@ -125,12 +137,16 @@ void FontTable::sprm(Sprm& rSprm)
     switch(nSprmId)
     {
         case NS_ooxml::LN_CT_Font_charset:
-            m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromWindowsCharset( nIntValue );
-        break;
-        default:
-        break;
+            resolveSprm( rSprm );
+            break;
     }
+}
 
+void FontTable::resolveSprm(Sprm & r_Sprm)
+{
+    writerfilter::Reference<Properties>::Pointer_t pProperties = r_Sprm.getProps();
+    if( pProperties.get())
+        pProperties->resolve(*this);
 }
 
 void FontTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)

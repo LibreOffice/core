@@ -75,6 +75,7 @@ public:
     // Properties
     virtual void attribute(Id Name, Value & val);
     virtual void sprm(Sprm & sprm);
+    void resolveSprm(Sprm & r_sprm);
 
     // Table
     virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
