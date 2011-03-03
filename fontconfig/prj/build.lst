@@ -1,0 +1,3 @@
+ep	freetype	: soltools freetype LIBXML2:libxml2 NULL
+ep	freetype			usr1	-	all	ep_mkout NULL
+ep	freetype			nmake	-	all	ep_freetype NULL

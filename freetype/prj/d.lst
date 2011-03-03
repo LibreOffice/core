@@ -1,7 +1,6 @@
 mkdir: %_DEST%\inc%_EXT%\external\freetype
 mkdir: %_DEST%\inc%_EXT%\external\freetype\config
 ..\%__SRC%\bin\freetype.dll %_DEST%\bin%_EXT%\freetype.dll
-..\%__SRC%\bin\freetype.lib %_DEST%\lib%_EXT%\freetype.lib
 ..\%__SRC%\lib\ifreetype.lib %_DEST%\lib%_EXT%\ifreetype.lib
 ..\%__SRC%\misc\build\freetype-2.4.4\include\ft2build.h %_DEST%\inc%_EXT%\external\freetype\ft2build.h
 
