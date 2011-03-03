@@ -4934,25 +4934,7 @@ void ScInterpreter::ScSumIf()
             case svExternalSingleRef:
             case svExternalDoubleRef:
             {
-                if (GetStackType() == svMatrix)
-                    pQueryMatrix = PopMatrix();
-                else if (GetStackType() == svExternalDoubleRef)
-                    PopExternalDoubleRef(pQueryMatrix);
-                else
-                {
-                    OSL_ENSURE(GetStackType() == svExternalSingleRef, "external single ref is expected, but that's not what we found.");
-                    ScExternalRefCache::TokenRef pToken;
-                    PopExternalSingleRef(pToken);
-                    if (pToken)
-                    {
-                        pQueryMatrix = new ScMatrix(1, 1);
-                        if (pToken->GetType() == svDouble)
-                            pQueryMatrix->PutDouble(pToken->GetDouble(), 0, 0);
-                        else
-                            pQueryMatrix->PutString(pToken->GetString(), 0, 0);
-                    }
-                }
-
+                pQueryMatrix = GetMatrix();
                 if (!pQueryMatrix)
                 {
                     PushIllegalParameter();

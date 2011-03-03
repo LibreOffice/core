@@ -2298,8 +2298,10 @@ void ScInterpreter::ScZTest()
         }
         break;
         case svMatrix :
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if (pMat)
             {
                 SCSIZE nCount = pMat->GetElementCount();
@@ -2735,8 +2737,10 @@ void ScInterpreter::ScHarMean()
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     SCSIZE nCount = pMat->GetElementCount();
@@ -2856,8 +2860,10 @@ void ScInterpreter::ScGeoMean()
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     SCSIZE nCount = pMat->GetElementCount();
@@ -2980,8 +2986,10 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     SCSIZE nCount = pMat->GetElementCount();
@@ -3380,8 +3388,10 @@ void ScInterpreter::GetNumberSequenceArray( BYTE nParamCount, vector<double>& rA
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (!pMat)
                     break;
 
@@ -3584,8 +3594,10 @@ void ScInterpreter::ScRank()
         }
         break;
         case svMatrix :
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             double fVal = GetDouble();
             if (pMat)
             {
@@ -3681,8 +3693,10 @@ void ScInterpreter::ScAveDev()
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     SCSIZE nCount = pMat->GetElementCount();
@@ -3752,8 +3766,10 @@ void ScInterpreter::ScAveDev()
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     SCSIZE nCount = pMat->GetElementCount();
