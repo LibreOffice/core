@@ -1,10 +1,12 @@
---- misc/cppunit-1.12.1/src/cppunit/Makefile.am	Wed Feb 20 06:36:38 2008
-+++ misc/build/cppunit-1.12.1/src/cppunit/Makefile.am	Mon May  3 17:00:41 2010
-@@ -63,5 +63,6 @@
+--- misc/cppunit-1.12.1/src/cppunit/Makefile.in	2008-02-20 06:59:55.000000000 +0100
++++ misc/build/cppunit-1.12.1/src/cppunit/Makefile.in	2011-03-03 09:12:14.205508776 +0100
+@@ -300,7 +300,8 @@
  
- libcppunit_la_LDFLAGS= \
+ libcppunit_la_LDFLAGS = \
   -no-undefined -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
 - -release $(LT_RELEASE)
 + -release $(LT_RELEASE) \
 + @LIBADD_DL@
+ 
+ all: all-am
  
