@@ -27,14 +27,14 @@
 
 PRJ=.
 
-PRJNAME=so_freetype
-TARGET=so_freetype
+PRJNAME=so_fontconfig
+TARGET=so_fontconfig
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
 
-.IF "$(SYSTEM_FREETYPE)" == "YES"
+.IF "$(SYSTEM_FONTCONFIG)" == "YES"
 all:
         @echo "An already available installation of freetype should exist on your system."
     @echo "Therefore the version provided here does not need to be built in addition."
@@ -42,22 +42,30 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=freetype-2.4.4
-TARFILE_MD5=9273efacffb683483e58a9e113efae9f
+TARFILE_NAME=fontconfig-2.8.0
+TARFILE_MD5=77e15a92006ddc2adbb06f840d591c0e
 
 CONFIGURE_DIR=
 .IF "$(OS)"=="WNT"
-CONFIGURE_ACTION=
-ADDITIONAL_FILES=config.mk \
-            objs/ftmodule.h \
-            freetype.def
-PATCH_FILES=freetype-2.4.4.patch
-LIBS= -l $(STDLIBGUIMT) -l $(LIBSTLPORT)
-.ELSE
-CONFIGURE_ACTION=.$/configure
-.ENDIF
+ADDITIONAL_FILES=\
+            fc-arch$/fcalias.h \
+            fc-arch$/fcaliastail.h \
+            fc-arch$/fcarch.h \
+            fc-glyphname$/fcglyphname.h \
+            fc-lang$/fclang.h \
+            src$/fcalias.h \
+            src$/fcaliastail.h \
+            src$/fcftaliastail.h \
+            src$/makefile.mk \
+            config.h
 
+PATCH_FILES=fontconfig-2.8.0.patch
+BUILD_DIR=$(CONFIGURE_DIR)$/src
+BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
+.ELSE
+CONFIGURE_ACTION=./configure --enable-shared=yes --enable-libxml2 --disable-docs --libdir=$(OUTDIR)/lib
 BUILD_ACTION=$(GNUMAKE)
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
