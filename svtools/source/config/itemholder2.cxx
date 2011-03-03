@@ -86,7 +86,7 @@ ItemHolder2::ItemHolder2()
             sMsg += ::rtl::OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                         RTL_TEXTENCODING_ASCII_US);
-            DBG_ERROR(sMsg.getStr());
+            OSL_FAIL(sMsg.getStr());
         }
     }
 #else
