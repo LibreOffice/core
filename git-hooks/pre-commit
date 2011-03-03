@@ -58,6 +58,18 @@ sub check_and_fix_whitespace($)
     my $line_no = 0;
     my $line_max = -1;
 
+    my $stash = "";
+
+    # any not staged changes to stash away?
+    system( "git update-index -q --refresh" );
+    if ( `git diff --name-only --` ) {
+        my $fd;
+        ( $fd, $stash ) = mkstemp( "/tmp/unstaged-changes-XXXXXX" );
+        close( $fd );
+        # this will keep the staged changes
+        system( "git diff > $stash" );
+        system( "git checkout ." );
+    }
     open( IN, "git diff-index -p --no-prefix --cached $head -- |" ) || die "Cannot get git diff-index";
     while ( my $line = <IN> ) {
         if ( $line =~ /^\+\+\+ (.*)/ ) {
@@ -80,6 +92,10 @@ sub check_and_fix_whitespace($)
     }
     fix_whitespace( $file, \%lines );
     close( IN );
+    if ($stash) {
+        system( "git apply < $stash" );
+        unlink( $stash );
+    }
 }
 
 # Do the work :-)
