@@ -219,7 +219,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
     {
         for ( size_t i = 0, n = pService->pConv->size(); i < n; ++i )
         {
-            pc = (*pService->pConv)[ i ];
+            pC = (*pService->pConv)[ i ];
             if ( pC->hConv == hConv )
                 goto found;
         }
