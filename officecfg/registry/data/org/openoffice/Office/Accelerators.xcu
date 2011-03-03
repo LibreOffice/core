@@ -40,6 +40,11 @@
      <value xml:lang="es">vnd.sun.star.findbar:FocusToFindbar</value>
     </prop>
    </node>
+   <node oor:name="B_MOD1_MOD2" oor:op="replace">
+    <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+     <value xml:lang="es">.uno:SearchDialog</value>
+    </prop>
+   </node>
    <node oor:name="C_MOD1" oor:op="replace">
     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
      <value xml:lang="en-US">.uno:Copy</value>
@@ -78,6 +83,11 @@
    <node oor:name="F_MOD1" oor:op="replace">
     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
      <value xml:lang="en-US">vnd.sun.star.findbar:FocusToFindbar</value>
+    </prop>
+   </node>
+   <node oor:name="F_MOD1_MOD2" oor:op="replace">
+    <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+     <value xml:lang="en-US">.uno:SearchDialog</value>
     </prop>
    </node>
    <node oor:name="G_MOD1" oor:op="replace">
@@ -223,6 +233,11 @@
     <node oor:name="F_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">vnd.sun.star.findbar:FocusToFindbar</value>
+     </prop>
+    </node>
+    <node oor:name="F_MOD1_MOD2" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno.SearchDialog</value>
      </prop>
     </node>
     <node oor:name="N_MOD1" oor:op="replace">
@@ -395,6 +410,11 @@
       <value xml:lang="de">.uno:AlignBlock</value>
       <value xml:lang="en-US">.uno:Bold</value>
       <value xml:lang="es">vnd.sun.star.findbar:FocusToFindbar</value>
+     </prop>
+    </node>
+    <node oor:name="B_MOD1_MOD2" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
@@ -576,11 +596,6 @@
     <node oor:name="F9_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:CalculateHard</value>
-     </prop>
-    </node>
-    <node oor:name="F_MOD1_MOD2" oor:op="replace">
-     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="F_SHIFT_MOD1" oor:op="replace">
@@ -1029,6 +1044,11 @@
       <value xml:lang="es">vnd.sun.star.findbar:FocusToFindbar</value>
      </prop>
     </node>
+    <node oor:name="B_MOD1_MOD2" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
+     </prop>
+    </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:SubScript</value>
@@ -1123,11 +1143,6 @@
     <node oor:name="F8_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:TextFitToSize</value>
-     </prop>
-    </node>
-    <node oor:name="F_MOD1_MOD2" oor:op="replace">
-     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="F_SHIFT_MOD1" oor:op="replace">
@@ -1385,6 +1400,11 @@
       <value xml:lang="es">vnd.sun.star.findbar:FocusToFindbar</value>
      </prop>
     </node>
+    <node oor:name="B_MOD1_MOD2" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
+     </prop>
+    </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:SubScript</value>
@@ -1604,11 +1624,6 @@
     <node oor:name="F9_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:UpdateInputFields</value>
-     </prop>
-    </node>
-    <node oor:name="F_MOD1_MOD2" oor:op="replace">
-     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="F_SHIFT_MOD1" oor:op="replace">
@@ -1988,6 +2003,11 @@
       <value xml:lang="es">vnd.sun.star.findbar:FocusToFindbar</value>
      </prop>
     </node>
+    <node oor:name="B_MOD1_MOD2" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
+     </prop>
+    </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:SubScript</value>
@@ -2097,11 +2117,6 @@
     <node oor:name="F8_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:TextFitToSize</value>
-     </prop>
-    </node>
-    <node oor:name="F_MOD1_MOD2" oor:op="replace">
-     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="F_SHIFT_MOD1" oor:op="replace">
@@ -2426,6 +2441,11 @@
       <value xml:lang="es">vnd.sun.star.findbar:FocusToFindbar</value>
      </prop>
     </node>
+    <node oor:name="B_MOD1_MOD2" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
+     </prop>
+    </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:SubScript</value>
@@ -2645,11 +2665,6 @@
     <node oor:name="F9_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:UpdateInputFields</value>
-     </prop>
-    </node>
-    <node oor:name="F_MOD1_MOD2" oor:op="replace">
-     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="F_SHIFT_MOD1" oor:op="replace">
@@ -3044,6 +3059,11 @@
       <value xml:lang="de">.uno:JustifyPara</value>
       <value xml:lang="en-US">.uno:Bold</value>
       <value xml:lang="es">vnd.sun.star.findbar:FocusToFindbar</value>
+     </prop>
+    </node>
+    <node oor:name="B_MOD1_MOD2" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
@@ -3671,6 +3691,11 @@
       <value xml:lang="es">vnd.sun.star.findbar:FocusToFindbar</value>
      </prop>
     </node>
+    <node oor:name="B_MOD1_MOD2" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
+     </prop>
+    </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:SubScript</value>
@@ -4276,6 +4301,11 @@
       <value xml:lang="es">vnd.sun.star.findbar:FocusToFindbar</value>
      </prop>
     </node>
+    <node oor:name="B_MOD1_MOD2" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
+     </prop>
+    </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:SubScript</value>
@@ -4495,11 +4525,6 @@
     <node oor:name="F9_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:UpdateInputFields</value>
-     </prop>
-    </node>
-    <node oor:name="F_MOD1_MOD2" oor:op="replace">
-     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="F_SHIFT_MOD1" oor:op="replace">
@@ -4891,6 +4916,11 @@
       <value xml:lang="es">vnd.sun.star.findbar:FocusToFindbar</value>
      </prop>
     </node>
+    <node oor:name="B_MOD1_MOD2" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
+     </prop>
+    </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:SubScript</value>
@@ -5110,11 +5140,6 @@
     <node oor:name="F9_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:UpdateInputFields</value>
-     </prop>
-    </node>
-    <node oor:name="F_MOD1_MOD2" oor:op="replace">
-     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="F_SHIFT_MOD1" oor:op="replace">
