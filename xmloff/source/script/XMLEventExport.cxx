@@ -159,7 +159,7 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
             // don't proceed further
             ::rtl::OString aStr("Unknown event name:" );
             aStr += ::rtl::OUStringToOString( aNames[i], RTL_TEXTENCODING_UTF8 );
-            DBG_ERROR( aStr.getStr() );
+            OSL_FAIL( aStr.getStr() );
         }
 #endif
     }
@@ -209,7 +209,7 @@ void XMLEventExport::ExportSingleEvent(
         // don't proceed further
         ::rtl::OString aStr("Unknown event name:" );
         aStr += ::rtl::OUStringToOString( rApiEventName, RTL_TEXTENCODING_UTF8 );
-        DBG_ERROR( aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
 #endif
 }

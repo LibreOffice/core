@@ -765,7 +765,7 @@ namespace svx
                             sError += ::rtl::OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
                         else
                             sError += "unknown (no SfxSlot)";
-                        DBG_ERROR( sError.getStr() );
+                        OSL_FAIL( sError.getStr() );
                     }
                 #endif
                 }
