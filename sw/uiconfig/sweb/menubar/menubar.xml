@@ -60,6 +60,7 @@
       </menu:menu>
       <menu:menuitem menu:id=".uno:SelectAll"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
       <menu:menuitem menu:id=".uno:SearchDialog"/>
       <menu:menuitem menu:id=".uno:EditGlossary"/>
       <menu:menuseparator/>
