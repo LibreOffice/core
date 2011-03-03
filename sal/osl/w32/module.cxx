@@ -80,13 +80,13 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     {
         std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > vec(Module->length + 1);
         DWORD len = GetShortPathNameW(reinterpret_cast<LPCWSTR>(Module->buffer),
-                                      vec.begin(), Module->length + 1);
+                                      &vec[0], Module->length + 1);
         if (len )
         {
-            hInstance = LoadLibraryW(vec.begin());
+            hInstance = LoadLibraryW(&vec[0]);
 
             if (hInstance == NULL)
-                hInstance = LoadLibraryExW(vec.begin(), NULL,
+                hInstance = LoadLibraryExW(&vec[0], NULL,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
         }
     }

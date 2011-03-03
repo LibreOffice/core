@@ -314,7 +314,7 @@ namespace /* private */
             std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > vec(path.getLength() + 1);
             //GetShortPathNameW only works if the file can be found!
             const DWORD len = GetShortPathNameW(
-                path.getStr(), vec.begin(), path.getLength() + 1);
+                path.getStr(), &vec[0], path.getLength() + 1);
 
             if (!len && GetLastError() == ERROR_FILE_NOT_FOUND
                 && extension.getLength())
@@ -323,12 +323,12 @@ namespace /* private */
                 std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > vec2(
                     extPath.getLength() + 1);
                 const DWORD len2 = GetShortPathNameW(
-                    extPath.getStr(), vec2.begin(), extPath.getLength() + 1);
-                ret = rtl::OUString(vec2.begin(), len2);
+                    extPath.getStr(), &vec2[0], extPath.getLength() + 1);
+                ret = rtl::OUString(&vec2[0], len2);
             }
             else
             {
-                ret = rtl::OUString(vec.begin(), len);
+                ret = rtl::OUString(&vec[0], len);
             }
         }
         return ret;
