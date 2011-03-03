@@ -173,6 +173,11 @@ CONFIGURE_FLAGS+=CFLAGS="-I$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/inc $(cairo_CFLAG
 
 .ENDIF
 
+.IF "$(SYSTEM_LIBPNG)" != "YES"
+CONFIGURE_FLAGS+=png_CFLAGS="-I$(SOLARINCDIR)$/external$/libpng" png_LIBS="-L$(SOLARLIBDIR) -lpng"
+.ENDIF
+
+
 OUT2INC+=cairo-version.h \
      src$/cairo-deprecated.h \
      src$/cairo-features.h  \
