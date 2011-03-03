@@ -550,7 +550,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
     {
         ByteString aTmp( "sd::CustomAnimationPresets::importPresets(), invalid preset id!\n" );
         aTmp += ByteString( aMissedPresetIds, RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aTmp.GetBuffer() );
+        OSL_FAIL( aTmp.GetBuffer() );
     }
 #endif
 }
