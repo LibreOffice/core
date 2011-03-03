@@ -2750,6 +2750,7 @@ void DocxAttributeOutput::NumberingLevel( BYTE nLevel,
 
         if ( pFont )
         {
+            GetExport().GetId( *pFont ); // ensure font info is written to fontTable.xml
             OString aFamilyName( OUStringToOString( OUString( pFont->GetFamilyName() ), RTL_TEXTENCODING_UTF8 ) );
             m_pSerializer->singleElementNS( XML_w, XML_rFonts,
                     FSNS( XML_w, XML_ascii ), aFamilyName.getStr(),
