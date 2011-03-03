@@ -325,7 +325,7 @@ BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
     if ( !rAttr.GetRef() && rAttr.IsA( TYPE( SvMetaSlot ) ) )
     {
         OSL_FAIL( "Neuer Slot : " );
-        DBG_ERROR( rAttr.GetSlotId().GetBuffer() );
+        OSL_FAIL( rAttr.GetSlotId().GetBuffer() );
     }
 
     for( ULONG n = 0; n < aAttrList.Count(); n++ )
@@ -337,9 +337,9 @@ BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
             if( pS->GetSlotId().GetValue() != rAttr.GetSlotId().GetValue() )
             {
                 OSL_FAIL( "Gleicher Name in MetaClass : " );
-                DBG_ERROR( pS->GetName().GetBuffer() );
-                DBG_ERROR( pS->GetSlotId().GetBuffer() );
-                DBG_ERROR( rAttr.GetSlotId().GetBuffer() );
+                OSL_FAIL( pS->GetName().GetBuffer() );
+                OSL_FAIL( pS->GetSlotId().GetBuffer() );
+                OSL_FAIL( rAttr.GetSlotId().GetBuffer() );
 
                 ByteString aStr( "Attribute's " );
                 aStr += pS->GetName();
@@ -356,9 +356,9 @@ BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
             if( nId1 == nId2 && nId1 != 0 )
             {
                 OSL_FAIL( "Gleiche Id in MetaClass : " );
-                DBG_ERROR( ByteString::CreateFromInt32( pS->GetSlotId().GetValue() ).GetBuffer() );
-                DBG_ERROR( pS->GetSlotId().GetBuffer() );
-                DBG_ERROR( rAttr.GetSlotId().GetBuffer() );
+                OSL_FAIL( ByteString::CreateFromInt32( pS->GetSlotId().GetValue() ).GetBuffer() );
+                OSL_FAIL( pS->GetSlotId().GetBuffer() );
+                OSL_FAIL( rAttr.GetSlotId().GetBuffer() );
 
                 ByteString aStr( "Attribute " );
                 aStr += pS->GetName();

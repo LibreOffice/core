@@ -1853,7 +1853,7 @@ String BasicFrame::GenRealString( const String &aResString )
         }
         else
         {
-            DBG_ERROR( CByteString("Unknown replacement in String: ").Append( ByteString( aResult.Copy(nStart,nEnd-nStart), RTL_TEXTENCODING_UTF8 ) ).GetBuffer() );
+            OSL_FAIL( CByteString("Unknown replacement in String: ").Append( ByteString( aResult.Copy(nStart,nEnd-nStart), RTL_TEXTENCODING_UTF8 ) ).GetBuffer() );
             nStartPos = nStartPos + StartKenn.Len();
         }
     }
