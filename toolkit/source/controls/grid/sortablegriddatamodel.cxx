@@ -293,45 +293,15 @@ namespace toolkit
         MethodGuard aGuard( *this, rBHelper );
         DBG_CHECK_ME();
 
-        // if the data is not sorted, broadcast the event unchanged
-        if ( !impl_isSorted_nothrow() )
+        if ( impl_isSorted_nothrow() )
         {
-            GridDataEvent const aEvent( impl_createPublicEvent( i_event ) );
-            impl_broadcast( &XGridDataListener::rowsInserted, aEvent, aGuard );
-            return;
+            // no infrastructure is in place currently to sort the new row to its proper location,
+            // so we remove the sorting here.
+            impl_removeColumnSort( aGuard );
+            aGuard.reset();
         }
 
-        bool needReIndex = false;
-        if ( i_event.FirstRow > i_event.LastRow )
-        {
-            OSL_ENSURE( false, "SortableGridDataModel::rowsInserted: invalid event - invalid row indexes!" );
-            needReIndex = true;
-        }
-        else if ( size_t( i_event.FirstRow ) > m_privateToPublicRowIndex.size() )
-        {
-            OSL_ENSURE( false, "SortableGridDataModel::rowsInserted: invalid event - too large row index!" );
-            needReIndex = true;
-        }
-
-        if ( needReIndex )
-        {
-            impl_rebuildIndexesAndNotify( aGuard );
-            return;
-        }
-
-        // we do not insert the new rows into the sort order - if somebody adds rows while we're sorted, s/he has
-        // to resort. Instead, we simply append the rows, no matter where they were inserted in the delegator data
-        // model.
-        sal_Int32 const nPublicFirstRow = sal_Int32( m_privateToPublicRowIndex.size() );
-        sal_Int32 nPublicLastRow = nPublicFirstRow;
-        for ( sal_Int32 newRow = i_event.FirstRow; newRow <= i_event.LastRow; ++newRow, ++nPublicLastRow )
-        {
-            m_privateToPublicRowIndex.push_back( nPublicLastRow );
-            m_publicToPrivateRowIndex.push_back( nPublicLastRow );
-        }
-
-        // broadcast the event
-        GridDataEvent const aEvent( *this, -1, -1, nPublicFirstRow, nPublicLastRow );
+        GridDataEvent const aEvent( impl_createPublicEvent( i_event ) );
         impl_broadcast( &XGridDataListener::rowsInserted, aEvent, aGuard );
     }
 
@@ -568,11 +538,8 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL SortableGridDataModel::removeColumnSort(  ) throw (RuntimeException)
+    void SortableGridDataModel::impl_removeColumnSort( MethodGuard& i_instanceLock )
     {
-        MethodGuard aGuard( *this, rBHelper );
-        DBG_CHECK_ME();
-
         lcl_clear( m_publicToPrivateRowIndex );
         lcl_clear( m_privateToPublicRowIndex );
 
@@ -582,8 +549,16 @@ namespace toolkit
         impl_broadcast(
             &XGridDataListener::dataChanged,
             GridDataEvent( *this, -1, -1, -1, -1 ),
-            aGuard
+            i_instanceLock
         );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL SortableGridDataModel::removeColumnSort(  ) throw (RuntimeException)
+    {
+        MethodGuard aGuard( *this, rBHelper );
+        DBG_CHECK_ME();
+        impl_removeColumnSort( aGuard );
     }
 
     //------------------------------------------------------------------------------------------------------------------
