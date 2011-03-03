@@ -1170,11 +1170,11 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     }
 
     aState = utl::Bootstrap::locateUserData( sVal );
+    //There can be the valid case that there is no user installation. For example, "unopkg sync"
+    //is currently (OOo3.4) run as part of the setup. Then no user installation is required.
+    //Therefore we do not assert here.
     if( aState == ::utl::Bootstrap::PATH_EXISTS ) {
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ] = ConvertOSLtoUCBURL( sVal );
-    }
-    else {
-        LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Bootstrap code has no value for userpath");
     }
 
     // Set $(inst), $(instpath), $(insturl)
