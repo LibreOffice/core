@@ -1,0 +1,56 @@
+mkdir: %_DEST%\inc%_EXT%\external
+mkdir: %_DEST%\inc%_EXT%\external\libgsf-1
+mkdir: %_DEST%\inc%_EXT%\external\libgsf-1\gsf
+
+..\%__SRC%\inc\gsf-blob.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-blob.h
+..\%__SRC%\inc\gsf-input-impl.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-input-impl.h
+..\%__SRC%\inc\gsf-outfile.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-outfile.h
+..\%__SRC%\inc\gsf-clip-data.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-clip-data.h
+..\%__SRC%\inc\gsf-input-iochannel.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-input-iochannel.h
+..\%__SRC%\inc\gsf-output-bzip.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-output-bzip.h
+..\%__SRC%\inc\gsf-doc-meta-data.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-doc-meta-data.h
+..\%__SRC%\inc\gsf-input-memory.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-input-memory.h
+..\%__SRC%\inc\gsf-output-csv.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-output-csv.h
+..\%__SRC%\inc\gsf-docprop-vector.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-docprop-vector.h
+..\%__SRC%\inc\gsf-input-proxy.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-input-proxy.h
+..\%__SRC%\inc\gsf-output-gio.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-output-gio.h
+..\%__SRC%\inc\gsf-impl-utils.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-impl-utils.h
+..\%__SRC%\inc\gsf-input-stdio.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-input-stdio.h
+..\%__SRC%\inc\gsf-output-gzip.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-output-gzip.h
+..\%__SRC%\inc\gsf-infile-impl.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-infile-impl.h
+..\%__SRC%\inc\gsf-input-textline.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-input-textline.h
+..\%__SRC%\inc\gsf-output-iconv.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-output-iconv.h
+..\%__SRC%\inc\gsf-infile-msole.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-infile-msole.h
+..\%__SRC%\inc\gsf-input.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-input.h
+..\%__SRC%\inc\gsf-output-impl.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-output-impl.h
+..\%__SRC%\inc\gsf-infile-msvba.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-infile-msvba.h
+..\%__SRC%\inc\gsf-libxml.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-libxml.h
+..\%__SRC%\inc\gsf-output-iochannel.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-output-iochannel.h
+..\%__SRC%\inc\gsf-infile-stdio.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-infile-stdio.h
+..\%__SRC%\inc\gsf-meta-names.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-meta-names.h
+..\%__SRC%\inc\gsf-output-memory.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-output-memory.h
+..\%__SRC%\inc\gsf-infile-tar.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-infile-tar.h
+..\%__SRC%\inc\gsf-msole-utils.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-msole-utils.h
+..\%__SRC%\inc\gsf-output-stdio.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-output-stdio.h
+..\%__SRC%\inc\gsf-infile-zip.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-infile-zip.h
+..\%__SRC%\inc\gsf-open-pkg-utils.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-open-pkg-utils.h
+..\%__SRC%\inc\gsf-output.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-output.h
+..\%__SRC%\inc\gsf-infile.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-infile.h
+..\%__SRC%\inc\gsf-opendoc-utils.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-opendoc-utils.h
+..\%__SRC%\inc\gsf-shared-memory.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-shared-memory.h
+..\%__SRC%\inc\gsf-input-bzip.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-input-bzip.h
+..\%__SRC%\inc\gsf-outfile-impl.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-outfile-impl.h
+..\%__SRC%\inc\gsf-structured-blob.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-structured-blob.h
+..\%__SRC%\inc\gsf-input-gio.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-input-gio.h
+..\%__SRC%\inc\gsf-outfile-msole.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-outfile-msole.h
+..\%__SRC%\inc\gsf-timestamp.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-timestamp.h
+..\%__SRC%\inc\gsf-input-gzip.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-input-gzip.h
+..\%__SRC%\inc\gsf-outfile-stdio.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-outfile-stdio.h
+..\%__SRC%\inc\gsf-utils.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-utils.h
+..\%__SRC%\inc\gsf-input-http.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-input-http.h
+..\%__SRC%\inc\gsf-outfile-zip.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf-outfile-zip.h
+..\%__SRC%\inc\gsf.h %_DEST%\inc%_EXT%\external\libgsf-1\gsf\gsf.h
+
+..\%__SRC%\lib\libgsf-1.114.dylib %_DEST%\lib%_EXT%\libgsf-1.114.dylib
+symlink: %_DEST%\lib%_EXT%\libgsf-1.114.dylib %_DEST%\lib%_EXT%\libgsf-1.dylib
+

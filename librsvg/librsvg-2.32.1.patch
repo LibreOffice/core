@@ -1,0 +1,26 @@
+--- misc/librsvg-2.32.1/configure	2010-11-13 11:52:19.000000000 +0100
++++ misc/build/librsvg-2.32.1/configure	2011-03-02 14:06:41.000000000 +0100
+@@ -12288,8 +12288,8 @@
+ 
+ 
+ 
+-GLIB_MKENUMS=`$PKG_CONFIG --variable=glib_mkenums glib-2.0`
+-
++#GLIB_MKENUMS=`$PKG_CONFIG --variable=glib_mkenums glib-2.0`
++GLIB_MKENUMS=glib-mkenums
+ 
+ 
+ pkg_failed=no
+--- misc/librsvg-2.32.1/librsvg-features.h	2010-11-13 11:52:49.000000000 +0100
++++ misc/build/librsvg-2.32.1/librsvg-features.h	2011-03-02 14:05:37.000000000 +0100
+@@ -11,8 +11,8 @@
+    (LIBRSVG_MAJOR_VERSION == (major) && LIBRSVG_MINOR_VERSION > (minor)) || \
+    (LIBRSVG_MAJOR_VERSION == (major) && LIBRSVG_MINOR_VERSION == (minor) && LIBRSVG_MICRO_VERSION >= (micro)))
+ 
+-#define LIBRSVG_HAVE_SVGZ  (1)
+-#define LIBRSVG_HAVE_CSS   (1)
++#define LIBRSVG_HAVE_SVGZ  (0)
++#define LIBRSVG_HAVE_CSS   (0)
+ 
+ #define LIBRSVG_CHECK_FEATURE(FEATURE) (defined(LIBRSVG_HAVE_##FEATURE) && LIBRSVG_HAVE_##FEATURE)
+ 
