@@ -1104,7 +1104,20 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         if (nBlockAddX > nDestSizeX)
             nMarkAddX = nBlockAddX - nDestSizeX;            // fuer Merge-Test
         else
+        {
             nEndCol = nStartCol + nDestSizeX;
+            if (nEndCol > aMarkRange.aEnd.Col())
+            {
+                // #i113553# larger range has to be included in aFilteredMark (for undo), but extending columns can't changed the filtered status
+                aMarkRange = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
+                aFilteredMark.SetMarkArea( aMarkRange );
+                if (bMarkIsFiltered)
+                {
+                    ScViewUtil::UnmarkFiltered( aFilteredMark, pDoc );
+                    aFilteredMark.FillRangeListWithMarks( &aRangeList, sal_True );
+                }
+            }
+        }
 
         if (nBlockAddY > nDestSizeY)
             nMarkAddY = nBlockAddY - nDestSizeY;            // fuer Merge-Test
