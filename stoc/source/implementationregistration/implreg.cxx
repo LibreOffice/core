@@ -73,10 +73,10 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 
-
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 #define IMPLNAME "com.sun.star.comp.stoc.ImplementationRegistration"
 #define SERVICENAME         "com.sun.star.registry.ImplementationRegistration"
 namespace stoc_impreg

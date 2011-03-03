@@ -60,8 +60,11 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 #if OSL_DEBUG_LEVEL > 0
 #define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
@@ -72,35 +75,35 @@ using namespace osl;
 namespace stoc_impreg
 {
 void SAL_CALL mergeKeys(
-    Reference< registry::XRegistryKey > const & xDest,
-    Reference< registry::XRegistryKey > const & xSource )
-    SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) );
+Reference< registry::XRegistryKey > const & xDest,
+Reference< registry::XRegistryKey > const & xSource )
+SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) );
 }
 static void mergeKeys(
-    Reference< registry::XSimpleRegistry > const & xDest,
-    OUString const & rBaseNode,
-    OUString const & rURL )
-    SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) )
+Reference< registry::XSimpleRegistry > const & xDest,
+OUString const & rBaseNode,
+OUString const & rURL )
+SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) )
 {
-    Reference< registry::XRegistryKey > xDestRoot( xDest->getRootKey() );
-    Reference< registry::XRegistryKey > xDestKey;
-    if (rBaseNode.getLength())
-    {
-        xDestKey = xDestRoot->createKey( rBaseNode );
-        xDestRoot->closeKey();
-    }
-    else
-    {
-        xDestKey = xDestRoot;
-    }
-    Reference< registry::XSimpleRegistry > xSimReg( ::cppu::createSimpleRegistry() );
-    xSimReg->open( rURL, sal_True, sal_False );
-    OSL_ASSERT( xSimReg->isValid() );
-    Reference< registry::XRegistryKey > xSourceKey( xSimReg->getRootKey() );
-    ::stoc_impreg::mergeKeys( xDestKey, xSourceKey );
-    xSourceKey->closeKey();
-    xSimReg->close();
-    xDestKey->closeKey();
+Reference< registry::XRegistryKey > xDestRoot( xDest->getRootKey() );
+Reference< registry::XRegistryKey > xDestKey;
+if (rBaseNode.getLength())
+{
+xDestKey = xDestRoot->createKey( rBaseNode );
+xDestRoot->closeKey();
+}
+else
+{
+xDestKey = xDestRoot;
+}
+Reference< registry::XSimpleRegistry > xSimReg( ::cppu::createSimpleRegistry() );
+xSimReg->open( rURL, sal_True, sal_False );
+OSL_ASSERT( xSimReg->isValid() );
+Reference< registry::XRegistryKey > xSourceKey( xSimReg->getRootKey() );
+::stoc_impreg::mergeKeys( xDestKey, xSourceKey );
+xSourceKey->closeKey();
+xSimReg->close();
+xDestKey->closeKey();
 }
 
 
@@ -108,33 +111,33 @@ OString userRegEnv("STAR_USER_REGISTRY=");
 
 OUString getExePath()
 {
-    OUString        exe;
-    OSL_VERIFY( osl_getExecutableFile( &exe.pData ) == osl_Process_E_None);
+OUString        exe;
+OSL_VERIFY( osl_getExecutableFile( &exe.pData ) == osl_Process_E_None);
 #if defined(WIN32) || defined(__OS2__) || defined(WNT)
-    exe = exe.copy(0, exe.getLength() - 16);
+exe = exe.copy(0, exe.getLength() - 16);
 #else
-    exe = exe.copy(0, exe.getLength() - 12);
+exe = exe.copy(0, exe.getLength() - 12);
 #endif
-    return exe;
+return exe;
 }
 
 void setStarUserRegistry()
 {
-    Registry *myRegistry = new Registry();
+Registry *myRegistry = new Registry();
 
-    RegistryKey rootKey, rKey, rKey2;
+RegistryKey rootKey, rKey, rKey2;
 
-    OUString userReg = getExePath();
-    userReg += OUString(RTL_CONSTASCII_USTRINGPARAM("user.rdb"));
-    if(myRegistry->open(userReg, REG_READWRITE))
-    {
-        TEST_ENSHURE(!myRegistry->create(userReg), "setStarUserRegistry error 1");
-    }
+OUString userReg = getExePath();
+userReg += OUString(RTL_CONSTASCII_USTRINGPARAM("user.rdb"));
+if(myRegistry->open(userReg, REG_READWRITE))
+{
+TEST_ENSHURE(!myRegistry->create(userReg), "setStarUserRegistry error 1");
+}
 
-    TEST_ENSHURE(!myRegistry->close(), "setStarUserRegistry error 9");
-    delete myRegistry;
+TEST_ENSHURE(!myRegistry->close(), "setStarUserRegistry error 9");
+delete myRegistry;
 
-    userRegEnv += OUStringToOString(userReg, RTL_TEXTENCODING_ASCII_US);
+userRegEnv += OUStringToOString(userReg, RTL_TEXTENCODING_ASCII_US);
     putenv((char *)userRegEnv.getStr());
 }
 

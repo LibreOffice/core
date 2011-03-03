@@ -62,7 +62,6 @@
 
 using namespace std;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -71,7 +70,8 @@ using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
 using namespace com::sun::star::registry;
 
-
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 static const sal_Int32 CACHE_SIZE = 512;
 

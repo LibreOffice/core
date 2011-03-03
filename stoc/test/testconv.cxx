@@ -44,7 +44,6 @@
 #include <stdio.h>
 
 
-using namespace rtl;
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::uno;
@@ -52,6 +51,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::registry;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 const double MIN_DOUBLE     = -DBL_MAX;
 const double MAX_DOUBLE     = DBL_MAX;

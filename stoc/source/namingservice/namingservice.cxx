@@ -45,13 +45,14 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 using namespace std;
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
+
+using ::rtl::OUString;
 
 #define SERVICENAME "com.sun.star.uno.NamingService"
 #define IMPLNAME    "com.sun.star.comp.stoc.NamingService"

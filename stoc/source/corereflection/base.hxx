@@ -61,12 +61,12 @@
 
 using namespace std;
 using namespace osl;
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
+using ::rtl::OUString;
 
 
 namespace stoc_corefl

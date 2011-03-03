@@ -52,8 +52,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::loader;
 using namespace com::sun::star::lang;
 using namespace osl;
-using namespace rtl;
 using namespace cppu;
+
+using ::rtl::OUString;
 
 #if OSL_DEBUG_LEVEL > 0
 #define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)

@@ -47,13 +47,16 @@
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 
 using namespace std;
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::java;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 
 sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )

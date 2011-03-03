@@ -43,7 +43,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 
 extern rtl_StandardModuleCount g_moduleCount;
 

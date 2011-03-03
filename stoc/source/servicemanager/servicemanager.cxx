@@ -82,8 +82,12 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
 
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 

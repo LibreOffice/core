@@ -46,7 +46,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 #define SERVICENAME1 "example.ExampleComponent1"
 #define IMPLNAME1   "example.ExampleComponent1.Impl"

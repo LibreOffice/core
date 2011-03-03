@@ -65,9 +65,8 @@ using namespace com::sun::star::loader;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
-
+using ::rtl::OUString;
 extern rtl_StandardModuleCount g_moduleCount;
 
 namespace stoc_bootstrap

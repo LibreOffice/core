@@ -7,7 +7,8 @@
 
 
 using namespace salhelper;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 
 class SampleLibLoader

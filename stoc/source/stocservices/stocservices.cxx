@@ -41,7 +41,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace stoc_services;
 
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;

@@ -89,7 +89,10 @@ using namespace com::sun::star::beans::PropertyConcept;
 using namespace com::sun::star::beans::MethodConcept;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.stoc.Introspection"
 #define SERVICE_NAME        "com.sun.star.beans.Introspection"
@@ -1318,20 +1321,6 @@ Sequence< Property > ImplIntrospectionAccess::getProperties(sal_Int32 PropertyCo
         sal_Int32 nConcept = pConcepts[ i ];
         if( nConcept & PropertyConcepts )
             pDestProps[ iDest++ ] = pSourceProps[ i ];
-
-        /*
-        // Property mit Concepts ausgeben
-        OUString aPropName = pSourceProps[ i ].Name;
-        String aNameStr = OOUStringToString(aPropName, CHARSET_SYSTEM);
-        String ConceptStr;
-        if( nConcept & PROPERTYSET )
-            ConceptStr += "PROPERTYSET";
-        if( nConcept & ATTRIBUTES )
-            ConceptStr += "ATTRIBUTES";
-        if( nConcept & METHODS )
-            ConceptStr += "METHODS";
-        printf( "Property %ld: %s, Concept = %s\n", i, aNameStr.GetStr(), ConceptStr.GetStr() );
-        */
     }
 
     // PropertyConcept merken, dies entspricht maLastPropertySeq

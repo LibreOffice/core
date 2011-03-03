@@ -61,7 +61,6 @@
 #include <uno/current_context.hxx>
 
 using namespace std;
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -69,6 +68,10 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::java;
 using namespace com::sun::star::task;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 #define OUSTR( x ) OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 #define INTERACTION_HANDLER_NAME "java-vm.interaction-handler"
