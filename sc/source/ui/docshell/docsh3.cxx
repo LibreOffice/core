@@ -972,7 +972,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
                 ByteString aError( aValue, gsl_getSystemTextEncoding() );
                 aError += " weggelassen";
-                DBG_ERROR( aError.GetBuffer() );
+                OSL_FAIL( aError.GetBuffer() );
 #endif
             }
             else
