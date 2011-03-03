@@ -1142,7 +1142,6 @@ BOOL ViewTabListBox_Impl::DoubleClickHdl()
         // - which is not what in the case of content replace
         // (I really doubt that this behaviour of the SvImpLBox does make any sense at all, but
         // who knows ...)
-        // 07.12.2001 - 95727 - fs@openoffice.org
 }
 
 ::rtl::OUString ViewTabListBox_Impl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
@@ -2455,7 +2454,7 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
         {
             pEntry = mpView->GetEntry( nPos );
 
-            ++mnSuspendSelectCallback;  // #i15668# - 2004-04-25 - fs@openoffice.org
+            ++mnSuspendSelectCallback;  // #i15668#
             mpView->SetCurEntry( pEntry );
             --mnSuspendSelectCallback;
         }

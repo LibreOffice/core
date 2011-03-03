@@ -2257,7 +2257,6 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             // if there is no next entry, take the current one
             // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
             // the cursor key
-            // 06.09.20001 - 83416 - fs@openoffice.org
             if ( !pNewCursor && pCursor )
                 pNewCursor = pCursor;
 

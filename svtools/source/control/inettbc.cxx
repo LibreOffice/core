@@ -1167,7 +1167,7 @@ String SvtURLBox::GetURL()
     aText.EraseTrailingChars();
     if ( !aText.Len() )
         return aText;
-    // #i9739# - 2002-12-03 - fs@openoffice.org
+    // #i9739#
 #endif
 
     INetURLObject aObj( aText );

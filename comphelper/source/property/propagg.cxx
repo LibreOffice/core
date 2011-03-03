@@ -747,7 +747,6 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                 throw WrappedTargetException( ::rtl::OUString(), static_cast< XMultiPropertySet* >( this ), makeAny( UnknownPropertyException( ) ) );
                 // due to a flaw in the API design, this method is not allowed to throw an UnknownPropertyException
                 // so we wrap it into a WrappedTargetException
-                // #107545# - 2002-02-20 - fs@openoffice.org
 
             if ( OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY == ePropOrg )
                 ++nAggCount;

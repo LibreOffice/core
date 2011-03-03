@@ -2301,7 +2301,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
             {
                 aRet = TransferableDataHelper( xTransferable );
                    aRet.mxClipboard = xClipboard;
-                    // also copy the clipboard - 99030 - 23.05.2002 - fs@openoffice.org
+                    // also copy the clipboard
             }
            }
         catch( const ::com::sun::star::uno::Exception& )

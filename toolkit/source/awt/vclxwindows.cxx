@@ -581,7 +581,6 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 // since we call listeners below, there is a potential that we will be destroyed
                 // during the listener call. To prevent the resulting crashs, we keep us
                 // alive as long as we're here
-                // #20178# - 2003-10-01 - fs@openoffice.org
 
             if ( maActionListeners.getLength() )
             {
@@ -1024,7 +1023,6 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 // since we call listeners below, there is a potential that we will be destroyed
                 // in during the listener call. To prevent the resulting crashs, we keep us
                 // alive as long as we're here
-                // #20178# - 2003-10-01 - fs@openoffice.org
 
             CheckBox* pCheckBox = (CheckBox*)GetWindow();
             if ( pCheckBox )
@@ -1298,7 +1296,6 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
         // since we call listeners below, there is a potential that we will be destroyed
         // in during the listener call. To prevent the resulting crashs, we keep us
         // alive as long as we're here
-        // #20178# - 2003-10-01 - fs@openoffice.org
 
     switch ( rVclWindowEvent.GetId() )
     {
@@ -1451,7 +1448,6 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 // since we call listeners below, there is a potential that we will be destroyed
                 // in during the listener call. To prevent the resulting crashs, we keep us
                 // alive as long as we're here
-                // #20178# - 2003-10-01 - fs@openoffice.org
 
             if ( maSpinListeners.getLength() )
             {
@@ -1808,7 +1804,6 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         // since we call listeners below, there is a potential that we will be destroyed
         // in during the listener call. To prevent the resulting crashs, we keep us
         // alive as long as we're here
-        // #20178# - 2003-10-01 - fs@openoffice.org
 
     switch ( rVclWindowEvent.GetId() )
     {
@@ -3772,7 +3767,6 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 // since we call listeners below, there is a potential that we will be destroyed
                 // in during the listener call. To prevent the resulting crashs, we keep us
                 // alive as long as we're here
-                // #20178# - 2003-10-01 - fs@openoffice.org
 
             if ( maAdjustmentListeners.getLength() )
             {
@@ -4185,7 +4179,6 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 // since we call listeners below, there is a potential that we will be destroyed
                 // during the listener call. To prevent the resulting crashs, we keep us
                 // alive as long as we're here
-                // #20178# - 2003-10-01 - fs@openoffice.org
 
             if ( GetTextListeners().getLength() )
             {
@@ -4492,7 +4485,6 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         // since we call listeners below, there is a potential that we will be destroyed
         // during the listener call. To prevent the resulting crashs, we keep us
         // alive as long as we're here
-        // #20178# - 2003-10-01 - fs@openoffice.org
 
     switch ( rVclWindowEvent.GetId() )
     {

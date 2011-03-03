@@ -333,7 +333,6 @@ namespace svt
                         // thus, there is no help during the lifetime of the dialog.
                         // To fake this, we explicitly load the necessary services when the user
                         // really requests help herein.
-                        // #110791# - 2003-06-11 - fs@openoffice.org
                         Reference < XInitialization > xOfficeWrapper(
                                 m_xORB->createInstance(
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.OfficeWrapper" ) )

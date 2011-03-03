@@ -649,14 +649,13 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         aGuard.clear();
 
         // clear the guard before creating a new peer - as usual, our peer implementations use the SolarMutex
-        // #82300# - 2000-12-21 - fs@openoffice.org
+
         if (bNeedNewPeer && xParent.is())
         {
             SolarMutexGuard aVclGuard;
                 // and now this is the final withdrawal:
-                // With 83561, I have no other idea than locking the SolarMutex here ....
+                // I have no other idea than locking the SolarMutex here ....
                 // I really hate the fact that VCL is not theadsafe ....
-                // #83561# - 2001-03-01 - fs@openoffice.org
 
             // Funktioniert beim Container nicht!
             getPeer()->dispose();
@@ -674,7 +673,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         // model did not cause the listeners of the controls/peers to be called
         // Since the implementations for the listeners changed a lot towards 1.1, this
         // would not be the case anymore, if we would not do this listener-lock below
-        // #i14703# - 2003-05-23 - fs@openoffice.org
+        // #i14703#
         Window* pVclPeer = VCLUnoHelper::GetWindow( getPeer() );
         VCLXWindow* pPeer = pVclPeer ? pVclPeer->GetWindowPeer() : NULL;
         VclListenerLock aNoVclEventMultiplexing( pPeer );
@@ -682,7 +681,6 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         // setting peer properties may result in an attemp to acquire the solar mutex, 'cause the peers
         // usually don't have an own mutex but use the SolarMutex instead.
         // To prevent deadlocks resulting from this, we do this without our own mutex locked
-        // 2000-11-03 - fs@openoffice.org
         PropertyValueVectorIterator aEnd = aPeerPropertiesToSet.end();
         for (   PropertyValueVectorIterator aLoop = aPeerPropertiesToSet.begin();
                 aLoop != aEnd;

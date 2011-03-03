@@ -228,7 +228,6 @@ public:
 // whole class, which is planned for a long time :)
 //
 // sorry for the ranting. could not resist
-// 98483 - 11.04.2002 - fs@openoffice.org
 
 class SVT_DLLPUBLIC BrowseBox
         :public Control

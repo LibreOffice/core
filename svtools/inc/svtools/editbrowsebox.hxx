@@ -114,7 +114,6 @@ namespace svt
 
         // commit any current changes. Especially, do any reformatting you need (from input formatting
         // to output formatting) here
-        // 95826 - 2002-10-14 - fs@openoffice.org
         virtual void CommitModifications();
 
         // suspending the controller is not culmulative!

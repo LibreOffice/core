@@ -1131,7 +1131,7 @@ void UnoRadioButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) thr
     // Thus, we suppress all events with a new state other than "1". This is unlogical, and weird, when looking
     // from a pure API perspective, but it's _compatible_ with older product versions, and this is
     // all which matters here.
-    // #i14703# - 2003-05-23 - fs@openoffice.org
+    // #i14703#
     if ( 1 == rEvent.Selected )
     {
         if ( maItemListeners.getLength() )

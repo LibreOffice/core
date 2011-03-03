@@ -1616,7 +1616,6 @@ void UnoDialogControl::ImplInsertControl( Reference< XControlModel >& rxModel, c
         addControl( rName, xCtrl );
             // will implicitly call addingControl, where we can add the PropertiesChangeListener to the model
             // (which we formerly did herein)
-            // 08.01.2001 - 96008 - fs@openoffice.org
 
         ImplSetPosSize( xCtrl );
     }
@@ -1759,7 +1758,6 @@ sal_Bool UnoDialogControl::setModel( const Reference< XControlModel >& rxModel )
             removeControl( *pCtrls );
                 // will implicitly call removingControl, which will remove the PropertyChangeListener
                 // (which we formerly did herein)
-                // 08.01.2001 - 96008 - fs@openoffice.org
 
         Reference< XContainer > xC( getModel(), UNO_QUERY );
         if ( xC.is() )
@@ -2412,7 +2410,6 @@ void UnoParentControl::ImplInsertControl( Reference< XControlModel >& rxModel, c
         addControl( rName, xCtrl );
             // will implicitly call addingControl, where we can add the PropertiesChangeListener to the model
             // (which we formerly did herein)
-            // 08.01.2001 - 96008 - fs@openoffice.org
 
         ImplSetPosSize( xCtrl );
     }
@@ -2519,7 +2516,6 @@ sal_Bool UnoParentControl::setModel( const Reference< XControlModel >& rxModel )
             removeControl( *pCtrls );
                 // will implicitly call removingControl, which will remove the PropertyChangeListener
                 // (which we formerly did herein)
-                // 08.01.2001 - 96008 - fs@openoffice.org
 
         Reference< XContainer > xC( getModel(), UNO_QUERY );
         if ( xC.is() )

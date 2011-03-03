@@ -813,7 +813,6 @@ void FormattedField::FormatChanged( FORMAT_CHANGE_TYPE _nWhat )
 
     if ( ( 0 != ( _nWhat & FCT_FORMATTER ) ) && m_pFormatter )
         m_pFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
-        // 95845 - 03.04.2002 - fs@openoffice.org
 
     ReFormat();
 }

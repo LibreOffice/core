@@ -1550,7 +1550,6 @@ void Window::ImplResetReallyVisible()
     // the SHOW/HIDE events serve as indicators to send child creation/destroy events to the access bridge.
     // For this, the data member of the event must not be NULL.
     // Previously, we did this in Window::Show, but there some events got lost in certain situations.
-    // #104887# - 2004-08-10 - fs@openoffice.org
     if( bBecameReallyInvisible && ImplIsAccessibleCandidate() )
         ImplCallEventListeners( VCLEVENT_WINDOW_HIDE, this );
         // TODO. It's kind of a hack that we're re-using the VCLEVENT_WINDOW_HIDE. Normally, we should
@@ -1593,7 +1592,6 @@ void Window::ImplSetReallyVisible()
     // For this, the data member of the event must not be NULL.
     // Previously, we did this in Window::Show, but there some events got lost in certain situations. Now
     // we're doing it when the visibility really changes
-    // #104887# - 2004-08-10 - fs@openoffice.org
     if( bBecameReallyVisible && ImplIsAccessibleCandidate() )
         ImplCallEventListeners( VCLEVENT_WINDOW_SHOW, this );
         // TODO. It's kind of a hack that we're re-using the VCLEVENT_WINDOW_SHOW. Normally, we should

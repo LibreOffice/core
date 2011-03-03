@@ -745,7 +745,6 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     // handles a context menu command as special case of a mouse event, which is simply wrong.
                     // Without extending the API, we would not have another chance to notify listeners of a
                     // keyboard-triggered context menu request
-                    // 102205 - 16.08.2002 - fs@openoffice.org
                     aWhere = Point( -1, -1 );
                 }
 

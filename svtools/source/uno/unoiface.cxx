@@ -529,7 +529,7 @@ void SAL_CALL VCLXMultiLineEdit::setFocus(  ) throw(::com::sun::star::uno::Runti
     // does is forwarding the focus to it's text window. This text window then does a "select all".
     // So if the text window already has the focus, and we give the focus to the multi line
     // edit, then all which happens is that everything is selected.
-    // #i27072# - 2004-04-25 - fs@openoffice.org
+    // #i27072#
     if ( GetWindow() && !GetWindow()->HasChildPathFocus() )
         GetWindow()->GrabFocus();
 }

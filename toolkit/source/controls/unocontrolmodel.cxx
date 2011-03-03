@@ -1170,7 +1170,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                         if ( bConverted )
                             rConvertedValue <<= nAsDouble;
                         else
-                        {   // try as integer - 96136 - 2002-10-08 - fs@openoffice.org
+                        {   // try as integer
                             sal_Int32 nAsInteger = 0;
                             bConverted = ( rValue >>= nAsInteger );
                             if ( bConverted )
@@ -1395,7 +1395,6 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
     sal_Int32* pHandles = aHandles.getArray();
 
     // may need to change the order in the sequence, for this we need a non-const value sequence
-    // 15.05.2002 - 99314 - fs@openoffice.org
     uno::Sequence< uno::Any > aValues( Values );
     uno::Any* pValues = aValues.getArray();
 
@@ -1429,7 +1428,7 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
                 // clear our guard before calling into setFastPropertyValues - this method
                 // will implicitly call property listeners, and this should not happen with
                 // our mutex locked
-                // #i23451# - 2004-03-18 - fs@openoffice.org
+                // #i23451#
              setFastPropertyValues( nProps, pHandles, pValues, nValidHandles );
         }
         else
