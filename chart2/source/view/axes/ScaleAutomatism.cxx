@@ -49,8 +49,15 @@ using ::com::sun::star::chart::TimeUnit::MONTH;
 using ::com::sun::star::chart::TimeUnit::YEAR;
 
 const sal_Int32 MAXIMUM_MANUAL_INCREMENT_COUNT = 500;
-const sal_Int32 MAXIMUM_AUTO_INCREMENT_COUNT = 10;
 const sal_Int32 MAXIMUM_SUB_INCREMENT_COUNT = 100;
+
+sal_Int32 lcl_getMaximumAutoIncrementCount( sal_Int32 nAxisType )
+{
+    sal_Int32 nMaximumAutoIncrementCount = 10;
+    if( nAxisType==AxisType::DATE )
+        nMaximumAutoIncrementCount = MAXIMUM_MANUAL_INCREMENT_COUNT;
+    return nMaximumAutoIncrementCount;
+}
 
 namespace
 {
@@ -102,7 +109,7 @@ ScaleAutomatism::ScaleAutomatism( const ScaleData& rSourceScale, const Date& rNu
                     : m_aSourceScale( rSourceScale )
                     , m_fValueMinimum( 0.0 )
                     , m_fValueMaximum( 0.0 )
-                    , m_nMaximumAutoMainIncrementCount( MAXIMUM_AUTO_INCREMENT_COUNT )
+                    , m_nMaximumAutoMainIncrementCount( lcl_getMaximumAutoIncrementCount( m_aSourceScale.AxisType ) )
                     , m_bExpandBorderToIncrementRhythm( false )
                     , m_bExpandIfValuesCloseToBorder( false )
                     , m_bExpandWideValuesToZero( false )
@@ -149,8 +156,8 @@ void ScaleAutomatism::setMaximumAutoMainIncrementCount( sal_Int32 nMaximumAutoMa
 {
     if( nMaximumAutoMainIncrementCount < 2 )
         m_nMaximumAutoMainIncrementCount = 2; //#i82006
-    else if( nMaximumAutoMainIncrementCount > MAXIMUM_AUTO_INCREMENT_COUNT )
-        m_nMaximumAutoMainIncrementCount = MAXIMUM_AUTO_INCREMENT_COUNT;
+    else if( nMaximumAutoMainIncrementCount > lcl_getMaximumAutoIncrementCount( m_aSourceScale.AxisType ) )
+        m_nMaximumAutoMainIncrementCount = lcl_getMaximumAutoIncrementCount( m_aSourceScale.AxisType );
     else
         m_nMaximumAutoMainIncrementCount = nMaximumAutoMainIncrementCount;
 }
@@ -692,6 +699,19 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         nNumer = static_cast<sal_Int32>( rtl::math::approxCeil( nIntervalDays/nDaysPerInterval ) );
         if(nNumer<=0)
             nNumer=1;
+        if( rExplicitIncrement.MajorTimeInterval.TimeUnit == DAY )
+        {
+            if( nNumer>2 && nNumer<7 )
+                nNumer=7;
+            else if( nNumer>7 )
+            {
+                rExplicitIncrement.MajorTimeInterval.TimeUnit = MONTH;
+                nDaysPerInterval = 31.0;
+                nNumer = static_cast<sal_Int32>( rtl::math::approxCeil( nIntervalDays/nDaysPerInterval ) );
+                if(nNumer<=0)
+                    nNumer=1;
+            }
+        }
         rExplicitIncrement.MajorTimeInterval.Number = nNumer;
         nMainIncrementCount = nDayCount/(nNumer*nDaysPerInterval);
     }
