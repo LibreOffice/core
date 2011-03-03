@@ -181,7 +181,7 @@ uno::Sequence< ::rtl::OUString >  SAL_CALL StringRepresentation::getSupportedSer
             ::rtl::OString sMessage( "StringRepresentation::convertPropertyValueToStringRepresentation: cannot convert values of type '" );
             sMessage += ::rtl::OString( PropertyValue.getValueType().getTypeName().getStr(), PropertyValue.getValueType().getTypeName().getLength(), RTL_TEXTENCODING_ASCII_US );
             sMessage += ::rtl::OString( "'!" );
-            DBG_ERROR( sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
         }
 #endif
     }
@@ -226,7 +226,7 @@ uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const ::rtl::OUSt
             ::rtl::OString sMessage( "StringRepresentation::convertStringRepresentationToPropertyValue: cannot convert into values of type '" );
             sMessage += ::rtl::OString( ControlValueType.getTypeName().getStr(), ControlValueType.getTypeName().getLength(), RTL_TEXTENCODING_ASCII_US );
             sMessage += ::rtl::OString( "'!" );
-            DBG_ERROR( sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
         }
     #endif
     }
