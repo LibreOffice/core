@@ -108,7 +108,7 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
     {
 #ifdef DBG_UTIL
         ByteString aErrorStr( "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <" );
-        DBG_ERROR( ( ( aErrorStr += ByteString( aFileName, RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
+        OSL_FAIL( ( ( aErrorStr += ByteString( aFileName, RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
 #endif
     }
 }
