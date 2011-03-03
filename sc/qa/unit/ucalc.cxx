@@ -228,6 +228,7 @@ public:
 
     void testCollator();
     void testSUM();
+    void testVolatileFunc();
     void testNamedRange();
     void testCSV();
     void testMatrix();
@@ -250,6 +251,7 @@ public:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testSUM);
+    CPPUNIT_TEST(testVolatileFunc);
     CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST(testCSV);
     CPPUNIT_TEST(testMatrix);
@@ -343,6 +345,36 @@ void Test::testSUM()
     double result;
     m_pDoc->GetValue (0, 2, 0, result);
     CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testVolatileFunc()
+{
+    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
+    double val = 1;
+    m_pDoc->SetValue(0, 0, 0, val);
+    m_pDoc->SetString(0, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=IF(A1>0;NOW();0")));
+    double now1;
+    m_pDoc->GetValue(0, 1, 0, now1);
+    CPPUNIT_ASSERT_MESSAGE("Value of NOW() should be positive.", now1 > 0.0);
+
+    val = 0;
+    m_pDoc->SetValue(0, 0, 0, val);
+    m_xDocShRef->DoRecalc(true);
+    double zero;
+    m_pDoc->GetValue(0, 1, 0, zero);
+    CPPUNIT_ASSERT_MESSAGE("Result should equal the 3rd parameter of IF, which is zero.", zero == 0.0);
+
+    val = 1;
+    m_pDoc->SetValue(0, 0, 0, val);
+    m_xDocShRef->DoRecalc(true);
+    double now2;
+    m_pDoc->GetValue(0, 1, 0, now2);
+    CPPUNIT_ASSERT_MESSAGE("Result should be the value of NOW() again.", (now2 - now1) >= 0.0);
 
     m_pDoc->DeleteTab(0);
 }
