@@ -1,0 +1,3 @@
+mkdir: %_DEST%\inc%_EXT%\external\fontconfig
+..\%__SRC%\bin\fontconfigmi.dll %_DEST%\bin%_EXT%\fontconfigmi.dll
+
