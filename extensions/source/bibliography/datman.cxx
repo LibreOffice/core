@@ -215,7 +215,7 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
                 String sMsg(String::CreateFromAscii("::getColumns : catched an exception ("));
                 sMsg += String(e.Message);
                 sMsg.AppendAscii(") ...");
-                DBG_ERROR( ByteString(sMsg, RTL_TEXTENCODING_ASCII_US ).GetBuffer());
+                OSL_FAIL( ByteString(sMsg, RTL_TEXTENCODING_ASCII_US ).GetBuffer());
 #endif
             }
 
