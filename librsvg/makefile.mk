@@ -61,7 +61,7 @@ CONFIGURE_FLAGS=--disable-gtk-theme --disable-tools --with-croco --with-svgz \
                  LIBRSVG_CFLAGS="-I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/gdk-pixbuf-2.0 -I$(SOLARINCDIR)$/external$/pango-1.0 -I$(SOLARINCDIR)$/cairo $(LIBXML_CFLAGS)" \
                  LIBRSVG_LIBS="-L$(SOLARLIBDIR) -lgdk_pixbuf-2.0 -lpango-1.0 -lpangocairo-1.0 -lgthread-2.0 -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lglib-2.0 $(LIBXML_LIBS) -lcairo -lintl" \
                  GDK_PIXBUF_CFLAGS="-I$(SOLARINCDIR)$/external$/gdk-pixbuf-2.0" \
-                 GDK_PIXBUF_LIBS=-lgdkpixbuf-2.0 \
+                 GDK_PIXBUF_LIBS=-lgdk_pixbuf-2.0 \
                  GTHREAD_CFLAGS=-I$(SOLARINCDIR)$/external/$glib-2.0 \
                  GTHREAD_LIBS=-lgthread-2.0 \
                  LIBCROCO_CFLAGS="-I$(SOLARINCDIR)$/external$/libcroco-0.6" \
@@ -80,6 +80,12 @@ BUILD_DIR=$(CONFIGURE_DIR)
 
 .IF "$(OS)"=="MACOSX"
 EXTRPATH=LOADER
+OUT2LIB+=.libs$/librsvg-2.2.dylib
+
+OUT2INC+=librsvg-enum-types.h
+OUT2INC+=librsvg-features.h
+OUT2INC+=rsvg-cairo.h
+OUT2INC+=rsvg.h
 .ELIF "$(OS)"=="WNT"
 .ENDIF
 
