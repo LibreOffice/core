@@ -179,6 +179,10 @@ namespace toolkit
         */
         void    impl_rebuildIndexesAndNotify( MethodGuard& i_instanceLock );
 
+        /** removes the current sorting, and notifies a change of all data
+        */
+        void    impl_removeColumnSort( MethodGuard& i_instanceLock );
+
     private:
         ::comphelper::ComponentContext                                                          m_context;
         bool                                                                                    m_isInitialized;
