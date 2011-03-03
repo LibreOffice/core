@@ -134,17 +134,6 @@ void SAL_CALL XMLErrorHandler::fatalError( const Any& aSAXParseException ) throw
 
 void SAL_CALL XMLErrorHandler::warning( const Any& /* aSAXParseException */ ) throw (SAXException, RuntimeException)
 {
-/*
-    SAXParseException e;
-    if( aSAXParseException >>= e )
-    {
-        String sErr( String::CreateFromInt32( e.LineNumber ) );
-        sErr += String( RTL_CONSTASCII_USTRINGPARAM( " : " ) );
-        sErr += String( e.Message );
-        USHORT nEntry = mrListBox.InsertEntry( sErr );
-        mrListBox.SetEntryData( nEntry, (void*)e.LineNumber );
-    }
-*/
 }
 
 
@@ -364,7 +353,6 @@ void XMLFileWindow::CreateTextEngine()
     pTextEngine->EnableUndo( FALSE );
     pTextEngine->SetUpdateMode( TRUE );
 
-//  pTextView->ShowCursor( TRUE, TRUE );
     pTextView->HideCursor();
 
     InitScrollBars();
@@ -567,10 +555,6 @@ void XMLSourceFileDialog::Resize()
     Size aButton( maPBValidate.GetSizePixel() );
 
     Size aDialogSize( GetOutputSizePixel() );
-
-//  Point aButtonPos( aSpacing.X(), aSpacing.Y() );
-//  maPBValidate.SetPosSizePixel( aButtonPos, aButton );
-
     Size aOutputSize( aDialogSize.Width(), bOutputVisible ? mnOutputHeight : 0 );
 
     Point aTextWindowPos( 0, 2* aSpacing.Y() + aButton.Height() );
@@ -678,8 +662,6 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
     const sal_Unicode cCloseBracket= '>';
     const sal_Unicode cSlash        = '/';
     const sal_Unicode cExclamation = '!';
-//  const sal_Unicode cQuote        = '"';
-//  const sal_Unicode cSQuote      = '\'';
     const sal_Unicode cMinus        = '-';
     const sal_Unicode cSpace        = ' ';
     const sal_Unicode cTab          = 0x09;
@@ -755,25 +737,12 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     //irgend ein String wurde gefunden
                     String sToken = rSource.Copy(nActPos + 1, nSrchPos - nActPos - 1 );
                     sToken.ToUpperAscii();
-//                  int nToken = ::GetHTMLToken(sToken);
-//                  if(nToken)
                     {
                         //Token gefunden
                         eFoundType = svtools::HTMLKEYWORD;
                         nPortEnd = nSrchPos;
                         nPortStart = nActPos;
                     }
-/*
-                    else
-                    {
-                        //was war das denn?
-#ifdef DEBUG
-                        OSL_FAIL("Token nicht erkannt!")
-                        DBG_ERROR(ByteString(sToken, gsl_getSystemTextEncoding()).GetBuffer())
-#endif
-                    }
-*/
-
                 }
             }
             // jetzt muss noch '>' gesucht werden
@@ -882,7 +851,6 @@ void XMLFileWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         SwTextPortion& r = aPortionList[i];
         if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
             continue;
-//      USHORT nCol = r.eType;
         if(r.eType !=  svtools::HTMLSGML    &&
             r.eType != svtools::HTMLCOMMENT &&
             r.eType != svtools::HTMLKEYWORD &&
