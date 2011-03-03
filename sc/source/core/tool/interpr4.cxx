@@ -3594,7 +3594,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     pFormatter( pDoc->GetFormatTable() ),
     mnStringNoValueError( errNoValue),
     bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() ),
-    meVolaileType(NOT_VOLATILE)
+    meVolaileType(r.IsRecalcModeAlways() ? VOLATILE : NOT_VOLATILE)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTTT" );
 //  pStack = new ScToken*[ MAXSTACK ];
@@ -3662,8 +3662,6 @@ StackVar ScInterpreter::Interpret()
     // that keeps switching exceptions on, now that we run with exceptions off,
     // so reassure exceptions are really off.
     SAL_MATH_FPEXCEPTIONS_OFF();
-
-    CheckForVolatileToken();
 
     aCode.Reset();
     while( ( pCur = aCode.Next() ) != NULL

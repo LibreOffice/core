@@ -32,18 +32,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "interpre.hxx"
-#include "formula/FormulaCompiler.hxx"
 
-void ScInterpreter::CheckForVolatileToken()
-{
-    for (const formula::FormulaToken* p = aCode.First(); p; p = aCode.Next())
-    {
-        if (formula::FormulaCompiler::IsOpCodeVolatile(p->GetOpCode()))
-        {
-            meVolaileType = VOLATILE;
-            return;
-        }
-    }
-}
+// TODO: Add new methods for ScInterpreter here.
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
