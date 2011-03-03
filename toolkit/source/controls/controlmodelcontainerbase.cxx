@@ -39,14 +39,14 @@
 #include <toolkit/controls/unocontrols.hxx>
 #include "toolkit/controls/formattedcontrol.hxx"
 #include "toolkit/controls/roadmapcontrol.hxx"
-#ifndef TOOLKIT_INC_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
 #include "toolkit/controls/tkscrollbar.hxx"
-#endif
+#include "toolkit/controls/tabpagemodel.hxx"
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <tools/list.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
@@ -389,6 +389,8 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const ::rtl::
         pNewModel = new OGeometryControlModel< UnoGridModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlTabPageContainerModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoControlTabPageContainerModel >( xFactory );
+    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlTabPageModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoControlTabPageModel >( xFactory );
 
     if ( !pNewModel )
     {
@@ -417,9 +419,13 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const ::rtl::
     return xNewModel;
 }
 
-Reference< XInterface > ControlModelContainerBase::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const Sequence< Any >& /* Arguments */ ) throw(Exception, RuntimeException)
+Reference< XInterface > ControlModelContainerBase::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const Sequence< Any >& i_arguments ) throw(Exception, RuntimeException)
 {
-    return createInstance( ServiceSpecifier );
+    const Reference< XInterface > xInstance( createInstance( ServiceSpecifier ) );
+    const Reference< XInitialization > xInstanceInit( xInstance, UNO_QUERY );
+    ENSURE_OR_RETURN( xInstanceInit.is(), "ControlModelContainerBase::createInstanceWithArguments: can't pass the arguments!", xInstance );
+    xInstanceInit->initialize( i_arguments );
+    return xInstance;
 }
 
 Sequence< ::rtl::OUString > ControlModelContainerBase::getAvailableServiceNames() throw(RuntimeException)
@@ -1344,7 +1350,7 @@ void ControlContainerBase::ImplInsertControl( Reference< XControlModel >& rxMode
     Reference < XControl > xCtrl;
     maContext.createComponent( aDefCtrl, xCtrl );
 
-    DBG_ASSERT( xCtrl.is(), "UnoDialogControl::ImplInsertControl: could not create the control!" );
+    DBG_ASSERT( xCtrl.is(), "ControlContainerBase::ImplInsertControl: could not create the control!" );
     if ( xCtrl.is() )
     {
         xCtrl->setModel( rxModel );
@@ -1562,7 +1568,7 @@ void ControlContainerBase::elementInserted( const ContainerEvent& Event ) throw(
 
     Event.Accessor >>= aName;
     Event.Element >>= xModel;
-    ENSURE_OR_RETURN_VOID( xModel.is(), "UnoDialogControl::elementInserted: illegal element!" );
+    ENSURE_OR_RETURN_VOID( xModel.is(), "ControlContainerBase::elementInserted: illegal element!" );
     try
     {
         ImplInsertControl( xModel, aName );
@@ -1580,7 +1586,7 @@ void ControlContainerBase::elementRemoved( const ContainerEvent& Event ) throw(R
 
     Reference< XControlModel > xModel;
     Event.Element >>= xModel;
-    ENSURE_OR_RETURN_VOID( xModel.is(), "UnoDialogControl::elementRemoved: illegal element!" );
+    ENSURE_OR_RETURN_VOID( xModel.is(), "ControlContainerBase::elementRemoved: illegal element!" );
     try
     {
         ImplRemoveControl( xModel );
@@ -1600,7 +1606,7 @@ void ControlContainerBase::elementReplaced( const ContainerEvent& Event ) throw(
     Event.ReplacedElement >>= xModel;
     try
     {
-        OSL_ENSURE( xModel.is(), "UnoDialogControl::elementReplaced: invalid ReplacedElement!" );
+        OSL_ENSURE( xModel.is(), "ControlContainerBase::elementReplaced: invalid ReplacedElement!" );
         if ( xModel.is() )
             ImplRemoveControl( xModel );
     }
@@ -1613,7 +1619,7 @@ void ControlContainerBase::elementReplaced( const ContainerEvent& Event ) throw(
     ::rtl::OUString aName;
     Event.Accessor >>= aName;
     Event.Element >>= xModel;
-    ENSURE_OR_RETURN_VOID( xModel.is(), "UnoDialogControl::elementReplaced: invalid new element!" );
+    ENSURE_OR_RETURN_VOID( xModel.is(), "ControlContainerBase::elementReplaced: invalid new element!" );
     try
     {
         ImplInsertControl( xModel, aName );
