@@ -353,7 +353,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\PluginsEnabled\"!" );
                 }
                 m_bIsPluginsEnabledRO = seqRO[nProperty];
                 break;
@@ -363,7 +363,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_nSymbolsSize) )
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\SymbolSet\"!" );
                 }
                 m_bIsSymbolsSizeRO = seqRO[nProperty];
                 break;
@@ -373,7 +373,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\ToolboxStyle\"!" );
                 }
                 m_bIsToolboxStyleRO = seqRO[nProperty];
                 break;
@@ -383,7 +383,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
                 }
                 m_bIsUseSystemFileDialogRO = seqRO[nProperty];
                 break;
@@ -393,7 +393,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_bUseSystemPrintDialog) )
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
                 }
                 m_bIsUseSystemPrintDialogRO = seqRO[nProperty];
                 break;
@@ -403,7 +403,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_bTryODMADialog) )
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\TryODMADialog\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\TryODMADialog\"!" );
                 }
                 m_bIsTryODMADialogRO = seqRO[nProperty];
                 break;
@@ -413,7 +413,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_bShowLinkWarningDialog) )
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\ShowLinkWarningDialog\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\ShowLinkWarningDialog\"!" );
                 }
                 m_bIsShowLinkWarningDialogRO = seqRO[nProperty];
                 break;
@@ -426,7 +426,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                     SetSymbolsStyleName( aSymbolsStyle );
                 else
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\SymbolStyle\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\SymbolStyle\"!" );
                 }
                 m_bIsSymbolsStyleRO = seqRO[nProperty];
                 break;
@@ -435,19 +435,19 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             case PROPERTYHANDLE_DISABLEUICUSTOMIZATION :
             {
                 if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
-                    DBG_ERROR("Wrong type of \"Misc\\DisableUICustomization\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\DisableUICustomization\"!" );
                 break;
             }
             case PROPERTYHANDLE_ALWAYSALLOWSAVE :
             {
                 if( !(seqValues[nProperty] >>= m_bAlwaysAllowSave) )
-                    DBG_ERROR("Wrong type of \"Misc\\AlwaysAllowSave\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\AlwaysAllowSave\"!" );
                 break;
             }
             case PROPERTYHANDLE_EXPERIMENTALMODE :
             {
                 if( !(seqValues[nProperty] >>= m_bExperimentalMode) )
-                    DBG_ERROR("Wrong type of \"Misc\\ExperimentalMode\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\ExperimentalMode\"!" );
                 break;
             }
         }
@@ -503,49 +503,49 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
             case PROPERTYHANDLE_PLUGINSENABLED      :   {
                                                             if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\PluginsEnabled\"!" );
                                                             }
                                                         }
                                                     break;
             case PROPERTYHANDLE_SYMBOLSET           :   {
                                                             if( !(seqValues[nProperty] >>= m_nSymbolsSize) )
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\SymbolSet\"!" );
                                                             }
                                                         }
                                                     break;
             case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
                                                             if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\ToolboxStyle\"!" );
                                                             }
                                                         }
                                                     break;
             case PROPERTYHANDLE_USESYSTEMFILEDIALOG      :   {
                                                             if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
                                                             }
                                                         }
                                                     break;
             case PROPERTYHANDLE_USESYSTEMPRINTDIALOG     :   {
                                                             if( !(seqValues[nProperty] >>= m_bUseSystemPrintDialog) )
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
                                                             }
                                                         }
                                                     break;
             case PROPERTYHANDLE_TRYODMADIALOG       :   {
                                                             if( !(seqValues[nProperty] >>= m_bTryODMADialog) )
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\TryODMADialog\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\TryODMADialog\"!" );
                                                             }
                                                         }
                                                     break;
             case PROPERTYHANDLE_SHOWLINKWARNINGDIALOG     :   {
                                                             if( !(seqValues[nProperty] >>= m_bShowLinkWarningDialog) )
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\ShowLinkWarningDialog\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\ShowLinkWarningDialog\"!" );
                                                             }
                                                         }
                                                     break;
@@ -555,19 +555,19 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                                 SetSymbolsStyleName( aSymbolsStyle );
                                                             else
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\SymbolStyle\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\SymbolStyle\"!" );
                                                             }
                                                         }
                                                     break;
             case PROPERTYHANDLE_DISABLEUICUSTOMIZATION      :   {
                                                             if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
-                                                                DBG_ERROR("Wrong type of \"Misc\\DisableUICustomization\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\DisableUICustomization\"!" );
                                                         }
                                                     break;
             case PROPERTYHANDLE_ALWAYSALLOWSAVE:
             {
                 if( !(seqValues[nProperty] >>= m_bAlwaysAllowSave) )
-                    DBG_ERROR("Wrong type of \"Misc\\AlwaysAllowSave\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\AlwaysAllowSave\"!" );
             }
             break;
         }
