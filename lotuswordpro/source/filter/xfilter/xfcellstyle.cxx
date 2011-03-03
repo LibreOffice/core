@@ -57,10 +57,6 @@
  * @file
  * Table cell style. Number format, string value, and so on...
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-28 create this file.
- ************************************************************************/
 #include    "xfcellstyle.hxx"
 #include    "xfborders.hxx"
 #include    "xffont.hxx"

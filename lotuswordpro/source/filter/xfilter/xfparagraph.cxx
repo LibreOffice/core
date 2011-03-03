@@ -57,10 +57,6 @@
  * @file
  * Paragraph object of OOo, it will output <text:p >...</text:p> element.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-26 create this file.
- ************************************************************************/
 #include    "xfparagraph.hxx"
 #include    "ixfstream.hxx"
 #include    "ixfattrlist.hxx"

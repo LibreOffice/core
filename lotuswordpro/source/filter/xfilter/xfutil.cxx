@@ -57,11 +57,6 @@
  * @file
  * Util functions for xml filter.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- * 2005-01-24 add some enum tool funtion here.
- ************************************************************************/
 #include    <stdio.h>
 #include    "xfutil.hxx"
 #include    "xfparagraph.hxx"

@@ -57,10 +57,6 @@
  * @file
  * Manager for all config object,include line number config.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-03-23 create this file.
- ************************************************************************/
 #include    "xfconfigmanager.hxx"
 
 XFConfigManager::XFConfigManager()

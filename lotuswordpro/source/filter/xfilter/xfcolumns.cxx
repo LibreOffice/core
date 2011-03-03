@@ -57,11 +57,6 @@
  * @file
  * Columns styles for section, or paragraph.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-17 create this file.
- ************************************************************************/
-
 #include    "xfcolumns.hxx"
 
 void    XFColumn::SetRelWidth(sal_Int32 width)

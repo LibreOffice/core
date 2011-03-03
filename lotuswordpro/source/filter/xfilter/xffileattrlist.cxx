@@ -58,10 +58,6 @@
  * Attribute list for sax element,this is a help class to write xml to
  * local file.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- ************************************************************************/
 #include    "xffileattrlist.hxx"
 
 XFFileAttrList::XFFileAttrList()

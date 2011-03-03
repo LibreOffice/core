@@ -57,10 +57,6 @@
  * @file
  * Frame whose anchor is not page.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-21 create this file.
- ************************************************************************/
 #include    "xfframe.hxx"
 #include    "xfparagraph.hxx"
 #define     ZINDEX_MAX 0x7fffffff

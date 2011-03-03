@@ -58,10 +58,6 @@
  * Style for <text:p> or <text:h> or <text:span>
  * Now we have only font attributes.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-26 create this file.
- ************************************************************************/
 #include    "xftextstyle.hxx"
 #include    "ixfattrlist.hxx"
 #include    "ixfstream.hxx"

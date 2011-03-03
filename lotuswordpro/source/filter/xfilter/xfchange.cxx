@@ -69,9 +69,8 @@ void XFChangeList::ToXml(IXFStream *pStrm)
             return;
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-//Add by ,for disable change tracking,2005/11/21
+    // Add for disable change tracking
     pAttrList->AddAttribute( A2OUSTR("text:track-changes"),A2OUSTR("false"));
-//Add end
     pStrm->StartElement( A2OUSTR("text:tracked-changes") );
     XFContentContainer::ToXml(pStrm);
     pStrm->EndElement(A2OUSTR("text:tracked-changes"));
@@ -117,8 +116,6 @@ void XFChangeDelete::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute( A2OUSTR("office:chg-date-time"),A2OUSTR("0000-00-00T00:00:00"));
     pStrm->StartElement( A2OUSTR("office:change-info") );
     pStrm->EndElement( A2OUSTR("office:change-info") );
-
-/// XFContentContainer::ToXml(pStrm);//delete , note by ,2005/7/1
 
     pStrm->EndElement( A2OUSTR("text:deletion") );
     pStrm->EndElement( A2OUSTR("text:changed-region") );

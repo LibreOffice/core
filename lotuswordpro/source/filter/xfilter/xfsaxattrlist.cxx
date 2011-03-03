@@ -57,11 +57,6 @@
  * @file
  * Document object of the xml filter framework.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- ************************************************************************/
-
 #include    "xfsaxattrlist.hxx"
 #include    "xmloff/attrlist.hxx"
 

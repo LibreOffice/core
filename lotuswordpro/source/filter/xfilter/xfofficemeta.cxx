@@ -57,11 +57,6 @@
  * @file
  * Implemention file for Meta data,pls reference to the header file.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-26 create this file.
- * 2004-01-05 it works now.
- ************************************************************************/
 #include    "xfofficemeta.hxx"
 #include    "ixfstream.hxx"
 #include    "ixfattrlist.hxx"

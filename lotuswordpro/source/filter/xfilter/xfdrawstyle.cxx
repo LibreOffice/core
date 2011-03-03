@@ -57,10 +57,6 @@
  * @file
  * Style for all draw object.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-2-21 create this file.
- ************************************************************************/
 #include    "xfdrawstyle.hxx"
 #include    "xfdrawlinestyle.hxx"
 #include    "xfdrawareastyle.hxx"

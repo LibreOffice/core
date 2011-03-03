@@ -57,11 +57,6 @@
  * @file
  * Border object,now only used by paragraph object.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-14 create this file.
- * 2005-01-17 change for the XFColor object.
- ************************************************************************/
 #include    "xfborders.hxx"
 
 XFBorder::XFBorder()

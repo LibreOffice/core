@@ -57,10 +57,6 @@
  * @file
  * Outline style for the full document.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-02-2 create and implements.
- ************************************************************************/
 #include    "xfoutlinestyle.hxx"
 
 XFOutlineLevelStyle::XFOutlineLevelStyle()
