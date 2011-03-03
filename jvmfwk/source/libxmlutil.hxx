@@ -88,24 +88,6 @@ public:
 };
 
 //===========================================================
-// class CXmlNsPtr
-// {
-//     xmlNs* _object;
-
-//     CXmlNsPtr(const CXmlNsPtr&);
-//     CXmlNsPtr & operator = (const CXmlNsPtr&);
-// public:
-//     CXmlNsPtr();
-//     CXmlNsPtr(xmlNs* aDoc);
-//     /** Takes ownership of xmlDoc
-//      */
-//     CXmlNsPtr & operator = (xmlNs* pObj);
-//     ~CXmlNsPtr();
-//     xmlNs* operator -> ();
-//     operator xmlNs* ();
-// };
-
-//===========================================================
 class CXmlCharPtr
 {
     xmlChar* _object;

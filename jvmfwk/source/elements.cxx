@@ -44,8 +44,6 @@
 #include "rtl/bootstrap.hxx"
 #include "boost/optional.hpp"
 #include <string.h>
-// #define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
-// #define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"
 
 
 using namespace osl;
@@ -154,13 +152,12 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
 
-    //<javaInfo xsi:nil="true"  autoSelect="true">
+    //<javaInfo xsi:nil="true">
     xmlNode  * nodeJava = xmlNewTextChild(
         root,NULL, (xmlChar*) "javaInfo", (xmlChar*) "");
     if (nodeJava == NULL)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeJava,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
-//    xmlSetProp(nodeJava,(xmlChar*) "autoSelect",(xmlChar*) "true");
     //add a new line
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
@@ -733,7 +730,6 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
                 //that after removing the file and shortly later creating it again
                 //did not change the creation time. That is the newly created file
                 //had the creation time of the former file.
-//                ::TimeValue time = stat.getCreationTime();
                 ::TimeValue modTime = stat.getModifyTime();
                 ::TimeValue curTime = {0,0};
                 if (sal_True == ::osl_getSystemTime(& curTime))
@@ -746,7 +742,6 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
                         fprintf(stderr, "[Java framework] Deleting settings file at \n%s\n", s.getStr());
 #endif
                         //delete file
-//                        File::RC rc_rem = File::remove(sURL);
                         File f(sURL);
                         if (File::E_None == f.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Read)
                             && File::E_None == f.setPos(0, 0)

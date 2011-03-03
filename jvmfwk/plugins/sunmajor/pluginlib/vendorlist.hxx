@@ -35,17 +35,8 @@
 namespace jfw_plugin
 {
 
-//extern VendorSupportMapEntry gVendorMap[];
-
 typedef char  const * const * (* getJavaExePaths_func)(int*);
 typedef rtl::Reference<VendorBase> (* createInstance_func) ();
-
-// struct Blas
-// {
-//         char const * sVendorName;
-//     getJavaExePaths_func getJavaFunc;
-//     createInstance_func  createFunc;
-// };
 
 struct VendorSupportMapEntry
 {

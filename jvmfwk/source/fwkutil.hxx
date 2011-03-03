@@ -69,14 +69,10 @@ struct Bootstrap :
 
 struct FwkMutex: public ::rtl::Static<osl::Mutex, FwkMutex> {};
 
-//osl::Mutex * getFwkMutex();
-
 rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData);
 rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data);
 
 rtl::OUString getPlatform();
-
-//const rtl::Bootstrap& getBootstrap();
 
 
 rtl::OUString getDirFromFile(const rtl::OUString& usFilePath);

@@ -47,7 +47,6 @@ using ::rtl::OString;
 static sal_Bool hasOption(char const * szOption, int argc, char** argv);
 static rtl::OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData);
 static bool findAndSelect(JavaInfo**);
-//static sal_Bool printPaths(const OUString& sPathFile);
 
 #define HELP_TEXT    \
 "\njavaldx is necessary to make Java work on some UNIX platforms." \

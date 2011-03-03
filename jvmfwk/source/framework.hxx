@@ -104,7 +104,6 @@ public:
     void attach(::JavaInfo* pInfo);
     ::JavaInfo * detach();
     const ::JavaInfo* operator ->() const;
-//    ::JavaInfo** operator & ();
     operator ::JavaInfo* ();
     operator ::JavaInfo const * () const;
     ::JavaInfo* cloneJavaInfo() const;

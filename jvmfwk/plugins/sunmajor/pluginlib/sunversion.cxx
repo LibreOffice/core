@@ -128,7 +128,7 @@ bool SunVersion::init(const char *szVersion)
 
             //check next character
             if (! ( (pCur < pEnd)
-                    && ( (nPart < 3) && isdigit(*pCur)))) //(*pCur >= 48 && *pCur <=57))))
+                    && ( (nPart < 3) && isdigit(*pCur))))
                 return false;
         }
         else

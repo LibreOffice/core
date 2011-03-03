@@ -157,7 +157,6 @@ namespace
    {
        OUString const & operator()()
        {
-           //  osl::Guard<osl::Mutex> g(osl::GetGlobalMutex());
            static OUString sIni;
             rtl::OUStringBuffer buf( 255);
             buf.append( getLibraryLocation());
@@ -456,8 +455,6 @@ bool getJavaProps(const OUString & exePath,
         rs = stdoutReader.readLine( & aLine);
         if (rs != FileHandleReader::RESULT_OK)
             break;
-//         JFW_TRACE2(OString("[Java framework] line:\" ")
-//                + aLine + OString(" \".\n"));
         OUString sLine;
         if (!decodeOutput(aLine, &sLine))
             continue;
@@ -515,7 +512,6 @@ bool decodeOutput(const rtl::OString& s, rtl::OUString* out)
     } while (nIndex >= 0);
 
     *out = buff.makeStringAndClear();
-//    JFW_TRACE2(*out);
     return true;
 }
 
@@ -559,7 +555,6 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
         DWORD dwIndex = 0;
         const DWORD BUFFSIZE = 1024;
         wchar_t bufVersion[BUFFSIZE];
-//      char bufVersion[BUFFSIZE];
         DWORD nNameLen = BUFFSIZE;
         FILETIME fileTime;
         nNameLen = sizeof(bufVersion);

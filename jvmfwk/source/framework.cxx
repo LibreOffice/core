@@ -162,8 +162,6 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             for (citLoc ii = vecJRELocations.begin();
                 ii != vecJRELocations.end(); ++ii)
             {
-//              rtl::OUString sLocation =
-//                  rtl::OStringToOUString(*ii, RTL_TEXTENCODING_UTF8);
                 jfw::CJavaInfo aInfo;
                 plerr = (*jfw_plugin_getJavaInfoByPathFunc)(
                     ii->pData,
@@ -1256,10 +1254,6 @@ CJavaInfo::operator JavaInfo const * () const
 {
     return pInfo;
 }
-// ::JavaInfo** CJavaInfo::operator & ()
-// {
-//     return & pInfo;
-// }
 
 rtl::OUString CJavaInfo::getVendor() const
 {
