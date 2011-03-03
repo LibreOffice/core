@@ -68,7 +68,9 @@
 #endif
 
 #include "stdio.h"
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 //------------------------------------------------------------------------
 // test classes

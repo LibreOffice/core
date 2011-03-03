@@ -53,8 +53,9 @@
 
 #define TEST_ENSURE(c, m) CPPUNIT_ASSERT_MESSAGE((m), (c))
 
-
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
 
 namespace rtl_OUString
 {

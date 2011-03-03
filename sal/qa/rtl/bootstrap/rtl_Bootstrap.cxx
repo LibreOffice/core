@@ -51,8 +51,10 @@
 
 #include <osl/thread.hxx>
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 #define TESTSHL2_INI "testshl2"
 #define PSEUDO_INI   "pseudo"
 

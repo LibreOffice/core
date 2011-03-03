@@ -41,10 +41,7 @@
 #include <testshl/simpleheader.hxx>
 
 #define TEST_ENSURE(c, m) CPPUNIT_ASSERT_MESSAGE((m), (c))
-
-
-using namespace rtl;
-
+using ::rtl::OString;
 namespace rtl_OString
 {
     class oldtests : public CppUnit::TestFixture

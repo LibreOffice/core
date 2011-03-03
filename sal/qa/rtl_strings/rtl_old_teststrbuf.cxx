@@ -42,8 +42,10 @@
 
 #include <testshl/simpleheader.hxx>
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OStringBuffer;
 #define TEST_ENSURE(c, m) CPPUNIT_ASSERT_MESSAGE((m), (c))
 
 
