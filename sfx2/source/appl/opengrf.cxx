@@ -214,7 +214,7 @@ void SvxOpenGraphicDialog::EnableLink( sal_Bool  state  )
         catch(IllegalArgumentException)
         {
 #ifdef DBG_UTIL
-            DBG_ERROR( "Cannot enable \"link\" checkbox" );
+            OSL_FAIL( "Cannot enable \"link\" checkbox" );
 #endif
         }
     }
@@ -233,7 +233,7 @@ void SvxOpenGraphicDialog::AsLink(sal_Bool  bState)
         catch(IllegalArgumentException)
         {
 #ifdef DBG_UTIL
-            DBG_ERROR( "Cannot check \"link\" checkbox" );
+            OSL_FAIL( "Cannot check \"link\" checkbox" );
 #endif
         }
     }
@@ -254,7 +254,7 @@ sal_Bool SvxOpenGraphicDialog::IsAsLink() const
     catch(IllegalArgumentException)
     {
 #ifdef DBG_UTIL
-        DBG_ERROR( "Cannot access \"link\" checkbox" );
+        OSL_FAIL( "Cannot access \"link\" checkbox" );
 #endif
     }
 

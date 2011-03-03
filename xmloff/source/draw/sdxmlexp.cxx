@@ -1947,7 +1947,7 @@ void SdXMLExport::_ExportContent()
                 }
                 catch( Exception& )
                 {
-                    DBG_ERROR(" no \"BookmarkURL\" property at page?" );
+                    OSL_FAIL(" no \"BookmarkURL\" property at page?" );
                 }
             }
 
