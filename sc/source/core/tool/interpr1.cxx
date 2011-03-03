@@ -6879,6 +6879,8 @@ void ScInterpreter::ScIndex()
         switch (GetStackType())
         {
             case svMatrix:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
                 {
                     if (nArea != 1)
                         SetError(errIllegalArgument);

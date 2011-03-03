@@ -551,6 +551,31 @@ ScMatrixRef ScInterpreter::GetMatrix()
             }
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (!pToken)
+            {
+                PopError();
+                SetError( errIllegalArgument);
+                break;
+            }
+            if (pToken->GetType() == svDouble)
+            {
+                pMat = new ScMatrix(1, 1);
+                pMat->PutDouble(pToken->GetDouble(), 0, 0);
+            }
+            else
+            {
+                pMat = new ScMatrix(1, 1);
+                pMat->PutString(pToken->GetString(), 0, 0);
+            }
+        }
+        break;
+        case svExternalDoubleRef:
+            PopExternalDoubleRef(pMat);
+        break;
         default:
             PopError();
             SetError( errIllegalArgument);
