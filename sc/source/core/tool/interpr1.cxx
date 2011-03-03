@@ -5217,8 +5217,10 @@ void ScInterpreter::ScLookup()
             }
             break;
             case svMatrix:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                pResMat = PopMatrix();
+                pResMat = GetMatrix();
                 if (!pResMat)
                 {
                     PushIllegalParameter();
@@ -5275,8 +5277,10 @@ void ScInterpreter::ScLookup()
         }
         break;
         case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
         {
-            pDataMat = PopMatrix();
+            pDataMat = GetMatrix();
             if (!pDataMat)
             {
                 PushIllegalParameter();
@@ -5763,12 +5767,9 @@ void ScInterpreter::CalculateLookup(BOOL HLookup)
                 return;
             }
         }
-        else if (eType == svMatrix || eType == svExternalDoubleRef)
+        else if (eType == svMatrix || eType == svExternalDoubleRef || eType == svExternalSingleRef)
         {
-            if (eType == svMatrix)
-                pMat = PopMatrix();
-            else
-                PopExternalDoubleRef(pMat);
+            pMat = GetMatrix();
 
             if (pMat)
                 pMat->GetDimensions(nC, nR);
