@@ -2237,7 +2237,7 @@ sub retrieve_build_list {
     my $old_fh = select(STDOUT);
 
     # Try to get global depencies from solver's build.lst if such exists
-    my $solver_inc_dir = "$ENV{SOLARVER}/$ENV{INPATH}";
+    my $solver_inc_dir = "$ENV{SOLARVER}/$ENV{OUTPATH}";
     $solver_inc_dir .= $ENV{PROEXT} if (defined $ENV{PROEXT});
     $solver_inc_dir .= '/inc';
     $solver_inc_dir .= $ENV{UPDMINOREXT} if (defined $ENV{UPDMINOREXT});
