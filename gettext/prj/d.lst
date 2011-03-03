@@ -11,5 +11,20 @@ symlink: %_DEST%\lib%_EXT%\libintl.8.dylib %_DEST%\lib%_EXT%\libintl.dylib
 ..\%__SRC%\lib\libgettextlib-0.18.1.dylib %_DEST%\lib%_EXT%\libgettextlib-0.18.1.dylib
 symlink: %_DEST%\lib%_EXT%\libgettextlib-0.18.1.dylib %_DEST%\lib%_EXT%\libgettextlib.dylib
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%
-..\%__SRC%\bin\msgfmt %_DEST%\bin%_EXT%
+..\%__SRC%\bin\msgattrib %_DEST%\bin%_EXT%\msgattrib
+..\%__SRC%\bin\msgcat %_DEST%\bin%_EXT%\msgcat
+..\%__SRC%\bin\msgcmp %_DEST%\bin%_EXT%\msgcmp
+..\%__SRC%\bin\msgcomm %_DEST%\bin%_EXT%\msgcomm
+..\%__SRC%\bin\msgconv %_DEST%\bin%_EXT%\msgconv
+..\%__SRC%\bin\msgen %_DEST%\bin%_EXT%\msgen
+..\%__SRC%\bin\msgexec %_DEST%\bin%_EXT%\msgexec
+..\%__SRC%\bin\msgfilter %_DEST%\bin%_EXT%\msgfilter
+..\%__SRC%\bin\msgfmt %_DEST%\bin%_EXT%\msgfmt
+..\%__SRC%\bin\msggrep %_DEST%\bin%_EXT%\msggrep
+..\%__SRC%\bin\msginit %_DEST%\bin%_EXT%\msginit
+..\%__SRC%\bin\msgmerge %_DEST%\bin%_EXT%\msgmerge
+..\%__SRC%\bin\msgunfmt %_DEST%\bin%_EXT%\msgunfmt
+..\%__SRC%\bin\msguniq %_DEST%\bin%_EXT%\msguniq
+..\%__SRC%\bin\urlget %_DEST%\bin%_EXT%\urlget
+..\%__SRC%\bin\xgettext %_DEST%\bin%_EXT%\xgettext
 

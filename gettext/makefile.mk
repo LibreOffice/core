@@ -68,7 +68,22 @@ OUT2INC+=gettext-tools$/intl$/libintl.h
 OUT2INC+=gettext-runtime$/libasprintf$/autosprintf.h
 OUT2INC+=gettext-tools$/libgettextpo$/gettext-po.h
 
+OUT2BIN+=gettext-tools$/src$/.libs$/msgattrib
+OUT2BIN+=gettext-tools$/src$/.libs$/msgcat
+OUT2BIN+=gettext-tools$/src$/.libs$/msgcmp
+OUT2BIN+=gettext-tools$/src$/.libs$/msgcomm
+OUT2BIN+=gettext-tools$/src$/.libs$/msgconv
+OUT2BIN+=gettext-tools$/src$/.libs$/msgen
+OUT2BIN+=gettext-tools$/src$/.libs$/msgexec
+OUT2BIN+=gettext-tools$/src$/.libs$/msgfilter
 OUT2BIN+=gettext-tools$/src$/.libs$/msgfmt
+OUT2BIN+=gettext-tools$/src$/.libs$/msggrep
+OUT2BIN+=gettext-tools$/src$/.libs$/msginit
+OUT2BIN+=gettext-tools$/src$/.libs$/msgmerge
+OUT2BIN+=gettext-tools$/src$/.libs$/msgunfmt
+OUT2BIN+=gettext-tools$/src$/.libs$/msguniq
+OUT2BIN+=gettext-tools$/src$/.libs$/urlget
+OUT2BIN+=gettext-tools$/src$/.libs$/xgettext
 .ELIF "$(OS)"=="WNT"
 .ELSE
 .ENDIF
