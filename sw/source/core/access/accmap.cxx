@@ -188,7 +188,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
 #if OSL_DEBUG_LEVEL > 1
             ByteString aError( "Runtime exception caught while notifying shape.:\n" );
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR( aError.GetBuffer() );
+            OSL_FAIL( aError.GetBuffer() );
 #endif
         }
     }

@@ -231,7 +231,7 @@ sal_Int32 ReadThroughComponent(
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "SAX parse exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
 
         String sErr( String::CreateFromInt32( r.LineNumber ));
@@ -265,7 +265,7 @@ sal_Int32 ReadThroughComponent(
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "SAX exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
 
         return ERR_SWG_READ_ERROR;
@@ -276,7 +276,7 @@ sal_Int32 ReadThroughComponent(
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "Zip exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return ERRCODE_IO_BROKENPACKAGE;
     }
@@ -286,7 +286,7 @@ sal_Int32 ReadThroughComponent(
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "IO exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return ERR_SWG_READ_ERROR;
     }
@@ -296,7 +296,7 @@ sal_Int32 ReadThroughComponent(
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "uno exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return ERR_SWG_READ_ERROR;
     }

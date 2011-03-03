@@ -155,7 +155,7 @@ SwCache::~SwCache()
         (( sOut += "Anzahl Cache-Verkleinerungen:       " )
                     += ByteString::CreateFromInt32( nDecreaseMax ))+= '\n';
 
-        DBG_ERROR( sOut.GetBuffer() );
+        OSL_FAIL( sOut.GetBuffer() );
     }
     Check();
 }
