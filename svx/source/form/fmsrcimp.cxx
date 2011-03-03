@@ -852,7 +852,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
     // - a control in the form is bound to "column" - not the different case
     // In such a scenario, the form and the field would work okay, but we here need to case for the different case
     // explicitly
-    // 2003-01-09 - #i8755# - fs@openoffice.org
+    // #i8755#
 
     // so first of all, check if the database handles identifiers case sensitive
     Reference< XConnection > xConn;

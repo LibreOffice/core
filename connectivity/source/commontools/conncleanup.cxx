@@ -182,8 +182,6 @@ namespace dbtools
                 // check this here.
                 //
                 // Yes, this is a HACK :(
-                //
-                // 94407 - 08.11.2001 - fs@openoffice.org
                 if ( xNewConnection.get() != m_xOriginalConnection.get() )
                 {
 #if OSL_DEBUG_LEVEL > 0

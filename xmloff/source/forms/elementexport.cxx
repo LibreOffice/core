@@ -385,7 +385,7 @@ namespace xmloff
             // (the strikeout type), the latter hasn't. But, when the CharCrossedOut is exported and
             // later on imported, it overwrites anything which has previously been imported for
             // CharStrikeout.
-            // 2004-04-14 - #i27729# - fs@openoffice.org
+            // #i27729#
             exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharCrossedOut" ) ) );
         }
 
@@ -414,7 +414,7 @@ namespace xmloff
             case LISTBOX:
                 // don't export the list entries if the are not provided by the user, but obtained implicitly
                 // from other sources
-                // #i26944# - 2004-05-17 - fs@openoffice.org
+                // #i26944#
                 if ( controlHasUserSuppliedListEntries() )
                     exportListSourceAsElements();
                 break;
@@ -432,7 +432,7 @@ namespace xmloff
 
                 // don't export the list entries if the are not provided by the user, but obtained implicitly
                 // from other sources
-                // #i26944# - 2004-05-17 - fs@openoffice.org
+                // #i26944#
                 if ( controlHasUserSuppliedListEntries() )
                 {
                     // get the item list
@@ -743,7 +743,7 @@ namespace xmloff
             if (pCurrentValuePropertyName && (CCA_CURRENT_VALUE & m_nIncludeCommon))
             {
                 // don't export the current-value if this value originates from a data binding
-                // #i26944# - 2004-05-17 - fs@openoffice.org
+                // #i26944#
                 if ( controlHasActiveDataBinding() )
                     exportedProperty( ::rtl::OUString::createFromAscii( pCurrentValuePropertyName ) );
                 else

@@ -1012,7 +1012,7 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement
             if ( !::svxform::OStaticDataAccessTools().isEmbeddedInDatabase( _rxElement ) )
                 // (if there is a connection in the context of the component, setting
                 // a new connection would be vetoed, anyway)
-                // #i34196# - 2004-09-21 - fs@openoffice.org
+                // #i34196#
                 xFormProperties->setPropertyValue( FM_PROP_ACTIVE_CONNECTION, Any() );
     }
 

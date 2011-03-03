@@ -1239,16 +1239,15 @@ namespace sdr { namespace contact {
                 _rInitialZoomNormalization
             );
 
-            // #107049# set design mode before peer is created,
+            // set design mode before peer is created,
             // this is also needed for accessibility
             _out_rControl.setDesignMode( _rPageView.isDesignMode() );
 
             // adjust the initial visibility according to the visibility of the layer
-            // 2003-06-03 - #110592# - fs@openoffice.org
             impl_adjustControlVisibilityToLayerVisibility_throw( _out_rControl, _rUnoObject, _rPageView, false, true );
 
             // add the control to the respective control container
-            // #108327# do this last
+            // do this last
             Reference< XControlContainer > xControlContainer( _rPageView.getControlContainer( _rDevice ) );
             if ( xControlContainer.is() )
                 xControlContainer->addControl( sControlServiceName, _out_rControl.getControl() );
@@ -1518,7 +1517,6 @@ namespace sdr { namespace contact {
         try
         {
             // if the control is part of a invisible layer, we need to explicitly hide it in alive mode
-            // 2003-06-03 - #110592# - fs@openoffice.org
             impl_adjustControlVisibilityToLayerVisibility_throw( false );
         }
         catch( const Exception& )

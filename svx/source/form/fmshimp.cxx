@@ -955,7 +955,6 @@ void FmXFormShell::disposing()
         // if we're here, then we expect that PrepareClose has been called, and thus the user
         // got a chance to commit or reject any changes. So in case we're here and there
         // are still uncommitted changes, the user explicitly wanted this.
-        // 2002-11-11 - 104702 - fs@openoffice.org
 
     m_pTextShell->dispose();
 
@@ -3794,7 +3793,6 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeacti
 
     // if we have an async load operation pending for the 0-th page for this view,
     // we need to cancel this
-    // 103727 - 2002-09-26 - fs@openoffice.org
     FmFormPage* pPage = _rCurrentView.GetCurPage();
     if ( pPage )
     {

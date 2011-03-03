@@ -238,7 +238,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
             // Do *not* use |this| as container window for the frame, this would result in undefined
             // responsiblity for this window (as soon as we initialize a frame with a window, the frame
             // is responsible for it's life time, but |this| is controlled by the belonging SfxChildWindow)
-            // #i34249# - 2004-09-27 - fs@openoffice.org
+            // #i34249#
             Window* pContainerWindow = new Window( this );
             pContainerWindow->Show();
             m_xFrameContainerWindow = VCLUnoHelper::GetInterface ( pContainerWindow );
@@ -252,7 +252,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
 //                if ( xSupp.is() )
 //                    xSupp->getFrames()->append( m_xMeAsFrame );
                 // Don't append frame to frame hierachy to prevent UI_DEACTIVATE messages
-                // #i31834# - 2004-07-27 - cd@openoffice.org
+                // #i31834#
             }
         }
     }
@@ -361,7 +361,6 @@ void FmPropBrw::implDetachController()
     }
 
     // we attached a frame to the controller manually, so we need to manually tell it that it's detached, too
-    // 96068 - 09.01.2002 - fs@openoffice.org
     if ( m_xBrowserController.is() )
         m_xBrowserController->attachFrame( NULL );
 

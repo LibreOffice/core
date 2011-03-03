@@ -2189,7 +2189,6 @@ void FmXGridPeer::dispose() throw( RuntimeException )
     VCLXWindow::dispose();
 
     // release all interceptors
-    // discovered during #100312# - 2002-10-23 - fs@openoffice.org
     Reference< XDispatchProviderInterceptor > xInterceptor( m_xFirstDispatchInterceptor );
     m_xFirstDispatchInterceptor.clear();
     while ( xInterceptor.is() )

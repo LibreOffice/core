@@ -1162,8 +1162,8 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         && !(   FILEDLG_MODE_SAVE == pThis->_pImp->_eMode       // we're saving a file
             &&  pThis->_pFileView->GetSelectionCount()          // there is a selected file in the file view -> it will later on
             )                                                   //    (in SvtFileDialog::GetPathList) be taken as file to save to
-                                                                // (#114818# - 2004-03-17 - fs@openoffice.org)
-        && FILEDLG_MODE_OPEN != pThis->_pImp->_eMode // pb: #i83408# don't append extension on open
+
+        && FILEDLG_MODE_OPEN != pThis->_pImp->_eMode // #i83408# don't append extension on open
         )
     {
         // check extension and append the default extension if necessary

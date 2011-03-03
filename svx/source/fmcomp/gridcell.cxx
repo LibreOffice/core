@@ -2904,7 +2904,6 @@ void DbFilterField::Init( Window& rParent, const Reference< XRowSet >& xCursor )
     DbCellControl::Init( rParent, xCursor );
 
     // filter cells are never readonly
-    // 31.07.2002 - 101584 - fs@openoffice.org
     Edit* pAsEdit = dynamic_cast< Edit* >( m_pWindow );
     if ( pAsEdit )
         pAsEdit->SetReadOnly( sal_False );

@@ -3273,7 +3273,6 @@ void FormController::startFiltering()
     Reference< XConnection >  xConnection( aStaticTools.getRowSetConnection( Reference< XRowSet >( m_xModelAsIndex, UNO_QUERY ) ) );
     if ( !xConnection.is() )
         // nothing to do - can't filter a form which is not connected
-        // 98023 - 19.03.2002 - fs@openoffice.org
         return;
 
     // stop listening for controls

@@ -283,7 +283,6 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
 {
     if ( GetImpl()->didPrepareClose() )
         // we already did a PrepareClose for the current modifications of the current form
-        // 2002-11-12 #104702# - fs@openoffice.org
         return sal_True;
 
     sal_Bool bResult = sal_True;
