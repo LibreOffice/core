@@ -57,10 +57,6 @@
  * @file
  * Text content, it's an adapter for string to IXFObject.
  ************************************************************************/
-/*************************************************************************
- * Change History
-   2005-02-02   create and implemente.
- ************************************************************************/
 #ifndef     _XFTEXTCONTENT_HXX
 #define     _XFTEXTCONTENT_HXX
 

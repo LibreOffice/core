@@ -57,10 +57,6 @@
  * @file
  * Property for styles. ie. Margins,shadow,columns and so on.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-19 create this file.
- ************************************************************************/
 #ifndef     _IXFPROPERTY_HXX
 #define     _IXFPROPERTY_HXX
 

@@ -57,10 +57,6 @@
  * @file
  * Interfer face for all object that will responsible for xml element output
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- ************************************************************************/
 #ifndef     IXFOBJECT_INC
 #define     IXFOBJECT_INC
 

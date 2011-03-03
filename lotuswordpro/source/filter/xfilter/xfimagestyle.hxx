@@ -57,11 +57,6 @@
  * @file
  * Image style object.
  ************************************************************************/
-/*************************************************************************
- * Change History
-   2005-02-22   create this file.
-   2005-02-25   make it inherit from XFFrameStyle.
- ************************************************************************/
 #ifndef     _XFIMAGESTYLE_HXX
 #define     _XFIMAGESTYLE_HXX
 

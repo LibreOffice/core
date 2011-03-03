@@ -58,10 +58,6 @@
  * Frame object style for OOo.
  * You can reference to the XFFrame object.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-10 create and implements.
- ************************************************************************/
 #ifndef     _XFFRAMESTYLE_HXX
 #define     _XFFRAMESTYLE_HXX
 

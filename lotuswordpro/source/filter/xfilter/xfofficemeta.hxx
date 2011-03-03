@@ -58,10 +58,6 @@
  * Meta info for the full document.
  * You can see this by click: File->Properties.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-26 create this file.
- ************************************************************************/
 #ifndef     _XFOFFICEMETA_HXX
 #define     _XFOFFICEMETA_HXX
 
