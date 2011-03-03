@@ -553,8 +553,7 @@ static void lcl_collectAllPredOrSuccRanges(
     ScRange* p = aSrcRanges.front();
     ScDetectiveFunc aDetFunc(pDoc, p->aStart.Tab());
     ScRangeList aDestRanges;
-    size_t i = 0;
-    for (size_t n = aSrcRanges.size(); i < n; ++i)
+    for (size_t i = 0, n = aSrcRanges.size(); i < n; ++i)
     {
         p = aSrcRanges[i];
         if (bPred)
