@@ -4382,7 +4382,7 @@ Window::~Window()
             aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
             aTempStr += ") with living SystemWindow(s) destroyed: ";
             aTempStr += aErrorStr;
-            DBG_ERROR( aTempStr.GetBuffer() );
+            OSL_FAIL( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
 
@@ -4403,7 +4403,7 @@ Window::~Window()
             aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
             aTempStr += ") with living SystemWindow(s) destroyed: ";
             aTempStr += aErrorStr;
-            DBG_ERROR( aTempStr.GetBuffer() );
+            OSL_FAIL( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
 
@@ -4418,7 +4418,7 @@ Window::~Window()
                 lcl_appendWindowInfo( aTempStr, *pTempWin );
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
-            DBG_ERROR( aTempStr.GetBuffer() );
+            OSL_FAIL( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
 
@@ -4433,7 +4433,7 @@ Window::~Window()
                 lcl_appendWindowInfo( aTempStr, *pTempWin );
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
-            DBG_ERROR( aTempStr.GetBuffer() );
+            OSL_FAIL( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
 
@@ -4451,7 +4451,7 @@ Window::~Window()
             ByteString aTempStr( "Window (" );
             aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
             aTempStr += ") still in TaskPanelList!";
-            DBG_ERROR( aTempStr.GetBuffer() );
+            OSL_FAIL( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
     }
@@ -4477,7 +4477,7 @@ Window::~Window()
             ByteString aTempStr( "Window (" );
             aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
             aTempStr += ") not found in TaskPanelList!";
-            DBG_ERROR( aTempStr.GetBuffer() );
+            OSL_FAIL( aTempStr.GetBuffer() );
         }
     }
 
@@ -4508,7 +4508,7 @@ Window::~Window()
         ByteString aTempStr( "Window (" );
         aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
         aTempStr += ") with focussed child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !";
-        DBG_ERROR( aTempStr.GetBuffer() );
+        OSL_FAIL( aTempStr.GetBuffer() );
         GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
 #endif
     }

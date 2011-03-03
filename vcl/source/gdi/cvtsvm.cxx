@@ -2434,7 +2434,7 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 ByteString aStr( "Missing implementation for Action#: " );
                 aStr += ByteString::CreateFromInt32( pAction->GetType() );
                 aStr += '!';
-                DBG_ERROR( aStr.GetBuffer() );
+                OSL_FAIL( aStr.GetBuffer() );
             }
             break;
 #endif

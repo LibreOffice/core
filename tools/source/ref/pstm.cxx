@@ -156,7 +156,7 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
                 aStr += ByteString::CreateFromInt32( (long)(rStm.Tell() - nObjPos) );
                 aStr += ", should = ";
                 aStr += ByteString::CreateFromInt64(nObjLen);
-                DBG_ERROR( aStr.GetBuffer() );
+                OSL_FAIL( aStr.GetBuffer() );
             }
 #else
             (void)nObjLen;
@@ -792,7 +792,7 @@ UINT32 SvPersistStream::ReadObj
                 aStr += ByteString::CreateFromInt32( (long)(Tell() - nObjPos) );
                 aStr += ", should = ";
                 aStr += ByteString::CreateFromInt32( nObjLen );
-                DBG_ERROR( aStr.GetBuffer() );
+                OSL_FAIL( aStr.GetBuffer() );
             }
 #endif
             rpObj->RestoreNoDelete();

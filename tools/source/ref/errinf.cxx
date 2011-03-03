@@ -217,7 +217,7 @@ static void aDspFunc(const String &rErr, const String &rAction)
     aErr+= ByteString( rAction, RTL_TEXTENCODING_ASCII_US );
     aErr+=" Fehler: ";
     aErr+= ByteString( rErr, RTL_TEXTENCODING_ASCII_US );
-    DBG_ERROR(aErr.GetBuffer());
+    OSL_FAIL(aErr.GetBuffer());
 }
 
 
@@ -347,7 +347,7 @@ USHORT ErrorHandler::HandleError_Impl(
         aStr += ByteString( aAction, RTL_TEXTENCODING_ASCII_US );
         aStr += ByteString("\nFehler: ");
         aStr += ByteString( aErr, RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aStr.GetBuffer() );
+        OSL_FAIL( aStr.GetBuffer() );
         }
         else
         {

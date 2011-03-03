@@ -831,7 +831,7 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
     // clean up
     delete pNewResMgr;
 
-    DBG_ERROR( aStr.GetBuffer() );
+    OSL_FAIL( aStr.GetBuffer() );
 }
 
 #endif
@@ -951,7 +951,7 @@ void ResMgr::Init( const OUString& rFileName )
 #ifdef DBG_UTIL
         ByteString aStr( "Resourcefile not found:\n" );
         aStr += ByteString( OUStringToOString( rFileName, RTL_TEXTENCODING_UTF8 ) );
-        DBG_ERROR( aStr.GetBuffer() );
+        OSL_FAIL( aStr.GetBuffer() );
 #endif
         RscException_Impl();
     }

@@ -622,7 +622,7 @@ BOOL Dialog::ImplStartExecuteModal()
 #ifdef DBG_UTIL
         ByteString aErrorStr( "Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): " );
         aErrorStr += ImplGetDialogText( this );
-        DBG_ERROR( aErrorStr.GetBuffer() );
+        OSL_FAIL( aErrorStr.GetBuffer() );
 #endif
         return FALSE;
     }
@@ -632,7 +632,7 @@ BOOL Dialog::ImplStartExecuteModal()
 #ifdef DBG_UTIL
         ByteString aErrorStr( "Dialog::StartExecuteModal() is called in a none UI application: " );
         aErrorStr += ImplGetDialogText( this );
-        DBG_ERROR( aErrorStr.GetBuffer() );
+        OSL_FAIL( aErrorStr.GetBuffer() );
 #endif
         return FALSE;
     }
