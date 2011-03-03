@@ -240,7 +240,7 @@ void SdFileDialog_Imp::CheckSelectionState()
         catch( css::lang::IllegalArgumentException )
         {
 #ifdef DBG_UTIL
-            DBG_ERROR( "Cannot access \"selection\" checkbox" );
+            OSL_FAIL( "Cannot access \"selection\" checkbox" );
 #endif
         }
     }
