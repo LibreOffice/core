@@ -1449,7 +1449,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf, const NMSP_RTL:
             default :
                 ByteString aDbgOut( "SVGActionWriter::ImplWriteActions: unsupported MetaAction #" );
                 aDbgOut.Append( ByteString::CreateFromInt32( nType ) );
-                DBG_ERROR( aDbgOut.GetBuffer() );
+                OSL_FAIL( aDbgOut.GetBuffer() );
             break;
 #endif
         }
