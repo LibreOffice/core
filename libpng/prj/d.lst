@@ -6,4 +6,5 @@ mkdir: %_DEST%\inc%_EXT%\external\libpng
 
 ..\%__SRC%\inc\png.h %_DEST%\inc%_EXT%\external\libpng\png.h
 ..\%__SRC%\inc\pnglibconf.h %_DEST%\inc%_EXT%\external\libpng\pnglibconf.h
+..\%__SRC%\inc\pnglibconf.h %_DEST%\inc%_EXT%\external\libpng\pngconf.h
 
