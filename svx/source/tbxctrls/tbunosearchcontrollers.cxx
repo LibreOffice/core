@@ -132,12 +132,10 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
         case EVENT_KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-            sal_Bool bCtrl = pKeyEvent->GetKeyCode().IsMod1();
-            sal_Bool bAlt = pKeyEvent->GetKeyCode().IsMod2();
             sal_Bool bShift = pKeyEvent->GetKeyCode().IsShift();
             sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
 
-            if ( (bCtrl && bAlt && KEY_F == nCode) || KEY_ESCAPE == nCode )
+            if ( KEY_ESCAPE == nCode )
             {
                 nRet = 1;
                 GrabFocusToDocument();
