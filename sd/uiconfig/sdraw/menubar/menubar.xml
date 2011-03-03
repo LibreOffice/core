@@ -55,6 +55,7 @@
       <menu:menuitem menu:id=".uno:PasteSpecial"/>
       <menu:menuitem menu:id=".uno:SelectAll"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
       <menu:menuitem menu:id=".uno:SearchDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CopyObjects"/>
