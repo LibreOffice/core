@@ -139,6 +139,21 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
             {
                 nRet = 1;
                 GrabFocusToDocument();
+
+                // hide the findbar
+                css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
+                if (xPropSet.is())
+                {
+                    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+                    css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) );
+                    aValue >>= xLayoutManager;
+                    if (xLayoutManager.is())
+                    {
+                        const ::rtl::OUString sResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/findbar" ) );
+                        xLayoutManager->hideElement( sResourceURL );
+                        xLayoutManager->destroyElement( sResourceURL );
+                    }
+                }
             }
 
             if ( KEY_RETURN == nCode )
@@ -804,10 +819,17 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
         if (!xLayoutManager.is())
             return;
 
-        const ::rtl::OUString sResourceURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/findbar" ));
+        const ::rtl::OUString sResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/findbar" ) );
         css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
         if (!xUIElement.is())
-            return;
+        {
+            // show the findbar if necessary
+            xLayoutManager->createElement( sResourceURL );
+            xLayoutManager->showElement( sResourceURL );
+            xUIElement = xLayoutManager->getElement( sResourceURL );
+            if ( !xUIElement.is() )
+                return;
+        }
 
         css::uno::Reference< css::awt::XWindow > xWindow(xUIElement->getRealInterface(), css::uno::UNO_QUERY);
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
