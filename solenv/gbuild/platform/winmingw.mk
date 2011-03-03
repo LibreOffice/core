@@ -28,7 +28,9 @@
 GUI := WNT
 COM := GCC
 
-gb_MKTEMP := mktemp -t gbuild.XXXXXX
+# set tmpdir to some mixed case path, suitable for native tools
+gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
+gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
 gb_CC := $(CC)
 gb_CXX := $(CXX)

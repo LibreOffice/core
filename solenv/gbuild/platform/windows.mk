@@ -30,7 +30,7 @@ COM := MSC
 
 # set tmpdir to some mixed case path, suitable for native tools
 gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
-gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) -t gbuild.XXXXXX
+gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
 gb_CC := cl
 gb_CXX := cl
