@@ -343,7 +343,7 @@ void load_config( const OUString& rPath )
     }
     catch( Exception& r )
     {
-        DBG_ERROR(
+        OSL_FAIL(
             (rtl::OString("load_config(), "
                      "exception caught: ") +
              rtl::OUStringToOString(

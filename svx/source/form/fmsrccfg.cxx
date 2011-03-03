@@ -143,7 +143,7 @@ namespace svxform
             ++pSearch;
         }
 
-        DBG_ERROR(
+        OSL_FAIL(
             (   ::rtl::OString( "lcl_implMapAsciiValue: could not convert the ascii value " )
             +=  ::rtl::OString( _rAsciiValue.getStr(), _rAsciiValue.getLength(), RTL_TEXTENCODING_ASCII_US )
             +=  ::rtl::OString( " !" )
@@ -164,7 +164,7 @@ namespace svxform
             ++pSearch;
         }
 
-        DBG_ERROR(
+        OSL_FAIL(
             (   ::rtl::OString( "lcl_implMapIntValue: could not convert the integer value " )
             +=  ::rtl::OString::valueOf( (sal_Int32)_nValue )
             +=  ::rtl::OString( " !" )

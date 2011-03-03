@@ -974,7 +974,7 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
                     catch( ::com::sun::star::uno::Exception& e )
                     {
                         (void)e;
-                        DBG_ERROR(
+                        OSL_FAIL(
                             (OString("SdrOle2Obj::UpdateLinkURL_Impl(), "
                                     "exception caught: ") +
                             rtl::OUStringToOString(
@@ -1017,7 +1017,7 @@ void SdrOle2Obj::BreakFileLink_Impl()
             catch( ::com::sun::star::uno::Exception& e )
             {
                 (void)e;
-                DBG_ERROR(
+                OSL_FAIL(
                     (OString("SdrOle2Obj::BreakFileLink_Impl(), "
                             "exception caught: ") +
                     rtl::OUStringToOString(
@@ -1069,7 +1069,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
         catch( ::com::sun::star::uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("SdrOle2Obj::CheckFileLink_Impl(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -1154,7 +1154,7 @@ void SdrOle2Obj::Connect_Impl()
         catch( ::com::sun::star::uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("SdrOle2Obj::Connect_Impl(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -1242,7 +1242,7 @@ void SdrOle2Obj::RemoveListeners_Impl()
         catch( ::com::sun::star::uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("SdrOle2Obj::RemoveListeners_Impl(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -1325,7 +1325,7 @@ void SdrOle2Obj::Disconnect_Impl()
     catch( ::com::sun::star::uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("SdrOle2Obj::Disconnect_Impl(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -1383,7 +1383,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
         catch( ::com::sun::star::uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("SdrOle2Obj::SetModel(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -1959,7 +1959,7 @@ sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xOb
         catch( ::com::sun::star::uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("SdrOle2Obj::Unload=(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(

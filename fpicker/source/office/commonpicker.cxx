@@ -465,7 +465,7 @@ namespace svt
             }
             else
             {
-                DBG_ERROR(
+                OSL_FAIL(
                     (   ::rtl::OString( "OCommonPicker::initialize: unknown argument type at position " )
                     +=  ::rtl::OString::valueOf( (sal_Int32)( pArguments - _rArguments.getConstArray() ) )
                     ).getStr()
