@@ -72,6 +72,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:CompareDocuments"/>
+            <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
             <menu:menuitem menu:id=".uno:EditHeaderAndFooter"/>
             <menu:menuseparator/>
