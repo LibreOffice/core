@@ -4116,7 +4116,7 @@ BOOL SvNumberformat::IsNegativeWithoutSign() const
 
 BOOL SvNumberformat::IsNegativeInBracket() const
 {
-    USHORT nAnz = NumFor[1].GetnAnz();
+    USHORT nAnz = NumFor[1].GetCount();
     if (!nAnz)
         return FALSE;
 
@@ -4126,7 +4126,7 @@ BOOL SvNumberformat::IsNegativeInBracket() const
 
 BOOL SvNumberformat::HasPositiveBracketPlaceholder() const
 {
-    USHORT nAnz = NumFor[0].GetnAnz();
+    USHORT nAnz = NumFor[0].GetCount();
     String *tmpStr = NumFor[0].Info().sStrArray;
     return (tmpStr[nAnz-1].EqualsAscii( "_)" ));
 }
