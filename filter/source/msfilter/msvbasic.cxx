@@ -1291,7 +1291,7 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
                 }
                 else if ( key == sDocument )
                 {
-                    /*  #i37965# DR 2004-12-03: add "Document", used i.e.
+                    /*  #i37965# add "Document", used i.e.
                         in Excel for macros attached to sheet or document. */
 
                     // value is of form <name>/&H<identifier>, strip the identifier
