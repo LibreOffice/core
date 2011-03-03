@@ -29,7 +29,6 @@
 #define _ROMENU_HXX
 
 #include <vcl/graph.hxx>
-#include <tools/list.hxx>
 #include <vcl/menu.hxx>
 #include <svl/stritem.hxx>
 
