@@ -57,12 +57,11 @@ using namespace ::com::sun::star::script::ModuleType;
 
 DECLARE_DYNARRAY(StringArray,String *)
 
-// #117718# define internal types to distinguish between
+// define internal types to distinguish between
 // module types, form, class & normal
-// #i37965# DR 2004-12-03: add "Document", used in Excel for macros attached to sheet
+// #i37965# add "Document", used in Excel for macros attached to sheet
 
-// #117718# define map to hold types of module
-//
+// define map to hold types of module
 typedef sal_Int32 ModType;
 typedef ::std::map< UniString,
     ModType > ModuleTypeHash;

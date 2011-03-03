@@ -128,7 +128,6 @@ private:
     // column vector
     LwpColumnLayout ** m_pColumns;
 
-//add  by ,2005/4/1
 public:
     void XFConvert(XFContentContainer* pCont);
     void ConvertTable(XFTable* pXFTable,sal_uInt16 nStartRow,

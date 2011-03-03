@@ -134,7 +134,6 @@ void LwpChangeMgr::ConvertAllChange(IXFStream* pStream)
             XFChangeDelete* pDelete = new XFChangeDelete;
             pDelete->SetChangeID(iter->second);
             pDelete->SetEditor(iter->first->GetEditor());
-///         ConvertFribContent(pDelete,iter->first); //delete tmp,note by ,2005/7/1
             m_ChangeList.push_back(pDelete);
         }
     }
@@ -143,16 +142,13 @@ void LwpChangeMgr::ConvertAllChange(IXFStream* pStream)
     pStream->GetAttrList()->Clear();
     if (m_ChangeList.size() == 0)
             return;
-//Add by ,for disable change tracking,2005/11/21
+    // Add for disable change tracking
     pStream->GetAttrList()->AddAttribute( A2OUSTR("text:track-changes"),A2OUSTR("false"));
-//Add end
     pStream->StartElement( A2OUSTR("text:tracked-changes") );
     for (iter1=m_ChangeList.begin();iter1 !=m_ChangeList.end();++iter1)
         (*iter1)->ToXml(pStream);
 
     pStream->EndElement(A2OUSTR("text:tracked-changes"));
-
-//  m_DocFribMap.clear();
 
     for (iter1=m_ChangeList.begin();iter1 !=m_ChangeList.end();++iter1)
     {

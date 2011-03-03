@@ -57,11 +57,6 @@
 * @file
 * Border stuff of Wordpro.
 ************************************************************************/
-/*************************************************************************
-* Change History
-* 2005-01-11  Create and implement.
-* 2005-01-17  Add Get** functions.
-************************************************************************/
 #include    "lwpborderstuff.hxx"
 #include    "lwpstyledef.hxx"
 #include    "lwpfilehdr.hxx"

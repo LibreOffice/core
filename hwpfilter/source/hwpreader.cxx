@@ -363,8 +363,6 @@ void HwpReader::makeMeta()
         }
         sprintf(buf,"%d-%02d-%02dT%02d:%02d:00",year,month,day,hour,minute);
 
-/* 2001?? 9?? 8?? ??????, 14?? 16?? */
-// 2001-09-07T11:16:47
         rstartEl( ascii("meta:creation-date"), rList );
         rchars( ascii(buf));
         rendEl( ascii("meta:creation-date") );
@@ -372,7 +370,6 @@ void HwpReader::makeMeta()
 
     if (hwpinfo->summary.keyword[0][0] || hwpinfo->summary.etc[0][0])
     {
-/* ???????? dc?? ????????. */
         rstartEl(ascii("meta:keywords"), rList);
         if (hwpinfo->summary.keyword[0][0])
         {
@@ -500,7 +497,6 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
         if( hdo->type == HWPDO_LINE || hdo->type == HWPDO_ARC || hdo->type == HWPDO_FREEFORM ||
             hdo->type == HWPDO_ADVANCED_ARC )
         {
-                                                  /* ???????? ???? */
             if( prop->line_tstyle && !ArrowShape[prop->line_tstyle].bMade  )
             {
                 ArrowShape[prop->line_tstyle].bMade = sal_True;
@@ -553,7 +549,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
 
         if( hdo->type != HWPDO_LINE )
         {
-            if( prop->flag >> 18  & 0x01 )        /* ?????? ???? ???? ???? */
+            if( prop->flag >> 18  & 0x01 )
             {
                 padd( ascii("draw:name"), sXML_CDATA, ascii(Int2Str(hdo->index, "fillimage%d", buf)));
                 if( !prop->pictype )
@@ -561,7 +557,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                     padd( ascii("xlink:href"), sXML_CDATA,
                         hconv(kstr2hstr( (uchar *)urltounix(prop->szPatternFile, buf), sbuf), gstr));
                 }
-                else                              /* ???????? image???? ?????? ???????? ????. */
+                else
                 {
                     EmPicture *emp = 0L;
                     if ( strlen( prop->szPatternFile ) > 3)

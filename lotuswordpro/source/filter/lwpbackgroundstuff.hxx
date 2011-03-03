@@ -57,10 +57,6 @@
 * @file
 * Backgound object of Wordpro.
 ************************************************************************/
-/*************************************************************************
-* Change History
-* 2005-01-12 Create and implement.
-************************************************************************/
 #ifndef     _LWPBACKGROUNDSTUFF_HXX
 #define     _LWPBACKGROUNDSTUFF_HXX
 #include    "lwpcolor.hxx"

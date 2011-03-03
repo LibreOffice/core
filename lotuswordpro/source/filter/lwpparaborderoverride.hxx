@@ -57,10 +57,6 @@
 * @file
 * Border override of Wordpro.
 ************************************************************************/
-/*************************************************************************
-* Change History
-* 2005-01-11 Create and implement.
-************************************************************************/
 #ifndef     _LWPPARABORDEROVERRIDE_HXX
 #define     _LWPPARABORDEROVERRIDE_HXX
 

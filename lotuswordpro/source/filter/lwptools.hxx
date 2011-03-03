@@ -93,18 +93,13 @@ public:
         OUString& str, sal_uInt16 strlen,  rtl_TextEncoding aEncoding );
     static BOOL IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len);
 
-    // 01/19/2005
     inline static double ConvertFromUnits(const sal_Int32& nUnits);
     inline static double ConvertToMetric(const double& fInch);
     inline static double ConvertFromMetric(const double& fCM);
     inline static double ConvertFromUnitsToMetric(const sal_Int32& nUnits);
-    //end
 
-    //add by , 03/11/2005
     inline static sal_Int32 ConvertToUnits(const double& fInch);
-    //add end
 
-    //, 02/23/2005
     inline static sal_Bool IsOddNumber(sal_uInt16& nNumber);
     inline static sal_Bool IsEvenNumber(sal_uInt16& nNumber);
 
@@ -112,7 +107,6 @@ public:
     static OUString convertToFileUrl(const OString& fileName);
     static rtl::OUString    DateTimeToOUString(LtTm& dt);
 
-    //add by ,2005/6/1
     static XFDateStyle* GetSystemDateStyle(sal_Bool bLongFormat);
     static XFTimeStyle* GetSystemTimeStyle();
 };

@@ -284,7 +284,7 @@ void LwpCellLayout::ApplyFmtStyle(XFCellStyle *pCellStyle)
         {
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
             m_NumfmtName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
-            pCellStyle->SetDataStyle(m_NumfmtName);//modified by ,2005/11/30
+            pCellStyle->SetDataStyle(m_NumfmtName);
         }
     }
 

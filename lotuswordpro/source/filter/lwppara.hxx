@@ -229,7 +229,7 @@ protected:
     //LwpForked3NotifyList* m_NotifyList;   //not saved
 
     rtl::OUString m_StyleName;
-    rtl::OUString m_ParentStyleName;//Add by ,to support toc,2005/12/13
+    rtl::OUString m_ParentStyleName;//Add to support toc
     LwpBreaksOverride* m_pBreaks;
     rtl::OUString m_AftPageBreakName;
     rtl::OUString m_BefPageBreakName;
@@ -238,10 +238,9 @@ protected:
     rtl::OUString m_BefColumnBreakName;
     LwpIndentOverride* m_pIndentOverride;
     rtl::OUString m_Content;//for silver bullet,get text of first frib, add by  2/1
-    sal_uInt32 m_FontID;//for silver bullet, add by  2/1
+    sal_uInt32 m_FontID;//for silver bullet
     rtl::OUString m_AllText;//get all text in this paragraph
 
-    //add by
     sal_Bool m_bHasBullet;
     LwpObjectID m_aSilverBulletID;
     LwpSilverBullet* m_pSilverBullet;

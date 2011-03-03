@@ -391,7 +391,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( VBA_Impl& aVBA, const std::vector< Stri
             {
                 StringArray aDecompressed = aVBA.Decompress(i);
 #if 0
-/*  DR 2005-08-11 #124850# Do not filter special characters from module name.
+/*  Do not filter special characters from module name.
     Just put the original module name and let the Basic interpreter deal with
     it. Needed for roundtrip...
  */

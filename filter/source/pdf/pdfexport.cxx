@@ -204,13 +204,12 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                     aMtf.SetPrefMapMode( aMapMode );
                     aMtf.Record( pOut );
 
-                    // --> FME 2004-10-08 #i35176#
+                    // #i35176#
                     // IsLastPage property.
                     const sal_Int32 nCurrentRenderer = nSel - 1;
                     nSel = aMultiSelection.NextSelected();
                     if ( pLastPage && sal_Int32(SFX_ENDOFSELECTION) == nSel )
                         *pLastPage <<= sal_True;
-                    // <--
 
                     rRenderable->render( nCurrentRenderer, rSelection, rRenderOptions );
 

@@ -268,8 +268,8 @@ void LwpFontTable::Read(LwpObjectStream *pStrm)
 OUString LwpFontTable::GetFaceName(sal_uInt16 index) //index: start from 1
 {
     assert(index>0);
-    if (index < 1)//add by , for fix crash,2005/12/20
-        return OUString();//add end
+    if (index < 1)//add for fix crash
+        return OUString();
     return m_pFontEntries[index-1].GetFaceName();
 }
 
@@ -554,7 +554,7 @@ void LwpFontManager::SetDfltFont(XFFont* /*pFont*/)
 
 OUString LwpFontManager::GetNameByID(sal_uInt32 fontID)
 {
-    return ( m_FNMgr.GetNameByIndex(GetFontNameIndex(fontID)) );//use font id for bullet? note by ,2005/7/5
+    return ( m_FNMgr.GetNameByIndex(GetFontNameIndex(fontID)) );//use font id for bullet?
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

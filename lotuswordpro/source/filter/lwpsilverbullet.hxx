@@ -70,9 +70,7 @@
 #include "lwpdlvlist.hxx"
 #include "lwpobjid.hxx"
 #include "lwpatomholder.hxx"
-//Added by yanjun for SS merge: 2007-12-21
 #include    "unicode/utypes.h"
-//End
 const sal_uInt16 MAXNUMBERPOSITIONS = 10; //max number of positions
 const sal_uInt16 NUMCHAR_none = 0x00;   //none of numberchar
 const sal_uInt16 NUMCHAR_1 = 0x01;      //index for numberchar "1"
@@ -87,7 +85,6 @@ const sal_uInt16 NUMCHAR_Chinese1 = 0x09;       //index for numberchar "Ò¼"
 const sal_uInt16 NUMCHAR_Chinese2 = 0x08;       //index for numberchar "Ò»"
 const sal_uInt16 NUMCHAR_Chinese3= 0x0A;    //index for numberchar "¼×"
 const sal_uInt16 NUMCHAR_Chinese4 = 0x13;       //index for numberchar "01" in chinese version
-//add end
 
 class LwpStory;
 class LwpAtomHolder;

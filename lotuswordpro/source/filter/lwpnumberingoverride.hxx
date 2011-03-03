@@ -57,11 +57,6 @@
 * @file
 * Numbering override of Wordpro.
 ************************************************************************/
-/*************************************************************************
-* Change History
-* 2005-01-12 Create and implement.
-************************************************************************/
-
 #ifndef     _LWPNUMBERINGOVERRIDE_HXX
 #define     _LWPNUMBERINGOVERRIDE_HXX
 
