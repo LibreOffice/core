@@ -82,6 +82,7 @@ SLOFILES =  \
         $(SLO)$/interpr4.obj \
         $(SLO)$/interpr5.obj \
         $(SLO)$/interpr6.obj \
+        $(SLO)$/interpr7.obj \
         $(SLO)$/lookupcache.obj \
         $(SLO)$/navicfg.obj \
         $(SLO)$/odffmap.obj \

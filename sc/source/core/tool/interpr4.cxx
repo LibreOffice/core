@@ -3663,6 +3663,8 @@ StackVar ScInterpreter::Interpret()
     // so reassure exceptions are really off.
     SAL_MATH_FPEXCEPTIONS_OFF();
 
+    CheckForVolatileToken();
+
     aCode.Reset();
     while( ( pCur = aCode.Next() ) != NULL
             && (!nGlobalError || nErrorFunction <= nErrorFunctionCount) )
