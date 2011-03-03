@@ -52,6 +52,7 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/shl.hxx>
+#include <vector>
 
 class DdeService;
 class DdeTopic;
@@ -69,7 +70,7 @@ struct Conversation
     DdeTopic*   pTopic;
 };
 
-DECLARE_LIST( ConvList, Conversation* );
+typedef ::std::vector< Conversation* > ConvList;
 
 // ---------------
 // - DdeInternal -

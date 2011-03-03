@@ -49,10 +49,10 @@ class DdeExecute;
 class DdeItem;
 class DdeTopic;
 class DdeService;
-class ConvList;
 struct DdeDataImp;
 struct DdeImp;
 class DdeItemImp;
+struct Conversation;
 
 #ifndef _SVDDE_NOLISTS
 DECLARE_LIST( DdeConnections, DdeConnection* )
@@ -68,6 +68,7 @@ typedef List DdeItems;
 
 DECLARE_LIST( DdeTransactions, DdeTransaction* )
 typedef ::std::vector< long > DdeFormats;
+typedef ::std::vector< Conversation* > ConvList;
 
 // -----------
 // - DdeData -

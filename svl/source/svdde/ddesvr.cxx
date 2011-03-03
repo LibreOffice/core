@@ -209,7 +209,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                     pC = new Conversation;
                     pC->hConv = hConv;
                     pC->pTopic = pTopic;
-                    pService->pConv->Insert( pC );
+                    pService->pConv->push_back( pC );
                 }
             }
             return (HDDEDATA)NULL;
@@ -217,9 +217,9 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
 
     for ( pService = rAll.First(); pService; pService = rAll.Next() )
     {
-        for( pC = pService->pConv->First(); pC;
-             pC = pService->pConv->Next() )
+        for ( size_t i = 0, n = pService->pConv->size(); i < n; ++i )
         {
+            pc = (*pService->pConv)[ i ];
             if ( pC->hConv == hConv )
                 goto found;
         }
@@ -231,8 +231,17 @@ found:
     if ( nCode == XTYP_DISCONNECT)
     {
         pC->pTopic->_Disconnect( (long) hConv );
-        pService->pConv->Remove( pC );
-        delete pC;
+        for ( ConvList::iterator it = pService->pConv->begin();
+              it < pService->pConv->end();
+              ++it
+        ) {
+            if ( *it == pC )
+            {
+                delete *it;
+                pService->pConv->erase( it );
+                break;
+            }
+        }
         return (HDDEDATA)NULL;
     }
 
@@ -565,13 +574,15 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
             aTopics.Remove( t );
             // JP 27.07.95: und alle Conversions loeschen !!!
             //              (sonst wird auf geloeschten Topics gearbeitet!!)
-            for( ULONG n = pConv->Count(); n; )
+            for( size_t n = pConv->size(); n; )
             {
-                Conversation* pC = pConv->GetObject( --n );
+                Conversation* pC = (*pConv)[ --n ];
                 if( pC->pTopic == &rTopic )
                 {
-                    pConv->Remove( pC );
-                    delete pC;
+                    ConvList::iterator it = pConv->begin();
+                    ::std::advance( it, n );
+                    delete *it;
+                    pConv->erase( it );
                 }
             }
             break;
