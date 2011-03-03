@@ -493,45 +493,14 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         SwTxtNode* pTNd = aTmpStt.GetNode().GetTxtNode();
         if( pTNd && pTNd->HasSwAttrSet() && pTNd->GetpSwAttrSet()->Count() )
         {
-            SfxItemIter aIter( *pTNd->GetpSwAttrSet() );
-            const SfxPoolItem* pItem = aIter.GetCurItem();
-            SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_CHRATR_END );
-
-            while( sal_True )
+            if (pHst)
             {
-                if( IsInRange( aCharFmtSetRange, pItem->Which() ))
-                {
-                    pTNd->GetOrCreateSwpHints();
-
-                    aCharSet.Put( *pItem );
-
-                    if( pHst )
-                    {
-                        SwRegHistory aRegH( pTNd, *pTNd, pHst );
-                        pTNd->ResetAttr( pItem->Which() );
-                    }
-                    else
-                        pTNd->ResetAttr( pItem->Which() );
-                }
-                if( aIter.IsAtEnd() )
-                    break;
-                pItem = aIter.NextItem();
+                SwRegHistory history(pTNd, *pTNd, pHst);
+                pTNd->FmtToTxtAttr(pTNd);
             }
-
-            if ( aCharSet.Count() )
+            else
             {
-                if ( pHst )
-                {
-                    SwRegHistory history( pTNd, *pTNd, pHst );
-                    history.InsertItems( aCharSet, 0, pTNd->GetTxt().Len(),
-                        nsSetAttrMode::SETATTR_NOFORMATATTR );
-                }
-                else
-                {
-                    SwTxtAttr* pNew =
-                        MakeTxtAttr( *this, aCharSet, 0, pTNd->GetTxt().Len() );
-                    pTNd->InsertHint( pNew );
-                }
+                pTNd->FmtToTxtAttr(pTNd);
             }
         }
 
@@ -545,29 +514,14 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         SwTxtNode* pTNd = aTmpEnd.GetNode().GetTxtNode();
         if( pTNd && pTNd->HasSwAttrSet() && pTNd->GetpSwAttrSet()->Count() )
         {
-            SfxItemIter aIter( *pTNd->GetpSwAttrSet() );
-            const SfxPoolItem* pItem = aIter.GetCurItem();
-            while( sal_True )
+            if (pHst)
             {
-                if( IsInRange( aCharFmtSetRange, pItem->Which() ))
-                {
-                    SwTxtAttr* pTAttr = MakeTxtAttr( *this,
-                        const_cast<SfxPoolItem&>(*pItem),
-                        0, pTNd->GetTxt().Len() );
-                    SwpHints & rHints = pTNd->GetOrCreateSwpHints();
-                    rHints.SwpHintsArray::Insert( pTAttr );
-                    if ( pHst )
-                    {
-                        SwRegHistory aRegH( pTNd, *pTNd, pHst );
-                        pTNd->ResetAttr( pItem->Which() );
-                        pHst->Add( pTAttr, aTmpEnd.GetIndex(), true );
-                    }
-                    else
-                        pTNd->ResetAttr( pItem->Which() );
-                }
-                if( aIter.IsAtEnd() )
-                    break;
-                pItem = aIter.NextItem();
+                SwRegHistory history(pTNd, *pTNd, pHst);
+                pTNd->FmtToTxtAttr(pTNd);
+            }
+            else
+            {
+                pTNd->FmtToTxtAttr(pTNd);
             }
         }
     }
