@@ -1,5 +1,15 @@
 --- misc/fontconfig-2.8.0/fc-cache/fc-cache.c	Mon Jan 19 23:26:36 1970
 +++ misc/build/fontconfig-2.8.0/fc-cache/fc-cache.c	Mon Jan 19 23:26:36 1970
+@@ -41,7 +41,9 @@
+ #include <sys/stat.h>
+ #include <errno.h>
+ #include <fcntl.h>
++#ifndef _WIN32
+ #include <dirent.h>
++#endif
+ #include <string.h>
+ 
+ #if defined (_WIN32)
 @@ -257,6 +257,9 @@
      FcBool	remove;
      FcCache	*cache;
@@ -77,6 +87,16 @@
  #include "../fc-arch/fcarch.h"
  #include <stdio.h>
  #include <fcntl.h>
+@@ -26,7 +26,9 @@
+ #include "../fc-arch/fcarch.h"
+ #include <stdio.h>
+ #include <fcntl.h>
++#ifndef _WIN32
+ #include <dirent.h>
++#endif
+ #include <string.h>
+ #include <sys/types.h>
+ #include <assert.h>
 @@ -34,9 +35,11 @@
  #  include <sys/mman.h>
  #elif defined(_WIN32)
@@ -170,6 +190,16 @@
  		    cache_dir = test_dir;
 --- misc/fontconfig-2.8.0/src/fccfg.c	Mon Jan 19 23:26:36 1970
 +++ misc/build/fontconfig-2.8.0/src/fccfg.c	Mon Jan 19 23:26:36 1970
+@@ -23,7 +23,9 @@
+  */
+ 
+ #include "fcint.h"
++#ifndef _WIN32
+ #include <dirent.h>
++#endif
+ #include <sys/types.h>
+ 
+ #if defined (_WIN32) && (defined (PIC) || defined (DLL_EXPORT))
 @@ -1646,6 +1646,9 @@
  FcConfigFileExists (const FcChar8 *dir, const FcChar8 *file)
  {
@@ -208,6 +238,73 @@
  
  /* The language is documented in doc/fcformat.fncs
   * These are the features implemented:
+--- misc/fontconfig-2.8.0/src/fcdir.c	2009-11-16 18:24:52.000000000 +0100
++++ misc/build/fontconfig-2.8.0/src/fcdir.c	2011-03-03 12:46:39.702582800 +0100
+@@ -23,7 +23,6 @@
+  */
+ 
+ #include "fcint.h"
+-#include <dirent.h>
+ 
+ FcBool
+ FcFileIsDir (const FcChar8 *file)
+@@ -323,6 +322,56 @@
+ {
+     return FcFalse; /* XXX deprecated */
+ }
++
++DIR *opendir( const char* pPfad )
++{
++    DIR *pDir = malloc (sizeof (DIR));
++    if ( pDir )
++	{
++		FcMemAlloc (FC_MEM_ATTR, sizeof (DIR));    /* size is too expensive */
++        pDir->p = (char*) pPfad;
++	}
++    return pDir;
++}
++struct dirent *readdir( DIR *pDir )
++{
++    int bOk = 0;
++    if ( pDir->p )
++    {
++        char *pBuf = malloc ((strlen( pDir->p ) + 5 ));
++		FcMemAlloc (FC_MEM_STRING, strlen( pDir->p ) + 5);
++        if ( pBuf )
++        {
++            // *.* dahinter, ggf mit "\\" abtrennen (falls nicht schon da)
++            strcpy( pBuf, pDir->p );
++            strcat( pBuf, "\\*.*" + ( *(pBuf + strlen( pBuf ) - 1 ) == '\\' ) );
++            CharUpperBuff( pBuf, strlen(pBuf) );
++            pDir->h = FindFirstFile( pBuf, &pDir->aDirEnt );
++            bOk = pDir->h != INVALID_HANDLE_VALUE;
++            pDir->p = NULL;
++            free (pBuf);
++        }
++        else
++            pDir->h = INVALID_HANDLE_VALUE;
++    }
++    else
++    {
++        bOk = FindNextFile( pDir->h, &pDir->aDirEnt );
++    }
++
++    return bOk ? &pDir->aDirEnt : NULL;
++}
++
++int closedir( DIR *pDir )
++{
++    int bOk = 0;
++    if ( pDir )
++    {
++        bOk = 0 != pDir->p || FindClose( pDir->h );
++        free (pDir);
++    }
++    return bOk;
++}
+ #define __fcdir__
+ #include "fcaliastail.h"
+ #undef __fcdir__
 --- misc/fontconfig-2.8.0/src/fcint.h	Mon Jan 19 23:26:36 1970
 +++ misc/build/fontconfig-2.8.0/src/fcint.h	Mon Jan 19 23:26:36 1970
 @@ -31,6 +31,15 @@
@@ -236,11 +333,54 @@
  #include <string.h>
  #include <ctype.h>
  #include <errno.h>
+@@ -62,6 +64,40 @@
+ #include <fontconfig/fcprivate.h>
+ #include "fcdeprecate.h"
+ 
++#ifndef _WIN32
++#include <dirent.h>
++#else
++#include <sys\types.h>
++#include <sys\stat.h>
++#include <direct.h>
++#include <io.h>
++#include <unistd.h>
++#include <windows.h>
++#ifdef _MSC_VER
++#pragma warning (push,1)
++#endif
++#include <winbase.h>
++#ifdef _MSC_VER
++#pragma warning (pop)
++#endif
++# define S_IFDIR  _S_IFDIR                     /* directory */
++#define	S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
++#define dirent          _WIN32_FIND_DATAA
++#define d_name          cFileName
++#define d_type          dwFileAttributes
++typedef struct
++{
++    WIN32_FIND_DATAA aDirEnt;
++    HANDLE           h;
++    const char      *p;
++} DIR;
++
++DIR *opendir( const char* pPfad );
++struct dirent *readdir( DIR *pDir );
++
++int closedir( DIR *pDir );
++#endif
++
+ #ifndef FC_CONFIG_PATH
+ #define FC_CONFIG_PATH "fonts.conf"
+ #endif
 --- misc/fontconfig-2.8.0/src/fcxml.c	Mon Jan 19 23:26:36 1970
 +++ misc/build/fontconfig-2.8.0/src/fcxml.c	Mon Jan 19 23:26:36 1970
-@@ -27,6 +27,11 @@
+@@ -27,6 +27,13 @@
  #include <stdarg.h>
++#ifndef _WIN32
  #include <dirent.h>
++#endif
  
 +#ifdef _WIN32
 +#include <io.h>
