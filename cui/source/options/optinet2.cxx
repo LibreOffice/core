@@ -736,12 +736,12 @@ SfxTabPage* SvxSearchTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet
 
 void SvxSearchTabPage::Reset( const SfxItemSet& )
 {
-    //The two lines below are moved here from the last part of this method by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
+    //The two lines below are moved here from the last part of this method
     aChangePB.Disable();
     aAddPB.Disable();
 
     sal_uInt16 nCount = aSearchConfig.Count();
-    aSearchLB.Clear();  //add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
+    aSearchLB.Clear();
     for(sal_uInt16 i = 0; i < nCount; i++)
     {
         const SvxSearchEngineData& rData = aSearchConfig.GetData(i);
@@ -775,7 +775,6 @@ void SvxSearchTabPage::ActivatePage( const SfxItemSet&  )
 
 int SvxSearchTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    //Modified by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
     if(!ConfirmLeave(String()))
         return KEEP_PAGE;
 
@@ -786,7 +785,6 @@ int SvxSearchTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 // -----------------------------------------------------------------------
 
-//add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
 BOOL SvxSearchTabPage::ConfirmLeave( const String& rStringSelection)
 {
     if(aChangePB.IsEnabled())
@@ -893,7 +891,6 @@ void SvxSearchTabPage::InitControls_Impl()
 
 IMPL_LINK( SvxSearchTabPage, NewSearchHdl_Impl, PushButton *, EMPTYARG )
 {
-    //The 3 lines below is modified by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
     SearchEntryHdl_Impl(&aSearchLB);
     if(aChangePB.IsEnabled() || aAddPB.IsEnabled())
         return 0;
@@ -910,7 +907,6 @@ IMPL_LINK( SvxSearchTabPage, NewSearchHdl_Impl, PushButton *, EMPTYARG )
 
 IMPL_LINK( SvxSearchTabPage, AddSearchHdl_Impl, PushButton *, EMPTYARG )
 {
-    //The following two lines is added by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
     aAddPB.Enable(FALSE);
     aChangePB.Enable(FALSE);
     aCurrentSrchData.sEngineName = aSearchNameED.GetText();
@@ -925,7 +921,6 @@ IMPL_LINK( SvxSearchTabPage, AddSearchHdl_Impl, PushButton *, EMPTYARG )
 
 IMPL_LINK( SvxSearchTabPage, ChangeSearchHdl_Impl, PushButton *, EMPTYARG )
 {
-    //The following two lines is added by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
     aChangePB.Enable(FALSE);
     aAddPB.Enable(FALSE);
     USHORT nPos = aSearchLB.GetSelectEntryPos();
@@ -957,7 +952,7 @@ IMPL_LINK( SvxSearchTabPage, ChangeSearchHdl_Impl, PushButton *, EMPTYARG )
 
 IMPL_LINK( SvxSearchTabPage, DeleteSearchHdl_Impl, PushButton *, EMPTYARG)
 {
-    aChangePB.Enable(FALSE);     //add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
+    aChangePB.Enable(FALSE);
     USHORT nPos = aSearchLB.GetSelectEntryPos();
     DBG_ASSERT(nPos != LISTBOX_ENTRY_NOTFOUND, "kein Eintrag selektiert!");
     aSearchConfig.RemoveData(aSearchLB.GetSelectEntry());
@@ -975,7 +970,6 @@ IMPL_LINK( SvxSearchTabPage, SearchEntryHdl_Impl, ListBox*, pBox )
     if ( nEntryPos != LISTBOX_ENTRY_NOTFOUND )
     {
         String sSelection(pBox->GetSelectEntry());
-        //Modified by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
         if(!ConfirmLeave(sSelection))
             return 0;
 
