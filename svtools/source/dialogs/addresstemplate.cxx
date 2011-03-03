@@ -201,7 +201,7 @@ public:
             }
             else
             {
-                DBG_ERROR   (   (   ::rtl::OString("AssigmentTransientData::AssigmentTransientData: unknown programmatic name (")
+                OSL_FAIL(   (   ::rtl::OString("AssigmentTransientData::AssigmentTransientData: unknown programmatic name (")
                                 +=  ::rtl::OString(pFields->ProgrammaticName.getStr(), pFields->ProgrammaticName.getLength(), RTL_TEXTENCODING_ASCII_US)
                                 +=  ::rtl::OString(")!")
                                 ).getStr()
