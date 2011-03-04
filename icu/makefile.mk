@@ -37,22 +37,17 @@ TARGET=so_icu
 
 .INCLUDE :	icuversion.mk
 
-.IF "$(ICU_MICRO)"!="0"
-TARFILE_NAME=icu4c-$(ICU_MAJOR)_$(ICU_MINOR)_$(ICU_MICRO)-src
-TARFILE_MD5=2f6ecca935948f7db92d925d88d0d078
-.ELSE
-TARFILE_NAME=icu4c-$(ICU_MAJOR)_$(ICU_MINOR)-src
-TARFILE_MD5=
-.ENDIF
+TARFILE_NAME=icu4c-4_6-src
+TARFILE_MD5=43e56b71c407be5154de681eaa646a4a
 TARFILE_ROOTDIR=icu
 
 #icu4c.8320.freeserif.crash.patch, see
 #http://bugs.icu-project.org/trac/ticket/8320 for crash with FreeSerif
 
 PATCH_FILES=\
-    ${TARFILE_NAME}.patch \
     icu4c.8320.freeserif.crash.patch \
     icu4c-aix.patch
+#    ${TARFILE_NAME}.patch \
 
 .IF "$(GUI)"=="UNX"
 
