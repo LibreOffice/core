@@ -132,10 +132,12 @@ $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb makefil
         -c $(DLLPRE)fileacc$(DLLPOST) \
         -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST) \
         -c $(DLLPRE)sfx$(DLLPOSTFIX)$(DLLPOST) \
+        -c $(DLLPRE)ucb1$(DLLPOST) \
+        -c $(DLLPRE)ucpfile1$(DLLPOST) \
         -c $(DLLPRE)unoxml$(DLLPOSTFIX)$(DLLPOST) \
+        -c stocservices.uno$(DLLPOST) \
         -c i18npool.uno$(DLLPOST) \
         -c sax.uno$(DLLPOST)
-
 
 #Tweak things so that we use the .res files in the solver
 STAR_RESOURCEPATH:=$(PWD)/$(BIN)$(PATH_SEPERATOR)$(SOLARBINDIR)
