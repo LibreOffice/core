@@ -1337,14 +1337,12 @@ class FixedImageImpl: public ControlImpl
 public:
     uno::Reference< graphic::XGraphic > mxGraphic;
     FixedImageImpl( Context *context, const PeerHandle &peer, Window *window)
-//                    const char *pName )
         : ControlImpl( context, peer, window )
-          //, mxGraphic( layoutimpl::loadGraphic( pName ) )
         , mxGraphic( peer, uno::UNO_QUERY )
     {
         if ( !mxGraphic.is() )
         {
-            DBG_ERROR( "ERROR: failed to load image: `%s'" /*, pName*/ );
+            OSL_FAIL( "ERROR: failed to load image: `%s'" );
         }
     }
 };
