@@ -109,7 +109,7 @@ ScaleAutomatism::ScaleAutomatism( const ScaleData& rSourceScale, const Date& rNu
                     : m_aSourceScale( rSourceScale )
                     , m_fValueMinimum( 0.0 )
                     , m_fValueMaximum( 0.0 )
-                    , m_nMaximumAutoMainIncrementCount( lcl_getMaximumAutoIncrementCount( m_aSourceScale.AxisType ) )
+                    , m_nMaximumAutoMainIncrementCount( lcl_getMaximumAutoIncrementCount( rSourceScale.AxisType ) )
                     , m_bExpandBorderToIncrementRhythm( false )
                     , m_bExpandIfValuesCloseToBorder( false )
                     , m_bExpandWideValuesToZero( false )
