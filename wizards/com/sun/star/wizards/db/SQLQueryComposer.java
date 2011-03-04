@@ -26,7 +26,6 @@
  ************************************************************************/
 package com.sun.star.wizards.db;
 
-import java.util.Vector;
 
 // import com.sun.star.lang.IllegalArgumentException;
 // import com.sun.star.lang.WrappedTargetException;
@@ -37,7 +36,6 @@ import com.sun.star.container.XIndexAccess;
 // import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbcx.XColumnsSupplier;
 // import com.sun.star.sdb.XColumn;
-import com.sun.star.sdb.XSQLQueryComposerFactory;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdb.XSingleSelectQueryAnalyzer;
 import com.sun.star.ui.dialogs.XExecutableDialog;
@@ -50,6 +48,7 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.sdb.SQLFilterOperator;
 
 import com.sun.star.wizards.common.*;
+import java.util.ArrayList;
 
 public class SQLQueryComposer
 {
@@ -60,7 +59,7 @@ public class SQLQueryComposer
     // String m_sSelectClause;
     // String m_sFromClause;
     public XSingleSelectQueryAnalyzer m_xQueryAnalyzer;
-    Vector composedCommandNames = new Vector(1);
+    ArrayList<CommandName> composedCommandNames = new ArrayList<CommandName>(1);
     private XSingleSelectQueryComposer m_queryComposer;
     XMultiServiceFactory xMSF;
     boolean bincludeGrouping = true;
@@ -74,9 +73,6 @@ public class SQLQueryComposer
             final Object oQueryComposer = xMSF.createInstance("com.sun.star.sdb.SingleSelectQueryComposer");
             m_xQueryAnalyzer = (XSingleSelectQueryAnalyzer) UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class, oQueryComposer);
             m_queryComposer = (XSingleSelectQueryComposer) UnoRuntime.queryInterface(XSingleSelectQueryComposer.class, m_xQueryAnalyzer);
-            XSQLQueryComposerFactory xSQLComposerFactory;
-            xSQLComposerFactory = (XSQLQueryComposerFactory) UnoRuntime.queryInterface(XSQLQueryComposerFactory.class, CurDBMetaData.DBConnection);
-        // /* XSQLQueryComposer */ xSQLQueryComposer = xSQLComposerFactory.createQueryComposer();
         }
         catch (Exception exception)
         {
@@ -86,18 +82,9 @@ public class SQLQueryComposer
 
     private boolean addtoSelectClause(String DisplayFieldName) throws SQLException
     {
-        if (bincludeGrouping)
+        if (bincludeGrouping && CurDBMetaData.xDBMetaData.supportsGroupByUnrelated() && CurDBMetaData.GroupFieldNames != null && JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, DisplayFieldName) > -1)
         {
-            if (CurDBMetaData.xDBMetaData.supportsGroupByUnrelated())
-            {
-                if (CurDBMetaData.GroupFieldNames != null)
-                {
-                    if (JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, DisplayFieldName) > -1)
-                    {
-                        return false;
-                    }
-                }
-            }
+            return false;
         }
         return true;
     }
@@ -234,7 +221,6 @@ public class SQLQueryComposer
         }
         // just for debug!
         sOrder = m_queryComposer.getOrder();
-        int dummy = 0;
     }
 
     public void appendGroupByColumns(boolean _baddAliasFieldNames) throws SQLException
@@ -244,7 +230,6 @@ public class SQLQueryComposer
             XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(CurDBMetaData.GroupFieldNames[i], _baddAliasFieldNames);
             m_queryComposer.appendGroupByColumn(xColumn);
         }
-        String s = m_xQueryAnalyzer.getQuery();
     }
 
     public void setDBMetaData(QueryMetaData _oDBMetaData)
@@ -269,19 +254,19 @@ public class SQLQueryComposer
         return m_xQueryAnalyzer.getQuery();
     }
 
-    public String getFromClause()
+    public StringBuilder getFromClause()
     {
-        String sFromClause = "FROM";
+        StringBuilder sFromClause = new StringBuilder("FROM");
         composedCommandNames.clear();
         String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
         for (int i = 0; i < sCommandNames.length; i++)
         {
             CommandName curCommandName = new CommandName(CurDBMetaData, sCommandNames[i]); //(setComposedCommandName)
             curCommandName.setAliasName(getuniqueAliasName(curCommandName.getTableName()));
-            sFromClause += " " + curCommandName.getComposedName() + " " + quoteName(curCommandName.getAliasName());
+            sFromClause.append(" ").append(curCommandName.getComposedName()).append(" ").append(quoteName(curCommandName.getAliasName()));
             if (i < sCommandNames.length - 1)
             {
-                sFromClause += ", ";
+                sFromClause.append(", ");
             }
             // fill composedCommandNames
             composedCommandNames.add(curCommandName);
@@ -291,30 +276,26 @@ public class SQLQueryComposer
 
     public boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames)
     {
-        return setQueryCommand(_xParentWindow,_bincludeGrouping, _baddAliasFieldNames,true);
+        return setQueryCommand(_xParentWindow, _bincludeGrouping, _baddAliasFieldNames, true);
     }
+
     public boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery)
     {
         try
         {
-            String s;
             bincludeGrouping = _bincludeGrouping;
-            if ( addQuery )
+            if (addQuery)
             {
-                String sFromClause = getFromClause();
+                StringBuilder fromClause = getFromClause();
                 String sSelectClause = getSelectClause(_baddAliasFieldNames);
-                String queryclause = sSelectClause + " " + sFromClause;
-                m_xQueryAnalyzer.setQuery(queryclause);
-                if (CurDBMetaData.getFilterConditions() != null)
+                StringBuilder queryclause = new StringBuilder(sSelectClause).append(" ").append(fromClause);
+                m_xQueryAnalyzer.setQuery(queryclause.toString());
+                if (CurDBMetaData.getFilterConditions() != null && CurDBMetaData.getFilterConditions().length > 0)
                 {
-                    if (CurDBMetaData.getFilterConditions().length > 0)
-                    {
-                        CurDBMetaData.setFilterConditions(replaceConditionsByAlias(CurDBMetaData.getFilterConditions()));
-                        m_queryComposer.setStructuredFilter(CurDBMetaData.getFilterConditions());
-                    }
+                    CurDBMetaData.setFilterConditions(replaceConditionsByAlias(CurDBMetaData.getFilterConditions()));
+                    m_queryComposer.setStructuredFilter(CurDBMetaData.getFilterConditions());
                 }
             }
-            s = m_xQueryAnalyzer.getQuery();
             if (_bincludeGrouping)
             {
                 appendGroupByColumns(_baddAliasFieldNames);
@@ -325,7 +306,6 @@ public class SQLQueryComposer
             }
             appendSortingcriteria(_baddAliasFieldNames);
 
-            s = m_xQueryAnalyzer.getQuery();
             return true;
         }
         catch (Exception exception)
@@ -340,8 +320,10 @@ public class SQLQueryComposer
     {
         FieldColumn CurFieldColumn = CurDBMetaData.getFieldColumnByDisplayName(_fieldname);
         CommandName curComposedCommandName = getComposedCommandByDisplayName(CurFieldColumn.getCommandName());
-        if ( curComposedCommandName == null )
+        if (curComposedCommandName == null)
+        {
             return _fieldname;
+        }
         String curAliasName = curComposedCommandName.getAliasName();
         return quoteName(curAliasName) + "." + quoteName(CurFieldColumn.getFieldName());
     }
@@ -350,13 +332,11 @@ public class SQLQueryComposer
     {
         if (composedCommandNames != null)
         {
-            CommandName curComposedName;
-            for (int i = 0; i < composedCommandNames.size(); i++)
+            for (CommandName commandName : composedCommandNames)
             {
-                curComposedName = (CommandName) composedCommandNames.elementAt(i);
-                if (curComposedName.getAliasName().equals(_AliasName))
+                if (commandName.getAliasName().equals(_AliasName))
                 {
-                    return curComposedName;
+                    return commandName;
                 }
             }
         }
@@ -367,13 +347,11 @@ public class SQLQueryComposer
     {
         if (composedCommandNames != null)
         {
-            CommandName curComposedName;
-            for (int i = 0; i < composedCommandNames.size(); i++)
+            for (CommandName commandName : composedCommandNames)
             {
-                curComposedName = (CommandName) composedCommandNames.elementAt(i);
-                if (curComposedName.getDisplayName().equals(_DisplayName))
+                if (commandName.getDisplayName().equals(_DisplayName))
                 {
-                    return curComposedName;
+                    return commandName;
                 }
             }
         }
@@ -415,12 +393,12 @@ public class SQLQueryComposer
             XInitialization xInitialize = (XInitialization) UnoRuntime.queryInterface(XInitialization.class, oErrorDialog);
             XExecutableDialog xExecute = (XExecutableDialog) UnoRuntime.queryInterface(XExecutableDialog.class, oErrorDialog);
             PropertyValue[] rDispatchArguments = new PropertyValue[3];
-            rDispatchArguments[0] = Properties.createProperty("Title", Configuration.getProductName(CurDBMetaData.xMSF) + " Base");
+            rDispatchArguments[0] = Properties.createProperty(PropertyNames.PROPERTY_TITLE, Configuration.getProductName(CurDBMetaData.xMSF) + " Base");
             rDispatchArguments[1] = Properties.createProperty("ParentWindow", _xParentWindow);
             rDispatchArguments[2] = Properties.createProperty("SQLException", _exception);
             xInitialize.initialize(rDispatchArguments);
             xExecute.execute();
-        //TODO dispose???
+            //TODO dispose???
         }
         catch (Exception typeexception)
         {
@@ -443,38 +421,40 @@ public class SQLQueryComposer
     public PropertyValue[][] getNormalizedStructuredFilter()
     {
         final PropertyValue[][] structuredFilter = m_queryComposer.getStructuredFilter();
-        for ( int i=0; i<structuredFilter.length; ++i )
+        for (int i = 0; i < structuredFilter.length; ++i)
         {
-            for ( int j=0; j<structuredFilter[i].length; ++j )
+            for (int j = 0; j < structuredFilter[i].length; ++j)
             {
-                if ( !( structuredFilter[i][j].Value instanceof String ) )
-                    continue;
-                final StringBuffer textualValue = new StringBuffer( (String)structuredFilter[i][j].Value );
-                switch ( structuredFilter[i][j].Handle )
+                if (!(structuredFilter[i][j].Value instanceof String))
                 {
-                case SQLFilterOperator.EQUAL:
-                    break;
-                case SQLFilterOperator.NOT_EQUAL:
-                case SQLFilterOperator.LESS_EQUAL:
-                case SQLFilterOperator.GREATER_EQUAL:
-                    textualValue.delete( 0, 2 );
-                    break;
-                case SQLFilterOperator.LESS:
-                case SQLFilterOperator.GREATER:
-                    textualValue.delete( 0, 1 );
-                    break;
-                case SQLFilterOperator.NOT_LIKE:
-                    textualValue.delete( 0, 8 );
-                    break;
-                case SQLFilterOperator.LIKE:
-                    textualValue.delete( 0, 4 );
-                    break;
-                case SQLFilterOperator.SQLNULL:
-                    textualValue.delete( 0, 7 );
-                    break;
-                case SQLFilterOperator.NOT_SQLNULL:
-                    textualValue.delete( 0, 11 );
-                    break;
+                    continue;
+                }
+                final StringBuffer textualValue = new StringBuffer((String) structuredFilter[i][j].Value);
+                switch (structuredFilter[i][j].Handle)
+                {
+                    case SQLFilterOperator.EQUAL:
+                        break;
+                    case SQLFilterOperator.NOT_EQUAL:
+                    case SQLFilterOperator.LESS_EQUAL:
+                    case SQLFilterOperator.GREATER_EQUAL:
+                        textualValue.delete(0, 2);
+                        break;
+                    case SQLFilterOperator.LESS:
+                    case SQLFilterOperator.GREATER:
+                        textualValue.delete(0, 1);
+                        break;
+                    case SQLFilterOperator.NOT_LIKE:
+                        textualValue.delete(0, 8);
+                        break;
+                    case SQLFilterOperator.LIKE:
+                        textualValue.delete(0, 4);
+                        break;
+                    case SQLFilterOperator.SQLNULL:
+                        textualValue.delete(0, 7);
+                        break;
+                    case SQLFilterOperator.NOT_SQLNULL:
+                        textualValue.delete(0, 11);
+                        break;
                 }
                 structuredFilter[i][j].Value = textualValue.toString().trim();
             }

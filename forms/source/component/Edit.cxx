@@ -675,7 +675,6 @@ sal_Bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
 void OEditModel::resetNoBroadcast()
 {
     OEditBaseModel::resetNoBroadcast();
-    m_aLastKnownValue.clear();
 }
 
 //------------------------------------------------------------------------------
@@ -683,38 +682,34 @@ sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
 
-    if ( aNewValue != m_aLastKnownValue )
-    {
-        ::rtl::OUString sNewValue;
-        aNewValue >>= sNewValue;
+    ::rtl::OUString sNewValue;
+    aNewValue >>= sNewValue;
 
-        if  (   !aNewValue.hasValue()
-            ||  (   !sNewValue.getLength()      // an empty string
-                &&  m_bEmptyIsNull              // which should be interpreted as NULL
-                )
+    if  (   !aNewValue.hasValue()
+        ||  (   !sNewValue.getLength()      // an empty string
+            &&  m_bEmptyIsNull              // which should be interpreted as NULL
             )
+        )
+    {
+        m_xColumnUpdate->updateNull();
+    }
+    else
+    {
+        OSL_PRECOND( m_pValueFormatter.get(), "OEditModel::commitControlValueToDbColumn: no value formatter!" );
+        try
         {
-            m_xColumnUpdate->updateNull();
+            if ( m_pValueFormatter.get() )
+            {
+                if ( !m_pValueFormatter->setFormattedValue( sNewValue ) )
+                    return sal_False;
+            }
+            else
+                m_xColumnUpdate->updateString( sNewValue );
         }
-        else
+        catch ( const Exception& )
         {
-            OSL_PRECOND( m_pValueFormatter.get(), "OEditModel::commitControlValueToDbColumn: no value formatter!" );
-            try
-            {
-                if ( m_pValueFormatter.get() )
-                {
-                    if ( !m_pValueFormatter->setFormattedValue( sNewValue ) )
-                        return sal_False;
-                }
-                else
-                    m_xColumnUpdate->updateString( sNewValue );
-            }
-            catch ( const Exception& )
-            {
-                return sal_False;
-            }
+            return sal_False;
         }
-        m_aLastKnownValue = aNewValue;
     }
 
     return sal_True;
@@ -724,6 +719,7 @@ sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 Any OEditModel::translateDbColumnToControlValue()
 {
     OSL_PRECOND( m_pValueFormatter.get(), "OEditModel::translateDbColumnToControlValue: no value formatter!" );
+    Any aRet;
     if ( m_pValueFormatter.get() )
     {
         ::rtl::OUString sValue( m_pValueFormatter->getFormattedValue() );
@@ -732,7 +728,6 @@ Any OEditModel::translateDbColumnToControlValue()
             &&  m_pValueFormatter->getColumn()->wasNull()
             )
         {
-            m_aLastKnownValue.clear();
         }
         else
         {
@@ -744,14 +739,11 @@ Any OEditModel::translateDbColumnToControlValue()
                 sValue = sValue.replaceAt( nMaxTextLen, nDiff, ::rtl::OUString() );
             }
 
-            m_aLastKnownValue <<= sValue;
+            aRet <<= sValue;
         }
     }
-    else
-        m_aLastKnownValue.clear();
 
-    return m_aLastKnownValue.hasValue() ? m_aLastKnownValue : makeAny( ::rtl::OUString() );
-        // (m_aLastKnownValue is alllowed to be VOID, the control value isn't)
+    return aRet.hasValue() ? aRet : makeAny( ::rtl::OUString() );
 }
 
 //------------------------------------------------------------------------------
