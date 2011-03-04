@@ -2288,6 +2288,9 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         pCreate = GetInfo().GetMultiCreator( --nMultiPos, 0 );
     }
 
+    if (!pCreate)
+        return pRest;
+
     if( pRest || nMultiPos > nPosition || ( pHelpMulti->IsRuby() &&
         ((SwRubyPortion*)pHelpMulti)->GetRubyOffset() < STRING_LEN ) )
     {
