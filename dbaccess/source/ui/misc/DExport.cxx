@@ -447,7 +447,8 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
             if ( eNumLang != LANGUAGE_NONE )
             {
                 nFormatKey = m_pFormatter->GetFormatForLanguageIfBuiltIn( nFormatKey, eNumLang );
-                m_pFormatter->IsNumberFormat( m_sTextToken, nFormatKey, fOutNumber );
+                if ( !m_pFormatter->IsNumberFormat( m_sTextToken, nFormatKey, fOutNumber ) )
+                    return NumberFormat::TEXT;
             }
             Reference<XPropertySet> xProp = xFormats->getByKey(nFormatKey);
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nNumberFormat;

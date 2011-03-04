@@ -435,6 +435,10 @@ public class RowSet extends TestCase
         testCursorMove(m_resultSet, cResSet.getMethod(NEXT, (Class[]) null), pRow, moves, null);
 
         moves[RowSetEventListener.IS_MODIFIED] = false;
+        updRow.updateString(2, m_row.getString(2));
+        testCursorMove(m_resultSet, cResSet.getMethod(NEXT, (Class[]) null), pRow, moves, null);
+
+        moves[RowSetEventListener.IS_MODIFIED] = false;
         final Class cupd = Class.forName("com.sun.star.sdbc.XResultSetUpdate");
         final XResultSetUpdate upd = UnoRuntime.queryInterface( XResultSetUpdate.class, m_resultSet );
         testCursorMove(upd, cupd.getMethod("moveToInsertRow", (Class[]) null), pRow, moves, null);

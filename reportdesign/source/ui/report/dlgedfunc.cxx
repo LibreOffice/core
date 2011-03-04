@@ -451,6 +451,7 @@ void DlgEdFunc::activateOle(SdrObject* _pObj)
 void DlgEdFunc::deactivateOle(bool _bSelect)
 {
     OLEObjCache& rObjCache = GetSdrGlobalData().GetOLEObjCache();
+    OReportController& rController = m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController();
     const sal_uLong nCount = rObjCache.Count();
     for(sal_uLong i = 0 ; i< nCount;++i)
     {
@@ -464,7 +465,6 @@ void DlgEdFunc::deactivateOle(bool _bSelect)
                 m_bUiActive = false;
                 if ( m_bShowPropertyBrowser )
                 {
-                    OReportController& rController = m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController();
                     rController.executeChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue >());
                 }
 
@@ -639,15 +639,17 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
                     if (pObjOverlapped && !m_bSelectionMode)
                     {
                         colorizeOverlappedObject(pObjOverlapped);
+                    }
                 }
             }
         }
     }
-    }
-    else if ( aVEvt.pObj && !m_bSelectionMode)
+    else if ( aVEvt.pObj && (aVEvt.pObj->GetObjIdentifier() != OBJ_CUSTOMSHAPE) && !m_bSelectionMode)
     {
         colorizeOverlappedObject(aVEvt.pObj);
     }
+    else
+        bIsSetPoint = false;
     return bIsSetPoint;
 }
 // -----------------------------------------------------------------------------
