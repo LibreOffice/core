@@ -1593,10 +1593,12 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
 
         WW8_FC nRet = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
         if (8 > pWw8Fib->nVersion)
-        if (pWw8Fib->fExtChar)
+        {
+            if (pWw8Fib->fExtChar)
                 *pIsUnicode=true;
             else
-                    *pIsUnicode = false;
+                *pIsUnicode = false;
+        }
         else
             nRet = WW8PLCFx_PCD::TransformPieceAddress( nRet, *pIsUnicode );
 
