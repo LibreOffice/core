@@ -508,7 +508,7 @@ static void filterAccelerator( rtl::OUString& io_rText )
     }
     else
     {
-        DBG_ERROR( "unsupported class" );
+        OSL_FAIL( "unsupported class" );
     }
     mpController->updateEnableState();
 }
@@ -540,7 +540,7 @@ static void filterAccelerator( rtl::OUString& io_rText )
     }
     else
     {
-        DBG_ERROR( "unsupported class" );
+        OSL_FAIL( "unsupported class" );
     }
     mpController->updateEnableState();
 }
@@ -1202,7 +1202,7 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
         }
         else
         {
-            DBG_ERROR( "Unsupported UI option" );
+            OSL_FAIL( "Unsupported UI option" );
         }
     }
     
