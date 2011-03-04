@@ -91,7 +91,6 @@ TabPage RID_SVXPAGE_EVENTASSIGN
     {
         Pos = MAP_APPFONT ( COL4 , ROW0  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-         // ### ACHTUNG: Neuer Text in Resource? Z~uweisen : Zuweisen
         Disable = TRUE ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Assign" ;

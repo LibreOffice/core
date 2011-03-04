@@ -64,7 +64,6 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
     {
         Pos = MAP_APPFONT ( 122 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
         TabStop = TRUE ;
         Text [ en-US ] = "Delete" ;
     };

@@ -71,7 +71,6 @@ TabPage RID_SVXPAGE_BACKGROUND
         Size = MAP_APPFONT ( 24 , 10 ) ;
         Hide = TRUE ;
         LeftLabel = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? Fü~r : F³~r */
         Text [ en-US ] = "F~or" ;
     };
     ListBox LB_TBL_BOX
@@ -203,7 +202,6 @@ TabPage RID_SVXPAGE_BACKGROUND
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 103 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Fläche : ~Flõche */
         Text [ en-US ] = "Ar~ea" ;
     };
     RadioButton BTN_TILE

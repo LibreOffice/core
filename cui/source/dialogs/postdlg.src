@@ -121,7 +121,6 @@ ModalDialog RID_SVXDLG_POSTIT
     };
     String STR_NOTIZ_INSERT
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Notiz einfügen : Notiz einf³gen */
         Text [ en-US ] = "Insert note" ;
     };
 };
