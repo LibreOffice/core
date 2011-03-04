@@ -229,7 +229,7 @@ void ScParameterClassification::Init()
 #ifdef DBG_UTIL
             if ( pRun->aData.nParam[0] != Unknown )
             {
-                DBG_ERROR1( "already assigned: %d", pRaw->eOp);
+                OSL_TRACE( "already assigned: %d", pRaw->eOp);
             }
 #endif
             memcpy( &(pRun->aData), &(pRaw->aData), sizeof(CommonData));

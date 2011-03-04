@@ -1042,7 +1042,7 @@ struct ConventionOOO_A1 : public Convention_A1
                 pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
                 if (aTabNames.empty())
                 {
-                    DBG_ERROR1( "ConventionOOO_A1::makeExternalRefStrImpl: no sheet names for document ID %s", nFileId);
+                    OSL_TRACE( "ConventionOOO_A1::makeExternalRefStrImpl: no sheet names for document ID %s", nFileId);
                 }
 
                 if (!lcl_getLastTabName(aLastTabName, rTabName, aTabNames, aRef))

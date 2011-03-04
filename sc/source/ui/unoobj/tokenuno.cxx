@@ -442,7 +442,7 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                     }
                     break;
                 default:
-                    DBG_ERROR1( "ScTokenConversion::ConvertToTokenSequence: unhandled token type SvStackVar %d", rToken.GetType());
+                    OSL_TRACE( "ScTokenConversion::ConvertToTokenSequence: unhandled token type SvStackVar %d", rToken.GetType());
                 case svSep:     // occurs with ocSep, ocOpen, ocClose, ocArray*
                 case svJump:    // occurs with ocIf, ocChose
                 case svMissing: // occurs with ocMissing

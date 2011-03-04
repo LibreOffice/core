@@ -389,7 +389,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
                             rtl::OUString aStr;
                             if (!(rInfo.Data >>= aStr))
                             {
-                                DBG_ERROR1( "ScRange::Parse_XL_Header: Data type mismatch for ExternalLinkInfo %d", i);
+                                OSL_TRACE( "ScRange::Parse_XL_Header: Data type mismatch for ExternalLinkInfo %d", i);
                                 return NULL;
                             }
                             rExternDocName = aStr;

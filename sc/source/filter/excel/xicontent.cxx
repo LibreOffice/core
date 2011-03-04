@@ -539,7 +539,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
                 case EXC_CF_CMP_GREATER_EQUAL:  eMode = SC_COND_EQGREATER;  break;
                 case EXC_CF_CMP_LESS_EQUAL:     eMode = SC_COND_EQLESS;     break;
                 default:
-                    DBG_ERROR1( "XclImpCondFormat::ReadCF - unknown CF comparison 0x%02hX", nOperator );
+                    OSL_TRACE( "XclImpCondFormat::ReadCF - unknown CF comparison 0x%02hX", nOperator );
             }
         }
         break;
@@ -549,7 +549,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         break;
 
         default:
-            DBG_ERROR1( "XclImpCondFormat::ReadCF - unknown CF mode 0x%02hX", nType );
+            OSL_TRACE( "XclImpCondFormat::ReadCF - unknown CF mode 0x%02hX", nType );
             return;
     }
 

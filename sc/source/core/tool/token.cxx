@@ -333,7 +333,7 @@ ScRawToken* ScRawToken::Clone() const
             case svExternalName:      n += sizeof(extname); break;
             default:
             {
-                DBG_ERROR1( "unknown ScRawToken::Clone() type %d", int(eType));
+                OSL_TRACE( "unknown ScRawToken::Clone() type %d", int(eType));
             }
         }
         p = (ScRawToken*) new BYTE[ n ];
@@ -409,7 +409,7 @@ FormulaToken* ScRawToken::CreateToken() const
             return new FormulaUnknownToken( eOp );
         default:
             {
-                DBG_ERROR1( "unknown ScRawToken::CreateToken() type %d", int(GetType()));
+                OSL_TRACE( "unknown ScRawToken::CreateToken() type %d", int(GetType()));
                 return new FormulaUnknownToken( ocBad );
             }
     }
