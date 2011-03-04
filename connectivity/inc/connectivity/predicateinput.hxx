@@ -104,6 +104,12 @@ namespace dbtools
             ::rtl::OUString* _pErrorMessage = NULL
         ) const;
 
+        ::rtl::OUString getPredicateValue(
+            const ::rtl::OUString& _sField
+            , const ::rtl::OUString& _rPredicateValue
+            , sal_Bool _bForStatementUse
+            , ::rtl::OUString* _pErrorMessage = NULL) const;
+
     private:
         ::connectivity::OSQLParseNode* implPredicateTree(
             ::rtl::OUString& _rErrorMessage,
@@ -116,6 +122,8 @@ namespace dbtools
             sal_Unicode& _rDecSep,
             sal_Unicode& _rThdSep
         ) const;
+
+        ::rtl::OUString implParseNode(::connectivity::OSQLParseNode* pParseNode,sal_Bool _bForStatementUse) const;
     };
 
 //.........................................................................
