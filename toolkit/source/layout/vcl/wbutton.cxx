@@ -64,7 +64,7 @@ class ImageImpl
     {
         if ( !mxGraphic.is() )
         {
-            DBG_ERROR1( "ERROR: failed to load image: `%s'\n", pName );
+            OSL_TRACE( "ERROR: failed to load image: `%s'\n", pName );
         }
     }
 };

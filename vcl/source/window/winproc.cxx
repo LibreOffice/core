@@ -2605,7 +2605,7 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             break;
 #ifdef DBG_UTIL
         default:
-            DBG_ERROR1( "ImplWindowFrameProc(): unknown event (%lu)", (ULONG)nEvent );
+            OSL_TRACE( "ImplWindowFrameProc(): unknown event (%lu)", (ULONG)nEvent );
             break;
 #endif
     }

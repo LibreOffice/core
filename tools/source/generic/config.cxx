@@ -635,7 +635,7 @@ static void ImplWriteConfig( ImplConfigData* pData )
     {
         if ( pData->mnTimeStamp != ImplSysGetConfigTimeStamp( pData->maFileName ) )
         {
-            DBG_ERROR1( "Config overwrites modified configfile:\n %s", ByteString( pData->maFileName, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+            OSL_TRACE( "Config overwrites modified configfile:\n %s", ByteString( pData->maFileName, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
         }
     }
 #endif

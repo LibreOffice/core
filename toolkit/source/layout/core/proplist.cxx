@@ -200,7 +200,7 @@ uno::Any anyFromString( OUString const& value, uno::Type const& type )
         }
 
         default:
-            DBG_ERROR1( "ERROR: unknown property type of value: `%s'\n", OUSTRING_CSTR( value ) );
+            OSL_TRACE( "ERROR: unknown property type of value: `%s'\n", OUSTRING_CSTR( value ) );
             break;
     }
     throw uno::RuntimeException();
@@ -277,13 +277,13 @@ setProperty( uno::Reference< uno::XInterface > const& xPeer,
     }
     catch( beans::UnknownPropertyException & )
     {
-        DBG_ERROR1( "Warning: unknown attribute: `%s'\n", OUSTRING_CSTR( unoAttr ) );
+        OSL_TRACE( "Warning: unknown attribute: `%s'\n", OUSTRING_CSTR( unoAttr ) );
         return;
     }
 
     if ( prop.Name.getLength() <= 0 )
     {
-        DBG_ERROR1( "Warning: missing prop: `%s'\n", OUSTRING_CSTR( unoAttr ) );
+        OSL_TRACE( "Warning: missing prop: `%s'\n", OUSTRING_CSTR( unoAttr ) );
         return;
     }
 

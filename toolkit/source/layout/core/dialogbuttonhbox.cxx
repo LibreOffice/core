@@ -90,7 +90,7 @@ DialogButtonHBox::setOrdering( rtl::OUString const& ordering )
         mnOrdering = WINDOWS;
     else
     {
-        DBG_ERROR1( "DialogButtonHBox: no such ordering: %s", OUSTRING_CSTR( ordering ) );
+        OSL_TRACE( "DialogButtonHBox: no such ordering: %s", OUSTRING_CSTR( ordering ) );
     }
 }
 

@@ -114,12 +114,12 @@ void InitTestToolLib()
                 (reinterpret_cast< pfunc_CreateRemoteControl >(pInitFunc))();
             else
             {
-                DBG_ERROR1( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+                OSL_TRACE( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
             }
         }
         else
         {
-            DBG_ERROR1( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+            OSL_TRACE( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
         }
     }
 
@@ -139,12 +139,12 @@ void InitTestToolLib()
             }
             else
             {
-                DBG_ERROR1( "Unable to get Symbol 'CreateEventLogger' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+                OSL_TRACE( "Unable to get Symbol 'CreateEventLogger' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
             }
         }
         else
         {
-            DBG_ERROR1( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+            OSL_TRACE( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
         }
     }
 }

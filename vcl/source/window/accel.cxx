@@ -268,7 +268,7 @@ void Accelerator::ImplInsertAccel( USHORT nItemId, const KeyCode& rKeyCode,
     }
     else if ( !mpData->maKeyTable.Insert( nCode, pEntry ) )
     {
-        DBG_ERROR1( "Accelerator::InsertItem(): KeyCode (Key: %lx) already exists", nCode );
+        OSL_TRACE( "Accelerator::InsertItem(): KeyCode (Key: %lx) already exists", nCode );
         delete pEntry;
     }
     else

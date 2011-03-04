@@ -151,7 +151,7 @@ PeerHandle Context::GetPeerHandle( const char *id, sal_uInt32 nId ) const
     xHandle = pImpl->getByName( OUString( id, strlen( id ), RTL_TEXTENCODING_UTF8 ) );
     if ( !xHandle.is() )
     {
-        DBG_ERROR1( "Failed to fetch widget '%s'", id );
+        OSL_TRACE( "Failed to fetch widget '%s'", id );
     }
 
     if ( nId != 0 )

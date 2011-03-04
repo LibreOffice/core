@@ -167,7 +167,7 @@ uno::Reference <awt::XLayoutConstrains> WidgetFactory::toolkitCreateWidget (uno:
     }
     catch( uno::Exception & )
     {
-        DBG_ERROR1( "Warning: %s is not a recognized type\n", OUSTRING_CSTR( name ) );
+        OSL_TRACE( "Warning: %s is not a recognized type\n", OUSTRING_CSTR( name ) );
         return uno::Reference< awt::XLayoutConstrains >();
     }
 
