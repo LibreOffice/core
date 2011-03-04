@@ -271,7 +271,7 @@ void ScNameDlg::SetActive()
 
 void ScNameDlg::UpdateChecks()
 {
-    USHORT       nCurPos=0;
+    sal_uInt16       nCurPos=0;
 
     if(aLocalRangeName.SearchName( aEdName.GetText(), nCurPos))
     {

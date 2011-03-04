@@ -36,6 +36,7 @@
 #include "scdllapi.h"
 
 #include <map>
+#include <boost/ptr_container/ptr_map.hpp>
 
 //------------------------------------------------------------------------
 
@@ -174,7 +175,43 @@ extern "C" int SAL_CALL ScRangeData_QsortNameCompare( const void*, const void* )
                             { return ScRangeData_QsortNameCompare(a,b); }
 #endif
 
-//------------------------------------------------------------------------
+#define NEW_RANGE_NAME 1
+
+#if NEW_RANGE_NAME
+
+class ScRangeName
+{
+private:
+    typedef ::boost::ptr_map<rtl::OUString, ScRangeData> MapType;
+    MapType     maData;
+    ScDocument* mpDoc;
+    sal_uInt16  mnSharedMaxIndex;
+public:
+    ScRangeName(ScDocument* pDoc = NULL);
+    ScRangeName(const ScRangeName& r);
+
+    SC_DLLPUBLIC ScRangeData* operator[](sal_uInt16 nIndex) const;
+    SC_DLLPUBLIC ScRangeData* GetRangeAtBlock(const ScRange& rRange) const;
+    SC_DLLPUBLIC bool SearchName(const rtl::OUString& rName, sal_uInt16& rPos) const;
+    bool SearchNameUpper(const rtl::OUString& rUpperName, sal_uInt16& rPos) const;
+    void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
+                         SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
+    void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0);
+    void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
+    void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);
+    SC_DLLPUBLIC ScRangeData* FindIndex(sal_uInt16 nIndex);
+    sal_uInt16 GetSharedMaxIndex();
+    void SetSharedMaxIndex(sal_uInt16 nInd);
+    sal_uInt16 GetEntryIndex();
+    SC_DLLPUBLIC size_t GetCount() const;
+    SC_DLLPUBLIC bool Insert(ScRangeData* p);
+    void AtFree(size_t i);
+    void FreeAll();
+    SC_DLLPUBLIC ScRangeData* At(size_t i);
+    bool operator== (const ScRangeName& r) const;
+};
+
+#else
 
 class ScRangeName : public ScSortedCollection
 {
@@ -217,6 +254,8 @@ public:
     void                    SetSharedMaxIndex(USHORT nInd)  { nSharedMaxIndex = nInd; }
     USHORT                  GetEntryIndex();
 };
+
+#endif
 
 #endif
 

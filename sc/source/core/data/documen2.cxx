@@ -250,7 +250,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     for (SCTAB i=1; i<=MAXTAB; i++)
         pTab[i] = NULL;
 
-    pRangeName = new ScRangeName( 4, 4, FALSE, this );
+    pRangeName = new ScRangeName(this);
     pDBCollection = new ScDBCollection( 4, 4, FALSE, this );
     pSelectionAttr = NULL;
     pChartCollection = new ScChartCollection;

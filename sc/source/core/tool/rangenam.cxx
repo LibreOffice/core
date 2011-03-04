@@ -654,10 +654,100 @@ ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
             (*(const ScRangeData**)p2)->GetName() );
 }
 
+#if NEW_RANGE_NAME
 
-//========================================================================
-// ScRangeName
-//========================================================================
+ScRangeName::ScRangeName(ScDocument* pDoc) :
+    mpDoc(pDoc) {}
+
+ScRangeName::ScRangeName(const ScRangeName& r) :
+    maData(r.maData), mpDoc(r.mpDoc) {}
+
+ScRangeData* ScRangeName::operator[](sal_uInt16 nIndex) const
+{
+    return NULL;
+}
+
+ScRangeData* ScRangeName::GetRangeAtBlock(const ScRange& rRange) const
+{
+    return NULL;
+}
+
+bool ScRangeName::SearchName(const rtl::OUString& rName, sal_uInt16& rPos) const
+{
+    return false;
+}
+
+bool ScRangeName::SearchNameUpper(const rtl::OUString& rName, sal_uInt16& rPos) const
+{
+    return false;
+}
+
+void ScRangeName::UpdateReference(
+    UpdateRefMode eUpdateRefMode, const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz)
+{
+}
+
+void ScRangeName::UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable)
+{
+}
+
+void ScRangeName::UpdateTranspose(const ScRange& rSource, const ScAddress& rDest)
+{
+}
+
+void ScRangeName::UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY)
+{
+}
+
+ScRangeData* ScRangeName::FindIndex(sal_uInt16 nIndex)
+{
+    return NULL;
+}
+
+sal_uInt16 ScRangeName::GetSharedMaxIndex()
+{
+    return mnSharedMaxIndex;
+}
+
+void ScRangeName::SetSharedMaxIndex(sal_uInt16 nInd)
+{
+    mnSharedMaxIndex = nInd;
+}
+
+sal_uInt16 ScRangeName::GetEntryIndex()
+{
+    return 0;
+}
+
+size_t ScRangeName::GetCount() const
+{
+    return maData.size();
+}
+
+bool ScRangeName::Insert(ScRangeData* p)
+{
+    return true;
+}
+
+void ScRangeName::AtFree(size_t i)
+{
+}
+
+void ScRangeName::FreeAll()
+{
+}
+
+ScRangeData* ScRangeName::At(size_t i)
+{
+    return NULL;
+}
+
+bool ScRangeName::operator== (const ScRangeName& r) const
+{
+    return true;
+}
+
+#else
 
 ScRangeName::ScRangeName(const ScRangeName& rScRangeName, ScDocument* pDocument) :
                 ScSortedCollection ( rScRangeName ),
@@ -783,6 +873,7 @@ void ScRangeName::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
         ((ScRangeData*)pItems[i])->UpdateTabRef(nOldTable, nFlag, nNewTable);
 }
 
+#endif
 
 
 
