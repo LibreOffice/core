@@ -1407,12 +1407,10 @@ void ScDPLayoutDlg::UpdateSrcRange()
         if (pRangeName)
         {
             OUString aUpper = ScGlobal::pCharClass->upper(aSrcStr);
-            USHORT n;
-            bValid = pRangeName->SearchNameUpper(aUpper, n);
-            if (bValid)
+            const ScRangeData* pData = pRangeName->findByUpperName(aUpper);
+            if (pData)
             {
                 // range name found.  Check if this is a valid reference.
-                ScRangeData* pData = (*pRangeName)[n];
                 bValid = pData->IsReference(aNewRange);
             }
         }

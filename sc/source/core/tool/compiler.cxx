@@ -2896,18 +2896,17 @@ BOOL ScCompiler::IsNamedRange( const String& rUpperName )
 {
     // IsNamedRange is called only from NextNewToken, with an upper-case string
 
-    USHORT n;
     ScRangeName* pRangeName = pDoc->GetRangeName();
-    if (pRangeName->SearchNameUpper( rUpperName, n ) )
+    const ScRangeData* pData = pRangeName->findByUpperName(rUpperName);
+    if (pData)
     {
-        const ScRangeData* pData = (*pRangeName)[n];
         ScRawToken aToken;
         aToken.SetName( pData->GetIndex() );
         pRawToken = aToken.Clone();
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 bool ScCompiler::IsExternalNamedRange( const String& rSymbol )

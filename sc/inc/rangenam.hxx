@@ -121,6 +121,7 @@ public:
     void            SetIndex( USHORT nInd )         { nIndex = nInd; }
     USHORT    GetIndex() const                { return nIndex; }
     ScTokenArray*   GetCode()                       { return pCode; }
+    const ScTokenArray* GetCode() const             { return pCode; }
     USHORT          GetErrCode();
     BOOL            HasReferences() const;
     void            SetDocument( ScDocument* pDocument){ pDoc = pDocument; }
@@ -198,8 +199,8 @@ public:
     SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock(const ScRange& rRange) const;
     SC_DLLPUBLIC ScRangeData* findByName(const rtl::OUString& rName);
     SC_DLLPUBLIC const ScRangeData* findByName(const rtl::OUString& rName) const;
+    ScRangeData* findByUpperName(const rtl::OUString& rName);
     const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
-    bool SearchNameUpper(const rtl::OUString& rUpperName, sal_uInt16& rPos) const;
     void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
                          SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
     void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0);

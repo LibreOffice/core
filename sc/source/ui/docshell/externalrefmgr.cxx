@@ -2000,12 +2000,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
 {
     ScRangeName* pExtNames = pSrcDoc->GetRangeName();
     String aUpperName = ScGlobal::pCharClass->upper(rName);
-    USHORT n;
-    bool bRes = pExtNames->SearchNameUpper(aUpperName, n);
-    if (!bRes)
-        return ScExternalRefCache::TokenArrayRef();
-
-    ScRangeData* pRangeData = (*pExtNames)[n];
+    const ScRangeData* pRangeData = pExtNames->findByUpperName(aUpperName);
     if (!pRangeData)
         return ScExternalRefCache::TokenArrayRef();
 
@@ -2016,28 +2011,28 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
 
     ScExternalRefCache::TokenArrayRef pNew(new ScTokenArray);
 
-    ScTokenArray* pCode = pRangeData->GetCode();
-    for (FormulaToken* pToken = pCode->First(); pToken; pToken = pCode->Next())
+    ScTokenArray aCode(*pRangeData->GetCode());
+    for (const FormulaToken* pToken = aCode.First(); pToken; pToken = aCode.Next())
     {
         bool bTokenAdded = false;
         switch (pToken->GetType())
         {
             case svSingleRef:
             {
-                const ScSingleRefData& rRef = static_cast<ScToken*>(pToken)->GetSingleRef();
+                const ScSingleRefData& rRef = static_cast<const ScToken*>(pToken)->GetSingleRef();
                 String aTabName;
                 pSrcDoc->GetName(rRef.nTab, aTabName);
-                ScExternalSingleRefToken aNewToken(nFileId, aTabName, static_cast<ScToken*>(pToken)->GetSingleRef());
+                ScExternalSingleRefToken aNewToken(nFileId, aTabName, static_cast<const ScToken*>(pToken)->GetSingleRef());
                 pNew->AddToken(aNewToken);
                 bTokenAdded = true;
             }
             break;
             case svDoubleRef:
             {
-                const ScSingleRefData& rRef = static_cast<ScToken*>(pToken)->GetSingleRef();
+                const ScSingleRefData& rRef = static_cast<const ScToken*>(pToken)->GetSingleRef();
                 String aTabName;
                 pSrcDoc->GetName(rRef.nTab, aTabName);
-                ScExternalDoubleRefToken aNewToken(nFileId, aTabName, static_cast<ScToken*>(pToken)->GetDoubleRef());
+                ScExternalDoubleRefToken aNewToken(nFileId, aTabName, static_cast<const ScToken*>(pToken)->GetDoubleRef());
                 pNew->AddToken(aNewToken);
                 bTokenAdded = true;
             }

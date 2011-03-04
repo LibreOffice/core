@@ -716,6 +716,17 @@ const ScRangeData* ScRangeName::findByName(const OUString& rName) const
     return NULL;
 }
 
+ScRangeData* ScRangeName::findByUpperName(const OUString& rName)
+{
+    DataType::iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        if (rName.equals(itr->GetUpperName()))
+            return &(*itr);
+    }
+    return NULL;
+}
+
 const ScRangeData* ScRangeName::findByUpperName(const OUString& rName) const
 {
     DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
@@ -725,11 +736,6 @@ const ScRangeData* ScRangeName::findByUpperName(const OUString& rName) const
             return &(*itr);
     }
     return NULL;
-}
-
-bool ScRangeName::SearchNameUpper(const rtl::OUString& rName, sal_uInt16& rPos) const
-{
-    return false;
 }
 
 void ScRangeName::UpdateReference(

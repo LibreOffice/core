@@ -258,13 +258,12 @@ const ScRange& ScSheetSourceDesc::GetSourceRange() const
                 break;
 
             OUString aUpper = ScGlobal::pCharClass->upper(maRangeName);
-            USHORT n;
-            if (!pRangeName->SearchNameUpper(aUpper, n))
+            const ScRangeData* pData = pRangeName->findByUpperName(aUpper);
+            if (!pData)
                 break;
 
             // range name found.  Fow now, we only use the first token and
             // ignore the rest.
-            ScRangeData* pData = (*pRangeName)[n];
             ScRange aRange;
             if (!pData->IsReference(aRange))
                 break;
