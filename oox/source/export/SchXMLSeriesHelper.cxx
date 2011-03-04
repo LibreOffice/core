@@ -251,7 +251,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
         catch( uno::Exception & rEx )
         {
             (void)rEx; // avoid warning for pro build
-            DBG_ERROR1( "Exception caught SchXMLSeriesHelper::createOldAPISeriesPropertySet: %s",
+            OSL_TRACE( "Exception caught SchXMLSeriesHelper::createOldAPISeriesPropertySet: %s",
                         OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         }
     }
@@ -290,7 +290,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
         {
             (void)rEx; // avoid warning for pro build
 
-            DBG_ERROR1( "Exception caught SchXMLSeriesHelper::createOldAPIDataPointPropertySet: %s",
+            OSL_TRACE( "Exception caught SchXMLSeriesHelper::createOldAPIDataPointPropertySet: %s",
                         OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         }
     }

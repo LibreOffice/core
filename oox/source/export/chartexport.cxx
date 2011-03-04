@@ -2600,7 +2600,7 @@ void ChartExport::exportDataPoints(
                 catch( uno::Exception & rEx )
                 {
                     (void)rEx; // avoid warning for pro build
-                    DBG_ERROR1( "Exception caught during Export of data point: %s",
+                    OSL_TRACE( "Exception caught during Export of data point: %s",
                                     rtl::OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 }
             }
