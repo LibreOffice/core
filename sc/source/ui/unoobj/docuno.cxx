@@ -1268,7 +1268,12 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
                     }
 
                     if ( nPage >= 0 )
-                        pPDFData->SetLinkDest( aIter->nLinkId, pPDFData->CreateDest( aArea, nPage ) );
+                    {
+                        if ( aIter->nLinkId != -1 )
+                            pPDFData->SetLinkDest( aIter->nLinkId, pPDFData->CreateDest( aArea, nPage ) );
+                        else
+                            pPDFData->DescribeRegisteredDest( aIter->nDestId, aArea, nPage );
+                    }
                 }
             }
             else
