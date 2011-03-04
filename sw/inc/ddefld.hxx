@@ -89,7 +89,6 @@ public:
     void DecRefCnt() {  if( !--nRefCnt && pDoc ) _RefCntChgd(); }
 
     void SetCRLFDelFlag( sal_Bool bFlag = sal_True )    { bCRLFFlag = bFlag; }
-    SwDDEFieldType( const SwDDEFieldType& );
 };
 
 /*--------------------------------------------------------------------
