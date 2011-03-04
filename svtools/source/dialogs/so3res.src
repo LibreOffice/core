@@ -37,7 +37,6 @@ Resource RID_SO_ERROR_HANDLER
     };
     String ERRCODE_SO_CANT_BINDTOSOURCE&S_MAX
     {
-         // ### ACHTUNG: Neuer Text in Resource? Die Verbindung zum Objekt kann nicht hergestellt werden : Die Verbindung zum Objekt kann nicht hergestellt werden.
         Text [ en-US ] = "The connection to the object cannot be established." ;
     };
     String ERRCODE_SO_NOCACHE_UPDATED&S_MAX
@@ -110,7 +109,6 @@ Resource RID_SO_ERROR_HANDLER
     };
     String ERRCODE_SO_MK_NOT_BINDABLE&S_MAX
     {
-         // ### ACHTUNG: Neuer Text in Resource? Der Verbindungsname kann nicht verbunden werden Es handelt sich um einen relativen Namen : Der Verbindungsname kann nicht verbunden werden. Es handelt sich um einen relativen Namen
         Text [ en-US ] = "The connection name cannot be connected. This is a relative name." ;
     };
     String ERRCODE_SO_NOT_IMPLEMENTED&S_MAX
@@ -135,42 +133,34 @@ Resource RID_SO_ERROR_HANDLER
     };
     String ERRCODE_SO_NOT_INPLACEACTIVE & S_MAX
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Objekt wurde nicht InPlace aktiviert : Objetkt wurde nicht InPlace aktiviert */
         Text [ en-US ] = "Object could not be activated InPlace." ;
     };
     String ERRCODE_SO_LINDEX & S_MAX
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Ungültiger Index : Ung³ltiger Index */
         Text [ en-US ] = "Invalid index." ;
     };
     String ERRCODE_SO_CANNOT_DOVERB_NOW & S_MAX
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Das Objekt kann die Aktion im momentanen Zustand nicht ausführen : Das Objekt kann die Aktion im momentanen Zustand nicht ausf³hren */
         Text [ en-US ] = "The action cannot be executed in the object's current state." ;
     };
     String ERRCODE_SO_OLEOBJ_INVALIDHWND & S_MAX
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Bei der Aktivierung wurde ein ungültiges Fenster ist übergeben : Bei der Aktivierung wurde ein ung³ltiges Fenster ist ³bergeben */
         Text [ en-US ] = "An invalid window was passed when activated." ;
     };
     String ERRCODE_SO_NOVERBS & S_MAX
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Das Objekt unterstützt keine Aktionen : Das Objekt unterst³tzt keine Aktionen */
         Text [ en-US ] = "The object does not support any actions." ;
     };
     String ERRCODE_SO_INVALIDVERB & S_MAX
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Die Aktion ist nicht definiert. Es wird die Default Aktion ausgelöst : Die Aktion ist nicht definiert. Es wird die Default Aktion ausgel÷st */
         Text [ en-US ] = "The action is not defined. The default action will be executed." ;
     };
     String ERRCODE_SO_MK_CONNECT & S_MAX
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Eine Verknüpfung auf das Netzwerk konnte nicht wieder hergestellt werden : Eine Verkn³pfung auf das Netzwerk, die nicht wieder hergestellt werden konnte */
         Text [ en-US ] = "A link to the network could not be re-established." ;
     };
     String ERRCODE_SO_NOTIMPL & S_MAX
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Das Objekt unterstützt diese Aktion nicht : Das Objekt unterst³tzt diese Aktion nicht */
         Text [ en-US ] = "Object does not support this action." ;
     };
     String ERRCODE_SO_MK_CANTOPENFILE & S_MAX
