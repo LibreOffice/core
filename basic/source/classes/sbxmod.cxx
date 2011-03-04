@@ -54,11 +54,15 @@
 #include <basic/basrdll.hxx>
 #include <vos/mutex.hxx>
 #include <basic/sbobjmod.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <basic/vbahelper.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <unotools/eventcfg.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XEventListener.hpp>
 
 using namespace com::sun::star;
 
@@ -496,24 +500,18 @@ IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, /*pNull*/ )
     return 0L;
 }
 
-bool VBAUnlockControllers( StarBASIC* pBasic )
+void VBAUnlockDocuments( StarBASIC* pBasic )
 {
-    bool bRes = false;
     if ( pBasic && pBasic->IsDocBasic() )
     {
         SbUnoObject* pGlobs = dynamic_cast< SbUnoObject* >( pBasic->Find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ThisComponent" ) ), SbxCLASS_DONTCARE ) );
-        if ( pGlobs ) try
+        if ( pGlobs )
         {
-            uno::Reference< frame::XModel > xModel( pGlobs->getUnoAny(), uno::UNO_QUERY_THROW );
-            if ( xModel->hasControllersLocked() )
-                xModel->unlockControllers();
-            bRes = true;
-        }
-        catch( uno::Exception& )
-        {
+            uno::Reference< frame::XModel > xModel( pGlobs->getUnoAny(), uno::UNO_QUERY );
+            ::basic::vba::lockControllersOfAllDocuments( xModel, sal_False );
+            ::basic::vba::enableContainerWindowsOfAllDocuments( xModel, sal_True );
         }
     }
-    return bRes;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1182,7 +1180,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
 
                 // VBA always ensures screenupdating is enabled after completing
                 if ( mbVBACompat )
-                    VBAUnlockControllers( PTR_CAST( StarBASIC, GetParent() ) );
+                    VBAUnlockDocuments( PTR_CAST( StarBASIC, GetParent() ) );
 
 #ifdef DBG_TRACE_BASIC
                 dbg_DeInitTrace();
@@ -2162,22 +2160,27 @@ void SbObjModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 }
 
 
-typedef ::cppu::WeakImplHelper2< awt::XTopWindowListener, awt::XWindowListener > FormObjEventListener_BASE;
+typedef ::cppu::WeakImplHelper3<
+    awt::XTopWindowListener,
+    awt::XWindowListener,
+    document::XEventListener > FormObjEventListener_BASE;
 
 class FormObjEventListenerImpl : public FormObjEventListener_BASE
 {
     SbUserFormModule* mpUserForm;
     uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< frame::XModel > mxModel;
     bool mbDisposed;
     sal_Bool mbOpened;
     sal_Bool mbActivated;
     sal_Bool mbShowing;
-    FormObjEventListenerImpl(); // not defined
+
     FormObjEventListenerImpl(const FormObjEventListenerImpl&); // not defined
+    FormObjEventListenerImpl& operator=(const FormObjEventListenerImpl&); // not defined
 
 public:
-    FormObjEventListenerImpl( SbUserFormModule* pUserForm, const uno::Reference< lang::XComponent >& xComponent ) :
-        mpUserForm( pUserForm ), mxComponent( xComponent) ,
+    FormObjEventListenerImpl( SbUserFormModule* pUserForm, const uno::Reference< lang::XComponent >& xComponent, const uno::Reference< frame::XModel >& xModel ) :
+        mpUserForm( pUserForm ), mxComponent( xComponent), mxModel( xModel ),
         mbDisposed( false ), mbOpened( sal_False ), mbActivated( sal_False ), mbShowing( sal_False )
     {
         if ( mxComponent.is() )
@@ -2191,6 +2194,15 @@ public:
             try
             {
                 uno::Reference< awt::XWindow >( mxComponent, uno::UNO_QUERY_THROW )->addWindowListener( this );
+            }
+            catch( uno::Exception& ) {}
+        }
+
+        if ( mxModel.is() )
+        {
+            try
+            {
+                uno::Reference< document::XEventBroadcaster >( mxModel, uno::UNO_QUERY_THROW )->addEventListener( this );
             }
             catch( uno::Exception& ) {}
         }
@@ -2220,6 +2232,16 @@ public:
             catch( uno::Exception& ) {}
         }
         mxComponent.clear();
+
+        if ( mxModel.is() && !mbDisposed )
+        {
+            try
+            {
+                uno::Reference< document::XEventBroadcaster >( mxModel, uno::UNO_QUERY_THROW )->removeEventListener( this );
+            }
+            catch( uno::Exception& ) {}
+        }
+        mxModel.clear();
     }
 
     virtual void SAL_CALL windowOpened( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
@@ -2327,13 +2349,25 @@ public:
     {
     }
 
+    virtual void SAL_CALL notifyEvent( const document::EventObject& rEvent ) throw (uno::RuntimeException)
+    {
+        // early dosposing on document event "OnUnload", to be sure Basic still exists when calling VBA "UserForm_Terminate"
+        if( rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ) )
+        {
+            removeListener();
+            mbDisposed = true;
+            if ( mpUserForm )
+                mpUserForm->ResetApiObj();   // will trigger "UserForm_Terminate"
+        }
+    }
+
     virtual void SAL_CALL disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
     {
         OSL_TRACE("** Userform/Dialog disposing");
+        removeListener();
         mbDisposed = true;
-        mxComponent.clear();
         if ( mpUserForm )
-            mpUserForm->ResetApiObj();
+            mpUserForm->ResetApiObj( false );   // pass false (too late to trigger VBA events here)
     }
 };
 
@@ -2567,30 +2601,27 @@ void SbUserFormModule::InitObject()
             aArgs[ 2 ] <<= m_xModel;
             aArgs[ 3 ] <<= rtl::OUString( GetParent()->GetName() );
             pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.UserForm")), aArgs  ) ) );
-            uno::Reference< lang::XComponent > xComponent( aArgs[ 1 ], uno::UNO_QUERY_THROW );
+
+            uno::Reference< lang::XComponent > xComponent( m_xDialog, uno::UNO_QUERY_THROW );
 
             // the dialog must be disposed at the end!
-            if( xComponent.is() )
+            StarBASIC* pParentBasic = NULL;
+            SbxObject* pCurObject = this;
+            do
             {
-                StarBASIC* pParentBasic = NULL;
-                SbxObject* pCurObject = this;
-                do
-                {
-                    SbxObject* pObjParent = pCurObject->GetParent();
-                    pParentBasic = PTR_CAST( StarBASIC, pObjParent );
-                    pCurObject = pObjParent;
-                }
-                while( pParentBasic == NULL && pCurObject != NULL );
-
-                OSL_ASSERT( pParentBasic != NULL );
-                registerComponentToBeDisposedForBasic( xComponent, pParentBasic );
+                SbxObject* pObjParent = pCurObject->GetParent();
+                pParentBasic = PTR_CAST( StarBASIC, pObjParent );
+                pCurObject = pObjParent;
             }
+            while( pParentBasic == NULL && pCurObject != NULL );
 
+            OSL_ASSERT( pParentBasic != NULL );
+            registerComponentToBeDisposedForBasic( xComponent, pParentBasic );
 
-            // remove old listener if it exists
-            if ( m_DialogListener.get() )
+            // if old listener object exists, remove it from dialog and document model
+            if( m_DialogListener.is() )
                 m_DialogListener->removeListener();
-            m_DialogListener = new FormObjEventListenerImpl( this, xComponent );
+            m_DialogListener.set( new FormObjEventListenerImpl( this, xComponent, m_xModel ) );
 
             triggerInitializeEvent();
         }
