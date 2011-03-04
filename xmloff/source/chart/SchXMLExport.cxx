@@ -940,7 +940,7 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
 #ifdef DBG_UTIL
             String aStr( rEx.Message );
             ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR1( "chart:exporting error bar ranges: %s", aBStr.GetBuffer());
+            OSL_TRACE( "chart:exporting error bar ranges: %s", aBStr.GetBuffer());
 #else
             (void)rEx; // avoid warning
 #endif
@@ -1860,7 +1860,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 #ifdef DBG_UTIL
                 String aStr( rEx.Message );
                 ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR1( "chart:TableNumberList property caught: %s", aBStr.GetBuffer());
+                OSL_TRACE( "chart:TableNumberList property caught: %s", aBStr.GetBuffer());
 #else
                 (void)rEx; // avoid warning
 #endif
@@ -1907,7 +1907,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 #ifdef DBG_UTIL
                 String aStr( rEx.Message );
                 ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR1( "chart:exportPlotAreaException caught: %s", aBStr.GetBuffer());
+                OSL_TRACE( "chart:exportPlotAreaException caught: %s", aBStr.GetBuffer());
 #else
                 (void)rEx; // avoid warning
 #endif
@@ -2971,7 +2971,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                         catch( uno::Exception & rEx )
                         {
                             (void)rEx; // avoid warning for pro build
-                            DBG_ERROR1( "Exception caught during Export of series - optional DataMeanValueProperties not available: %s",
+                            OSL_TRACE( "Exception caught during Export of series - optional DataMeanValueProperties not available: %s",
                                         OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                         }
 
@@ -3019,7 +3019,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                         catch( uno::Exception & rEx )
                         {
                             (void)rEx; // avoid warning for pro build
-                            DBG_ERROR1( "Exception caught during Export of series - optional DataErrorProperties not available: %s",
+                            OSL_TRACE( "Exception caught during Export of series - optional DataErrorProperties not available: %s",
                                         OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                         }
 
@@ -3095,7 +3095,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
     catch( uno::Exception & rEx )
     {
         (void)rEx; // avoid warning for pro build
-        DBG_ERROR1( "Exception caught during Export of series - optional DataRegressionProperties not available: %s",
+        OSL_TRACE( "Exception caught during Export of series - optional DataRegressionProperties not available: %s",
                     OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
     }
 
@@ -3369,7 +3369,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                     catch( uno::Exception & rEx )
                     {
                         (void)rEx; // avoid warning for pro build
-                        DBG_ERROR1( "Exception caught during Export of data point: %s",
+                        OSL_TRACE( "Exception caught during Export of data point: %s",
                                     OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                     }
                 }
@@ -3441,7 +3441,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 catch( uno::Exception & rEx )
                 {
                     (void)rEx; // avoid warning for pro build
-                    DBG_ERROR1( "Exception caught during Export of data point: %s",
+                    OSL_TRACE( "Exception caught during Export of data point: %s",
                                 OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 }
                 if( xPropSet.is())

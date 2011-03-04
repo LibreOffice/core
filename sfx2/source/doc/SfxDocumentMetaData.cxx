@@ -1355,10 +1355,10 @@ void SAL_CALL SfxDocumentMetaData::init(
                     OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
             // ignore; duplicate
         } catch (css::beans::IllegalTypeException &) {
-            DBG_ERROR1("SfxDocumentMetaData: illegal type: %s",
+            OSL_TRACE("SfxDocumentMetaData: illegal type: %s",
                     OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
         } catch (css::lang::IllegalArgumentException &) {
-            DBG_ERROR1("SfxDocumentMetaData: illegal arg: %s",
+            OSL_TRACE("SfxDocumentMetaData: illegal arg: %s",
                     OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
         }
     }

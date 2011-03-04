@@ -844,7 +844,7 @@ void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComp
 #ifdef DBG_UTIL
         String aStr( rEx.Message );
         ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR1( "SchXMLChartContext::StartElement(): Exception caught: %s", aBStr.GetBuffer());
+        OSL_TRACE( "SchXMLChartContext::StartElement(): Exception caught: %s", aBStr.GetBuffer());
 #else
         (void)rEx; // avoid warning for pro build
 #endif

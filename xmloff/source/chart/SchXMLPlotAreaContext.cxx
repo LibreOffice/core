@@ -164,7 +164,7 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
 #ifdef DBG_UTIL
         String aStr( rEx.Message );
         ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR1( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
+        OSL_TRACE( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
 #else
         (void)rEx; // avoid warning for pro build
 #endif
@@ -483,7 +483,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
 #ifdef DBG_UTIL
         String aStr( rEx.Message );
         ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR1( "PlotAreaContext:EndElement(): Exception caught: %s", aBStr.GetBuffer());
+        OSL_TRACE( "PlotAreaContext:EndElement(): Exception caught: %s", aBStr.GetBuffer());
 #else
         (void)rEx; // avoid warning for pro build
 #endif
@@ -660,7 +660,7 @@ void SchXMLPlotAreaContext::EndElement()
 #ifdef DBG_UTIL
                 String aStr( rEx.Message );
                 ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR1( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
+                OSL_TRACE( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
 #else
                 (void)rEx; // avoid warning for pro build
 #endif
@@ -682,7 +682,7 @@ void SchXMLPlotAreaContext::EndElement()
 #ifdef DBG_UTIL
                 String aStr( rEx.Message );
                 ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR1( "Exception caught for property Volume: %s", aBStr.GetBuffer());
+                OSL_TRACE( "Exception caught for property Volume: %s", aBStr.GetBuffer());
 #else
                 (void)rEx; // avoid warning for pro build
 #endif

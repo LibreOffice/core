@@ -855,7 +855,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
             catch( uno::Exception & rEx )
             {
                 (void)rEx; // avoid warning for pro build
-                DBG_ERROR1( "Exception caught during setting styles to series: %s",
+                OSL_TRACE( "Exception caught during setting styles to series: %s",
                                 OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
         }
@@ -939,7 +939,7 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
             catch( uno::Exception & rEx )
             {
                 (void)rEx; // avoid warning for pro build
-                DBG_ERROR1( "Exception caught during setting styles to series: %s",
+                OSL_TRACE( "Exception caught during setting styles to series: %s",
                                 OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
         }
@@ -1038,7 +1038,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
             catch( uno::Exception & rEx )
             {
                 (void)rEx; // avoid warning for pro build
-                DBG_ERROR1( "Exception caught during setting styles to data points: %s",
+                OSL_TRACE( "Exception caught during setting styles to data points: %s",
                                     OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
         }

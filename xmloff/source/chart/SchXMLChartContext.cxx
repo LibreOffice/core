@@ -221,7 +221,7 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
     {
         String aStr( ex.Message );
         ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR1( "Exception caught while removing empty chart types: %s", aBStr.GetBuffer());
+        OSL_TRACE( "Exception caught while removing empty chart types: %s", aBStr.GetBuffer());
     }
 }
 
