@@ -619,12 +619,6 @@ do                                                  \
         DbgWarning( aWarning, __FILE__, __LINE__ ); \
 } while(0)
 
-#define DBG_ERROR( aError )                         \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-        DbgError( aError );                         \
-} while(0)
 #define DBG_ERROR1( aError, x1 )                    \
 do                                                  \
 {                                                   \
@@ -757,7 +751,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #define DBG_WARNING4( aWarning, x1, x2, x3, x4 ) ((void)0)
 #define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 ) ((void)0)
 #define DBG_WARNINGFILE( aWarning ) ((void)0)
-#define DBG_ERROR( aError ) ((void)0)
 #define DBG_ERROR1( aError, x1 ) ((void)0)
 #define DBG_ERROR2( aError, x1, x2 ) ((void)0)
 #define DBG_ERROR3( aError, x1, x2, x3 ) ((void)0)
