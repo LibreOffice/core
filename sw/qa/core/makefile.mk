@@ -103,6 +103,47 @@ SHL2LIBS=\
     $(SLB)$/ui1.lib	    \
     $(SLB)$/ui2.lib
 
+SHL3OBJS=$(SLO)$/filters-test.obj
+SHL3TARGET=swfilterstest
+SHL3STDLIBS+= \
+    $(ISWLIB) \
+    $(LNGLIB) \
+    $(BASICLIB) \
+    $(SFXLIB)           \
+    $(SVTOOLLIB)        \
+    $(SVLLIB)           \
+    $(SVXCORELIB)               \
+    $(EDITENGLIB)               \
+    $(SVXLIB)           \
+    $(BASEGFXLIB) \
+    $(DRAWINGLAYERLIB) \
+    $(VCLLIB)           \
+    $(CPPULIB)          \
+    $(CPPUHELPERLIB)    \
+    $(COMPHELPERLIB)    \
+    $(UCBHELPERLIB)     \
+    $(TKLIB)            \
+    $(VOSLIB)           \
+    $(SALLIB)           \
+    $(SALHELPERLIB)     \
+    $(TOOLSLIB) \
+    $(I18NISOLANGLIB) \
+    $(UNOTOOLSLIB) \
+    $(SOTLIB)           \
+    $(XMLOFFLIB)        \
+    $(ICUUCLIB) \
+    $(I18NUTILLIB) \
+    $(AVMEDIALIB) \
+    $(CPPUNITLIB)
+
+.IF "$(DBG_LEVEL)">="2"
+SHL3STDLIBS += $(LIBXML2LIB)
+.ENDIF
+
+SHL3IMPLIB= i$(SHL3TARGET)
+DEF3NAME    =$(SHL3TARGET)
+SHL3VERSIONMAP = export.map
+
 # END ------------------------------------------------------------------
 
 # --- Targets ------------------------------------------------------
@@ -129,12 +170,14 @@ $(MISC)/$(TARGET)/udkapi.rdb .ERRREMOVE : $(SOLARBINDIR)$/udkapi.rdb
 $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb makefile.mk
     $(MKDIRHIER) $(@:d)
     $(REGCOMP) -register -br $(MISC)/$(TARGET)/udkapi.rdb -r $@ -wop \
+        -c $(DLLPRE)sw$(DLLPOSTFIX)$(DLLPOST) \
         -c $(DLLPRE)fileacc$(DLLPOST) \
         -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST) \
         -c $(DLLPRE)sfx$(DLLPOSTFIX)$(DLLPOST) \
         -c $(DLLPRE)ucb1$(DLLPOST) \
         -c $(DLLPRE)ucpfile1$(DLLPOST) \
         -c $(DLLPRE)unoxml$(DLLPOSTFIX)$(DLLPOST) \
+        -c $(DLLPRE)comphelp$(COMPHLP_MAJOR)$(COMID)$(DLLPOST) \
         -c stocservices.uno$(DLLPOST) \
         -c i18npool.uno$(DLLPOST) \
         -c sax.uno$(DLLPOST)
@@ -143,7 +186,7 @@ $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb makefil
 STAR_RESOURCEPATH:=$(PWD)/$(BIN)$(PATH_SEPERATOR)$(SOLARBINDIR)
 .EXPORT : STAR_RESOURCEPATH
 
-test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/types.rdb $(MISC)/$(TARGET)/udkapi.rdb
+test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(SHL3TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/types.rdb $(MISC)/$(TARGET)/udkapi.rdb
     echo "$(STAR_RESOURCEPATH)"
     @echo ----------------------------------------------------------
     @echo - start unit test \#1 on library $(SHL1TARGETN)
@@ -153,6 +196,15 @@ test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC
     @echo - start unit test \#2 on library $(SHL2TARGETN)
     @echo ----------------------------------------------------------
     $(CPPUNITTESTER) $(SHL2TARGETN) -headless -invisible \
+        -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
+        -env:UNO_TYPES="$(my_file)$(PWD)/$(MISC)/$(TARGET)/types.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/udkapi.rdb" \
+        -env:OOO_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
+        -env:BRAND_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
+        -env:UNO_USER_PACKAGES_CACHE="$(my_file)$(PWD)/$(MISC)/$(TARGET)"
+    @echo ----------------------------------------------------------
+    @echo - start unit test \#3 on library $(SHL3TARGETN)
+    @echo ----------------------------------------------------------
+    $(CPPUNITTESTER) $(SHL3TARGETN) -headless -invisible \
         -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
         -env:UNO_TYPES="$(my_file)$(PWD)/$(MISC)/$(TARGET)/types.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/udkapi.rdb" \
         -env:OOO_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
