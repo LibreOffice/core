@@ -116,7 +116,7 @@ int SvxImportMSVBasic::Import( const String& rStorageName,
 bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
     const String& rSubStorageName, BOOL bVBAMode )
 {
-    BOOL bRet = FALSE;
+    bool bRet = false;
     // #FIXME VBA_Impl ( or some other new class ) should handle both userforms
     // and code
     VBA_Impl aVBA( *xRoot, TRUE );
