@@ -3967,6 +3967,10 @@ void SwWW8ImplReader::StoreMacroCmds()
         pTableStream->Seek(pWwFib->fcCmds);
 
         uno::Reference < embed::XStorage > xRoot(mpDocShell->GetStorage());
+
+        if (!xRoot.is())
+            return;
+
         try
         {
             uno::Reference < io::XStream > xStream =
@@ -4463,7 +4467,9 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             uno::Sequence< uno::Any > aArgs(1);
             aArgs[ 0 ] <<= mpDocShell->GetModel();
             aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Globals")), aArgs );
-            mpDocShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+            BasicManager *pBasicMan = mpDocShell->GetBasicManager();
+            if (pBasicMan)
+                pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
 
             SvxImportMSVBasic aVBasic(*mpDocShell, *pStg,
                             pVBAFlags->IsLoadWordBasicCode(),
