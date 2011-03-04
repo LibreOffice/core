@@ -178,7 +178,12 @@ $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb makefil
         -c $(DLLPRE)ucpfile1$(DLLPOST) \
         -c $(DLLPRE)unoxml$(DLLPOSTFIX)$(DLLPOST) \
         -c $(DLLPRE)comphelp$(COMPHLP_MAJOR)$(COMID)$(DLLPOST) \
+        -c $(DLLPRE)xstor$(DLLPOST) \
+        -c $(DLLPRE)package2$(DLLPOST) \
+        -c $(DLLPRE)xof$(DLLPOSTFIX)$(DLLPOST) \
+        -c $(DLLPRE)utl$(DLLPOSTFIX)$(DLLPOST) \
         -c stocservices.uno$(DLLPOST) \
+        -c reflection.uno$(DLLPOST) \
         -c i18npool.uno$(DLLPOST) \
         -c sax.uno$(DLLPOST)
 
