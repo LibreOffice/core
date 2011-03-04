@@ -3367,7 +3367,7 @@ USHORT WW8TabDesc::GetLogicalWWCol() const // returns number of col as INDICATED
     USHORT nCol = 0;
     if( pActBand && pActBand->pTCs)
     {
-        for( USHORT iCol = 1; iCol <= nAktCol; ++iCol )
+        for( USHORT iCol = 1; iCol <= nAktCol && iCol <= pActBand->nWwCols; ++iCol )
         {
             if( !pActBand->pTCs[ iCol-1 ].bMerged )
                 ++nCol;
