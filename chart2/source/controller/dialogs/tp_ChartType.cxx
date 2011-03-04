@@ -189,6 +189,8 @@ Dim3DLookResourceGroup::Dim3DLookResourceGroup( Window* pWindow )
     m_aLB_Scheme.SetDropDownLineCount(2);
 
     m_aLB_Scheme.SetSelectHdl( LINK( this, Dim3DLookResourceGroup, SelectSchemeHdl ) );
+    m_aLB_Scheme.SetAccessibleName(m_aCB_3DLook.GetText());
+    m_aLB_Scheme.SetAccessibleRelationLabeledBy(&m_aCB_3DLook);
 }
 Dim3DLookResourceGroup::~Dim3DLookResourceGroup()
 {
@@ -344,6 +346,9 @@ StackingResourceGroup::StackingResourceGroup( Window* pWindow )
     m_aRB_Stack_Y.SetToggleHdl( LINK( this, StackingResourceGroup, StackingChangeHdl ) );
     m_aRB_Stack_Y_Percent.SetToggleHdl( LINK( this, StackingResourceGroup, StackingChangeHdl ) );
     m_aRB_Stack_Z.SetToggleHdl( LINK( this, StackingResourceGroup, StackingChangeHdl ) );
+    m_aRB_Stack_Y.SetAccessibleRelationMemberOf(&m_aCB_Stacked);
+    m_aRB_Stack_Y_Percent.SetAccessibleRelationMemberOf(&m_aCB_Stacked);
+    m_aRB_Stack_Z.SetAccessibleRelationMemberOf(&m_aCB_Stacked);
 }
 StackingResourceGroup::~StackingResourceGroup()
 {
@@ -472,9 +477,9 @@ private:
     MetricField m_aMF_SplineOrder;
 
     FixedLine       m_aFL_DialogButtons;
+    HelpButton      m_aBP_Help;
     OKButton        m_aBP_OK;
     CancelButton    m_aBP_Cancel;
-    HelpButton      m_aBP_Help;
 };
 
 SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
@@ -487,9 +492,9 @@ SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
         , m_aFT_SplineOrder( this, SchResId( FT_SPLINE_ORDER ) )
         , m_aMF_SplineOrder( this, SchResId( MF_SPLINE_ORDER ) )
         , m_aFL_DialogButtons( this, SchResId( FL_SPLINE_DIALOGBUTTONS ) )
+    , m_aBP_Help( this, SchResId(BTN_HELP) )
         , m_aBP_OK( this, SchResId(BTN_OK) )
-        , m_aBP_Cancel( this, SchResId(BTN_CANCEL) )
-        , m_aBP_Help( this, SchResId(BTN_HELP) )
+    , m_aBP_Cancel( this, SchResId(BTN_CANCEL) )
 {
     FreeResource();
 
