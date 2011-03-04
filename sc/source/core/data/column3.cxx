@@ -1266,7 +1266,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                           formula::FormulaGrammar::AddressConvention eConv,
                           ScSetStringParam* pParam )
 {
-    BOOL bNumFmtSet = FALSE;
+    bool bNumFmtSet = false;
     if (VALIDROW(nRow))
     {
         ScBaseCell* pNewCell = NULL;
@@ -1398,7 +1398,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                             {
                                 ApplyAttr( nRow, SfxUInt32Item( ATTR_VALUE_FORMAT,
                                     (UINT32) nIndex) );
-                                bNumFmtSet = TRUE;
+                                bNumFmtSet = true;
                             }
                         }
                     }
