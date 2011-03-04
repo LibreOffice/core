@@ -478,7 +478,7 @@ namespace svx
                 sMessage += "(slot id: ";
                 sMessage += ::rtl::OString::valueOf( (sal_Int32)_nSlotId );
                 sMessage += ")";
-                DBG_ERROR( sMessage );
+                OSL_FAIL( sMessage.getStr() );
             }
 #endif
             return sSlotUnoName;
