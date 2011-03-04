@@ -170,7 +170,6 @@ void Test::testNumberFormat()
         "$#,##0;-$#,##0",
         0
     };
-#endif
 
     const char* pDate[] = {
         "MM/DD/YY",
@@ -213,6 +212,7 @@ void Test::testNumberFormat()
         "MM/DD/YY HH:MM AM/PM",
         0
     };
+#endif
 
     const char* pBoolean[] = {
         "BOOLEAN",
