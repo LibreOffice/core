@@ -133,7 +133,6 @@ ModalDialog DLG_ORDERCRIT
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 46 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung : Verkn³pfung */
         Text [ en-US ] = "Operator" ;
     };
     FixedText FT_ORDERDIR

@@ -74,7 +74,6 @@ TabDialog DLG_ATTR
     };
     String TP_ATTR_CHAR
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Schrift : Zeichen */
         Text [ en-US ] = "Font" ;
     };
     String TP_ATTR_NUMBER

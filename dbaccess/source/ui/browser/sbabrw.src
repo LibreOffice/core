@@ -42,14 +42,12 @@ QueryBox QUERY_BRW_SAVEMODIFIED
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
-    /* ### ACHTUNG: Neuer Text in Resource? Soll der geänderte Datensatz gespeichert werden? : Soll der geänderte Datensatz gespeichert werden? */
     Message [ en-US ] = "The current record has been changed.\nDo you want to save the changes?" ;
 };
 
 QueryBox QUERY_BRW_DELETE_ROWS
 {
     Buttons = WB_YES_NO ;
-    /* ### ACHTUNG: Neuer Text in Resource? Sollen die selektierten Daten gelöscht werden? : Sollen die selektierten Daten gel÷scht werden? */
     Message [ en-US ] = "Do you want to delete the selected data?" ;
 };
 
