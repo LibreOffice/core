@@ -256,9 +256,12 @@ BOOL SwNodes::InsBoxen( SwTableNode* pTblNd,
                             pLine->GetTabBoxes()[ nInsPos ] )))
                 pPrvBox = pLine->FindPreviousBox( pTblNd->GetTable() );
         }
-        else if( 0 == ( pNxtBox = pLine->FindNextBox( pTblNd->GetTable(),
-                            pLine->GetTabBoxes()[ nInsPos-1 ] )))
+        else
+        {
+            if( 0 == (pNxtBox = pLine->FindNextBox( pTblNd->GetTable(),
+                            pLine->GetTabBoxes()[ pLine->GetTabBoxes().Count()-1 ] )))
                 pNxtBox = pLine->FindNextBox( pTblNd->GetTable() );
+        }
     }
     else if( 0 == ( pNxtBox = pLine->FindNextBox( pTblNd->GetTable() )))
         pPrvBox = pLine->FindPreviousBox( pTblNd->GetTable() );
