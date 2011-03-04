@@ -761,7 +761,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 ::rtl::OUString sPropertyName( GetPropertyName( pProp->GetId() ) );
                 sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
                 sMessage += "'.)";
-                DBG_ERROR( sMessage );
+                OSL_FAIL( sMessage.getStr() );
             }
 #endif
         }
@@ -962,7 +962,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                     ::rtl::OUString sPropertyName( GetPropertyName( nPropId ) );
                     sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
                     sMessage += "'.)";
-                    DBG_ERROR( sMessage );
+                    OSL_FAIL( sMessage.getStr() );
                 }
             }
             else
