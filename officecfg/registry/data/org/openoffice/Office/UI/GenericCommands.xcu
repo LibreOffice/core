@@ -1482,7 +1482,7 @@
             </node>
             <node oor:name="vnd.sun.star.findbar:FocusToFindbar" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Focus to Findbar</value>
+                    <value xml:lang="en-US">~Find</value>
                 </prop>
             </node>
             <node oor:name=".uno:ExtendedHelp" oor:op="replace">
@@ -2379,7 +2379,7 @@
             </node>
             <node oor:name=".uno:PlugInsActive" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">P~lug-in</value>
+                    <value xml:lang="en-US">Plug-in</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -4280,7 +4280,7 @@
             </node>
             <node oor:name=".uno:SearchDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Find &amp; Replace...</value>
+                    <value xml:lang="en-US">Find &amp; Rep~lace...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>9</value>
