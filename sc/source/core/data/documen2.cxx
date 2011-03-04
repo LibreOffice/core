@@ -981,14 +981,13 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 bool bInUse = ( aUsedNames.find(nOldIndex) != aUsedNames.end() );
                 if (bInUse)
                 {
-                    USHORT nExisting = 0;
-                    if ( pRangeName->SearchName( pSrcData->GetName(), nExisting ) )
+                    const ScRangeData* pExistingData = pRangeName->findByName(pSrcData->GetName());
+                    if (pExistingData)
                     {
                         // the name exists already in the destination document
                         // -> use the existing name, but show a warning
                         // (when refreshing links, the existing name is used and the warning not shown)
 
-                        ScRangeData* pExistingData = (*pRangeName)[nExisting];
                         USHORT nExistingIndex = pExistingData->GetIndex();
 
                         pSrcRangeNames[i] = NULL;       // don't modify the named range

@@ -4543,11 +4543,10 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
             String aContent;
             ScRange( nX1, nY1, nTab, nX2, nY2, nTab ).Format( aContent, SCR_ABS_3D, pDoc );
 
-            BOOL bInsert = FALSE;
-            USHORT nOldPos;
-            if (rList.SearchName( aName, nOldPos ))         // vorhanden ?
+            bool bInsert = false;
+            ScRangeData* pOld = rList.findByName(aName);
+            if (pOld)
             {
-                ScRangeData* pOld = rList[nOldPos];
                 String aOldStr;
                 pOld->GetSymbol( aOldStr );
                 if (aOldStr != aContent)
@@ -4567,8 +4566,8 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                                                     aMessage ).Execute();
                         if ( nResult == RET_YES )
                         {
-                            rList.AtFree(nOldPos);
-                            bInsert = TRUE;
+                            rList.erase(*pOld);
+                            bInsert = true;
                         }
                         else if ( nResult == RET_CANCEL )
                             rCancel = TRUE;
@@ -4576,7 +4575,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                 }
             }
             else
-                bInsert = TRUE;
+                bInsert = true;
 
             if (bInsert)
             {

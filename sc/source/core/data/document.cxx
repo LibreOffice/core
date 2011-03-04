@@ -1838,6 +1838,8 @@ void ScDocument::MergeNumberFormatter(ScDocument* pSrcDoc)
 
 void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameData& rRangeNames)
 {
+#if NEW_RANGE_NAME
+#else
     sal_uInt16 nClipRangeNameCount = pClipDoc->pRangeName->GetCount();
     ScClipRangeNameData aClipRangeNames;
 
@@ -1889,6 +1891,7 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
         }
     }
     rRangeNames = aClipRangeNames;
+#endif
 }
 
 void ScDocument::UpdateRangeNamesInFormulas(

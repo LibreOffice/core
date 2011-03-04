@@ -2934,11 +2934,11 @@ BOOL ScViewFunc::InsertName( const String& rName, const String& rSymbol,
         pDoc->CompileNameFormula( TRUE );   // CreateFormulaString
 
         // Eintrag bereits vorhanden? Dann vorher entfernen (=Aendern)
-        USHORT nFoundAt;
-        if ( pList->SearchName( rName, nFoundAt ) )
+        ScRangeData* pData = pList->findByName(rName);
+        if (pData)
         {                                   // alten Index uebernehmen
-            pNewEntry->SetIndex( ((ScRangeData*)pList->At(nFoundAt))->GetIndex() );
-            pList->AtFree( nFoundAt );
+            pNewEntry->SetIndex(pData->GetIndex());
+            pList->erase(*pData);
         }
 
         if ( pList->Insert( pNewEntry ) )

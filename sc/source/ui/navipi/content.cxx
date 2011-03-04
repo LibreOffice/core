@@ -1013,9 +1013,11 @@ BOOL lcl_GetRange( ScDocument* pDoc, USHORT nType, const String& rName, ScRange&
     {
         ScRangeName* pList = pDoc->GetRangeName();
         if (pList)
-            if (pList->SearchName( rName, nPos ))
-                if ( (*pList)[nPos]->IsValidReference( rRange ) )
-                    bFound = TRUE;
+        {
+            const ScRangeData* p = pList->findByName(rName);
+            if (p && p->IsValidReference(rRange))
+                bFound = true;
+        }
     }
     else if ( nType == SC_CONTENT_DBAREA )
     {

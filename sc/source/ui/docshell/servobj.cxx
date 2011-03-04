@@ -54,10 +54,9 @@ BOOL lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const String& r
         ScRangeName* pNames = pDoc->GetRangeName();
         if (pNames)
         {
-            USHORT nPos;
-            if( pNames->SearchName( rName, nPos ) )
+            const ScRangeData* pData = pNames->findByName(rName);
+            if (pData)
             {
-                ScRangeData* pData = (*pNames)[ nPos ];
                 if ( pData->IsValidReference( rRange ) )
                     return TRUE;
             }

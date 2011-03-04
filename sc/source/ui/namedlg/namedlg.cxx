@@ -271,11 +271,9 @@ void ScNameDlg::SetActive()
 
 void ScNameDlg::UpdateChecks()
 {
-    sal_uInt16       nCurPos=0;
-
-    if(aLocalRangeName.SearchName( aEdName.GetText(), nCurPos))
+    const ScRangeData* pData = aLocalRangeName.findByName(aEdName.GetText());
+    if (pData)
     {
-        ScRangeData* pData=(ScRangeData*)(aLocalRangeName.At( nCurPos ));
         aBtnCriteria .Check( pData->HasType( RT_CRITERIA ) );
         aBtnPrintArea.Check( pData->HasType( RT_PRINTAREA ) );
         aBtnColHeader.Check( pData->HasType( RT_COLHEADER ) );
@@ -359,10 +357,8 @@ void ScNameDlg::UpdateNames()
 
 //----------------------------------------------------------------------------
 
-void ScNameDlg::CalcCurTableAssign( String& aAssign, USHORT nCurPos )
+void ScNameDlg::CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData )
 {
-    ScRangeData* pRangeData = (ScRangeData*)(aLocalRangeName.At( nCurPos ));
-
     if ( pRangeData )
     {
         rtl::OUStringBuffer sBuffer;
@@ -448,13 +444,11 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                 //    in ein Token-Array uebersetzt werden?)
                 if ( 0 == pNewEntry->GetErrCode() )
                 {
-                    USHORT nFoundAt = 0;
-                    // Eintrag bereits vorhanden? Dann vorher entfernen (=Aendern)
-                    if ( aLocalRangeName.SearchName( aNewEntry, nFoundAt ) )
-                    {                                   // alten Index uebernehmen
-                        pNewEntry->SetIndex(
-                            ((ScRangeData*)(aLocalRangeName.At(nFoundAt)))->GetIndex() );
-                        aLocalRangeName.AtFree( nFoundAt );
+                    ScRangeData* pData = aLocalRangeName.findByName(aNewEntry);
+                    if (pData)
+                    {
+                        pNewEntry->SetIndex(pData->GetIndex());
+                        aLocalRangeName.erase(*pData);
                     }
                     else
                         pSaveObj->Clear();
@@ -503,10 +497,9 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
 
 IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 {
-    USHORT       nRemoveAt = 0;
     const String aStrEntry = aEdName.GetText();
-
-    if ( aLocalRangeName.SearchName( aStrEntry, nRemoveAt ) )
+    ScRangeData* pData = aLocalRangeName.findByName(aStrEntry);
+    if (pData)
     {
         String aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
         String aMsg       = aStrDelMsg.GetToken( 0, '#' );
@@ -517,7 +510,7 @@ IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
         if ( RET_YES ==
              QueryBox( this, WinBits( WB_YES_NO | WB_DEF_YES ), aMsg ).Execute() )
         {
-            aLocalRangeName.AtFree( nRemoveAt );
+            aLocalRangeName.erase(*pData);
             UpdateNames();
             UpdateChecks();
             bSaved=FALSE;
@@ -536,21 +529,15 @@ IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 
 IMPL_LINK( ScNameDlg, NameSelectHdl, void *, EMPTYARG )
 {
-    USHORT nAtPos;
-
-    if ( aLocalRangeName.SearchName( aEdName.GetText(), nAtPos ) )
+    ScRangeData* pData = aLocalRangeName.findByName(aEdName.GetText());
+    if (pData)
     {
-        String       aSymbol;
-        ScRangeData* pData  = (ScRangeData*)(aLocalRangeName.At( nAtPos ));
-
-        if ( pData )
-        {
-            pData->GetSymbol( aSymbol );
-            CalcCurTableAssign( aSymbol, nAtPos );
-            aEdAssign.SetText( aSymbol );
-            aBtnAdd.SetText( aStrModify );
-            theCurSel = Selection( 0, SELECTION_MAX );
-        }
+        String aSymbol;
+        pData->GetSymbol( aSymbol );
+        CalcCurTableAssign( aSymbol, pData );
+        aEdAssign.SetText( aSymbol );
+        aBtnAdd.SetText( aStrModify );
+        theCurSel = Selection( 0, SELECTION_MAX );
     }
     UpdateChecks();
     return 0;

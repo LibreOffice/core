@@ -133,12 +133,9 @@ ScRangeData* ScNamedRangeObj::GetRangeData_Impl()
         ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
         if (pNames)
         {
-            sal_uInt16 nPos = 0;
-            if (pNames->SearchName( aName, nPos ))
-            {
-                pRet = (*pNames)[nPos];
+            pRet = pNames->findByName(aName);
+            if (pRet)
                 pRet->ValidateTabRefs();        // adjust relative tab refs to valid tables
-            }
         }
     }
     return pRet;
@@ -150,6 +147,8 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* p
                                     const ScAddress* pNewPos, const sal_uInt16* pNewType,
                                     const formula::FormulaGrammar::Grammar eGrammar )
 {
+#if NEW_RANGE_NAME
+#else
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -199,6 +198,7 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* p
             }
         }
     }
+#endif
 }
 
 
@@ -555,8 +555,6 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
         sal_Int32 nUnoType ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameStr(aName);
-    String aContStr(aContent);
     ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, aPosition.Sheet );
 
     sal_uInt16 nNewType = RT_NAME;
@@ -570,12 +568,11 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangeName* pNames = pDoc->GetRangeName();
-        USHORT nIndex = 0;
-        if (pNames && !pNames->SearchName(aNameStr, nIndex))
+        if (pNames && !pNames->findByName(aName))
         {
             ScRangeName* pNewRanges = new ScRangeName( *pNames );
             // GRAM_PODF_A1 for API compatibility.
-            ScRangeData* pNew = new ScRangeData( pDoc, aNameStr, aContStr,
+            ScRangeData* pNew = new ScRangeData( pDoc, aName, aContent,
                                                 aPos, nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
             if ( pNewRanges->Insert(pNew) )
             {
@@ -626,23 +623,21 @@ void SAL_CALL ScNamedRangesObj::removeByName( const rtl::OUString& aName )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    BOOL bDone = FALSE;
+    bool bDone = false;
     if (pDocShell)
     {
         ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
         if (pNames)
         {
-            String aString(aName);
-            sal_uInt16 nPos = 0;
-            if (pNames->SearchName( aString, nPos ))
-                if ( lcl_UserVisibleName((*pNames)[nPos]) )
-                {
-                    ScRangeName* pNewRanges = new ScRangeName(*pNames);
-                    pNewRanges->AtFree(nPos);
-                    ScDocFunc aFunc(*pDocShell);
-                    aFunc.SetNewRangeNames( pNewRanges, mbModifyAndBroadcast);
-                    bDone = TRUE;
-                }
+            const ScRangeData* pData = pNames->findByName(aName);
+            if (pData && lcl_UserVisibleName(pData))
+            {
+                ScRangeName* pNewRanges = new ScRangeName(*pNames);
+                pNewRanges->erase(*pData);
+                ScDocFunc aFunc(*pDocShell);
+                aFunc.SetNewRangeNames( pNewRanges, mbModifyAndBroadcast);
+                bDone = true;
+            }
         }
     }
 
@@ -798,10 +793,9 @@ sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const rtl::OUString& aName )
         ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
         if (pNames)
         {
-            sal_uInt16 nPos = 0;
-            if (pNames->SearchName( String(aName), nPos ))
-                if ( lcl_UserVisibleName((*pNames)[nPos]) )
-                    return sal_True;
+            const ScRangeData* pData = pNames->findByName(aName);
+            if (pData && lcl_UserVisibleName(pData))
+                return sal_True;
         }
     }
     return sal_False;

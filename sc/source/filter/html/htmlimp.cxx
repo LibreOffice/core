@@ -210,8 +210,7 @@ void ScHTMLImport::WriteToDocument(
         if( pTable->GetTableName().Len() )
         {
             String aName( ScfTools::GetNameFromHTMLName( pTable->GetTableName() ) );
-            USHORT nPos;
-            if( !mpDoc->GetRangeName()->SearchName( aName, nPos ) )
+            if (!mpDoc->GetRangeName()->findByName(aName))
                 InsertRangeName( mpDoc, aName, aNewRange );
         }
     }
@@ -237,22 +236,22 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
         if( pRangeNames && ScfTools::IsHTMLTablesName( aToken ) )
         {   // build list with all HTML tables
             ULONG nIndex = 1;
-            USHORT nPos;
-            BOOL bLoop = TRUE;
+            bool bLoop = true;
             while( bLoop )
             {
                 aToken = ScfTools::GetNameFromHTMLIndex( nIndex++ );
-                bLoop = pRangeNames->SearchName( aToken, nPos );
-                if( bLoop )
+                const ScRangeData* pRangeData = pRangeNames->findByName(aToken);
+                if (pRangeData)
                 {
-                    const ScRangeData* pRangeData = (*pRangeNames)[ nPos ];
                     ScRange aRange;
-                    if( pRangeData && pRangeData->IsReference( aRange ) && !aRangeList.In( aRange ) )
+                    if( pRangeData->IsReference( aRange ) && !aRangeList.In( aRange ) )
                     {
                         ScGlobal::AddToken( aNewName, aToken, ';' );
                         aRangeList.Append( aRange );
                     }
                 }
+                else
+                    bLoop = false;
             }
         }
         else

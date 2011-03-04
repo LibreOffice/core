@@ -146,8 +146,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     // find an unused name
     String aOrigName( maScName );
     sal_Int32 nCounter = 0;
-    USHORT nDummy;
-    while( rRangeNames.SearchName( maScName, nDummy ) )
+    while( rRangeNames.findByName(maScName) )
         maScName.Assign( aOrigName ).Append( ' ' ).Append( String::CreateFromInt32( ++nCounter ) );
 
     // 3) *** convert the name definition formula *** -------------------------

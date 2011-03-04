@@ -6571,22 +6571,18 @@ void ScInterpreter::ScIndirect()
                 if (!pNames)
                     break;
 
-                USHORT nPos = 0;
-                if (!pNames->SearchName( sRefStr, nPos))
-                    break;
-
-                ScRangeData* rData = (*pNames)[nPos];
-                if (!rData)
+                ScRangeData* pData = pNames->findByName(sRefStr);
+                if (!pData)
                     break;
 
                 // We need this in order to obtain a good range.
-                rData->ValidateTabRefs();
+                pData->ValidateTabRefs();
 
                 ScRange aRange;
 
                 // This is the usual way to treat named ranges containing
                 // relative references.
-                if (!rData->IsReference( aRange, aPos))
+                if (!pData->IsReference( aRange, aPos))
                     break;
 
                 if (aRange.aStart == aRange.aEnd)

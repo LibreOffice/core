@@ -288,12 +288,10 @@ BOOL ScRangeUtil::MakeRangeFromName (
 
     if( eScope==RUTL_NAMES )
     {
-        ScRangeName& rRangeNames = *(pDoc->GetRangeName());
-        USHORT       nAt         = 0;
-
-        if ( rRangeNames.SearchName( rName, nAt ) )
+        const ScRangeName& rRangeNames = *pDoc->GetRangeName();
+        const ScRangeData* pData = rRangeNames.findByName(rName);
+        if (pData)
         {
-            ScRangeData* pData = rRangeNames[nAt];
             String       aStrArea;
             ScRefAddress     aStartPos;
             ScRefAddress     aEndPos;

@@ -205,14 +205,14 @@ BOOL ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const Stri
 // find a range with name >rAreaName< in >pSrcDoc<, return it in >rRange<
 BOOL ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName )
 {
-    BOOL bFound = FALSE;
+    bool bFound = false;
     ScRangeName* pNames = pSrcDoc->GetRangeName();
     USHORT nPos;
     if (pNames)         // benannte Bereiche
     {
-        if (pNames->SearchName( rAreaName, nPos ))
-            if ( (*pNames)[nPos]->IsValidReference( rRange ) )
-                bFound = TRUE;
+        const ScRangeData* p = pNames->findByName(rAreaName);
+        if (p && p->IsValidReference(rRange))
+            bFound = true;
     }
     if (!bFound)        // Datenbankbereiche
     {
@@ -225,14 +225,14 @@ BOOL ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const Strin
                 SCROW nRow1, nRow2;
                 (*pDBColl)[nPos]->GetArea(nTab,nCol1,nRow1,nCol2,nRow2);
                 rRange = ScRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
-                bFound = TRUE;
+                bFound = true;
             }
     }
     if (!bFound)        // direct reference (range or cell)
     {
         ScAddress::Details aDetails(pSrcDoc->GetAddressConvention(), 0, 0);
         if ( rRange.ParseAny( rAreaName, pSrcDoc, aDetails ) & SCA_VALID )
-            bFound = TRUE;
+            bFound = true;
     }
     return bFound;
 }

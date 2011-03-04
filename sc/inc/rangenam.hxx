@@ -196,7 +196,7 @@ public:
     SC_DLLPUBLIC ScRangeData* operator[](sal_uInt16 nIndex);
     SC_DLLPUBLIC const ScRangeData* operator[](sal_uInt16 nIndex) const;
     SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock(const ScRange& rRange) const;
-    SC_DLLPUBLIC bool SearchName(const rtl::OUString& rName, sal_uInt16& rPos) const;
+    SC_DLLPUBLIC ScRangeData* findByName(const rtl::OUString& rName);
     SC_DLLPUBLIC const ScRangeData* findByName(const rtl::OUString& rName) const;
     const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
     bool SearchNameUpper(const rtl::OUString& rUpperName, sal_uInt16& rPos) const;
@@ -212,6 +212,7 @@ public:
     SC_DLLPUBLIC size_t size() const;
     SC_DLLPUBLIC bool Insert(ScRangeData* p);
     void AtFree(size_t i);
+    void erase(const ScRangeData& r);
     void FreeAll();
     void clear();
     SC_DLLPUBLIC ScRangeData* At(size_t i);

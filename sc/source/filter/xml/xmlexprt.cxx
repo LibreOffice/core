@@ -3723,10 +3723,7 @@ void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <co
                                     xNamedRange->getReferencePosition(), pDoc, FormulaGrammar::CONV_OOO, ' ', sal_False, SCA_ABS_3D );
                                 AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sOUBaseCellAddress);
 
-                                sal_uInt16 nRangeIndex;
-                                String sName(sOUName);
-                                pNamedRanges->SearchName(sName, nRangeIndex);
-                                ScRangeData* pNamedRange((*pNamedRanges)[nRangeIndex]); //should get directly and not with ScDocument
+                                const ScRangeData* pNamedRange = pNamedRanges->findByName(sOUName);
                                 String sContent;
                                 pNamedRange->GetSymbol(sContent, pDoc->GetStorageGrammar());
                                 rtl::OUString sOUTempContent(sContent);

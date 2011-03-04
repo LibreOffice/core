@@ -1679,8 +1679,7 @@ void ScPosWnd::DoEnter()
                     ScDocument* pDoc = pDocShell->GetDocument();
                     ScRangeName* pNames = pDoc->GetRangeName();
                     ScRange aSelection;
-                    USHORT nIndex = 0;
-                    if ( pNames && !pNames->SearchName( aText, nIndex ) &&
+                    if ( pNames && !pNames->findByName(aText) &&
                             (pViewData->GetSimpleArea( aSelection ) == SC_MARK_SIMPLE) )
                     {
                         ScRangeName aNewRanges( *pNames );

@@ -690,9 +690,17 @@ const ScRangeData* ScRangeName::GetRangeAtBlock(const ScRange& rRange) const
     return NULL;
 }
 
-bool ScRangeName::SearchName(const rtl::OUString& rName, sal_uInt16& rPos) const
+ScRangeData* ScRangeName::findByName(const OUString& rName)
 {
-    return false;
+    DataType::iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        String aName;
+        itr->GetName(aName);
+        if (rName.equals(aName))
+            return &(*itr);
+    }
+    return NULL;
 }
 
 const ScRangeData* ScRangeName::findByName(const OUString& rName) const
@@ -793,6 +801,11 @@ void ScRangeName::AtFree(size_t i)
 
 void ScRangeName::FreeAll()
 {
+}
+
+void ScRangeName::erase(const ScRangeData& r)
+{
+    maData.erase(r);
 }
 
 void ScRangeName::clear()

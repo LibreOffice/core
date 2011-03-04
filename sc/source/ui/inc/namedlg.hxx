@@ -81,7 +81,7 @@ private:
     void Init();
     void UpdateChecks();
     void UpdateNames();
-    void CalcCurTableAssign( String& aAssign, USHORT nPos );
+    void CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData );
 
     // Handler:
     DECL_LINK( OkBtnHdl, void * );
