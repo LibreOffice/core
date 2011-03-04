@@ -13,11 +13,10 @@ http://hg.services.openoffice.org/binaries
 2a177023f9ea8ec8bd00837605c5df1b-jakarta-tomcat-5.0.30-src.tar.gz
 2ae988b339daec234019a7066f96733e-commons-lang-2.3-src.tar.gz
 2c9b0f83ed5890af02c0df1c1776f39b-commons-httpclient-3.1-src.tar.gz
-2f6ecca935948f7db92d925d88d0d078-icu4c-4_0_1-src.tgz
+43e56b71c407be5154de681eaa646a4a-icu4c-4_6-src.tgz
 ca4870d899fd7e943ffc310a5421ad4d-liberation-fonts-ttf-1.06.0.20100721.tar.gz
 35c94d2df8893241173de1d16b6034c0-swingExSrc.zip
 35efabc239af896dfb79be7ebdd6e6b9-gentiumbasic-fonts-1.10.zip
-377a60170e5185eb63d3ed2fae98e621-README_silgraphite-2.3.1.txt
 39bb3fcea1514f1369fcfc87542390fd-sacjava-1.3.zip
 3ade8cfe7e59ca8e65052644fed9fca4-epm-3.7.tar.gz
 3c219630e4302863a9a83d0efde889db-commons-logging-1.1.1-src.tar.gz
@@ -48,7 +47,6 @@ c441926f3a552ed3e5b274b62e86af16-STLport-4.0.tar.gz
 ca66e26082cab8bb817185a116db809b-redland-1.0.8.tar.gz
 d0b5af6e408b8d2958f3d83b5244f5e8-hyphen-2.4.tar.gz
 d1a3205871c3c52e8a50c9f18510ae12-libformula.zip
-d35724900f6a4105550293686688bbb3-silgraphite-2.3.1.tar.gz
 d4c4d91ab3a8e52a2e69d48d34ef4df4-core.zip
 d70951c80dabecc2892c919ff5d07172-db-4.7.25.NC-custom.tar.gz
 dbb3757275dc5cc80820c0b4dd24ed95-librepository.zip
