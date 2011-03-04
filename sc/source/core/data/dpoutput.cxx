@@ -612,15 +612,9 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
 {
     long nFlags = rData.Flags;
 
-    rtl::OUStringBuffer aCaptionBuf;
-    if (!(nFlags & sheet::MemberResultFlags::NUMERIC))
-        // This caption is not a number.  Make sure it won't get parsed as one.
-        aCaptionBuf.append(sal_Unicode('\''));
-    aCaptionBuf.append(rData.Caption);
-
     if ( nFlags & sheet::MemberResultFlags::HASMEMBER )
     {
-        pDoc->SetString( nCol, nRow, nTab, aCaptionBuf.makeStringAndClear() );
+        pDoc->SetString( nCol, nRow, nTab, rData.Caption);
     }
 
     if ( nFlags & sheet::MemberResultFlags::SUBTOTAL )

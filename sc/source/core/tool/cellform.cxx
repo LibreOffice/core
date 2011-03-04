@@ -46,7 +46,7 @@
 const ScFormulaCell* pLastFormulaTreeTop = 0;
 
 // -----------------------------------------------------------------------
-
+#include <stdio.h>
 void ScCellFormat::GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,
                               Color** ppColor, SvNumberFormatter& rFormatter,
                               BOOL bNullVals,
