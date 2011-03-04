@@ -82,14 +82,14 @@
     }                                                                       \
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))\
     {                                                                       \
-        DBG_ERROR( mes );                                                   \
+        OSL_FAIL( mes );                                                   \
         p->markInvalid();                                                   \
     }
 #define CATCH_DRIVER_EX_END_2(mes)                                         \
     }                                                                       \
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))\
     {                                                                       \
-        DBG_ERROR( mes );                                                   \
+        OSL_FAIL( mes );                                                   \
     }
 #endif
 
