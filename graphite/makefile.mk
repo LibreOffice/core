@@ -31,7 +31,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 PRJ=.
 
 PRJNAME=graphite
-TARGET=so_graphite
+TARGET=libgraphite
 
 # --- Settings -----------------------------------------------------
 
@@ -47,63 +47,19 @@ all:
 .IF "$(ENABLE_GRAPHITE)"=="TRUE"
 TARFILE_NAME=graphite2-0.9.2
 TARFILE_MD5=0625a7d661f899a8ce263fc8a9879108
-PATCH_FILES= graphite2-0.9.2.patch
+PATCH_FILES= graphite2-0.9.2.patch \
+        graphite_make.patch
 
 # convert line-endings to avoid problems when patching
 CONVERTFILES=
 
-CONFIGURE_DIR=build
+BUILD_DIR=src
+BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
-.IF "$(COM)"=="MSC"
-CMAKE_GENERATOR="NMake Makefiles"
-# make use of stlport headerfiles
-EXT_USE_STLPORT=TRUE
-GR_CMAKE_LINK_FLAGS=-D "CMAKE_SHARED_LINKER_FLAGS=/STACK:10000000 /machine:x86" -D "CMAKE_MODULE_LINKER_FLAGS=/STACK:10000000 /machine:x86" -D "CMAKE_EXE_LINKER_FLAGS=/STACK:10000000 /machine:x86" -D "CMAKE_SYSTEM_PROCESSOR=x86"
-BUILD_ACTION=nmake
-.ENDIF
-
-.IF "$(COM)"=="GCC"
-CMAKE_GENERATOR="Unix Makefiles"
-GR_CMAKE_LINK_FLAGS=
-.IF "$(OS)"=="WNT"
-#PATCH_FILES+=graphite2.patch.mingw
-.ENDIF
-.ENDIF
-
-.IF "$(COM)"=="GCC"
-BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
-.ENDIF
-
-.IF "$(debug)"=="true"
-CMAKE_BUILD_TYPE=Debug
-.ELSE
-CMAKE_BUILD_TYPE=Release
-.ENDIF
-
-# Don't include STLPORT headers because it interferes with CMake's compiler
-# detection. Graphite2 no longer uses the STL anyway.
-CONFIGURE_ACTION=bash -c 'INCLUDE="$(COMPATH)/Include;$(PSDK_HOME)/Include" CXXFLAGS="$(CFLAGSCXX) $(CDEFS)" LIB="$(ILIB)" cmake -G $(CMAKE_GENERATOR) -D CMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) -D ENABLE_COMPARE_RENDERER=0 $(GR_CMAKE_LINK_FLAGS) .. '
-
-
-BUILD_DIR=$(CONFIGURE_DIR)
-
-.IF "$(OS)"=="WNT" && "$(COM)"!="GCC"
-OUT2LIB=build$/src$/*.lib
-OUT2BIN=build$/src$/*.dll
-.ELSE
-.IF "$(OS)"=="MACOSX"
-OUT2LIB+=build$/src$/libgraphite2.*.dylib
-.ELSE
-OUT2LIB=build$/src$/libgraphite2.so.*.*.*
-.ENDIF
-.ENDIF
-
-OUTDIR2INC= \
-    include/graphite2
-
-.ELSE
-dddd:
-    @echo Nothing to do
+OUT2INC_SUBDIR=graphite2
+OUT2INC=include/graphite2/Font.h \
+        include/graphite2/Segment.h \
+        include/graphite2/Types.h
 .ENDIF
 
 # --- Targets ------------------------------------------------------

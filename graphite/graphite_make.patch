@@ -1,0 +1,57 @@
+--- misc/build/graphite2-0.9.2/src/makefile.mk  Fri Mar  4 10:20:30 2011 +0700
++++ misc/build/graphite2-0.9.2/src/makefile.mk  Fri Mar  4 10:20:30 2011 +0700
+@@ -0,0 +1,53 @@
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=libgraphite2_off
++TARGET=graphite2_off
++ENABLE_EXCEPTIONS=FALSE
++LIBTARGET=NO
++
++.INCLUDE : settings.mk
++
++CFLAGS+=-DDISABLE_TRACING -I../include
++.IF "$(debug)" == ""
++CFLAGS+=-O3 -DNDEBUG
++.ENDIF
++
++VMACHINE=call
++.IF "$(COM)"=="GCC"
++VMACHINE=direct
++.ENDIF
++
++SLOFILES= \
++    $(SLO)/$(VMACHINE)_machine.obj \
++    $(SLO)/gr_char_info.obj \
++    $(SLO)/gr_features.obj \
++    $(SLO)/gr_face.obj \
++    $(SLO)/gr_font.obj \
++    $(SLO)/gr_segment.obj \
++    $(SLO)/gr_slot.obj \
++    $(SLO)/CachedFace.obj \
++    $(SLO)/CmapCache.obj \
++    $(SLO)/Code.obj \
++    $(SLO)/Face.obj \
++    $(SLO)/FeatureMap.obj \
++    $(SLO)/Font.obj \
++    $(SLO)/GlyphFace.obj \
++    $(SLO)/GlyphFaceCache.obj \
++    $(SLO)/NameTable.obj \
++    $(SLO)/Pass.obj \
++    $(SLO)/SegCache.obj \
++    $(SLO)/SegCacheEntry.obj \
++    $(SLO)/SegCacheStore.obj \
++    $(SLO)/Segment.obj \
++    $(SLO)/Silf.obj \
++    $(SLO)/Slot.obj \
++    $(SLO)/TtfUtil.obj
++
++LIB1ARCHIV=$(LB)$/lib$(TARGET).a
++LIB1TARGET=$(SLB)$/$(TARGET).lib
++LIB1OBJFILES=$(SLOFILES)
++OUT2INC=../include/graphite2
++
++.INCLUDE : target.mk
+
