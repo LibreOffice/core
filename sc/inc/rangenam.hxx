@@ -182,8 +182,9 @@ extern "C" int SAL_CALL ScRangeData_QsortNameCompare( const void*, const void* )
 class ScRangeName
 {
 private:
-    typedef ::boost::ptr_map<rtl::OUString, ScRangeData> MapType;
-    MapType     maData;
+    typedef ::boost::ptr_map<rtl::OUString, ScRangeData> DataType;
+    DataType    maData;
+
     ScDocument* mpDoc;
     sal_uInt16  mnSharedMaxIndex;
 public:
@@ -199,14 +200,15 @@ public:
     void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0);
     void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
     void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);
-    SC_DLLPUBLIC ScRangeData* FindIndex(sal_uInt16 nIndex);
+    SC_DLLPUBLIC ScRangeData* FindIndex(size_t i);
     sal_uInt16 GetSharedMaxIndex();
     void SetSharedMaxIndex(sal_uInt16 nInd);
-    sal_uInt16 GetEntryIndex();
     SC_DLLPUBLIC size_t GetCount() const;
+    SC_DLLPUBLIC size_t size() const;
     SC_DLLPUBLIC bool Insert(ScRangeData* p);
     void AtFree(size_t i);
     void FreeAll();
+    void clear();
     SC_DLLPUBLIC ScRangeData* At(size_t i);
     bool operator== (const ScRangeName& r) const;
 };

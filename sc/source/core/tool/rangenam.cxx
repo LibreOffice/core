@@ -49,6 +49,8 @@
 #include "document.hxx"
 
 using namespace formula;
+using ::std::pair;
+using ::rtl::OUString;
 
 //========================================================================
 // ScRangeData
@@ -699,7 +701,7 @@ void ScRangeName::UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY)
 {
 }
 
-ScRangeData* ScRangeName::FindIndex(sal_uInt16 nIndex)
+ScRangeData* ScRangeName::FindIndex(size_t i)
 {
     return NULL;
 }
@@ -714,19 +716,24 @@ void ScRangeName::SetSharedMaxIndex(sal_uInt16 nInd)
     mnSharedMaxIndex = nInd;
 }
 
-sal_uInt16 ScRangeName::GetEntryIndex()
+size_t ScRangeName::GetCount() const
 {
-    return 0;
+    return maData.size();
 }
 
-size_t ScRangeName::GetCount() const
+size_t ScRangeName::size() const
 {
     return maData.size();
 }
 
 bool ScRangeName::Insert(ScRangeData* p)
 {
-    return true;
+    if (!p)
+        return false;
+
+    OUString aName = p->GetName();
+    pair<DataType::iterator, bool> r = maData.insert(aName, p);
+    return r.second;
 }
 
 void ScRangeName::AtFree(size_t i)
@@ -735,6 +742,11 @@ void ScRangeName::AtFree(size_t i)
 
 void ScRangeName::FreeAll()
 {
+}
+
+void ScRangeName::clear()
+{
+    maData.clear();
 }
 
 ScRangeData* ScRangeName::At(size_t i)
