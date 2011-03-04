@@ -29,7 +29,6 @@
 #ifndef _TYPES_HXX
 #define _TYPES_HXX
 
-#include <tools/list.hxx>
 #include <tools/ref.hxx>
 #include <basobj.hxx>
 
@@ -252,7 +251,6 @@ public:
 #endif
 };
 SV_IMPL_REF(SvMetaType)
-DECLARE_LIST(SvMetaTypeList,SvMetaType *)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaType,SvMetaType *)
 
 
