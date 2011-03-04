@@ -82,7 +82,6 @@ TabDialog RID_SCDLG_CHAR
     {
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
         Text [ en-US ] = "Back" ;
         TabStop = TRUE ;
     };
@@ -106,7 +105,6 @@ TabDialog RID_SCDLG_PARAGRAPH
             PageItem
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
-                /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
             };
@@ -151,7 +149,6 @@ TabDialog RID_SCDLG_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
         Text [ en-US ] = "Back" ;
         TabStop = TRUE ;
     };

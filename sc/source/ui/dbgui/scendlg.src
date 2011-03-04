@@ -95,7 +95,6 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     {
         Pos = MAP_APPFONT ( 12 , 121 ) ;
         Size = MAP_APPFONT ( 183 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Zurückkopieren : Zur³ckkopieren */
         Text [ en-US ] = "Copy ~back" ;
     };
     CheckBox CB_ATTRIB

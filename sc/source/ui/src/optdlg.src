@@ -91,7 +91,6 @@ TabPage RID_SCPAGE_CALC
     {
         Pos = MAP_APPFONT ( 139 , 28 ) ;
         Size = MAP_APPFONT ( 112 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? 01.01.1900 ( Star~Calc 1.0 ) : StarCa~lc 1.0 */
         Text [ en-US ] = "01/01/1900 (Star~Calc 1.0)" ;
         QuickHelpText [ en-US ] = "Value 0 corresponds to 01/01/1900" ;
     };
@@ -99,7 +98,6 @@ TabPage RID_SCPAGE_CALC
     {
         Pos = MAP_APPFONT ( 139 , 42 ) ;
         Size = MAP_APPFONT ( 112 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~01.01.1904 : ~1904 */
         Text [ en-US ] = "~01/01/1904" ;
         QuickHelpText [ en-US ] = "0 corresponds to 01/01/1904" ;
     };
@@ -340,7 +338,6 @@ TabPage RID_SCPAGE_USERLISTS
     {
         Pos = MAP_APPFONT ( 105 , 3 ) ;
         Size = MAP_APPFONT ( 93 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Ein~träge : Ein~trõge */
         Text [ en-US ] = "~Entries" ;
     };
     MultiLineEdit ED_ENTRIES
@@ -361,7 +358,6 @@ TabPage RID_SCPAGE_USERLISTS
     {
         Pos = MAP_APPFONT ( 6 , 168 ) ;
         Size = MAP_APPFONT ( 62 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Liste kopieren ~aus : Liste kopieren aus */
         Text [ en-US ] = "Copy list ~from" ;
     };
     PushButton BTN_NEW
@@ -374,7 +370,6 @@ TabPage RID_SCPAGE_USERLISTS
     {
         Pos = MAP_APPFONT ( 204 , 36 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
         Text [ en-US ] = "~Add" ;
         Disable = TRUE ;
     };
@@ -382,7 +377,6 @@ TabPage RID_SCPAGE_USERLISTS
     {
         Pos = MAP_APPFONT ( 204 , 54 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text [ en-US ] = "~Delete" ;
     };
     PushButton BTN_COPY
@@ -397,7 +391,6 @@ TabPage RID_SCPAGE_USERLISTS
     };
     String STR_QUERYREMOVE
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Soll der Eintrag\n#\ngelöscht werden? : Soll der Eintrag\n#\ngel÷scht werden? */
         Text [ en-US ] = "Should the entry\n#\nbe deleted?" ;
     };
     String STR_COPYLIST

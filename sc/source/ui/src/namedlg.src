@@ -58,7 +58,6 @@ ModelessDialog RID_SCDLG_NAMES
     {
         Pos = MAP_APPFONT ( 166 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
@@ -67,7 +66,6 @@ ModelessDialog RID_SCDLG_NAMES
     {
         Pos = MAP_APPFONT ( 166 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
@@ -149,17 +147,14 @@ ModelessDialog RID_SCDLG_NAMES
     };
     String STR_ADD
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
         Text [ en-US ] = "~Add" ;
     };
     String STR_MODIFY
     {
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~Žndern */
         Text [ en-US ] = "Mod~ify" ;
     };
     String STR_INVALIDSYMBOL
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Ungültiger Ausdruck : Ung³ltiger Ausdruck */
         Text [ en-US ] = "Invalid expression" ;
     };
 };
