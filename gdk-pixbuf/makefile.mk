@@ -55,14 +55,13 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                 BASE_DEPENDENCIES_LIBS=" " \
                  .$/configure \
                  --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
-                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external/glib-2.0" \
+                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/libpng" \
                  LDFLAGS="-L$(SOLARLIBDIR) -lgobject-2.0 -lgio-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0 -lintl" \
                  --disable-glibtest \
                  --without-libtiff \
-                 --without-libjpeg \
-                 --without-libpng
+                 --without-libjpeg
                  
-## FIXME: libtiff, libjpeg, libpng
+## FIXME: libtiff, libjpeg
                  
 CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
                 
@@ -72,21 +71,21 @@ BUILD_DIR=$(CONFIGURE_DIR)
 
 .IF "$(OS)"=="MACOSX"
 EXTRPATH=LOADER
-OUT2LIB+=gdk-pixbuf/.libs/libgdk_pixbuf-2.0.0.dylib
+OUT2LIB+=gdk-pixbuf$/.libs/libgdk_pixbuf-2.0.0.dylib
 
-OUT2BIN+=gdk-pixbuf/.libs/gdk-pixbuf-query-loaders
+OUT2BIN+=gdk-pixbuf$/.libs/gdk-pixbuf-query-loaders
 
-OUT2INC+=gdk-pixbuf/gdk-pixbuf-animation.h
-OUT2INC+=gdk-pixbuf/gdk-pixbuf-features.h
-OUT2INC+=gdk-pixbuf/gdk-pixbuf-marshal.h
-OUT2INC+=gdk-pixbuf/gdk-pixbuf.h
-OUT2INC+=gdk-pixbuf/gdk-pixbuf-core.h
-OUT2INC+=gdk-pixbuf/gdk-pixbuf-io.h
-OUT2INC+=gdk-pixbuf/gdk-pixbuf-simple-anim.h
-OUT2INC+=gdk-pixbuf/gdk-pixdata.h
-OUT2INC+=gdk-pixbuf/gdk-pixbuf-enum-types.h
-OUT2INC+=gdk-pixbuf/gdk-pixbuf-loader.h
-OUT2INC+=gdk-pixbuf/gdk-pixbuf-transform.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-animation.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-features.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-marshal.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-core.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-io.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-simple-anim.h
+OUT2INC+=gdk-pixbuf$/gdk-pixdata.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-enum-types.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-loader.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-transform.h
 .ELIF "$(OS)"=="WNT"
 .ELSE
 .ENDIF
