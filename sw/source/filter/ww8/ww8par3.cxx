@@ -524,8 +524,8 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
     ww::bytes &rParaSprms)
 {
-    sal_uInt8       aBits1;
-    sal_uInt16      nStartNo    = 0;    // Start-Nr. fuer den Writer
+    sal_uInt8       aBits1(0);
+    sal_uInt16      nStartNo(0);        // Start-Nr. fuer den Writer
     SvxExtNumType   eType;              // Writer-Num-Typ
     SvxAdjust       eAdj;               // Ausrichtung (Links/rechts/zent.)
     sal_Unicode     cBullet(0x2190);    // default safe bullet
@@ -559,7 +559,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     if( !bLVLOkB )
         return false;
 
-    sal_uInt8 ixchFollow;
+    sal_uInt8 ixchFollow(0);
     rSt >> ixchFollow;
     if (ixchFollow == 0)
         rReader.maTracer.Log(sw::log::eTabInNumbering);
