@@ -919,7 +919,7 @@ namespace pcr
                     ::rtl::OUString sPropertyName( _rLine.pLine->GetEntryName() );
                     sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
                     sMessage += ::rtl::OString( "')!" );
-                    DBG_ERROR( sMessage );
+                    OSL_FAIL( sMessage.getStr() );
                 }
     #endif
                 if ( _rLine.xHandler.is() )
@@ -950,7 +950,7 @@ namespace pcr
                 ::rtl::OUString sPropertyName( _rLine.pLine->GetEntryName() );
                 sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
                 sMessage += ::rtl::OString( "')!" );
-                DBG_ERROR( sMessage );
+                OSL_FAIL( sMessage.getStr() );
             }
         #endif
             if ( _rLine.xHandler.is() )
