@@ -99,6 +99,7 @@ using namespace ::com::sun::star;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::std::cout;
+using ::std::cerr;
 using ::std::endl;
 using ::std::vector;
 
@@ -796,7 +797,12 @@ void Test::testDataPilot()
             if (p)
             {
                 OUString aCheckVal = OUString::createFromAscii(p);
-                CPPUNIT_ASSERT_MESSAGE("Unexpected cell content.", aCheckVal.equals(aVal));
+                bool bEqual = aCheckVal.equals(aVal);
+                if (!bEqual)
+                {
+                    cerr << "Expected: " << aCheckVal << "  Actual: " << aVal << endl;
+                    CPPUNIT_ASSERT_MESSAGE("Unexpected cell content.", false);
+                }
             }
             else
                 CPPUNIT_ASSERT_MESSAGE("Empty cell expected.", aVal.Len() == 0);
