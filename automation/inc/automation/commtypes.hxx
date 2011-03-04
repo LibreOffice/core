@@ -69,8 +69,6 @@ typedef sal_Unicode comm_UniChar;
 
 #endif
 
-//#define DBG_ASSERT( cond, text )
-//#define DBG_ERROR( text )
 #include <tools/debug.hxx>
 
 #include <tools/solar.h>
