@@ -2239,41 +2239,44 @@ void WW8TabDesc::CalcDefaults()
                 }
             }
         }
-        /*
-        Similiar to graphics and other elements word does not totally
-        factor the width of the border into its calculations of size, we
-        do so we must adjust out widths and other dimensions to fit.  It
-        appears that what occurs is that the last cell's right margin if
-        the margin width that is not calculated into winwords table
-        dimensions, so in that case increase the table to include the
-        extra width of the right margin.
-        */
-        if ( pIo->bVer67 ?
-         !(SVBT16ToShort(pR->pTCs[pR->nWwCols-1].rgbrc[3].aBits1) & 0x20)
-       : !(SVBT16ToShort(pR->pTCs[pR->nWwCols-1].rgbrc[3].aBits2) & 0x2000))
+        if (pR->nWwCols)
         {
-            short nThickness = pR->pTCs[pR->nWwCols-1].rgbrc[3].
-                DetermineBorderProperties(pIo->bVer67);
-            pR->nCenter[pR->nWwCols] = pR->nCenter[pR->nWwCols] + nThickness;
-            if (nThickness > nRightMaxThickness)
-                nRightMaxThickness = nThickness;
-        }
+            /*
+            Similiar to graphics and other elements word does not totally
+            factor the width of the border into its calculations of size, we
+            do so we must adjust out widths and other dimensions to fit.  It
+            appears that what occurs is that the last cell's right margin if
+            the margin width that is not calculated into winwords table
+            dimensions, so in that case increase the table to include the
+            extra width of the right margin.
+            */
+            if ( pIo->bVer67 ?
+             !(SVBT16ToShort(pR->pTCs[pR->nWwCols-1].rgbrc[3].aBits1) & 0x20)
+           : !(SVBT16ToShort(pR->pTCs[pR->nWwCols-1].rgbrc[3].aBits2) & 0x2000))
+            {
+                short nThickness = pR->pTCs[pR->nWwCols-1].rgbrc[3].
+                    DetermineBorderProperties(pIo->bVer67);
+                pR->nCenter[pR->nWwCols] = pR->nCenter[pR->nWwCols] + nThickness;
+                if (nThickness > nRightMaxThickness)
+                    nRightMaxThickness = nThickness;
+            }
 
-        /*
-        The left space of the table is in nMinLeft, but again this
-        does not consider the margin thickness to its left in the
-        placement value, so get the thickness of the left border,
-        half is placed to the left of the nominal left side, and
-        half to the right.
-        */
-        if ( pIo->bVer67 ?
-              !(SVBT16ToShort(pR->pTCs[0].rgbrc[1].aBits1) & 0x20)
-            : !(SVBT16ToShort(pR->pTCs[0].rgbrc[1].aBits2) & 0x2000))
-        {
-            short nThickness = pR->pTCs[0].rgbrc[1].
-                DetermineBorderProperties(pIo->bVer67);
-            if (nThickness > nLeftMaxThickness)
-                nLeftMaxThickness = nThickness;
+            /*
+            The left space of the table is in nMinLeft, but again this
+            does not consider the margin thickness to its left in the
+            placement value, so get the thickness of the left border,
+            half is placed to the left of the nominal left side, and
+            half to the right.
+            */
+            if ( pIo->bVer67 ?
+                  !(SVBT16ToShort(pR->pTCs[0].rgbrc[1].aBits1) & 0x20)
+                : !(SVBT16ToShort(pR->pTCs[0].rgbrc[1].aBits2) & 0x2000))
+            {
+                short nThickness = pR->pTCs[0].rgbrc[1].
+                    DetermineBorderProperties(pIo->bVer67);
+                if (nThickness > nLeftMaxThickness)
+                    nLeftMaxThickness = nThickness;
+            }
         }
     }
     nSwWidth = nSwWidth + nRightMaxThickness;
