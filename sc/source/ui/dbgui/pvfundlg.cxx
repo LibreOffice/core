@@ -748,8 +748,11 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_u
                     if (pLayoutName)
                         aName = *pLayoutName;
                 }
-                maLbDims.InsertEntry( aName );
-                maNameIndexMap.insert(DimNameIndexMap::value_type(aName, nDim));
+                if ( aName.Len() )
+                {
+                    maLbDims.InsertEntry( aName );
+                    maNameIndexMap.insert(DimNameIndexMap::value_type(aName, nDim));
+                }
             }
         }
     }
