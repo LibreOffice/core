@@ -111,7 +111,7 @@ namespace ww
             }
             if (bBroken)
             {
-               DBG_ERROR(rtl::OUStringToOString(sError, RTL_TEXTENCODING_ASCII_US));
+               OSL_FAIL( rtl::OUStringToOString( sError, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
 #endif
         }
