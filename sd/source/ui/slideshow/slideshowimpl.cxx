@@ -880,7 +880,7 @@ bool SlideshowImpl::startPreview(
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("sd::SlideshowImpl::startPreview(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
