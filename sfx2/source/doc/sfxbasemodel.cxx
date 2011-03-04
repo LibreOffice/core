@@ -866,10 +866,10 @@ uno::Reference< document::XDocumentInfo > SAL_CALL SfxBaseModel::getDocumentInfo
         try {
             rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
             uno::Reference < beans::XPropertySet > xSet(
-                getDocumentStorage(), uno::UNO_QUERY );
+                getDocumentStorage(), uno::UNO_QUERY_THROW );
             uno::Any aMediaType = xSet->getPropertyValue( aName );
             uno::Reference < beans::XPropertySet > xDocSet(
-                m_pData->m_xDocumentInfo, uno::UNO_QUERY );
+                m_pData->m_xDocumentInfo, uno::UNO_QUERY_THROW );
             xDocSet->setPropertyValue( aName, aMediaType );
         } catch (uno::Exception &) {
             //ignore
