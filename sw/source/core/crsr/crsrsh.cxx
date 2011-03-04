@@ -322,7 +322,7 @@ if( GetWin() )
     sal_uInt16 nParm = SwCrsrShell::CHKRANGE;
     if ( !bIdleEnd )
         nParm |= SwCrsrShell::SCROLLWIN;
-    if( !IsViewLocked() )
+//    if( !IsViewLocked() )
     UpdateCrsr( nParm, bIdleEnd );      // Cursor-Aenderungen anzeigen
 
     {
