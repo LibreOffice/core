@@ -91,7 +91,7 @@ COMPONENT_IMAGES= \
     $(EXTENSIONDIR)/panel.png
 
 # ........ dependencies for packaging the extension ........
-EXTENSION_PACKDEPS=makefile.mk $(COMPONENT_IMAGES)
+EXTENSION_PACKDEPS=makefile.mk $(COMPONENT_XCU) $(COMPONENT_LIBRARIES) $(COMPONENT_IMAGES)
 
 # --- Targets ------------------------------------------------------
 .INCLUDE : extension_pre.mk
