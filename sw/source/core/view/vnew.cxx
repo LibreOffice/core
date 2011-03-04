@@ -144,7 +144,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
         {
             // switched to two step construction because creating the layout in SwRootFrm needs a valid pLayout set
             pLayout = SwRootFrmPtr(new SwRootFrm( pDoc->GetDfltFrmFmt(), this ));//swmod081016
-            pLayout->Init( pDoc->GetDfltFrmFmt(), this );
+            pLayout->Init( pDoc->GetDfltFrmFmt() );
         }
     }
     SizeChgNotify();    //swmod 071108
