@@ -222,7 +222,7 @@ namespace svt { namespace table
     void TableControl::SelectRow( RowPos const i_rowIndex, bool const i_select )
     {
         ENSURE_OR_RETURN_VOID( ( i_rowIndex >= 0 ) && ( i_rowIndex < m_pImpl->getModel()->getRowCount() ),
-            "TableControl::SelectRow: no control (anymore)!" );
+            "TableControl::SelectRow: invalid row index!" );
 
         if ( i_select )
         {
