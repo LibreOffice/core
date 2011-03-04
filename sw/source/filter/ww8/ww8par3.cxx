@@ -471,17 +471,17 @@ sal_uInt8* WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
     sal_uInt8 nLen)
 {
     sal_uInt8* pSprms = &rSprms;
-    USHORT i=0;
-    while (i < nLen)
+    USHORT nRemLen=nLen;
+    while (nRemLen > (maSprmParser.getVersion()?1:0))
     {
         sal_uInt16 nAktId = maSprmParser.GetSprmId(pSprms);
         if( nAktId == nId ) // Sprm found
             return pSprms + maSprmParser.DistanceToData(nId);
 
         // gib Zeiger auf Daten
-        USHORT x = maSprmParser.GetSprmSize(nAktId, pSprms);
-        i = i + x;
-        pSprms += x;
+        USHORT nSize = maSprmParser.GetSprmSize(nAktId, pSprms);
+        pSprms += nSize;
+        nRemLen -= nSize;
     }
     return 0;                           // Sprm not found
 }

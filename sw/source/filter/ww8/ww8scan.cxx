@@ -2028,7 +2028,7 @@ String WW8ReadPString(SvStream& rStrm, rtl_TextEncoding eEnc,
 
 String WW8Read_xstz(SvStream& rStrm, USHORT nChars, bool bAtEndSeekRel1)
 {
-    UINT16 b;
+    UINT16 b(0);
 
     if( nChars )
         b = nChars;
