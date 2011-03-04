@@ -527,7 +527,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
         catch(Exception& e)
         {
             (void) e;
-            DBG_ERROR(
+            OSL_FAIL(
                 rtl::OUStringToOString(
                     (rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
