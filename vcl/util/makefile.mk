@@ -187,7 +187,7 @@ SHL1STDLIBS+=\
 .IF "$(SYSTEM_GRAPHITE)" == "YES"
 SHL1STDLIBS+= $(GRAPHITE_LIBS)
 .ELSE
-SHL1STDLIBS+= -lgraphite2
+SHL1STDLIBS+= -lgraphite2_off
 .ENDIF
 .ENDIF
 .ENDIF
@@ -232,9 +232,10 @@ DEFLIB1NAME =vcl
 
 .IF "$(ENABLE_GRAPHITE)" == "TRUE"
 .IF "$(COM)" == "GCC"
-SHL1STDLIBS += -lgraphite2
+SHL1STDLIBS += -Wl,-Bstatic -lgraphite2_off -Wl,-Bdynamic
+#SHL1STDLIBS += -lgraphite2_off
 .ELSE
-SHL1STDLIBS += graphite2.lib
+SHL1STDLIBS += graphite2_off.lib
 .ENDIF
 .ENDIF
 

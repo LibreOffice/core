@@ -2849,7 +2849,7 @@ GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplW
     ::GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
     mpFont = gr_make_font_with_advance_fn(static_cast<float>(-aLogFont.lfHeight),
         hDC, gr_fontAdvance, rWFD.GraphiteFace());
-    maImpl.TakeFont(mpFont);
+    maImpl.SetFont(mpFont);
     const rtl::OString aLang = MsLangId::convertLanguageToIsoByteString( rWFE.maFontSelData.meLanguage );
     rtl::OString name = rtl::OUStringToOString(
         rWFE.maFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
