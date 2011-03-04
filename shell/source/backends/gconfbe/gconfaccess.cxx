@@ -232,19 +232,19 @@ static OUString xdg_user_dir_lookup (const char *type)
 
 //------------------------------------------------------------------------------
 
-uno::Any makeAnyOfGconfValue( GConfValue *aGconfValue )
+uno::Any makeAnyOfGconfValue( GConfValue *pGconfValue )
 {
-    switch( aGconfValue->type )
+    switch( pGconfValue->type )
     {
         case GCONF_VALUE_BOOL:
-            return uno::makeAny( (sal_Bool) gconf_value_get_bool( aGconfValue ) );
+            return uno::makeAny( (sal_Bool) gconf_value_get_bool( pGconfValue ) );
 
         case GCONF_VALUE_INT:
-            return uno::makeAny( (sal_Int32) gconf_value_get_int( aGconfValue ) );
+            return uno::makeAny( (sal_Int32) gconf_value_get_int( pGconfValue ) );
 
         case GCONF_VALUE_STRING:
             return uno::makeAny( OStringToOUString( rtl::OString(
-                gconf_value_get_string(aGconfValue) ), RTL_TEXTENCODING_UTF8 ) );
+                gconf_value_get_string(pGconfValue) ), RTL_TEXTENCODING_UTF8 ) );
 
         default:
             fprintf( stderr, "makeAnyOfGconfValue: Type not handled.\n" );
@@ -256,9 +256,9 @@ uno::Any makeAnyOfGconfValue( GConfValue *aGconfValue )
 
 //------------------------------------------------------------------------------
 
-static void splitFontName( GConfValue *aGconfValue, rtl::OUString &rName, sal_Int16 &rHeight)
+static void splitFontName( GConfValue *pGconfValue, rtl::OUString &rName, sal_Int16 &rHeight)
 {
-   rtl::OString aFont( gconf_value_get_string( aGconfValue ) );
+   rtl::OString aFont( gconf_value_get_string( pGconfValue ) );
    aFont.trim();
    sal_Int32 nIdx = aFont.lastIndexOf( ' ' );
    if (nIdx < 1) { // urk
@@ -274,15 +274,15 @@ static void splitFontName( GConfValue *aGconfValue, rtl::OUString &rName, sal_In
 
 //------------------------------------------------------------------------------
 
-uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValue )
+uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfValue )
 {
 
-    switch( aValue.nSettingId )
+    switch( rValue.nSettingId )
     {
         case SETTING_PROXY_MODE:
         {
             rtl::OUString aProxyMode;
-            uno::Any aOriginalValue = makeAnyOfGconfValue( aGconfValue );
+            uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
             aOriginalValue >>= aProxyMode;
 
             if( aProxyMode.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("manual")) ) )
@@ -295,9 +295,9 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
         case SETTING_NO_PROXY_FOR:
         {
             rtl::OStringBuffer aBuffer;
-            if( (GCONF_VALUE_LIST == aGconfValue->type) && (GCONF_VALUE_STRING == gconf_value_get_list_type(aGconfValue)) )
+            if( (GCONF_VALUE_LIST == pGconfValue->type) && (GCONF_VALUE_STRING == gconf_value_get_list_type(pGconfValue)) )
             {
-                GSList * list = gconf_value_get_list(aGconfValue);
+                GSList * list = gconf_value_get_list(pGconfValue);
                 for(; list; list = g_slist_next(list))
                 {
                     aBuffer.append(gconf_value_get_string((GConfValue *) list->data));
@@ -315,7 +315,7 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
         case SETTING_MAILER_PROGRAM:
         {
             rtl::OUString aMailer;
-            uno::Any aOriginalValue = makeAnyOfGconfValue( aGconfValue );
+            uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
             aOriginalValue >>= aMailer;
             sal_Int32 nIndex = 0;
             return uno::makeAny( aMailer.getToken( 0, ' ', nIndex ) );
@@ -327,7 +327,7 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
         case SETTING_SYMBOL_SET:
         {
             sal_Int32 nShortValue(0);
-            uno::Any aOriginalValue = makeAnyOfGconfValue( aGconfValue );
+            uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
             aOriginalValue >>= nShortValue;
             return uno::makeAny( (sal_Int16) nShortValue );
         }
@@ -341,7 +341,7 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
 #endif // ENABLE_LOCKDOWN
         {
             sal_Bool bBooleanValue = false;
-            uno::Any aOriginalValue = makeAnyOfGconfValue( aGconfValue );
+            uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
             aOriginalValue >>= bBooleanValue;
             return uno::makeAny( rtl::OUString::valueOf( (sal_Bool) bBooleanValue ) );
         }
@@ -386,8 +386,8 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
             rtl::OUString aName;
             sal_Int16 nHeight;
 
-            splitFontName (aGconfValue, aName, nHeight);
-            if (aValue.nSettingId == SETTING_SOURCEVIEWFONT_NAME)
+            splitFontName (pGconfValue, aName, nHeight);
+            if (rValue.nSettingId == SETTING_SOURCEVIEWFONT_NAME)
                 return uno::makeAny( aName );
             else
                 return uno::makeAny( nHeight );
@@ -404,18 +404,18 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
 
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL isDependencySatisfied( GConfClient* aClient, const ConfigurationValue aValue )
+sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const ConfigurationValue &rValue )
 {
-    switch( aValue.nDependsOn )
+    switch( rValue.nDependsOn )
     {
         case SETTING_PROXY_MODE:
         {
-            GConfValue* aGconfValue = gconf_client_get( aClient, GCONF_PROXY_MODE_KEY, NULL );
+            GConfValue* pGconfValue = gconf_client_get( pClient, GCONF_PROXY_MODE_KEY, NULL );
 
-            if ( aGconfValue != NULL )
+            if ( pGconfValue != NULL )
             {
-                bool bOk = g_strcasecmp( "manual", gconf_value_get_string( aGconfValue ) ) == 0;
-                gconf_value_free( aGconfValue );
+                bool bOk = g_strcasecmp( "manual", gconf_value_get_string( pGconfValue ) ) == 0;
+                gconf_value_free( pGconfValue );
                 if (bOk) return sal_True;
             }
         }
@@ -455,12 +455,12 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* aClient, const Configurati
 #ifdef ENABLE_LOCKDOWN
         case SETTING_AUTO_SAVE:
         {
-            GConfValue* aGconfValue = gconf_client_get( aClient, GCONF_AUTO_SAVE_KEY, NULL );
+            GConfValue* pGconfValue = gconf_client_get( pClient, GCONF_AUTO_SAVE_KEY, NULL );
 
-            if( ( aGconfValue != NULL ) )
+            if( ( pGconfValue != NULL ) )
             {
-                bool bOk = gconf_value_get_bool( aGconfValue );
-                gconf_value_free( aGconfValue );
+                bool bOk = gconf_value_get_bool( pGconfValue );
+                gconf_value_free( pGconfValue );
                 if (bOk) return sal_True;
             }
         }
@@ -829,21 +829,21 @@ std::size_t const nConfigurationValues = SAL_N_ELEMENTS(ConfigurationValues);
 
 css::beans::Optional< css::uno::Any > getValue(ConfigurationValue const & data)
 {
-    GConfClient* aClient = getGconfClient();
-    GConfValue* aGconfValue;
-    if( ( data.nDependsOn == SETTINGS_LAST ) || isDependencySatisfied( aClient, data ) )
+    GConfClient* pClient = getGconfClient();
+    GConfValue* pGconfValue;
+    if( ( data.nDependsOn == SETTINGS_LAST ) || isDependencySatisfied( pClient, data ) )
     {
-        aGconfValue = gconf_client_get( aClient, data.GconfItem, NULL );
+        pGconfValue = gconf_client_get( pClient, data.GconfItem, NULL );
 
-        if( aGconfValue != NULL )
+        if( pGconfValue != NULL )
         {
             css::uno::Any value;
             if( data.bNeedsTranslation )
-                value = translateToOOo( data, aGconfValue );
+                value = translateToOOo( data, pGconfValue );
             else
-                value = makeAnyOfGconfValue( aGconfValue );
+                value = makeAnyOfGconfValue( pGconfValue );
 
-            gconf_value_free( aGconfValue );
+            gconf_value_free( pGconfValue );
 
             return css::beans::Optional< css::uno::Any >(true, value);
         }
