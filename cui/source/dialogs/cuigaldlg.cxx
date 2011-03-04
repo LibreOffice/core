@@ -259,7 +259,7 @@ IMPL_LINK( SearchProgress, CleanUpHdl, void*, EMPTYARG )
 
 short SearchProgress::Execute()
 {
-    DBG_ERROR( "SearchProgress cannot be executed via Dialog::Execute!\n"
+    OSL_FAIL( "SearchProgress cannot be executed via Dialog::Execute!\n"
                "It creates a thread that will call back to VCL apartment => deadlock!\n"
                "Use Dialog::StartExecuteModal to execute the dialog!" );
     return RET_CANCEL;
@@ -434,7 +434,7 @@ IMPL_LINK( TakeProgress, CleanUpHdl, void*, EMPTYARG )
 
 short TakeProgress::Execute()
 {
-    DBG_ERROR( "TakeProgress cannot be executed via Dialog::Execute!\n"
+    OSL_FAIL( "TakeProgress cannot be executed via Dialog::Execute!\n"
                "It creates a thread that will call back to VCL apartment => deadlock!\n"
                "Use Dialog::StartExecuteModal to execute the dialog!" );
     return RET_CANCEL;
