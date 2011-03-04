@@ -53,8 +53,6 @@ ModalDialog DLG_ORGANIZE
     {
         Pos = MAP_APPFONT ( 205 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
-        /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
         Text [ en-US ] = "Close" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
@@ -164,8 +162,6 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_DELETE ;
                     HelpId = HID_ORGANIZE_DELETE ;
-                    /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-                    /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
                     Text [ en-US ] = "~Delete" ;
                     AccelKey = KeyCode
                     {

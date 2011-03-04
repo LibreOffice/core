@@ -35,8 +35,6 @@ String RID_SVX_3D_CREATE_LATHE
 };
 String RID_SVX_3D_UNDO_EXCHANGE_PASTE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Objekt(e) einfügen : Objekt(e) einf³gen */
-    /* ### ACHTUNG: Neuer Text in Resource? Objekt(e) einfügen : Objekt(e) einf³gen */
     Text [ en-US ] = "Insert object(s)" ;
 };
 String RID_SVX_3D_UNDO_SEGMENTS
@@ -65,14 +63,10 @@ String RID_SVX_3D_UNDO_EXTRUDE
 };
 String RID_SVX_3D_UNDO_LATHE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper erstellen : Rotationsk÷rper erstellen */
-    /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper erstellen : Rotationsk÷rper erstellen */
     Text [ en-US ] = "Create rotation object" ;
 };
 String RID_SVX_3D_UNDO_BREAK_LATHE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper aufbrechen : Rotationsk÷rper aufbrechen */
-    /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper aufbrechen : Rotationsk÷rper aufbrechen */
     Text [ en-US ] = "Split 3D object" ;
 };
 String RID_SVX_3D_UNDO_ATTRIBUTES

@@ -73,8 +73,6 @@ TabPage TP_MANAGE_STYLES
     {
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpft mit : ~Verkn³pft mit */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpft mit : ~Verkn³pft mit */
         Text [ en-US ] = "Linked with" ;
     };
     ListBox LB_BASE

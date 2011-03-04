@@ -53,8 +53,6 @@ String STR_UPDATEDOC
 
 String STR_CLOSEDOC_ANDRETURN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? S~chlieen & zur ck zu  : S~chlieen & zurck zu  */
-    /* ### ACHTUNG: Neuer Text in Resource? S~chlie en & zur ck zu  : S~chlieen & zurck zu  */
     Text [ en-US ] = "~Close & Return to " ;
 };
 
