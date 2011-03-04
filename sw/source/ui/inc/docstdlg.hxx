@@ -60,6 +60,7 @@ private:
     FixedText       aParaLbl;
     FixedText       aWordLbl;
     FixedText       aCharLbl;
+    FixedText       aCharExclSpacesLbl;
     FixedText       aLineLbl;
 
     FixedInfo       aTableNo;
@@ -69,6 +70,7 @@ private:
     FixedInfo       aParaNo;
     FixedInfo       aWordNo;
     FixedInfo       aCharNo;
+    FixedInfo       aCharExclSpacesNo;
     FixedInfo       aLineNo;
 
     PushButton      aUpdatePB;

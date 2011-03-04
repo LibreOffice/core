@@ -69,6 +69,7 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
     aParaLbl    (this, SW_RES( FT_PARA       )),
     aWordLbl    (this, SW_RES( FT_WORD       )),
     aCharLbl    (this, SW_RES( FT_CHAR       )),
+    aCharExclSpacesLbl  (this, SW_RES( FT_CHAR_EXCL_SPACES )),
     aLineLbl    (this, SW_RES( FT_LINE       )),
 
     aTableNo    (this, SW_RES( FT_TABLE_COUNT)),
@@ -78,6 +79,7 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
     aParaNo     (this, SW_RES( FT_PARA_COUNT )),
     aWordNo     (this, SW_RES( FT_WORD_COUNT )),
     aCharNo     (this, SW_RES( FT_CHAR_COUNT )),
+    aCharExclSpacesNo (this, SW_RES( FT_CHAR_COUNT_EXCL_SPACES )),
     aLineNo     (this, SW_RES( FT_LINE_COUNT )),
     aUpdatePB   (this, SW_RES( PB_PDATE      ))
 {
@@ -128,6 +130,7 @@ void SwDocStatPage::SetData(const SwDocStat &rStat)
     aParaNo.SetText(String::CreateFromInt32( rStat.nPara ));
     aWordNo.SetText(String::CreateFromInt32( rStat.nWord ));
     aCharNo.SetText(String::CreateFromInt32( rStat.nChar ));
+    aCharExclSpacesNo.SetText(String::CreateFromInt32( rStat.nCharExcludingSpaces ));
 }
 
 /*------------------------------------------------------------------------

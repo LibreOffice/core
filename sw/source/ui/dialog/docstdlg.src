@@ -83,64 +83,77 @@ TabPage TP_DOC_STAT
         Text [ en-US ] = "Number of Characters:" ;
         Left = TRUE ;
     };
-    FixedText FT_LINE
+    FixedText FT_CHAR_EXCL_SPACES
     {
         Pos = MAP_APPFONT ( 6 , 96 ) ;
+        Size = MAP_APPFONT ( 138 , 8 ) ;
+        Text [ en-US ] = "Number of non blank Characters:" ;
+        Left = TRUE ;
+    };
+    FixedText FT_LINE
+    {
+        Pos = MAP_APPFONT ( 6 , 110 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
         Text [ en-US ] = "Number of Lines:" ;
     };
     FixedText FT_PAGE_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 6 ) ;
+        Pos = MAP_APPFONT ( 138 , 6 ) ;
         Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_TABLE_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 18 ) ;
+        Pos = MAP_APPFONT ( 138 , 18 ) ;
         Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_GRF_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 30 ) ;
+        Pos = MAP_APPFONT ( 138 , 30 ) ;
         Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_OLE_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 42 ) ;
+        Pos = MAP_APPFONT ( 138 , 42 ) ;
         Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_PARA_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 54 ) ;
+        Pos = MAP_APPFONT ( 138 , 54 ) ;
         Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_WORD_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 68 ) ;
+        Pos = MAP_APPFONT ( 138 , 68 ) ;
         Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_CHAR_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 82 ) ;
+        Pos = MAP_APPFONT ( 138 , 82 ) ;
+        Size = MAP_APPFONT ( 27 , 8 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_CHAR_COUNT_EXCL_SPACES
+    {
+        Pos = MAP_APPFONT ( 138 , 96 ) ;
         Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_LINE_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 96 ) ;
+        Pos = MAP_APPFONT ( 138 , 110 ) ;
         Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
         Text = "..." ;
     };
     PushButton PB_PDATE
     {
-        Pos = MAP_APPFONT ( 204 , 94 ) ;
+        Pos = MAP_APPFONT ( 204 , 108 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Update" ;
     };
