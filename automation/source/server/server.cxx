@@ -700,7 +700,7 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
 
     if( nServiceId != SI_IPCCommandBlock && nServiceId != SI_DirectCommandBlock )
     {
-        DBG_ERROR1( "Ungültiger Request :%i", (int)nServiceId );
+        OSL_TRACE( "Ungültiger Request :%i", (int)nServiceId );
         return FALSE;
     }
 
@@ -738,7 +738,7 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
                 break;
             }
             default:
-                DBG_ERROR1( "Unbekannter Request Nr:%i", nId );
+                OSL_TRACE( "Unbekannter Request Nr:%i", nId );
                 break;
         }
         if( !pIn->IsEof() )

@@ -133,7 +133,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
             }
             break;
         default:
-            DBG_ERROR1( "Ungültiger Typ im Stream:%hu", nType );
+            OSL_TRACE( "Ungültiger Typ im Stream:%hu", nType );
 #if OSL_DEBUG_LEVEL > 1
             StatementList::m_pDbgWin->AddText( "Ungültiger Typ !!!! " );
 #endif
@@ -203,7 +203,7 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
             }
             break;
         default:
-            DBG_ERROR1( "Ungültiger Typ im Stream:%hu", nType );
+            OSL_TRACE( "Ungültiger Typ im Stream:%hu", nType );
 #if OSL_DEBUG_LEVEL > 1
             StatementList::m_pDbgWin->AddText( "Ungültiger Typ !!!! " );
 #endif

@@ -207,7 +207,7 @@ USHORT MyDispatcher::ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs, USHORT 
         case IDM_SYS_DLG:         pMainWin->SysDlg();               break;
         default:
             {
-                DBG_ERROR1("Dispatcher kennt Funktion nicht %s",ByteString::CreateFromInt64(nSID).GetBuffer());
+                OSL_TRACE("Dispatcher kennt Funktion nicht %s",ByteString::CreateFromInt64(nSID).GetBuffer());
                 return EXECUTE_NO;
             }
 

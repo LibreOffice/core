@@ -2317,7 +2317,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 long aMS = long( aDiff.GetMSFromTime() );
                                 if ( Abs( aMS - nWait ) > 100 )
                                 {
-                                    DBG_ERROR1("Wait was off limit by %i", aDiff.GetMSFromTime() - nWait );
+                                    OSL_TRACE("Wait was off limit by %i", aDiff.GetMSFromTime() - nWait );
                                 }
 #endif
                             }
@@ -3428,7 +3428,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                                     break;
                                 }
                                 default:
-                                    DBG_ERROR1("Unbekannter Sub Return Code bei Profile: %hu", nUId );
+                                    OSL_TRACE("Unbekannter Sub Return Code bei Profile: %hu", nUId );
                                     break;
                             }
                         }
@@ -3708,7 +3708,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                     }
                     break;
                 default:
-                    DBG_ERROR1( "Unbekannter Return Code: %iu", nRet );
+                    OSL_TRACE( "Unbekannter Return Code: %iu", nRet );
                     break;
             }
 
@@ -3743,7 +3743,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
             break;
         }
         default:
-            DBG_ERROR1( "Unbekannter Request im Return Stream Nr: %iu", nId );
+            OSL_TRACE( "Unbekannter Request im Return Stream Nr: %iu", nId );
         break;
     }
         if( !pIn->IsEof() )

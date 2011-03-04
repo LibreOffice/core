@@ -987,7 +987,7 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                                     aToolBoxItemType.AssignAscii("TOOLBOXITEM_BREAK");
                                     break;
                                 default:
-                                    DBG_ERROR1( "Unknown TOOLBOXITEM %i", pTB->GetItemType( i ) );
+                                    OSL_TRACE( "Unknown TOOLBOXITEM %i", pTB->GetItemType( i ) );
                                 }
                                 if ( pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
                                     pRet->GenReturn ( RET_WinInfo, SmartId( pTB->GetItemCommand(pTB->GetItemId( i )) ), (comm_ULONG)WINDOW_BASE,
@@ -1090,7 +1090,7 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                             aMenuItemType.AssignAscii("MENUITEM_DONTKNOW");
                             break;
                         default:
-                            DBG_ERROR1( "Unknown MENUITEM %i", pMenu->GetItemType( i ) );
+                            OSL_TRACE( "Unknown MENUITEM %i", pMenu->GetItemType( i ) );
                         }
                         if ( pMenu->GetItemCommand(nID).Len() || ( nConf & DH_MODE_ALLWIN ) )
                             pRet->GenReturn ( RET_WinInfo, SmartId( pMenu->GetItemCommand(nID) ), (comm_ULONG)0,
