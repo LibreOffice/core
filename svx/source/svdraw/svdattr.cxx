@@ -1553,7 +1553,7 @@ SfxPoolItem* SdrCustomShapeAdjustmentItem::Clone( SfxItemPool * /*pPool*/) const
 const SdrCustomShapeAdjustmentValue& SdrCustomShapeAdjustmentItem::GetValue( sal_uInt32 nIndex ) const
 {
 #ifdef DBG_UTIL
-    if ( aAdjustmentValueList.Count() <= nIndex )
+    if ( aAdjustmentValueList.size() <= nIndex )
         OSL_FAIL( "SdrCustomShapeAdjustemntItem::GetValue - nIndex out of range (SJ)" );
 #endif
     return aAdjustmentValueList[nIndex];
