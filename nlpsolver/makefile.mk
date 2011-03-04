@@ -46,7 +46,7 @@ PATCH_FILES=nlpsolver-0.9.patch
 
 ANT_FLAGS+=-Dplatforms.JDK_1.5.home=$(JAVA_HOME) -Doffice.program.dir=$(SOLARBINDIR)
 
-CONFIGURE_ACTION=cp -rpv ../../../../locale src/
+CONFIGURE_ACTION=cp -rv --preserve=timestamps ../../../../locale src/
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
