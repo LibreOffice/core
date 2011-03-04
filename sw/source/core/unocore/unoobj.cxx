@@ -2826,7 +2826,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
 
     if (bNewSortdescriptor && bOldSortdescriptor)
     {
-        DBG_ERROR("someone tried to set the old deprecated and "
+        OSL_FAIL("someone tried to set the old deprecated and "
             "the new sortdescriptor");
         bRet = sal_False;
     }
