@@ -658,25 +658,65 @@ ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
 
 #if NEW_RANGE_NAME
 
+bool operator<(const ScRangeData& left, const ScRangeData& right)
+{
+    return left.GetName() < right.GetName();
+}
+
 ScRangeName::ScRangeName(ScDocument* pDoc) :
     mpDoc(pDoc) {}
 
 ScRangeName::ScRangeName(const ScRangeName& r) :
     maData(r.maData), mpDoc(r.mpDoc) {}
 
-ScRangeData* ScRangeName::operator[](sal_uInt16 nIndex) const
+ScRangeData* ScRangeName::operator[](sal_uInt16 nIndex)
 {
     return NULL;
 }
 
-ScRangeData* ScRangeName::GetRangeAtBlock(const ScRange& rRange) const
+const ScRangeData* ScRangeName::operator[](sal_uInt16 nIndex) const
 {
+    return NULL;
+}
+
+const ScRangeData* ScRangeName::GetRangeAtBlock(const ScRange& rRange) const
+{
+    DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        if (itr->IsRangeAtBlock(rRange))
+            return &(*itr);
+    }
     return NULL;
 }
 
 bool ScRangeName::SearchName(const rtl::OUString& rName, sal_uInt16& rPos) const
 {
     return false;
+}
+
+const ScRangeData* ScRangeName::findByName(const OUString& rName) const
+{
+    DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        String aName;
+        itr->GetName(aName);
+        if (rName.equals(aName))
+            return &(*itr);
+    }
+    return NULL;
+}
+
+const ScRangeData* ScRangeName::findByUpperName(const OUString& rName) const
+{
+    DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        if (rName.equals(itr->GetUpperName()))
+            return &(*itr);
+    }
+    return NULL;
 }
 
 bool ScRangeName::SearchNameUpper(const rtl::OUString& rName, sal_uInt16& rPos) const
@@ -687,18 +727,30 @@ bool ScRangeName::SearchNameUpper(const rtl::OUString& rName, sal_uInt16& rPos) 
 void ScRangeName::UpdateReference(
     UpdateRefMode eUpdateRefMode, const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz)
 {
+    DataType::iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+        itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
 }
 
 void ScRangeName::UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable)
 {
+    DataType::iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+        itr->UpdateTabRef(nTable, nFlag, nNewTable);
 }
 
 void ScRangeName::UpdateTranspose(const ScRange& rSource, const ScAddress& rDest)
 {
+    DataType::iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+        itr->UpdateTranspose(rSource, rDest);
 }
 
 void ScRangeName::UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY)
 {
+    DataType::iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+        itr->UpdateGrow(rArea, nGrowX, nGrowY);
 }
 
 ScRangeData* ScRangeName::FindIndex(size_t i)
@@ -731,8 +783,7 @@ bool ScRangeName::Insert(ScRangeData* p)
     if (!p)
         return false;
 
-    OUString aName = p->GetName();
-    pair<DataType::iterator, bool> r = maData.insert(aName, p);
+    pair<DataType::iterator, bool> r = maData.insert(p);
     return r.second;
 }
 

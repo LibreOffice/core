@@ -103,9 +103,9 @@ void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
 }
 
 
-ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, String* pName ) const
+const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, String* pName ) const
 {
-    ScRangeData* pData = NULL;
+    const ScRangeData* pData = NULL;
     if ( pRangeName )
     {
         pData = pRangeName->GetRangeAtBlock( rBlock );

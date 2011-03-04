@@ -481,7 +481,7 @@ public:
                                         BOOL bStartOnly = FALSE) const;
     ScDBData*       GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
-    SC_DLLPUBLIC ScRangeData*   GetRangeAtBlock( const ScRange& rBlock, String* pName=NULL ) const;
+    SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock( const ScRange& rBlock, String* pName=NULL ) const;
 
     SC_DLLPUBLIC ScDPCollection*        GetDPCollection();
     ScDPObject*         GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;

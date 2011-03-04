@@ -65,7 +65,7 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, BOOL
 
     for( USHORT i=0 ; i<nCnt ; i++ )
     {
-        ScRangeData* pData = (*pList)[ i ];
+        const ScRangeData* pData = (*pList)[ i ];
 
         if( pData )
         {

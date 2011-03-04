@@ -2900,7 +2900,7 @@ BOOL ScCompiler::IsNamedRange( const String& rUpperName )
     ScRangeName* pRangeName = pDoc->GetRangeName();
     if (pRangeName->SearchNameUpper( rUpperName, n ) )
     {
-        ScRangeData* pData = (*pRangeName)[n];
+        const ScRangeData* pData = (*pRangeName)[n];
         ScRawToken aToken;
         aToken.SetName( pData->GetIndex() );
         pRawToken = aToken.Clone();

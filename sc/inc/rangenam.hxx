@@ -36,7 +36,7 @@
 #include "scdllapi.h"
 
 #include <map>
-#include <boost/ptr_container/ptr_map.hpp>
+#include <boost/ptr_container/ptr_set.hpp>
 
 //------------------------------------------------------------------------
 
@@ -177,12 +177,14 @@ extern "C" int SAL_CALL ScRangeData_QsortNameCompare( const void*, const void* )
 
 #define NEW_RANGE_NAME 1
 
+bool operator< (const ScRangeData& left, const ScRangeData& right);
+
 #if NEW_RANGE_NAME
 
 class ScRangeName
 {
 private:
-    typedef ::boost::ptr_map<rtl::OUString, ScRangeData> DataType;
+    typedef ::boost::ptr_set<ScRangeData> DataType;
     DataType    maData;
 
     ScDocument* mpDoc;
@@ -191,9 +193,12 @@ public:
     ScRangeName(ScDocument* pDoc = NULL);
     ScRangeName(const ScRangeName& r);
 
-    SC_DLLPUBLIC ScRangeData* operator[](sal_uInt16 nIndex) const;
-    SC_DLLPUBLIC ScRangeData* GetRangeAtBlock(const ScRange& rRange) const;
+    SC_DLLPUBLIC ScRangeData* operator[](sal_uInt16 nIndex);
+    SC_DLLPUBLIC const ScRangeData* operator[](sal_uInt16 nIndex) const;
+    SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock(const ScRange& rRange) const;
     SC_DLLPUBLIC bool SearchName(const rtl::OUString& rName, sal_uInt16& rPos) const;
+    SC_DLLPUBLIC const ScRangeData* findByName(const rtl::OUString& rName) const;
+    const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
     bool SearchNameUpper(const rtl::OUString& rUpperName, sal_uInt16& rPos) const;
     void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
                          SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
