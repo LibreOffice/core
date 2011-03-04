@@ -1267,241 +1267,241 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                           ScSetStringParam* pParam )
 {
     bool bNumFmtSet = false;
-    if (VALIDROW(nRow))
+    if (!ValidRow(nRow))
+        return false;
+
+    ScBaseCell* pNewCell = NULL;
+    BOOL bIsLoading = FALSE;
+    if (rString.Len() > 0)
     {
-        ScBaseCell* pNewCell = NULL;
-        BOOL bIsLoading = FALSE;
-        if (rString.Len() > 0)
+        ScSetStringParam aParam;
+        if (pParam)
+            aParam = *pParam;
+
+        sal_uInt32 nIndex, nOldIndex = 0;
+        sal_Unicode cFirstChar;
+        if (!aParam.mpNumFormatter)
+            aParam.mpNumFormatter = pDocument->GetFormatTable();
+        SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
+        if ( pDocSh )
+            bIsLoading = pDocSh->IsLoading();
+        // IsLoading bei ConvertFrom Import
+        if ( !bIsLoading )
         {
-            ScSetStringParam aParam;
-            if (pParam)
-                aParam = *pParam;
-
-            sal_uInt32 nIndex, nOldIndex = 0;
-            sal_Unicode cFirstChar;
-            if (!aParam.mpNumFormatter)
-                aParam.mpNumFormatter = pDocument->GetFormatTable();
-            SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
-            if ( pDocSh )
-                bIsLoading = pDocSh->IsLoading();
-            // IsLoading bei ConvertFrom Import
-            if ( !bIsLoading )
-            {
-                nIndex = nOldIndex = GetNumberFormat( nRow );
-                if ( rString.Len() > 1
-                        && aParam.mpNumFormatter->GetType(nIndex) != NUMBERFORMAT_TEXT )
-                    cFirstChar = rString.GetChar(0);
-                else
-                    cFirstChar = 0;                             // Text
-            }
-            else
-            {   // waehrend ConvertFrom Import gibt es keine gesetzten Formate
+            nIndex = nOldIndex = GetNumberFormat( nRow );
+            if ( rString.Len() > 1
+                    && aParam.mpNumFormatter->GetType(nIndex) != NUMBERFORMAT_TEXT )
                 cFirstChar = rString.GetChar(0);
-            }
-
-            if ( cFirstChar == '=' )
-            {
-                if ( rString.Len() == 1 )                       // = Text
-                    pNewCell = new ScStringCell( rString );
-                else                                            // =Formel
-                    pNewCell = new ScFormulaCell( pDocument,
-                        ScAddress( nCol, nRow, nTabP ), rString,
-                        formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_DEFAULT,
-                            eConv), MM_NONE );
-            }
-            else if ( cFirstChar == '\'')                       // 'Text
-                pNewCell = new ScStringCell( rString.Copy(1) );
             else
-            {
-                double nVal;
-                BOOL bIsText = FALSE;
-                if ( bIsLoading )
-                {
-                    if ( pItems && nCount )
-                    {
-                        String aStr;
-                        SCSIZE i = nCount;
-                        SCSIZE nStop = (i >= 3 ? i - 3 : 0);
-                        // die letzten Zellen vergleichen, ob gleicher String
-                        // und IsNumberFormat eingespart werden kann
-                        do
-                        {
-                            i--;
-                            ScBaseCell* pCell = pItems[i].pCell;
-                            switch ( pCell->GetCellType() )
-                            {
-                                case CELLTYPE_STRING :
-                                    ((ScStringCell*)pCell)->GetString( aStr );
-                                    if ( rString == aStr )
-                                        bIsText = TRUE;
-                                break;
-                                case CELLTYPE_NOTE :    // durch =Formel referenziert
-                                break;
-                                default:
-                                    if ( i == nCount - 1 )
-                                        i = 0;
-                                        // wahrscheinlich ganze Spalte kein String
-                            }
-                        } while ( i && i > nStop && !bIsText );
-                    }
-                    // nIndex fuer IsNumberFormat vorbelegen
-                    if ( !bIsText )
-                        nIndex = nOldIndex = aParam.mpNumFormatter->GetStandardIndex();
-                }
-
-                do
-                {
-                    if (bIsText)
-                        break;
-
-                    if (aParam.mbDetectNumberFormat)
-                    {
-                        if (!aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
-                            break;
-
-                        if ( aParam.mpNumFormatter )
-                        {
-                            // convert back to the original language if a built-in format was detected
-                            const SvNumberformat* pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex );
-                            if ( pOldFormat )
-                                nIndex = aParam.mpNumFormatter->GetFormatForLanguageIfBuiltIn( nIndex, pOldFormat->GetLanguage() );
-                        }
-
-                        pNewCell = new ScValueCell( nVal );
-                        if ( nIndex != nOldIndex)
-                        {
-                            // #i22345# New behavior: Apply the detected number format only if
-                            // the old one was the default number, date, time or boolean format.
-                            // Exception: If the new format is boolean, always apply it.
-
-                            BOOL bOverwrite = FALSE;
-                            const SvNumberformat* pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex );
-                            if ( pOldFormat )
-                            {
-                                short nOldType = pOldFormat->GetType() & ~NUMBERFORMAT_DEFINED;
-                                if ( nOldType == NUMBERFORMAT_NUMBER || nOldType == NUMBERFORMAT_DATE ||
-                                     nOldType == NUMBERFORMAT_TIME || nOldType == NUMBERFORMAT_LOGICAL )
-                                {
-                                    if ( nOldIndex == aParam.mpNumFormatter->GetStandardFormat(
-                                                        nOldType, pOldFormat->GetLanguage() ) )
-                                    {
-                                        bOverwrite = TRUE;      // default of these types can be overwritten
-                                    }
-                                }
-                            }
-                            if ( !bOverwrite && aParam.mpNumFormatter->GetType( nIndex ) == NUMBERFORMAT_LOGICAL )
-                            {
-                                bOverwrite = TRUE;              // overwrite anything if boolean was detected
-                            }
-
-                            if ( bOverwrite )
-                            {
-                                ApplyAttr( nRow, SfxUInt32Item( ATTR_VALUE_FORMAT,
-                                    (UINT32) nIndex) );
-                                bNumFmtSet = true;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Only check if the string is a regular number.
-                        const LocaleDataWrapper* pLocale = aParam.mpNumFormatter->GetLocaleData();
-                        if (!pLocale)
-                            break;
-
-                        LocaleDataItem aLocaleItem = pLocale->getLocaleItem();
-                        const OUString& rDecSep = aLocaleItem.decimalSeparator;
-                        const OUString& rGroupSep = aLocaleItem.thousandSeparator;
-                        if (rDecSep.getLength() != 1 || rGroupSep.getLength() != 1)
-                            break;
-
-                        sal_Unicode dsep = rDecSep.getStr()[0];
-                        sal_Unicode gsep = rGroupSep.getStr()[0];
-
-                        if (!ScStringUtil::parseSimpleNumber(rString, dsep, gsep, nVal))
-                            break;
-
-                        pNewCell = new ScValueCell(nVal);
-                    }
-                }
-                while (false);
-
-                if (!pNewCell)
-                {
-                    if (aParam.mbSetTextCellFormat && aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
-                    {
-                        // Set the cell format type to Text.
-                        sal_uInt32 nFormat = aParam.mpNumFormatter->GetStandardFormat(NUMBERFORMAT_TEXT);
-                        ScPatternAttr aNewAttrs(pDocument->GetPool());
-                        SfxItemSet& rSet = aNewAttrs.GetItemSet();
-                        rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat) );
-                        ApplyPattern(nRow, aNewAttrs);
-                    }
-
-                    pNewCell = new ScStringCell(rString);
-                }
-            }
-        }
-
-        if ( bIsLoading && (!nCount || nRow > pItems[nCount-1].nRow) )
-        {   // Search einsparen und ohne Umweg ueber Insert, Listener aufbauen
-            // und Broadcast kommt eh erst nach dem Laden
-            if ( pNewCell )
-                Append( nRow, pNewCell );
+                cFirstChar = 0;                             // Text
         }
         else
+        {   // waehrend ConvertFrom Import gibt es keine gesetzten Formate
+            cFirstChar = rString.GetChar(0);
+        }
+
+        if ( cFirstChar == '=' )
         {
-            SCSIZE i;
-            if (Search(nRow, i))
+            if ( rString.Len() == 1 )                       // = Text
+                pNewCell = new ScStringCell( rString );
+            else                                            // =Formel
+                pNewCell = new ScFormulaCell( pDocument,
+                    ScAddress( nCol, nRow, nTabP ), rString,
+                    formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_DEFAULT,
+                        eConv), MM_NONE );
+        }
+        else if ( cFirstChar == '\'')                       // 'Text
+            pNewCell = new ScStringCell( rString.Copy(1) );
+        else
+        {
+            double nVal;
+            BOOL bIsText = FALSE;
+            if ( bIsLoading )
             {
-                ScBaseCell* pOldCell = pItems[i].pCell;
-                ScPostIt* pNote = pOldCell->ReleaseNote();
-                SvtBroadcaster* pBC = pOldCell->ReleaseBroadcaster();
-                if (pNewCell || pNote || pBC)
+                if ( pItems && nCount )
                 {
-                    if (pNewCell)
-                        pNewCell->TakeNote( pNote );
-                    else
-                        pNewCell = new ScNoteCell( pNote );
-                    if (pBC)
+                    String aStr;
+                    SCSIZE i = nCount;
+                    SCSIZE nStop = (i >= 3 ? i - 3 : 0);
+                    // die letzten Zellen vergleichen, ob gleicher String
+                    // und IsNumberFormat eingespart werden kann
+                    do
                     {
-                        pNewCell->TakeBroadcaster(pBC);
-                        pLastFormulaTreeTop = 0;    // Err527 Workaround
+                        i--;
+                        ScBaseCell* pCell = pItems[i].pCell;
+                        switch ( pCell->GetCellType() )
+                        {
+                            case CELLTYPE_STRING :
+                                ((ScStringCell*)pCell)->GetString( aStr );
+                                if ( rString == aStr )
+                                    bIsText = TRUE;
+                            break;
+                            case CELLTYPE_NOTE :    // durch =Formel referenziert
+                            break;
+                            default:
+                                if ( i == nCount - 1 )
+                                    i = 0;
+                                    // wahrscheinlich ganze Spalte kein String
+                        }
+                    } while ( i && i > nStop && !bIsText );
+                }
+                // nIndex fuer IsNumberFormat vorbelegen
+                if ( !bIsText )
+                    nIndex = nOldIndex = aParam.mpNumFormatter->GetStandardIndex();
+            }
+
+            do
+            {
+                if (bIsText)
+                    break;
+
+                if (aParam.mbDetectNumberFormat)
+                {
+                    if (!aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
+                        break;
+
+                    if ( aParam.mpNumFormatter )
+                    {
+                        // convert back to the original language if a built-in format was detected
+                        const SvNumberformat* pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex );
+                        if ( pOldFormat )
+                            nIndex = aParam.mpNumFormatter->GetFormatForLanguageIfBuiltIn( nIndex, pOldFormat->GetLanguage() );
                     }
 
-                    if ( pOldCell->GetCellType() == CELLTYPE_FORMULA )
+                    pNewCell = new ScValueCell( nVal );
+                    if ( nIndex != nOldIndex)
                     {
-                        pOldCell->EndListeningTo( pDocument );
-                        // falls in EndListening NoteCell in gleicher Col zerstoert
-                        if ( i >= nCount || pItems[i].nRow != nRow )
-                            Search(nRow, i);
+                        // #i22345# New behavior: Apply the detected number format only if
+                        // the old one was the default number, date, time or boolean format.
+                        // Exception: If the new format is boolean, always apply it.
+
+                        BOOL bOverwrite = FALSE;
+                        const SvNumberformat* pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex );
+                        if ( pOldFormat )
+                        {
+                            short nOldType = pOldFormat->GetType() & ~NUMBERFORMAT_DEFINED;
+                            if ( nOldType == NUMBERFORMAT_NUMBER || nOldType == NUMBERFORMAT_DATE ||
+                                 nOldType == NUMBERFORMAT_TIME || nOldType == NUMBERFORMAT_LOGICAL )
+                            {
+                                if ( nOldIndex == aParam.mpNumFormatter->GetStandardFormat(
+                                                    nOldType, pOldFormat->GetLanguage() ) )
+                                {
+                                    bOverwrite = TRUE;      // default of these types can be overwritten
+                                }
+                            }
+                        }
+                        if ( !bOverwrite && aParam.mpNumFormatter->GetType( nIndex ) == NUMBERFORMAT_LOGICAL )
+                        {
+                            bOverwrite = TRUE;              // overwrite anything if boolean was detected
+                        }
+
+                        if ( bOverwrite )
+                        {
+                            ApplyAttr( nRow, SfxUInt32Item( ATTR_VALUE_FORMAT,
+                                (UINT32) nIndex) );
+                            bNumFmtSet = true;
+                        }
                     }
-                    pOldCell->Delete();
-                    pItems[i].pCell = pNewCell;         // ersetzen
-                    if ( pNewCell->GetCellType() == CELLTYPE_FORMULA )
-                    {
-                        pNewCell->StartListeningTo( pDocument );
-                        ((ScFormulaCell*)pNewCell)->SetDirty();
-                    }
-                    else
-                        pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
-                            ScAddress( nCol, nRow, nTabP ), pNewCell ) );
                 }
                 else
                 {
-                    DeleteAtIndex(i);                   // loeschen und Broadcast
+                    // Only check if the string is a regular number.
+                    const LocaleDataWrapper* pLocale = aParam.mpNumFormatter->GetLocaleData();
+                    if (!pLocale)
+                        break;
+
+                    LocaleDataItem aLocaleItem = pLocale->getLocaleItem();
+                    const OUString& rDecSep = aLocaleItem.decimalSeparator;
+                    const OUString& rGroupSep = aLocaleItem.thousandSeparator;
+                    if (rDecSep.getLength() != 1 || rGroupSep.getLength() != 1)
+                        break;
+
+                    sal_Unicode dsep = rDecSep.getStr()[0];
+                    sal_Unicode gsep = rGroupSep.getStr()[0];
+
+                    if (!ScStringUtil::parseSimpleNumber(rString, dsep, gsep, nVal))
+                        break;
+
+                    pNewCell = new ScValueCell(nVal);
                 }
             }
-            else if (pNewCell)
+            while (false);
+
+            if (!pNewCell)
             {
-                Insert(nRow, pNewCell);                 // neu eintragen und Broadcast
+                if (aParam.mbSetTextCellFormat && aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
+                {
+                    // Set the cell format type to Text.
+                    sal_uInt32 nFormat = aParam.mpNumFormatter->GetStandardFormat(NUMBERFORMAT_TEXT);
+                    ScPatternAttr aNewAttrs(pDocument->GetPool());
+                    SfxItemSet& rSet = aNewAttrs.GetItemSet();
+                    rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat) );
+                    ApplyPattern(nRow, aNewAttrs);
+                }
+
+                pNewCell = new ScStringCell(rString);
             }
         }
-
-        //  hier keine Formate mehr fuer Formeln setzen!
-        //  (werden bei der Ausgabe abgefragt)
-
     }
+
+    if ( bIsLoading && (!nCount || nRow > pItems[nCount-1].nRow) )
+    {   // Search einsparen und ohne Umweg ueber Insert, Listener aufbauen
+        // und Broadcast kommt eh erst nach dem Laden
+        if ( pNewCell )
+            Append( nRow, pNewCell );
+    }
+    else
+    {
+        SCSIZE i;
+        if (Search(nRow, i))
+        {
+            ScBaseCell* pOldCell = pItems[i].pCell;
+            ScPostIt* pNote = pOldCell->ReleaseNote();
+            SvtBroadcaster* pBC = pOldCell->ReleaseBroadcaster();
+            if (pNewCell || pNote || pBC)
+            {
+                if (pNewCell)
+                    pNewCell->TakeNote( pNote );
+                else
+                    pNewCell = new ScNoteCell( pNote );
+                if (pBC)
+                {
+                    pNewCell->TakeBroadcaster(pBC);
+                    pLastFormulaTreeTop = 0;    // Err527 Workaround
+                }
+
+                if ( pOldCell->GetCellType() == CELLTYPE_FORMULA )
+                {
+                    pOldCell->EndListeningTo( pDocument );
+                    // falls in EndListening NoteCell in gleicher Col zerstoert
+                    if ( i >= nCount || pItems[i].nRow != nRow )
+                        Search(nRow, i);
+                }
+                pOldCell->Delete();
+                pItems[i].pCell = pNewCell;         // ersetzen
+                if ( pNewCell->GetCellType() == CELLTYPE_FORMULA )
+                {
+                    pNewCell->StartListeningTo( pDocument );
+                    ((ScFormulaCell*)pNewCell)->SetDirty();
+                }
+                else
+                    pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
+                        ScAddress( nCol, nRow, nTabP ), pNewCell ) );
+            }
+            else
+            {
+                DeleteAtIndex(i);                   // loeschen und Broadcast
+            }
+        }
+        else if (pNewCell)
+        {
+            Insert(nRow, pNewCell);                 // neu eintragen und Broadcast
+        }
+    }
+
+    //  hier keine Formate mehr fuer Formeln setzen!
+    //  (werden bei der Ausgabe abgefragt)
+
     return bNumFmtSet;
 }
 
