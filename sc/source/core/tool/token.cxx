@@ -926,6 +926,14 @@ ScExternalDoubleRefToken::ScExternalDoubleRefToken( const ScExternalDoubleRefTok
 {
 }
 
+ScExternalDoubleRefToken::ScExternalDoubleRefToken( const ScExternalSingleRefToken& r ) :
+    ScToken( svExternalDoubleRef, ocExternalRef),
+    mnFileId( r.GetIndex()),
+    maTabName( r.GetString())
+{
+    maDoubleRef.Ref1 = maDoubleRef.Ref2 = r.GetSingleRef();
+}
+
 ScExternalDoubleRefToken::~ScExternalDoubleRefToken()
 {
 }

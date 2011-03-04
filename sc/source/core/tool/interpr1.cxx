@@ -6220,7 +6220,7 @@ void ScInterpreter::ScDBVarP()
 }
 
 
-ScTokenArray* lcl_CreateExternalRefTokenArray( const ScAddress& rPos, ScDocument* pDoc,
+FormulaSubroutineToken* lcl_CreateExternalRefSubroutine( const ScAddress& rPos, ScDocument* pDoc,
         const ScAddress::ExternalInfo& rExtInfo, const ScRefAddress& rRefAd1,
         const ScRefAddress* pRefAd2 )
 {
@@ -6262,7 +6262,7 @@ ScTokenArray* lcl_CreateExternalRefTokenArray( const ScAddress& rPos, ScDocument
             rExtInfo.maTabName, nSheets);
     ScCompiler aComp( pDoc, rPos, *pTokenArray);
     aComp.CompileTokenArray();
-    return pTokenArray;
+    return new FormulaSubroutineToken( pTokenArray);
 }
 
 
@@ -6291,15 +6291,10 @@ void ScInterpreter::ScIndirect()
         {
             if (aExtInfo.mbExternal)
             {
-                /* TODO: future versions should implement a proper subroutine
-                 * token. This procedure here is a minimally invasive fix for
-                 * #i101645# in OOo3.1.1 */
-                // Push a subroutine on the instruction code stack that
-                // resolves the external reference as the next instruction.
-                aCode.Push( lcl_CreateExternalRefTokenArray( aPos, pDok,
+                // Push a subroutine that resolves the external reference as
+                // the next instruction.
+                PushTempToken( lcl_CreateExternalRefSubroutine( aPos, pDok,
                             aExtInfo, aRefAd, &aRefAd2));
-                // Signal subroutine call to interpreter.
-                PushTempToken( new FormulaUnknownToken( ocCall));
             }
             else
                 PushDoubleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab(),
@@ -6311,15 +6306,10 @@ void ScInterpreter::ScIndirect()
         {
             if (aExtInfo.mbExternal)
             {
-                /* TODO: future versions should implement a proper subroutine
-                 * token. This procedure here is a minimally invasive fix for
-                 * #i101645# in OOo3.1.1 */
-                // Push a subroutine on the instruction code stack that
-                // resolves the external reference as the next instruction.
-                aCode.Push( lcl_CreateExternalRefTokenArray( aPos, pDok,
+                // Push a subroutine that resolves the external reference as
+                // the next instruction.
+                PushTempToken( lcl_CreateExternalRefSubroutine( aPos, pDok,
                             aExtInfo, aRefAd, NULL));
-                // Signal subroutine call to interpreter.
-                PushTempToken( new FormulaUnknownToken( ocCall));
             }
             else
                 PushSingleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab() );
@@ -6468,6 +6458,24 @@ void ScInterpreter::ScAddressFunc()
 }
 
 
+FormulaSubroutineToken* lcl_CreateExternalRefSubroutine( const ScAddress& rPos,
+        ScDocument* pDoc, const FormulaTokenRef& xExtRef )
+{
+    // The exact usage (which cell range) of the external table can't be
+    // detected during the store-to-file cycle, mark it as permanently
+    // referenced so it gets stored even if not directly referenced anywhere.
+    ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+    pRefMgr->setCacheTableReferencedPermanently(
+            static_cast<const ScToken*>(xExtRef.get())->GetIndex(),
+            static_cast<const ScToken*>(xExtRef.get())->GetString(), 1);
+    ScTokenArray* pTokenArray = new ScTokenArray;
+    pTokenArray->AddToken( *xExtRef);
+    ScCompiler aComp( pDoc, rPos, *pTokenArray);
+    aComp.CompileTokenArray();
+    return new FormulaSubroutineToken( pTokenArray);
+}
+
+
 void ScInterpreter::ScOffset()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScOffset" );
@@ -6492,54 +6500,129 @@ void ScInterpreter::ScOffset()
             PushIllegalArgument();
             return;
         }
-        if (GetStackType() == svSingleRef)
+        FormulaTokenRef xExtRef;
+        switch (GetStackType())
         {
-            PopSingleRef(nCol1, nRow1, nTab1);
-            if (nParamCount == 3 || (nColNew < 0 && nRowNew < 0))
-            {
-                nCol1 = (SCCOL)((long) nCol1 + nColPlus);
-                nRow1 = (SCROW)((long) nRow1 + nRowPlus);
-                if (!ValidCol(nCol1) || !ValidRow(nRow1))
-                    PushIllegalArgument();
-                else
-                    PushSingleRef(nCol1, nRow1, nTab1);
-            }
-            else
-            {
-                if (nColNew < 0)
-                    nColNew = 1;
-                if (nRowNew < 0)
-                    nRowNew = 1;
-                nCol1 = (SCCOL)((long)nCol1+nColPlus);      // ! nCol1 wird veraendert!
-                nRow1 = (SCROW)((long)nRow1+nRowPlus);
-                nCol2 = (SCCOL)((long)nCol1+nColNew-1);
-                nRow2 = (SCROW)((long)nRow1+nRowNew-1);
-                if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
-                    !ValidCol(nCol2) || !ValidRow(nRow2))
-                    PushIllegalArgument();
-                else
-                    PushDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab1);
-            }
+            case svExternalSingleRef:
+                xExtRef = PopToken()->Clone();
+                // fallthru
+            case svSingleRef:
+                {
+                    if (xExtRef)
+                    {
+                        ScSingleRefData& rData = static_cast<ScToken*>(xExtRef.get())->GetSingleRef();
+                        rData.CalcAbsIfRel( aPos);
+                        nCol1 = rData.nCol;
+                        nRow1 = rData.nRow;
+                        nTab1 = rData.nTab;
+                    }
+                    else
+                        PopSingleRef( nCol1, nRow1, nTab1);
+                    if (nParamCount == 3 || (nColNew < 0 && nRowNew < 0))
+                    {
+                        nCol1 = (SCCOL)((long) nCol1 + nColPlus);
+                        nRow1 = (SCROW)((long) nRow1 + nRowPlus);
+                        if (!ValidCol(nCol1) || !ValidRow(nRow1))
+                            PushIllegalArgument();
+                        else if (xExtRef)
+                        {
+                            ScSingleRefData& rData = static_cast<ScToken*>(xExtRef.get())->GetSingleRef();
+                            rData.nCol = nCol1;
+                            rData.nRow = nRow1;
+                            rData.nTab = nTab1;
+                            rData.CalcRelFromAbs( aPos);
+                            // Push a subroutine that resolves the external
+                            // reference as the next instruction.
+                            PushTempToken( lcl_CreateExternalRefSubroutine( aPos, pDok, xExtRef));
+                        }
+                        else
+                            PushSingleRef(nCol1, nRow1, nTab1);
+                    }
+                    else
+                    {
+                        if (nColNew < 0)
+                            nColNew = 1;
+                        if (nRowNew < 0)
+                            nRowNew = 1;
+                        nCol1 = (SCCOL)((long)nCol1+nColPlus);  // ! nCol1 is modified
+                        nRow1 = (SCROW)((long)nRow1+nRowPlus);
+                        nCol2 = (SCCOL)((long)nCol1+nColNew-1);
+                        nRow2 = (SCROW)((long)nRow1+nRowNew-1);
+                        if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
+                                !ValidCol(nCol2) || !ValidRow(nRow2))
+                            PushIllegalArgument();
+                        else if (xExtRef)
+                        {
+                            // Convert SingleRef to DoubleRef.
+                            xExtRef = new ScExternalDoubleRefToken(
+                                    *static_cast<const ScExternalSingleRefToken*>(xExtRef.get()));
+                            ScComplexRefData& rData = static_cast<ScToken*>(xExtRef.get())->GetDoubleRef();
+                            rData.Ref1.nCol = nCol1;
+                            rData.Ref1.nRow = nRow1;
+                            rData.Ref1.nTab = nTab1;
+                            rData.Ref2.nCol = nCol2;
+                            rData.Ref2.nRow = nRow2;
+                            rData.Ref2.nTab = nTab1;
+                            rData.CalcRelFromAbs( aPos);
+                            // Push a subroutine that resolves the external
+                            // reference as the next instruction.
+                            PushTempToken( lcl_CreateExternalRefSubroutine( aPos, pDok, xExtRef));
+                        }
+                        else
+                            PushDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab1);
+                    }
+                }
+                break;
+            case svExternalDoubleRef:
+                xExtRef = PopToken()->Clone();
+                // fallthru
+            case svDoubleRef:
+                {
+                    if (xExtRef)
+                    {
+                        ScComplexRefData& rData = static_cast<ScToken*>(xExtRef.get())->GetDoubleRef();
+                        rData.CalcAbsIfRel( aPos);
+                        nCol1 = rData.Ref1.nCol;
+                        nRow1 = rData.Ref1.nRow;
+                        nTab1 = rData.Ref1.nTab;
+                        nCol2 = rData.Ref2.nCol;
+                        nRow2 = rData.Ref2.nRow;
+                        nTab2 = rData.Ref2.nTab;
+                    }
+                    else
+                        PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+                    if (nColNew < 0)
+                        nColNew = nCol2 - nCol1 + 1;
+                    if (nRowNew < 0)
+                        nRowNew = nRow2 - nRow1 + 1;
+                    nCol1 = (SCCOL)((long)nCol1+nColPlus);
+                    nRow1 = (SCROW)((long)nRow1+nRowPlus);
+                    nCol2 = (SCCOL)((long)nCol1+nColNew-1);
+                    nRow2 = (SCROW)((long)nRow1+nRowNew-1);
+                    if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
+                            !ValidCol(nCol2) || !ValidRow(nRow2) || nTab1 != nTab2)
+                        PushIllegalArgument();
+                    else if (xExtRef)
+                    {
+                        ScComplexRefData& rData = static_cast<ScToken*>(xExtRef.get())->GetDoubleRef();
+                        rData.Ref1.nCol = nCol1;
+                        rData.Ref1.nRow = nRow1;
+                        rData.Ref1.nTab = nTab1;
+                        rData.Ref2.nCol = nCol2;
+                        rData.Ref2.nRow = nRow2;
+                        rData.Ref2.nTab = nTab1;
+                        rData.CalcRelFromAbs( aPos);
+                        // Push a subroutine that resolves the external
+                        // reference as the next instruction.
+                        PushTempToken( lcl_CreateExternalRefSubroutine( aPos, pDok, xExtRef));
+                    }
+                    else
+                        PushDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab1);
+                }
+                break;
+            default:
+                PushIllegalParameter();
         }
-        else if (GetStackType() == svDoubleRef)
-        {
-            PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-            if (nColNew < 0)
-                nColNew = nCol2 - nCol1 + 1;
-            if (nRowNew < 0)
-                nRowNew = nRow2 - nRow1 + 1;
-            nCol1 = (SCCOL)((long)nCol1+nColPlus);
-            nRow1 = (SCROW)((long)nRow1+nRowPlus);
-            nCol2 = (SCCOL)((long)nCol1+nColNew-1);
-            nRow2 = (SCROW)((long)nRow1+nRowNew-1);
-            if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
-                !ValidCol(nCol2) || !ValidRow(nRow2) || nTab1 != nTab2)
-                PushIllegalArgument();
-            else
-                PushDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab1);
-        }
-        else
-            PushIllegalParameter();
     }
 }
 

@@ -3181,6 +3181,14 @@ void ScInterpreter::ScColRowNameAuto()
 
 void ScInterpreter::ScExternalRef()
 {
+    const FormulaToken* pNextOp = aCode.PeekNextOperator();
+    if (pNextOp && pNextOp->GetOpCode() == ocOffset)
+    {
+        // Handled by OFFSET function.
+        PushTempToken( *pCur);
+        return;
+    }
+
     ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
     const String* pFile = pRefMgr->getExternalFileName(pCur->GetIndex());
     if (!pFile)
@@ -3324,6 +3332,21 @@ void ScInterpreter::GlobalExit()        // static
 }
 
 
+// A ::std::vector<FormulaTokenRef> is not possible, a push_back() attempts to
+// use a FormulaToken(const FormulaTokenRef&) ctor. Reinvent wheel..
+struct FormulaTokenRefPtr
+{
+    FormulaToken* mp;
+    FormulaTokenRefPtr() : mp(0) {}
+    FormulaTokenRefPtr( FormulaToken* p ) : mp(p) { if (mp) mp->IncRef(); }
+    FormulaTokenRefPtr( const FormulaTokenRefPtr & r ) : mp(r.mp) { if (mp) mp->IncRef(); }
+    ~FormulaTokenRefPtr() { if (mp) mp->DecRef(); }
+    FormulaTokenRefPtr& operator=( const FormulaTokenRefPtr & r )
+    { if (r.mp) r.mp->IncRef(); if (mp) mp->DecRef(); mp = r.mp; return *this; }
+};
+typedef ::std::vector< FormulaTokenRefPtr > FormulaTokenDtor;
+
+
 StackVar ScInterpreter::Interpret()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::Interpret" );
@@ -3342,6 +3365,7 @@ StackVar ScInterpreter::Interpret()
     pJumpMatrix = NULL;
     glSubTotal = sal_False;
     ScTokenMatrixMap::const_iterator aTokenMatrixMapIter;
+    ::boost::scoped_ptr< FormulaTokenDtor > pTokenDtor;
 
     // Once upon a time we used to have FP exceptions on, and there was a
     // Windows printer driver that kept switching off exceptions, so we had to
@@ -3720,13 +3744,27 @@ StackVar ScInterpreter::Interpret()
                 default : PushError( errUnknownOpCode);                 break;
             }
 
-            // If the function signalled that it pushed a subroutine on the
-            // instruction code stack instead of a result, continue with
+            // If the function pushed a subroutine as result, continue with
             // execution of the subroutine.
-            if (sp > nStackBase && pStack[sp-1]->GetOpCode() == ocCall)
+            if (sp > nStackBase && pStack[sp-1]->GetOpCode() == ocCall && pStack[sp-1]->GetType() == svSubroutine)
             {
-                Pop();
-                continue;   // while( ( pCur = aCode.Next() ) != NULL  ...
+                FormulaTokenRef xTok = PopToken();
+                const FormulaSubroutineToken* pSub = dynamic_cast<FormulaSubroutineToken*>(xTok.get());
+                if (pSub)
+                {
+                    // Remember token for late destruction.
+                    if (!pTokenDtor)
+                        pTokenDtor.reset( new FormulaTokenDtor);
+                    pTokenDtor->push_back( FormulaTokenDtor::value_type( xTok));
+                    // Continue with execution of subroutine.
+                    aCode.Push( pSub->GetTokenArray());
+                    continue;   // while( ( pCur = aCode.Next() ) != NULL  ...
+                }
+                else
+                {
+                    DBG_ERRORFILE( "ScInterpreter::Interpret: ocCall svSubroutine, but no FormulaSubroutineToken?!?");
+                    PushError( errNoCode);
+                }
             }
 
             // Remember result matrix in case it could be reused.
