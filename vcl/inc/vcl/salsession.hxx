@@ -85,7 +85,7 @@ struct SalSessionQuitEvent : public SalSessionEvent
 
 typedef void(*SessionProc)( SalSessionEvent *pEvent);
 
-class VCL_DLLPUBLIC SalSession
+class VCL_PLUGIN_PUBLIC SalSession
 {
     SessionProc         m_aProc;
 public:

@@ -54,7 +54,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-    UnoTreeModel();
+    UnoTreeModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     UnoTreeModel( const UnoTreeModel& rModel );
 
     UnoControlModel* Clone() const;
@@ -73,10 +73,11 @@ public:
 // ===================================================================
 // = UnoTreeControl
 // ===================================================================
-class UnoTreeControl : public ::cppu::ImplInheritanceHelper1< UnoControlBase, ::com::sun::star::awt::tree::XTreeControl >
+typedef ::cppu::ImplInheritanceHelper1< UnoControlBase, ::com::sun::star::awt::tree::XTreeControl > UnoTreeControl_Base;
+class UnoTreeControl : public UnoTreeControl_Base
 {
 public:
-    UnoTreeControl();
+    UnoTreeControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString             GetComponentServiceName();
 
     // ::com::sun::star::lang::XComponent

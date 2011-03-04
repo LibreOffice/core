@@ -70,6 +70,20 @@ ImplLineInfo::ImplLineInfo( const ImplLineInfo& rImplLineInfo ) :
 {
 }
 
+// -----------------------------------------------------------------------
+
+inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
+{
+    return(meStyle == rB.meStyle
+        && mnWidth == rB.mnWidth
+        && mnDashCount == rB.mnDashCount
+        && mnDashLen == rB.mnDashLen
+        && mnDotCount == rB.mnDotCount
+        && mnDotLen == rB.mnDotLen
+        && mnDistance == rB.mnDistance
+        && meLineJoin == rB.meLineJoin);
+}
+
 // ------------
 // - LineInfo -
 // ------------
@@ -125,13 +139,7 @@ sal_Bool LineInfo::operator==( const LineInfo& rLineInfo ) const
     DBG_CHKOBJ( &rLineInfo, LineInfo, NULL );
 
     return( mpImplLineInfo == rLineInfo.mpImplLineInfo ||
-            ( mpImplLineInfo->meStyle == rLineInfo.mpImplLineInfo->meStyle &&
-              mpImplLineInfo->mnWidth == rLineInfo.mpImplLineInfo->mnWidth &&
-              mpImplLineInfo->mnDashCount == rLineInfo.mpImplLineInfo->mnDashCount &&
-              mpImplLineInfo->mnDashLen == rLineInfo.mpImplLineInfo->mnDashLen &&
-              mpImplLineInfo->mnDotCount == rLineInfo.mpImplLineInfo->mnDotCount &&
-              mpImplLineInfo->mnDotLen == rLineInfo.mpImplLineInfo->mnDotLen &&
-              mpImplLineInfo->mnDistance == rLineInfo.mpImplLineInfo->mnDistance ) );
+           *mpImplLineInfo == *rLineInfo.mpImplLineInfo );
 }
 
 // -----------------------------------------------------------------------

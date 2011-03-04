@@ -50,7 +50,7 @@ class Printer;
 
 namespace padmin {
 
-    class PADialog : public ModalDialog
+    class SPA_DLLPUBLIC PADialog : public ModalDialog
     {
     private:
         DelListBox                          m_aDevicesLB;
