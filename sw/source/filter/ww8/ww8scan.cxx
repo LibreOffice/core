@@ -1486,9 +1486,9 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
     if( nFcPos == WW8_FC_MAX )
         return nFallBackCpEnd;
 
-    bool bIsUnicode = false;
     if( pPieceIter )    // Complex File ?
     {
+        bool bIsUnicode = false;
         ULONG nOldPos = pPieceIter->GetIdx();
 
         for (pPieceIter->SetIdx(0);
@@ -1546,9 +1546,11 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
         return nFallBackCpEnd;
     }
     // No complex file
-    if (pWw8Fib->fExtChar)
-        bIsUnicode=true;
-    return ((nFcPos - pWw8Fib->fcMin) / (bIsUnicode ? 2 : 1));
+    if (!pWw8Fib->fExtChar)
+        nFallBackCpEnd = (nFcPos - pWw8Fib->fcMin);
+    else
+        nFallBackCpEnd = (nFcPos - pWw8Fib->fcMin + 1) / 2;
+    return nFallBackCpEnd;
 }
 
 WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
