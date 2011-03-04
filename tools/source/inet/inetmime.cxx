@@ -2038,7 +2038,7 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             break;
 
         default: //@@@ more cases are missing!
-            DBG_ERROR("INetMIME::createPreferredCharsetList():"
+            OSL_FAIL("INetMIME::createPreferredCharsetList():"
                           " Unsupported encoding");
             break;
     }

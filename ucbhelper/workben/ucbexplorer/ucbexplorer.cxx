@@ -421,7 +421,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
                 else
                 {
                     // See com/sun/star/ucb/ContentInfo.idl
-                    DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
+                    OSL_FAIL( "UcbExplorerListBoxEntry::createNewContent - "
                                "Invlid type for bootstrap property!" );
                 }
             }
@@ -457,7 +457,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
             OUString aSourceURL( pDlg->GetValue() );
             if ( aSourceURL.getLength() == 0 )
             {
-                DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
+                OSL_FAIL( "UcbExplorerListBoxEntry::createNewContent - "
                                "No document data URL!" );
                 return FALSE;
             }
@@ -491,7 +491,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
             }
             catch ( ContentCreationException const & )
             {
-                DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
+                OSL_FAIL( "UcbExplorerListBoxEntry::createNewContent - "
                                "No content for document data!" );
                 return FALSE;
             }

@@ -1171,7 +1171,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                                 break;
 
                             default:
-                                DBG_ERROR(
+                                OSL_FAIL(
                                     "INetURLObject::setAbsURIRef():"
                                         " Bad guessFSysStyleByCounting");
                                 break;
@@ -1596,7 +1596,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
                     break;
 
                 default:
-                    DBG_ERROR("INetURLObject::convertRelToAbs():"
+                    OSL_FAIL("INetURLObject::convertRelToAbs():"
                                   " Bad guessFSysStyleByCounting");
                     break;
             }
