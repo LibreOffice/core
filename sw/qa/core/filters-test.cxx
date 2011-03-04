@@ -151,6 +151,16 @@ void FiltersTest::testCVEs()
         m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2009-3301-1.doc")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2009-3301 regression", bResult == true);
 
+    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2009-3302-1.doc")));
+    CPPUNIT_ASSERT_MESSAGE("CVE-2009-3302 regression", bResult == true);
+
+    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2009-3302-2.doc")));
+    CPPUNIT_ASSERT_MESSAGE("CVE-2009-3302 regression", bResult == true);
+
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")),
         m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2010-3451-1.rtf")));
