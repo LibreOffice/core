@@ -451,10 +451,18 @@ void XMLDocumentSettingsContext::EndElement()
     }
 
     sal_Bool bLoadDocPrinter( sal_True );
-    ::comphelper::ConfigurationHelper::readDirectKey(
-        ::comphelper::getProcessServiceFactory(),
-        C2U("org.openoffice.Office.Common/"), C2U("Save/Document"), C2U("LoadPrinter"),
-        ::comphelper::ConfigurationHelper::E_READONLY ) >>= bLoadDocPrinter;
+
+    try
+    {
+        ::comphelper::ConfigurationHelper::readDirectKey(
+            ::comphelper::getProcessServiceFactory(),
+            C2U("org.openoffice.Office.Common/"), C2U("Save/Document"), C2U("LoadPrinter"),
+            ::comphelper::ConfigurationHelper::E_READONLY ) >>= bLoadDocPrinter;
+    }
+    catch( const uno::Exception& )
+    {
+    }
+
     uno::Sequence<beans::PropertyValue> aSeqConfigProps;
     if ( m_pData->aConfigProps >>= aSeqConfigProps )
     {
