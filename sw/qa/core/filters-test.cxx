@@ -133,6 +133,11 @@ void FiltersTest::testCVEs()
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")),
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2007-0245-1.rtf")));
+    CPPUNIT_ASSERT_MESSAGE("CVE-2007-0245 regression", bResult == true);
+
+    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")),
         m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2010-3451-1.rtf")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2010-3451 regression", bResult == false);
 
