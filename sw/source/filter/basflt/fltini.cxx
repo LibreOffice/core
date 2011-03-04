@@ -193,35 +193,6 @@ SwRead GetReader( const String& rFltName )
 
 } // namespace SwReaderWriter
 
-/*  */
-
-ULONG StgReader::OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize )
-{
-    ULONG nRet = ERR_SWG_READ_ERROR;
-    OSL_ENSURE( pStg, "wo ist mein Storage?" );
-    const SfxFilter* pFltr = SwIoSystem::GetFilterOfFormat( aFltName );
-    if( pFltr )
-    {
-        rRef = pStg->OpenSotStream( SwIoSystem::GetSubStorageName( *pFltr ),
-                                    STREAM_READ | STREAM_SHARE_DENYALL );
-
-        if( rRef.Is() )
-        {
-            if( SVSTREAM_OK == rRef->GetError() )
-            {
-                USHORT nOld = rRef->GetBufferSize();
-                rRef->SetBufferSize( rBuffSize );
-                rBuffSize = nOld;
-                nRet = 0;
-            }
-            else
-                nRet = rRef->GetError();
-        }
-    }
-    return nRet;
-}
-
-
 void Writer::SetPasswd( const String& ) {}
 
 

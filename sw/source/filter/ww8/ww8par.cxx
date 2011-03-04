@@ -5253,6 +5253,29 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOC()
     return new WW8Reader();
 }
 
+ULONG WW8Reader::OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize )
+{
+    ULONG nRet = ERR_SWG_READ_ERROR;
+    OSL_ENSURE( pStg, "wo ist mein Storage?" );
+    rRef = pStg->OpenSotStream(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WordDocument")),
+        STREAM_READ | STREAM_SHARE_DENYALL);
+
+    if( rRef.Is() )
+    {
+        if( SVSTREAM_OK == rRef->GetError() )
+        {
+            USHORT nOld = rRef->GetBufferSize();
+            rRef->SetBufferSize( rBuffSize );
+            rBuffSize = nOld;
+            nRet = 0;
+        }
+        else
+            nRet = rRef->GetError();
+    }
+    return nRet;
+}
+
 ULONG WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String & /* FileName */)
 {
     USHORT nOldBuffSize = 32768;

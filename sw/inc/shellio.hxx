@@ -302,10 +302,6 @@ public:
 class SW_DLLPUBLIC StgReader : public Reader
 {
     String aFltName;
-
-protected:
-    ULONG OpenMainStream( SotStorageStreamRef& rRef, USHORT& rBuffSize );
-
 public:
     virtual int GetReaderType();
     const String& GetFltName() { return aFltName; }
