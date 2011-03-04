@@ -1542,7 +1542,7 @@ void SwXTextField::attachToRange(
                 SwFieldType* pFldType = pDoc->GetFldType(RES_SETEXPFLD, m_sTypeName, sal_True);
                 if(!pFldType)
                     throw uno::RuntimeException();
-                //#93192# detect the field type's sub type and set an appropriate number format
+                // detect the field type's sub type and set an appropriate number format
                 if(m_pProps->bFormatIsDefault &&
                     nsSwGetSetExpType::GSE_STRING == ((SwSetExpFieldType*)pFldType)->GetType())
                         m_pProps->nFormat = -1;
@@ -1879,7 +1879,6 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         }
         else
         {
-            // -> #111840#
             SwDoc * pDoc = GetDoc();
 
             if (NULL != pDoc)
@@ -1891,7 +1890,6 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
                 aPosition.nContent = *pTxtFld->GetStart();
                 pDoc->PutValueToField( aPosition, rValue, pEntry->nWID);
             }
-            // <- #111840#
         }
         pField->PutValue( rValue, pEntry->nWID );
 
@@ -1901,7 +1899,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         const_cast<SwFmtFld*>(pFmtFld)->Broadcast(SwFmtFldHint( 0, SWFMTFLD_CHANGED ));
     }
 
-        //#114571# changes of the expanded string have to be notified
+        // changes of the expanded string have to be notified
         //#to the SwTxtFld
         if(RES_DBFLD == nWhich && pFmtFld->GetTxtFld())
         {
@@ -2263,10 +2261,8 @@ void SwXTextField::update(  ) throw (uno::RuntimeException)
             }
             break;
         }
-        // --> FME 2004-10-06 #116480#
         // Text formatting has to be triggered.
         const_cast<SwFmtFld*>(pFmtFld)->Modify( 0, 0 );
-        // <--
     }
     else
         m_bCallUpdate = sal_True;

@@ -181,7 +181,6 @@ const SfxItemPropertySet* GetNumberingRulesSet()
 #define WID_DISTANCE                    4
 #define WID_INTERVAL                    5
 #define WID_SEPARATOR_TEXT              6
-//#define WID_CHARACTER_STYLE             7
 #define WID_COUNT_EMPTY_LINES           8
 #define WID_COUNT_LINES_IN_FRAMES       9
 #define WID_RESTART_AT_EACH_PAGE        10
@@ -1251,12 +1250,8 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
                             rProperties, nIndex);
     else if(pDocShell)
     {
-        // --> OD 2008-04-21 #i87650# - correction of cws swwarnings:
-        // Do not set member <pNumRule>
-//        pNumRule = pDocShell->GetDoc()->GetOutlineNumRule();
-//        SwNumRule aNumRule(*pNumRule);
+        // #i87650# - correction of cws swwarnings:
         SwNumRule aNumRule( *(pDocShell->GetDoc()->GetOutlineNumRule()) );
-        // <--
         SwXNumberingRules::SetNumberingRuleByIndex( aNumRule,
                             rProperties, nIndex);
         //hier noch die Zeichenformate bei Bedarf setzen
@@ -1543,11 +1538,8 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
                 aPropertyValues.Insert(pData, aPropertyValues.Count());
             }
              Size aSize = rFmt.GetGraphicSize();
-            // --> OD 2010-05-04 #i101131# - applying patch from CMC
+            // #i101131#
             // adjust conversion due to type mismatch between <Size> and <awt::Size>
-//            aSize.Width() = TWIP_TO_MM100( aSize.Width() );
-//            aSize.Height() = TWIP_TO_MM100( aSize.Height() );
-//            pData = new PropValData((void*)&aSize, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE), ::getCppuType((const awt::Size*)0));
             awt::Size aAwtSize(TWIP_TO_MM100(aSize.Width()), TWIP_TO_MM100(aSize.Height()));
             pData = new PropValData((void*)&aAwtSize, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE), ::getCppuType((const awt::Size*)0));
             // <--
@@ -1786,10 +1778,9 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                             }
                         }
                         aFmt.SetCharFmt( pCharFmt );
-                        // os 2005-08-22 #i51842#
+                        // #i51842#
                         // If the character format has been found it's name should not be in the
                         // char style names array
-                        //sNewCharStyleNames[(sal_uInt16)nIndex] = sCharFmtName;
                         sNewCharStyleNames[(sal_uInt16)nIndex].Erase();
                      }
                     else
@@ -1925,7 +1916,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                      awt::FontDescriptor* pDesc =  (awt::FontDescriptor*)pData->aVal.getValue();
                     if(pDesc)
                     {
-                        // --> OD 2008-09-11 #i93725#
+                        // #i93725#
                         // do not accept "empty" font
                         if ( pDesc->Name.getLength() > 0 )
                         {
@@ -2054,12 +2045,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         SwTxtFmtColl &rTxtColl = *((*pColls)[k]);
                         if(rTxtColl.IsDefault())
                             continue;
-                        //if(rTxtColl.GetOutlineLevel() == nIndex &&            //#outline level,removed by zhaojianwei
-                        //  rTxtColl.GetName() != sStyleName)
-                        //  rTxtColl..SetOutlineLevel(NO_NUMBERING);
-                        //else if(rTxtColl.GetName() == sStyleName)
-                        //  rTxtColl.SetOutlineLevel(sal_Int8(nIndex));
-                        if ( rTxtColl.IsAssignedToListLevelOfOutlineStyle() &&  //add by zhaojianwei
+                        if ( rTxtColl.IsAssignedToListLevelOfOutlineStyle() &&
                              rTxtColl.GetAssignedOutlineStyleLevel() == nIndex &&
                              rTxtColl.GetName() != sStyleName )
                         {
@@ -2068,7 +2054,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         else if ( rTxtColl.GetName() == sStyleName )
                         {
                             rTxtColl.AssignToListLevelOfOutlineStyle( nIndex );
-                        }                                                       //<-end,,zhaojianwei,
+                        }
                     }
                 }
                 break;
@@ -2277,7 +2263,7 @@ OUString SwXNumberingRules::getName() throw( RuntimeException )
         SwStyleNameMapper::FillProgName(pNumRule->GetName(), aString, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE, sal_True );
         return OUString ( aString );
     }
-    // --> OD 2005-10-25 #126347# - consider chapter numbering <SwXNumberingRules>
+    // consider chapter numbering <SwXNumberingRules>
     else if ( pDocShell )
     {
         SwStyleNameMapper::FillProgName( pDocShell->GetDoc()->GetOutlineNumRule()->GetName(),

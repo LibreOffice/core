@@ -1851,7 +1851,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     SwUnoInternalPaM aPam(*pDoc);
-    //das muss jetzt sal_True liefern
+    //which must now return sal_True
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     SwTOXMark aMark (pTOXType);
     if (m_pImpl->m_sAltText.getLength())
@@ -2897,7 +2897,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 }
                 aToken.nChapterFormat = nFormat;
             }
-//--->i53420
+// #i53420#
             else if (pProperties[j].Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM("ChapterLevel")))
             {
@@ -2908,7 +2908,6 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 }
                 aToken.nOutlineLevel = nLevel;
             }
-//<---
             else if (pProperties[j].Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM("BibliographyDataField")))
             {
@@ -2943,7 +2942,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
         {
             aToken.eTokenType = TOKEN_ENTRY;
         }
-//---> i53420
+// #i53420#
 // check for chapter format allowed values if it was TOKEN_ENTRY_NO type
 // only allowed value are CF_NUMBER and CF_NUM_NOPREPST_TITLE
 // reading from file
@@ -2958,7 +2957,6 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 throw lang::IllegalArgumentException();
             }
         }
-//<---
         sPattern += aToken.GetString();
     }
     SwForm aForm(rTOXBase.GetTOXForm());
@@ -3016,7 +3014,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         {
             case TOKEN_ENTRY_NO:
             {
-//--->i53420
+// #i53420#
 // writing to file (from doc to properties)
                 sal_Int32 nElements = 2;
                 sal_Int32 nCurrentElement = 0;
@@ -3067,7 +3065,6 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                     pArr[nCurrentElement].Name = C2U("ChapterLevel");
                     pArr[nCurrentElement].Value <<= aToken.nOutlineLevel;
                 }
-//<---
             }
             break;
             case TOKEN_ENTRY:   // no difference between Entry and Entry Text
@@ -3173,11 +3170,9 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                     break;
                 }
                 pArr[2].Value <<= nVal;
-//--->i53420
+// #i53420#
                 pArr[3].Name = C2U("ChapterLevel");
-                //
                 pArr[3].Value <<= aToken.nOutlineLevel;
-//<---
             }
             break;
             case TOKEN_LINK_START:
