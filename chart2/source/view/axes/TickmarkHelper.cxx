@@ -33,6 +33,7 @@
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
 #include <memory>
+#include <limits>
 
 //.............................................................................
 namespace chart
@@ -481,7 +482,12 @@ sal_Int32 TickmarkHelper::getMaxTickCount( sal_Int32 nDepth ) const
     if (!isFinite(fSub))
         return 0;
 
-    sal_Int32 nIntervalCount = static_cast<sal_Int32>( fSub / m_rIncrement.Distance );
+    double fIntervalCount = fSub / m_rIncrement.Distance;
+    if (fIntervalCount > std::numeric_limits<sal_Int32>::max())
+        // Interval count too high!  Bail out.
+        return 0;
+
+    sal_Int32 nIntervalCount = static_cast<sal_Int32>(fIntervalCount);
 
     nIntervalCount+=3;
     for(sal_Int32 nN=0; nN<nDepth-1; nN++)
