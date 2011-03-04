@@ -28,6 +28,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
+#include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/outliner.hxx>
@@ -146,10 +150,10 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     // Listen mit:
     // - Vorlagenzeigern fuer Gliederungstextobjekt (alte und neue Vorlagen)
     // -Replacedaten fuer OutlinerParaObject
-    List aOutlineStyles;
-    List aOldOutlineStyles;
-    List aReplList;
-    BOOL bListsFilled = FALSE;
+    std::vector<SfxStyleSheetBase*> aOutlineStyles;
+    std::vector<SfxStyleSheetBase*> aOldOutlineStyles;
+    boost::ptr_vector<StyleReplaceData> aReplList;
+    bool bListsFilled = false;
 
     ULONG nObjCount = GetObjCount();
 
@@ -178,11 +182,11 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
 
                     pSheet = pStShPool->Find(aOldFullName, SD_STYLE_FAMILY_MASTERPAGE);
                     DBG_ASSERT(pSheet, "alte Gliederungsvorlage nicht gefunden");
-                    aOldOutlineStyles.Insert(pSheet, LIST_APPEND);
+                    aOldOutlineStyles.push_back(pSheet);
 
                     pSheet = pStShPool->Find(aFullName, SD_STYLE_FAMILY_MASTERPAGE);
                     DBG_ASSERT(pSheet, "neue Gliederungsvorlage nicht gefunden");
-                    aOutlineStyles.Insert(pSheet, LIST_APPEND);
+                    aOutlineStyles.push_back(pSheet);
 
                     if (bReplaceStyleSheets && pSheet)
                     {
@@ -192,7 +196,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                         pReplData->nFamily    = pSheet->GetFamily();
                         pReplData->aNewName   = aFullName;
                         pReplData->aName      = aOldFullName;
-                        aReplList.Insert(pReplData, LIST_APPEND);
+                        aReplList.push_back(pReplData);
                     }
                     else
                     {
@@ -203,13 +207,20 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                     }
                 }
 
-                bListsFilled = TRUE;
+                bListsFilled = true;
             }
 
-            SfxStyleSheet* pSheet = (SfxStyleSheet*)aOutlineStyles.First();
-            SfxStyleSheet* pOldSheet = (SfxStyleSheet*)aOldOutlineStyles.First();
-            while (pSheet)
+            SfxStyleSheet* pSheet = NULL;
+            SfxStyleSheet* pOldSheet = NULL;
+
+            std::vector<SfxStyleSheetBase*>::iterator iterOut = aOutlineStyles.begin();
+            std::vector<SfxStyleSheetBase*>::iterator iterOldOut = aOldOutlineStyles.begin();
+
+            while (iterOut != aOutlineStyles.end())
             {
+                pSheet = reinterpret_cast<SfxStyleSheet*>(*iterOut);
+                pOldSheet = reinterpret_cast<SfxStyleSheet*>(*iterOldOut);
+
                 if (pSheet != pOldSheet)
                 {
                     pObj->EndListening(*pOldSheet);
@@ -218,19 +229,18 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                         pObj->StartListening(*pSheet);
                 }
 
-                pSheet = (SfxStyleSheet*)aOutlineStyles.Next();
-                pOldSheet = (SfxStyleSheet*)aOldOutlineStyles.Next();
+                ++iterOut;
+                ++iterOldOut;
             }
 
             OutlinerParaObject* pOPO = ((SdrTextObj*)pObj)->GetOutlinerParaObject();
             if ( bReplaceStyleSheets && pOPO )
             {
-                StyleReplaceData* pReplData = (StyleReplaceData*) aReplList.First();
-
-                while( pReplData )
+                boost::ptr_vector<StyleReplaceData>::const_iterator it = aReplList.begin();
+                while (it != aReplList.end())
                 {
-                    pOPO->ChangeStyleSheets( pReplData->aName, pReplData->nFamily, pReplData->aNewName, pReplData->nNewFamily );
-                    pReplData = (StyleReplaceData*) aReplList.Next();
+                    pOPO->ChangeStyleSheets( it->aName, it->nFamily, it->aNewName, it->nNewFamily );
+                    ++it;
                 }
             }
         }
@@ -252,11 +262,6 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
             if (pSheet)
                 pObj->SetStyleSheet(pSheet, TRUE);
         }
-    }
-
-    for (ULONG i = 0; i < aReplList.Count(); i++)
-    {
-        delete (StyleReplaceData*) aReplList.GetObject(i);
     }
 }
 
