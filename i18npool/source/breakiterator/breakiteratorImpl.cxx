@@ -473,31 +473,61 @@ static UBlock2Script scriptList[] = {
 
 #define scriptListCount sizeof (scriptList) / sizeof (UBlock2Script)
 
+static sal_Int16 scriptTypes[] = {
+    ScriptType::WEAK, ScriptType::WEAK, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX,
+    ScriptType::ASIAN, ScriptType::LATIN, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX,
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN, ScriptType::LATIN,
+// 15
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::ASIAN, ScriptType::ASIAN, ScriptType::COMPLEX,
+    ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::COMPLEX,
+    ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN,
+// 30
+    ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX,
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
+    ScriptType::LATIN, ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
+// 45
+    ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX,
+    ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN,
+    ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
+// 60
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX,
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::ASIAN, ScriptType::ASIAN,
+// 75
+    ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
+    ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
+// 90
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::WEAK, ScriptType::WEAK, ScriptType::COMPLEX,
+// 105
+    ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::ASIAN,
+// 120
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
+    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN,
+    ScriptType::WEAK};
+
+#define scriptTypesCount sizeof(scriptTypes) / sizeof(sal_Int16)
+
 sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
 {
         static sal_uInt32 lastChar = 0;
         static sal_Int16 nRet = 0;
+        sal_uInt32 script;
 
         if (currentChar != lastChar) {
             lastChar = currentChar;
 
-            //JP 21.9.2001: handle specific characters - always as weak
-            //                  definition of 1 - this breaks a word
-            //                  2 - this can be inside a word
-            //                  0x20 & 0xA0 - Bug 102975, declare western space and non-break space as WEAK char.
-            if( 1 == currentChar || 2 == currentChar || 0x20 == currentChar || 0xA0 == currentChar)
+            script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
+            if (script < 0)
                 nRet = ScriptType::WEAK;
-            // workaround for Coptic
-            else if ( 0x2C80 <= currentChar && 0x2CE3 >= currentChar)
-                nRet = ScriptType::LATIN;
-            else {
-                UBlockCode block=ublock_getCode(currentChar);
-                sal_uInt16 i;
-                for ( i = 0; i < scriptListCount; i++) {
-                    if (block <= scriptList[i].to) break;
-                }
-                nRet=(i < scriptListCount && block >= scriptList[i].from) ? scriptList[i].script : ScriptType::WEAK;
-            }
+            else if (script >= scriptTypesCount)
+                nRet = ScriptType::COMPLEX;         // anything new is going to be pretty wild
+            else
+                nRet = scriptTypes[script];
         }
         return nRet;
 }
