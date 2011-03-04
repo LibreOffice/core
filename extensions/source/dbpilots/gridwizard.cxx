@@ -227,9 +227,9 @@ namespace dbp
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR(  ::rtl::OString("OGridWizard::implApplySettings: unexpected exception while creating the grid column for field ")
-                            +=  ::rtl::OString(pFormFieldName->getStr(), pFormFieldName->getLength(), gsl_getSystemTextEncoding())
-                            +=  ::rtl::OString("!"));
+                    OSL_FAIL( ( ::rtl::OString("OGridWizard::implApplySettings: unexpected exception while creating the grid column for field ")
+                            += ::rtl::OString(pFormFieldName->getStr(), pFormFieldName->getLength(), gsl_getSystemTextEncoding())
+                            += ::rtl::OString("!") ).getStr() );
                 }
             }
         }
