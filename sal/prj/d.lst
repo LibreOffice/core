@@ -1,4 +1,3 @@
-mkdir: %_DEST%\bin%_EXT%\cppunit
 mkdir: %_DEST%\inc%_EXT%\sal
 mkdir: %_DEST%\inc%_EXT%\osl
 mkdir: %_DEST%\inc%_EXT%\rtl
