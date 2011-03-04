@@ -1959,7 +1959,7 @@ void LocaleDataWrapper::outputCheckMessage( const char* pStr )
 {
     fprintf( stderr, "\n%s\n", pStr);
     fflush( stderr);
-    DBG_ERROR( pStr);
+    OSL_TRACE("%s", pStr);
 }
 
 
