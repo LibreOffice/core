@@ -35,9 +35,8 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-// --> OD 2004-08-06 #i28749#
+// #i28749#
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
-// <--
 #include <swtypes.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
@@ -144,7 +143,7 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
         { SW_PROP_NMID(UNO_NAME_PARA_IS_NUMBERING_RESTART), FN_NUMBER_NEWSTART,     CPPU_E2T(CPPUTYPE_BOOLEAN),     PropertyAttribute::MAYBEVOID, 0 }, \
         { SW_PROP_NMID(UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE), FN_UNO_PARA_CONT_PREV_SUBTREE, CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::READONLY, 0 }, \
         { SW_PROP_NMID(UNO_NAME_PARA_LIST_LABEL_STRING), FN_UNO_PARA_NUM_STRING, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0 }, \
-        { SW_PROP_NMID(UNO_NAME_OUTLINE_LEVEL), RES_PARATR_OUTLINELEVEL,        CPPU_E2T(CPPUTYPE_INT16),                PropertyAttribute::MAYBEVOID,     0}, //#outline level, zhaojianwei
+        { SW_PROP_NMID(UNO_NAME_OUTLINE_LEVEL), RES_PARATR_OUTLINELEVEL,        CPPU_E2T(CPPUTYPE_INT16),                PropertyAttribute::MAYBEVOID,     0},
 
 #define COMMON_HYPERLINK_PROPERTIES \
         { SW_PROP_NMID(UNO_NAME_HYPER_LINK_U_R_L), RES_TXTATR_INETFMT,          CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID ,MID_URL_URL},                \
@@ -288,9 +287,7 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
 
 #define ANCHOR_TYPES_PROPERTY    { SW_PROP_NMID(UNO_NAME_ANCHOR_TYPES), FN_UNO_ANCHOR_TYPES,    CPPU_E2T(CPPUTYPE_SEQANCHORTYPE),PropertyAttribute::READONLY, 0xff},
 
-// OD 18.09.2003 #i18732# - add property
-// OD 2004-05-05 #i28701# - add property 'WrapInfluenceOnObjPos'
-// OD 2009-07-13 #i73249# - add properties 'Title' and 'Description'
+// #i18732# #i28701# #i73249#
 #define COMMON_FRAME_PROPERTIES \
     { SW_PROP_NMID(UNO_NAME_ANCHOR_PAGE_NO), RES_ANCHOR,            CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE, MID_ANCHOR_PAGENUM       },              \
     { SW_PROP_NMID(UNO_NAME_ANCHOR_TYPE), RES_ANCHOR,           CPPU_E2T(CPPUTYPE_TXTCNTANCHOR),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},             \
@@ -372,8 +369,6 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
                     { SW_PROP_NMID(UNO_NAME_CHAR_DIFF_HEIGHT_COMPLEX), RES_CHRATR_CTL_FONTSIZE ,            CPPU_E2T(CPPUTYPE_INT16),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF|CONVERT_TWIPS},
 
 
-//#outline level, zhaojianwei delete { SW_PROP_NMID(UNO_NAME_DEFAULT_OUTLINE_LEVEL), FN_UNO_DEFAULT_OUTLINE_LEVEL, CPPU_E2T(CPPUTYPE_INT8), PropertyAttribute::MAYBEVOID, 0},
-//add { SW_PROP_NMID(UNO_NAME_OUTLINE_LEVEL), RES_PARATR_OUTLINELEVEL,CPPU_E2T(CPPUTYPE_INT16), PropertyAttribute::MAYBEVOID, 0},
 #define COMMON_PARA_STYLE_PROPERTIES \
                     { SW_PROP_NMID(UNO_NAME_BREAK_TYPE), RES_BREAK,                 CPPU_E2T(CPPUTYPE_BREAK),       PROPERTY_NONE, 0},\
                     { SW_PROP_NMID(UNO_NAME_PAGE_DESC_NAME), RES_PAGEDESC,          CPPU_E2T(CPPUTYPE_OUSTRING),            PropertyAttribute::MAYBEVOID, MID_PAGEDESC_PAGEDESCNAME },\
@@ -527,7 +522,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL), FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL,CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, 0},                                                     \
                     { SW_PROP_NMID(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME), RES_FRMATR_CONDITIONAL_STYLE_NAME,        CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},                       \
                     { SW_PROP_NMID(UNO_NAME_PARA_IS_NUMBERING_RESTART), FN_NUMBER_NEWSTART,     CPPU_E2T(CPPUTYPE_BOOLEAN),     PropertyAttribute::MAYBEVOID, 0 },                       \
-                    { SW_PROP_NMID(UNO_NAME_OUTLINE_LEVEL), RES_PARATR_OUTLINELEVEL,        CPPU_E2T(CPPUTYPE_INT16),                PropertyAttribute::MAYBEVOID,     0}, //#outline level,zhaojianwei
+                    { SW_PROP_NMID(UNO_NAME_OUTLINE_LEVEL), RES_PARATR_OUTLINELEVEL,        CPPU_E2T(CPPUTYPE_INT16),                PropertyAttribute::MAYBEVOID,     0},
                     COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN
                     TABSTOPS_MAP_ENTRY
                     COMMON_TEXT_CONTENT_PROPERTIES
@@ -681,9 +676,8 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_URL), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_URL    },
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_FILTER), RES_BACKGROUND,       CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_LOCATION), RES_BACKGROUND,         CPPU_E2T(CPPUTYPE_GRAPHICLOC),          PROPERTY_NONE ,MID_GRAPHIC_POSITION},
-                    // --> OD 2005-06-06 #i50322# - add missing map entry for transparency of graphic background
+                    // #i50322# - add missing map entry for transparency of graphic background
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_TRANSPARENCY), RES_BACKGROUND, CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENCY},
-                    // <--
                     { SW_PROP_NMID(UNO_NAME_LEFT_MARGIN), RES_LR_SPACE,             CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_RIGHT_MARGIN), RES_LR_SPACE,            CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_HORI_ORIENT), RES_HORI_ORIENT,      CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE ,MID_HORIORIENT_ORIENT    },
@@ -735,9 +729,9 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_IS_PHYSICAL), FN_UNO_IS_PHYSICAL,     CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_IS_AUTO_UPDATE), FN_UNO_IS_AUTO_UPDATE, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_DISPLAY_NAME), FN_UNO_DISPLAY_NAME, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
-                    // OD 18.09.2003 #i18732#
+                    // #i18732#
                     { SW_PROP_NMID(UNO_NAME_IS_FOLLOWING_TEXT_FLOW), RES_FOLLOW_TEXT_FLOW,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
-                    // OD 2004-05-05 #i28701#
+                    // #i28701#
                     { SW_PROP_NMID(UNO_NAME_WRAP_INFLUENCE_ON_POSITION), RES_WRAP_INFLUENCE_ON_OBJPOS, CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, MID_WRAP_INFLUENCE},
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
                     {0,0,0,0,0,0}
@@ -916,9 +910,8 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
                     { SW_PROP_NMID(UNO_NAME_TABLE_NAME),   FN_UNO_TABLE_NAME,   CPPU_E2T(CPPUTYPE_OUSTRING),        PROPERTY_NONE, 0 },
                      { SW_PROP_NMID(UNO_NAME_PAGE_STYLE_NAME), RES_PAGEDESC, CPPU_E2T(CPPUTYPE_OUSTRING),         PROPERTY_NONE, 0},
-                    // --> collapsing borders DVO, FME 2005-05-27 #i29550#
+                    // #i29550#
                     { SW_PROP_NMID(UNO_NAME_COLLAPSING_BORDERS), RES_COLLAPSING_BORDERS, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
-                    // <-- collapsing
                     _REDLINE_NODE_PROPERTIES
                     {0,0,0,0,0,0}
                 };
@@ -970,17 +963,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_LOCATION), FN_UNO_TABLE_CELL_BACKGROUND,   CPPU_E2T(CPPUTYPE_GRAPHICLOC), PropertyAttribute::MAYBEVOID|PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_POSITION},
                     { SW_PROP_NMID(UNO_NAME_BACK_TRANSPARENT), FN_UNO_TABLE_CELL_BACKGROUND,    CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::MAYBEVOID|PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_TRANSPARENT      },
                     { SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT), RES_BOXATR_FORMAT,         CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID ,0             },
-                    // commented properties already found in
-                    // COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01
-//                    { SW_PROP_NMID(UNO_NAME_LEFT_BORDER), RES_BOX,    CPPU_E2T(CPPUTYPE_BORDERLINE),    0, LEFT_BORDER  |CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_RIGHT_BORDER), RES_BOX,    CPPU_E2T(CPPUTYPE_BORDERLINE),   0, RIGHT_BORDER |CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_TOP_BORDER), RES_BOX,    CPPU_E2T(CPPUTYPE_BORDERLINE), 0, TOP_BORDER   |CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_BOTTOM_BORDER), RES_BOX,    CPPU_E2T(CPPUTYPE_BORDERLINE),  0, BOTTOM_BORDER|CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_BORDER_DISTANCE), RES_BOX,    CPPU_E2T(CPPUTYPE_INT32), 0, BORDER_DISTANCE|CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_LEFT_BORDER_DISTANCE), RES_BOX,             CPPU_E2T(CPPUTYPE_INT32),   0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                CPPU_E2T(CPPUTYPE_INT32),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_TOP_BORDER_DISTANCE), RES_BOX,              CPPU_E2T(CPPUTYPE_INT32),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_BOTTOM_BORDER_DISTANCE), RES_BOX,               CPPU_E2T(CPPUTYPE_INT32),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
                     { SW_PROP_NMID(UNO_NAME_VERT_ORIENT), RES_VERT_ORIENT,      CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE ,MID_VERTORIENT_ORIENT    },
                     { SW_PROP_NMID(UNO_NAME_CHART_ROW_AS_LABEL), FN_UNO_RANGE_ROW_LABEL,    CPPU_E2T(CPPUTYPE_BOOLEAN),         PropertyAttribute::MAYBEVOID,  0},
                     { SW_PROP_NMID(UNO_NAME_CHART_COLUMN_AS_LABEL), FN_UNO_RANGE_COL_LABEL, CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID,     0},
@@ -1002,9 +984,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_FILE_LINK), WID_SECT_LINK     , CPPU_E2T(CPPUTYPE_SECTFILELNK),     PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_IS_VISIBLE), WID_SECT_VISIBLE   , CPPU_E2T(CPPUTYPE_BOOLEAN),           PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_IS_PROTECTED), WID_SECT_PROTECTED, CPPU_E2T(CPPUTYPE_BOOLEAN),              PROPERTY_NONE,     0},
-                    // --> FME 2004-06-22 #114856# edit in readonly sections
                     { SW_PROP_NMID(UNO_NAME_EDIT_IN_READONLY), WID_SECT_EDIT_IN_READONLY,    CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE, 0},
-                    // <--
                     { SW_PROP_NMID(UNO_NAME_LINK_REGION), WID_SECT_REGION   , CPPU_E2T(CPPUTYPE_OUSTRING)  ,        PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_TEXT_COLUMNS), RES_COL,                CPPU_E2T(CPPUTYPE_REFTEXTCOL),    PROPERTY_NONE, MID_COLUMNS},
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_URL), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_URL    },
@@ -1036,10 +1016,8 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     _REDLINE_NODE_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_IS_CURRENTLY_VISIBLE), WID_SECT_CURRENTLY_VISIBLE, CPPU_E2T(CPPUTYPE_BOOLEAN),          PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
-                    /* -> #109700# */
                     { SW_PROP_NMID(UNO_NAME_SECT_LEFT_MARGIN), RES_LR_SPACE,            CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, MID_L_MARGIN|CONVERT_TWIPS},                                   \
                     { SW_PROP_NMID(UNO_NAME_SECT_RIGHT_MARGIN), RES_LR_SPACE,           CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},                                  \
-                    /* <- #1097001# */
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aSectionPropertyMap_Impl;
@@ -1052,7 +1030,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_SEARCH_ALL), WID_SEARCH_ALL,        CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_SEARCH_BACKWARDS), WID_BACKWARDS,           CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_SEARCH_CASE_SENSITIVE), WID_CASE_SENSITIVE,     CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
-                //  { SW_PROP_NMID(UNO_NAME_SEARCH_IN_SELECTION), WID_IN_SELECTION,         CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_SEARCH_REGULAR_EXPRESSION), WID_REGULAR_EXPRESSION, CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_SEARCH_SIMILARITY), WID_SIMILARITY,         CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_SEARCH_SIMILARITY_ADD), WID_SIMILARITY_ADD,     CPPU_E2T(CPPUTYPE_INT16)  ,     PROPERTY_NONE,     0},
@@ -1076,7 +1053,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_CHAIN_PREV_NAME), RES_CHAIN,                CPPU_E2T(CPPUTYPE_OUSTRING),            PropertyAttribute::MAYBEVOID ,MID_CHAIN_PREVNAME},
                 /*not impl*/    { SW_PROP_NMID(UNO_NAME_CLIENT_MAP), RES_URL,               CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,MID_URL_CLIENTMAP         },
                     { SW_PROP_NMID(UNO_NAME_EDIT_IN_READONLY), RES_EDIT_IN_READONLY,    CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE, 0},
-                //  { SW_PROP_NMID(UNO_NAME_GRAPHIC), RES_BACKGROUND,       &,                              PROPERTY_NONE, MID_GRAPHIC
                     { SW_PROP_NMID(UNO_NAME_TEXT_COLUMNS), RES_COL,                CPPU_E2T(CPPUTYPE_REFTEXTCOL),    PROPERTY_NONE, MID_COLUMNS},
                     //next elements are part of the service description
                     { SW_PROP_NMID(UNO_NAME_FRAME_HEIGHT_ABSOLUTE),         RES_FRM_SIZE,           CPPU_E2T(CPPUTYPE_INT32),       PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS         },
@@ -1107,7 +1083,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_FILTER), FN_UNO_GRAPHIC_FILTER,      CPPU_E2T(CPPUTYPE_OUSTRING), 0, 0 },
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC), FN_UNO_GRAPHIC, CPPU_E2T(CPPUTYPE_REFXGRAPHIC), 0, 0 },
                     { SW_PROP_NMID(UNO_NAME_ACTUAL_SIZE), FN_UNO_ACTUAL_SIZE,    CPPU_E2T(CPPUTYPE_AWTSIZE),  PropertyAttribute::READONLY, CONVERT_TWIPS},
-//                    { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), FN_UNO_ALTERNATIVE_TEXT,CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE , 0   },
                     { SW_PROP_NMID(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, CPPU_E2T(CPPUTYPE_PNTSEQSEQ), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_IS_PIXEL_CONTOUR), FN_UNO_IS_PIXEL_CONTOUR, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0 },
                     { SW_PROP_NMID(UNO_NAME_IS_AUTOMATIC_CONTOUR), FN_UNO_IS_AUTOMATIC_CONTOUR , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0 },
@@ -1142,7 +1117,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_URL), FN_UNO_REPLACEMENT_GRAPHIC_URL, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC), FN_UNO_REPLACEMENT_GRAPHIC, CPPU_E2T(CPPUTYPE_REFXGRAPHIC), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_COMPONENT),FN_UNO_COMPONENT, CPPU_E2T(CPPUTYPE_REFCOMPONENT), PropertyAttribute::READONLY, 0},
-//                    { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), FN_UNO_ALTERNATIVE_TEXT,CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE , 0   },
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aEmbeddedPropertyMap_Impl;
@@ -1173,11 +1147,11 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_TEXT_RANGE), FN_TEXT_RANGE,         CPPU_E2T(CPPUTYPE_REFTXTRANGE),         PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_OPAQUE), RES_OPAQUE,             CPPU_E2T(CPPUTYPE_BOOLEAN),            PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_ANCHOR_POSITION), FN_ANCHOR_POSITION,    CPPU_E2T(CPPUTYPE_AWTPOINT),    PropertyAttribute::READONLY, 0},
-                    // OD 2004-05-04 #i26791#
+                    // #i26791#
                     { SW_PROP_NMID(UNO_NAME_IS_FOLLOWING_TEXT_FLOW), RES_FOLLOW_TEXT_FLOW,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
-                    // --> OD 2004-06-29 #i28701#
+                    // #i28701#
                     { SW_PROP_NMID(UNO_NAME_WRAP_INFLUENCE_ON_POSITION), RES_WRAP_INFLUENCE_ON_OBJPOS, CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, MID_WRAP_INFLUENCE},
-                    // --> OD 2004-08-06 #i28749#
+                    // #i28749#
                     { SW_PROP_NMID( UNO_NAME_TRANSFORMATION_IN_HORI_L2R),
                                     FN_SHAPE_TRANSFORMATION_IN_HORI_L2R,
                                     CPPU_E2T(CPPUTYPE_TRANSFORMATIONINHORIL2R),
@@ -1186,8 +1160,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                                     FN_SHAPE_POSITION_LAYOUT_DIR,
                                     CPPU_E2T(CPPUTYPE_INT16),
                                     PROPERTY_NONE, 0},
-                    // <--
-                    // --> OD 2004-10-28 #i36248#
+                    // #i36248#
                     { SW_PROP_NMID( UNO_NAME_STARTPOSITION_IN_HORI_L2R),
                                     FN_SHAPE_STARTPOSITION_IN_HORI_L2R,
                                     CPPU_E2T(CPPUTYPE_AWTPOINT),
@@ -1196,11 +1169,9 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                                     FN_SHAPE_ENDPOSITION_IN_HORI_L2R,
                                     CPPU_E2T(CPPUTYPE_AWTPOINT),
                                     PropertyAttribute::READONLY, 0},
-                    // <--
-                    // --> OD 2006-11-09 #i71182#
+                    // #i71182#
                     // missing map entry for property <PageToogle>
                     { SW_PROP_NMID(UNO_NAME_PAGE_TOGGLE), RES_HORI_ORIENT,      CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,MID_HORIORIENT_PAGETOGGLE },
-                    // <--
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aShapeMap_Impl;
@@ -1263,7 +1234,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_USE_DASH), WID_USE_DASH                            ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_USE_UPPER_CASE), WID_USE_UPPER_CASE                      ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_LEVEL_FORMAT), WID_LEVEL_FORMAT                        ,  CPPU_E2T(CPPUTYPE_REFIDXREPL)  , PROPERTY_NONE,   0},
-                //  { SW_PROP_NMID(UNO_NAME_???                               ),   WID_???                                 ,  &_getReflection  , PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_MAIN_ENTRY_CHARACTER_STYLE_NAME), WID_MAIN_ENTRY_CHARACTER_STYLE_NAME     ,  CPPU_E2T(CPPUTYPE_OUSTRING)  , PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_TEXT_COLUMNS), RES_COL,                CPPU_E2T(CPPUTYPE_REFTEXTCOL),    PROPERTY_NONE, MID_COLUMNS},
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_URL), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_URL    },
@@ -1294,14 +1264,11 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_LEVEL), WID_LEVEL                               ,  CPPU_E2T(CPPUTYPE_INT16)  , PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_CREATE_FROM_MARKS), WID_CREATE_FROM_MARKS                   ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_CREATE_FROM_OUTLINE), WID_CREATE_FROM_OUTLINE                 ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
-                //  { SW_PROP_NMID(UNO_NAME_PARAGRAPH_STYLE_NAMES), WID_PARAGRAPH_STYLE_NAMES               ,  CPPU_E2T(CPPUTYPE_REFIDXREPL)  , PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_CREATE_FROM_CHAPTER), WID_CREATE_FROM_CHAPTER                 ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_IS_PROTECTED), WID_PROTECTED                           ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_LEVEL_FORMAT), WID_LEVEL_FORMAT                        ,  CPPU_E2T(CPPUTYPE_REFIDXREPL)  , PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_LEVEL_PARAGRAPH_STYLES), WID_LEVEL_PARAGRAPH_STYLES              ,  CPPU_E2T(CPPUTYPE_REFIDXREPL)  , PropertyAttribute::READONLY,     0},
                     { SW_PROP_NMID(UNO_NAME_CREATE_FROM_LEVEL_PARAGRAPH_STYLES), WID_CREATE_FROM_PARAGRAPH_STYLES, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
-                //  { SW_PROP_NMID(UNO_NAME_RECALC_TAB_STOPS), WID_RECALC_TAB_STOPS                    ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
-                //  { SW_PROP_NMID(UNO_NAME_???                               ), WID_???                                 ,  &_getReflection  , PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_TEXT_COLUMNS), RES_COL,                CPPU_E2T(CPPUTYPE_REFTEXTCOL),    PROPERTY_NONE, MID_COLUMNS},
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_URL), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_URL    },
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_FILTER), RES_BACKGROUND,       CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
@@ -1332,7 +1299,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 {
                     _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NMID(UNO_NAME_CREATE_FROM_MARKS), WID_CREATE_FROM_MARKS                   ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
-                //  { SW_PROP_NMID(UNO_NAME_PARAGRAPH_STYLE_NAMES), WID_PARAGRAPH_STYLE_NAMES               ,  CPPU_E2T(CPPUTYPE_REFIDXREPL)  , PROPERTY_NONE,0},
                     { SW_PROP_NMID(UNO_NAME_CREATE_FROM_CHAPTER), WID_CREATE_FROM_CHAPTER                 ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_IS_PROTECTED), WID_PROTECTED                           ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_USE_LEVEL_FROM_SOURCE), WID_USE_LEVEL_FROM_SOURCE               ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
@@ -1462,8 +1428,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_SIZE_TYPE), RES_FRM_SIZE,           CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
                     { SW_PROP_NMID(UNO_NAME_WIDTH_TYPE), RES_FRM_SIZE,          CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_WIDTH_TYPE },
                     { SW_PROP_NMID(UNO_NAME_IS_SPLIT_ALLOWED), RES_ROW_SPLIT,       CPPU_E2T(CPPUTYPE_BOOLEAN)  , PropertyAttribute::MAYBEVOID, 0},
-                //  { SW_PROP_NMID(UNO_NAME_HEIGHT), RES_FRM_SIZE,          CPPU_E2T(CPPUTYPE_INT32)  ,         PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS         },
-                //  { SW_PROP_NMID(UNO_NAME_SHADOW_FORMAT), RES_SHADOW,             CPPU_E2T(CPPUTYPE_SHADOWFMT),   PROPERTY_NONE, CONVERT_TWIPS},
                     {0,0,0,0,0,0}
                 };
 
@@ -1485,17 +1449,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_LOCATION), RES_BACKGROUND,         CPPU_E2T(CPPUTYPE_GRAPHICLOC), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
                     { SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT), RES_BOXATR_FORMAT,  CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID ,0             },
                     { SW_PROP_NMID(UNO_NAME_BACK_TRANSPARENT), RES_BACKGROUND,  CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE , MID_GRAPHIC_TRANSPARENT      },
-                    // commented ones are already part of
-                    // COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01:
-//                    { SW_PROP_NMID(UNO_NAME_LEFT_BORDER), RES_BOX,    CPPU_E2T(CPPUTYPE_BORDERLINE),    0, LEFT_BORDER  |CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_RIGHT_BORDER), RES_BOX,    CPPU_E2T(CPPUTYPE_BORDERLINE),   0, RIGHT_BORDER |CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_TOP_BORDER), RES_BOX,    CPPU_E2T(CPPUTYPE_BORDERLINE), 0, TOP_BORDER   |CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_BOTTOM_BORDER), RES_BOX,    CPPU_E2T(CPPUTYPE_BORDERLINE),  0, BOTTOM_BORDER|CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_BORDER_DISTANCE), RES_BOX,    CPPU_E2T(CPPUTYPE_INT32), 0, BORDER_DISTANCE|CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_LEFT_BORDER_DISTANCE), RES_BOX,             CPPU_E2T(CPPUTYPE_INT32),   0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                CPPU_E2T(CPPUTYPE_INT32),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_TOP_BORDER_DISTANCE), RES_BOX,              CPPU_E2T(CPPUTYPE_INT32),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
-//                    { SW_PROP_NMID(UNO_NAME_BOTTOM_BORDER_DISTANCE), RES_BOX,               CPPU_E2T(CPPUTYPE_INT32),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
                     { SW_PROP_NMID(UNO_NAME_USER_DEFINED_ATTRIBUTES), RES_UNKNOWNATR_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_TEXT_SECTION), FN_UNO_TEXT_SECTION, CPPU_E2T(CPPUTYPE_REFTEXTSECTION),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
                     { SW_PROP_NMID(UNO_NAME_IS_PROTECTED), RES_PROTECT,            CPPU_E2T(CPPUTYPE_BOOLEAN), 0, MID_PROTECT_CONTENT},
@@ -1591,9 +1544,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_LOCK_UPDATES),        WID_DOC_LOCK_UPDATES,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
                     { SW_PROP_NMID(UNO_NAME_HAS_VALID_SIGNATURES),  WID_DOC_HAS_VALID_SIGNATURES, CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::READONLY,   0},
                     { SW_PROP_NMID(UNO_NAME_BUILDID), WID_DOC_BUILDID, CPPU_E2T(CPPUTYPE_OUSTRING), 0, 0},
-                    // --> OD 2006-03-21 #b6375613#
                     { SW_PROP_NMID(UNO_NAME_APPLY_WORKAROUND_FOR_B6375613), WID_APPLY_WORKAROUND_FOR_B6375613, CPPU_E2T(CPPUTYPE_BOOLEAN), 0, 0},
-                    // <--
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aDocMap_Impl;
@@ -1688,9 +1639,8 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_HYPERLINK_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),  PropertyAttribute::MAYBEVOID,     0},
                     { SW_PROP_NMID(UNO_NAME_IS_SPLIT_ALLOWED), RES_ROW_SPLIT,       CPPU_E2T(CPPUTYPE_BOOLEAN)  , PropertyAttribute::MAYBEVOID, 0},
-                    // --> collapsing borders DVO, FME 2005-05-27 #i29550#
+                    // #i29550#
                     { SW_PROP_NMID(UNO_NAME_COLLAPSING_BORDERS), RES_COLLAPSING_BORDERS, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
-                    // <-- collapsing
 
             //text grid enhancement for better CJK support.  2007-04-01
             //just export the default page mode property, other properties are not handled in this version
@@ -3102,11 +3052,6 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
 sal_Bool SwItemPropertySet::FillItem(SfxItemSet& /*rSet*/, sal_uInt16 /*nWhich*/, sal_Bool /*bGetProperty*/) const
 {
     sal_Bool bRet = sal_False;
-/*  if(nWhich == SID_ATTR_PAGE_PAPERBIN)
-    {
-        rSet.Put(SvxPaperBinItem(SID_ATTR_PAGE_PAPERBIN, 0));
-        bRet = sal_True;
-    }*/
     return bRet;
 }
 
