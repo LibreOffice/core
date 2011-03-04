@@ -1480,6 +1480,12 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
     return nMSTotalWidth;
 }
 
+/*
+ * WW8Cp2Fc is a good method, a CP always maps to a FC
+ * WW8Fc2Cp on the other hand is more dubious, a random FC
+ * may not map to a valid CP. Try and avoid WW8Fc2Cp where
+ * possible
+ */
 WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
 {
     WW8_CP nFallBackCpEnd = WW8_CP_MAX;
