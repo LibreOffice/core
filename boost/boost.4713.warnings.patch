@@ -866,3 +866,16 @@
  
    assert((last_block * bits_per_block) < static_cast<size_type>(ulong_width));
  
+--- misc/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-03-04 11:33:36.269274940 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-03-04 11:33:36.269274940 +0000
+@@ -259,6 +259,10 @@
+ 
+         static void enforce_null_policy( const Ty_* x, const char* msg )
+         {
++#ifdef BOOST_PTR_CONTAINER_NO_EXCEPTIONS
++            (void)x;
++            (void)msg;
++#endif
+             if( !allow_null )
+             {
+                 BOOST_PTR_CONTAINER_THROW_EXCEPTION( 0 == x && "null not allowed", 
