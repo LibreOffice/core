@@ -295,7 +295,7 @@ setProperty( uno::Reference< uno::XInterface > const& xPeer,
     }
     catch( uno::RuntimeException & )
     {
-        DBG_ERROR5( "Warning: %s( %s )( %s ) attribute is of type %s( rejected: %s )\n", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ), OUSTRING_CSTR( prop.Name ),  OUSTRING_CSTR( prop.Type.getTypeName() ), OUSTRING_CSTR( value ) );
+        OSL_TRACE( "Warning: %s( %s )( %s ) attribute is of type %s( rejected: %s )\n", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ), OUSTRING_CSTR( prop.Name ),  OUSTRING_CSTR( prop.Type.getTypeName() ), OUSTRING_CSTR( value ) );
         return;
     }
 
