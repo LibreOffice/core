@@ -250,7 +250,7 @@ setProperties( uno::Reference< uno::XInterface > const& xPeer,
         for ( PropList::const_iterator it = rProps.begin(); it != rProps.end();
               ++it )
         {
-            DBG_ERROR2( "%s=%s\n", OUSTRING_CSTR( it->first ), OUSTRING_CSTR( it->second ) );
+            OSL_TRACE( "%s=%s\n", OUSTRING_CSTR( it->first ), OUSTRING_CSTR( it->second ) );
         }
         return;
     }
@@ -306,7 +306,7 @@ setProperty( uno::Reference< uno::XInterface > const& xPeer,
     }
     catch( ... )
     {
-        DBG_ERROR2( "Warning: cannot set attribute %s to %s \n", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ) );
+        OSL_TRACE( "Warning: cannot set attribute %s to %s \n", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ) );
     }
 }
 

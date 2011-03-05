@@ -150,7 +150,7 @@ WidgetElement::startChildElement ( sal_Int32 nUid, OUString const &name,
 
     if ( !mpWidget->addChild( pChild->mpWidget ) )
     {
-        DBG_ERROR2( "ERROR: cannot add %s to container %s, container full", OUSTRING_CSTR( name ), OUSTRING_CSTR( getLocalName() ) );
+        OSL_TRACE( "ERROR: cannot add %s to container %s, container full", OUSTRING_CSTR( name ), OUSTRING_CSTR( getLocalName() ) );
         throw xml::sax::SAXException();
     }
 
