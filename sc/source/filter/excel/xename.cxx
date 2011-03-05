@@ -671,24 +671,14 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
 
 void XclExpNameManagerImpl::CreateUserNames()
 {
-#if NEW_RANGE_NAME
     const ScRangeName& rNamedRanges = GetNamedRanges();
     ScRangeName::const_iterator itr = rNamedRanges.begin(), itrEnd = rNamedRanges.end();
     for (; itr != itrEnd; ++itr)
     {
-        // TODO: re-implement maNameMap to map name to excel index.
-    }
-#else
-    const ScRangeName& rNamedRanges = GetNamedRanges();
-    for( USHORT nNameIdx = 0, nNameCount = rNamedRanges.GetCount(); nNameIdx < nNameCount; ++nNameIdx )
-    {
-        const ScRangeData* pRangeData = rNamedRanges[ nNameIdx ];
-        DBG_ASSERT( rNamedRanges[ nNameIdx ], "XclExpNameManagerImpl::CreateUserNames - missing defined name" );
         // skip definitions of shared formulas
-        if( pRangeData && !pRangeData->HasType( RT_SHARED ) && !FindNameIdx( maNameMap, pRangeData->GetIndex() ) )
-            CreateName( *pRangeData );
+        if (!itr->HasType(RT_SHARED) && !FindNameIdx(maNameMap, itr->GetIndex()))
+            CreateName(*itr);
     }
-#endif
 }
 
 void XclExpNameManagerImpl::CreateDatabaseNames()
