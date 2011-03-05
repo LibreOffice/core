@@ -29,9 +29,12 @@
 #ifndef SC_RANGEUTL_HXX
 #define SC_RANGEUTL_HXX
 
-#include "address.hxx"
 #include <tools/string.hxx>
+
+#include "address.hxx"
+#include "rangenam.hxx"
 #include "scdllapi.h"
+
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -303,11 +306,13 @@ public:
 class SC_DLLPUBLIC ScAreaNameIterator
 {
 private:
-    ScRangeName*    pRangeName;
-    ScDBCollection* pDBCollection;
-    BOOL            bFirstPass;
-    USHORT          nPos;
     String          aStrNoName;
+    ScRangeName*    pRangeName;
+    ScRangeName::const_iterator maRNPos;
+    ScRangeName::const_iterator maRNEnd;
+    ScDBCollection* pDBCollection;
+    bool            bFirstPass;
+    size_t          nPos;
 
 public:
             ScAreaNameIterator( ScDocument* pDoc );

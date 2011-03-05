@@ -1037,38 +1037,43 @@ BOOL ScArea::operator==( const ScArea& r ) const
 //------------------------------------------------------------------------
 
 ScAreaNameIterator::ScAreaNameIterator( ScDocument* pDoc ) :
-    aStrNoName( ScGlobal::GetRscString(STR_DB_NONAME) )
+    aStrNoName(ScGlobal::GetRscString(STR_DB_NONAME)),
+    pRangeName(pDoc->GetRangeName()),
+    pDBCollection(pDoc->GetDBCollection()),
+    bFirstPass(true),
+    nPos(0)
 {
-    pRangeName = pDoc->GetRangeName();
-    pDBCollection = pDoc->GetDBCollection();
-    nPos = 0;
-    bFirstPass = TRUE;
+    if (pRangeName)
+    {
+        maRNPos = pRangeName->begin();
+        maRNEnd = pRangeName->end();
+    }
 }
 
 BOOL ScAreaNameIterator::Next( String& rName, ScRange& rRange )
 {
     for (;;)
     {
-#if NEW_RANGE_NAME
-#else
         if ( bFirstPass )                                   // erst Bereichsnamen
         {
-            if ( pRangeName && nPos < pRangeName->GetCount() )
+            if ( pRangeName && maRNPos != maRNEnd )
             {
-                ScRangeData* pData = (*pRangeName)[nPos++];
-                if ( pData && pData->IsValidReference(rRange) )
+                const ScRangeData& rData = *maRNPos;
+                ++maRNPos;
+                bool bValid = rData.IsValidReference(rRange);
+                if (bValid)
                 {
-                    rName = pData->GetName();
-                    return TRUE;                            // gefunden
+                    rName = rData.GetName();
+                    return true;                            // gefunden
                 }
             }
             else
             {
-                bFirstPass = FALSE;
+                bFirstPass = false;
                 nPos = 0;
             }
         }
-#endif
+
         if ( !bFirstPass )                                  // dann DB-Bereiche
         {
             if ( pDBCollection && nPos < pDBCollection->GetCount() )
