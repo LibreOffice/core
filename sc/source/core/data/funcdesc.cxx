@@ -836,7 +836,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
     {
         if (nSuppressed > nArgs)
         {
-            DBG_ERROR3( "ScFuncRes: suppressed parameters count mismatch on OpCode %u: suppressed %d > params %d",
+            OSL_TRACE( "ScFuncRes: suppressed parameters count mismatch on OpCode %u: suppressed %d > params %d",
                     aRes.GetId(), (int)nSuppressed, (int)nArgs);
             nSuppressed = nArgs;    // sanitize
         }
@@ -847,7 +847,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
             {
                 if (pDesc->nArgCount >= VAR_ARGS && nParam == nArgs-1)
                 {
-                    DBG_ERROR3( "ScFuncRes: VAR_ARGS parameters can't be suppressed, on OpCode %u: param %d == arg %d-1",
+                    OSL_TRACE( "ScFuncRes: VAR_ARGS parameters can't be suppressed, on OpCode %u: param %d == arg %d-1",
                             aRes.GetId(), (int)nParam, (int)nArgs);
                 }
                 else
@@ -858,7 +858,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
             }
             else
             {
-                DBG_ERROR3( "ScFuncRes: suppressed parameter exceeds count on OpCode %u: param %d >= args %d",
+                OSL_TRACE( "ScFuncRes: suppressed parameter exceeds count on OpCode %u: param %d >= args %d",
                         aRes.GetId(), (int)nParam, (int)nArgs);
             }
         }
