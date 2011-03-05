@@ -736,9 +736,7 @@ BOOL OHTMLImportExport::Read()
         ((OHTMLReader*)m_pReader)->AddRef();
         if ( isCheckEnabled() )
             m_pReader->enableCheckOnly();
-        //dyf add 20070601
         m_pReader->SetTableName(m_sDefaultTableName);
-        //dyf add end
         eState = ((OHTMLReader*)m_pReader)->CallParser();
         m_pReader->release();
         m_pReader = NULL;

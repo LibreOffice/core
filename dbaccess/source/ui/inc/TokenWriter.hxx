@@ -84,10 +84,10 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
 
         ::rtl::OUString m_sName;
-        //dyf add 20070601
+
         //for transfor the tablename
         ::rtl::OUString m_sDefaultTableName;
-        //dyf add end
+
         ::rtl::OUString m_sDataSourceName;
         sal_Int32       m_nCommandType;
         bool            m_bNeedToReInitialize;
@@ -121,10 +121,8 @@ namespace dbaui
     public:
         void setStream(SvStream* _pStream){  m_pStream = _pStream; }
 
-        //dyf add 20070601
         //for set the tablename
         void setSTableName(const ::rtl::OUString &_sTableName){ m_sDefaultTableName = _sTableName; }
-        //dyf add end
 
         virtual BOOL Write(); // Export
         virtual BOOL Read(); // Import

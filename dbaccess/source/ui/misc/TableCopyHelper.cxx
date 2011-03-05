@@ -266,10 +266,9 @@ sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc
     if ( _bCheck )
         pImport->enableCheckOnly();
 
-    //dyf add 20070601
     //set the selected tablename
     pImport->setSTableName(_rDesc.sDefaultTableName);
-    //dyf add end
+
     pImport->setStream(pStream);
     return pImport->Read();
 }

@@ -166,9 +166,7 @@ namespace dbaui
 
         void    SetColumnTypes(const TColumnVector* rList,const OTypeInfoMap* _pInfoMap);
 
-        //dyf add 20070601
         inline void                    SetTableName(const ::rtl::OUString &_sTableName){ m_sDefaultTableName = _sTableName ; }
-        //dyf add end
 
         virtual void release() = 0;
 
