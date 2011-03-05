@@ -50,6 +50,7 @@
 
 using namespace formula;
 using ::std::pair;
+using ::std::unary_function;
 using ::rtl::OUString;
 
 //========================================================================
@@ -662,69 +663,103 @@ bool operator<(const ScRangeData& left, const ScRangeData& right)
     return left.GetName() < right.GetName();
 }
 
+namespace {
+
+/**
+ * Predicate to check if the name references the specified range.
+ */
+class MatchByRange : public unary_function<ScRangeData, bool>
+{
+    const ScRange& mrRange;
+public:
+    MatchByRange(const ScRange& rRange) : mrRange(rRange) {}
+    bool operator() (const ScRangeData& r) const
+    {
+        return r.IsRangeAtBlock(mrRange);
+    }
+};
+
+class MatchByName : public unary_function<ScRangeData, bool>
+{
+    const OUString& mrName;
+public:
+    MatchByName(const OUString& rName) : mrName(rName) {}
+    bool operator() (const ScRangeData& r) const
+    {
+        return mrName.equals(r.GetName());
+    }
+};
+
+class MatchByUpperName : public unary_function<ScRangeData, bool>
+{
+    const OUString& mrName;
+public:
+    MatchByUpperName(const OUString& rName) : mrName(rName) {}
+    bool operator() (const ScRangeData& r) const
+    {
+        return mrName.equals(r.GetUpperName());
+    }
+};
+
+class MatchByIndex : public unary_function<ScRangeData, bool>
+{
+    USHORT mnIndex;
+public:
+    MatchByIndex(USHORT nIndex) : mnIndex(nIndex) {}
+    bool operator() (const ScRangeData& r) const
+    {
+        return mnIndex == r.GetIndex();
+    }
+};
+
+}
+
 ScRangeName::ScRangeName(ScDocument* pDoc) :
     mpDoc(pDoc) {}
 
 ScRangeName::ScRangeName(const ScRangeName& r) :
     maData(r.maData), mpDoc(r.mpDoc), mnSharedMaxIndex(r.mnSharedMaxIndex) {}
 
-const ScRangeData* ScRangeName::GetRangeAtBlock(const ScRange& rRange) const
+const ScRangeData* ScRangeName::findByRange(const ScRange& rRange) const
 {
-    DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
-    for (; itr != itrEnd; ++itr)
-    {
-        if (itr->IsRangeAtBlock(rRange))
-            return &(*itr);
-    }
-    return NULL;
+    DataType::const_iterator itr = std::find_if(
+        maData.begin(), maData.end(), MatchByRange(rRange));
+    return itr == maData.end() ? NULL : &(*itr);
 }
 
 ScRangeData* ScRangeName::findByName(const OUString& rName)
 {
-    DataType::iterator itr = maData.begin(), itrEnd = maData.end();
-    for (; itr != itrEnd; ++itr)
-    {
-        String aName;
-        itr->GetName(aName);
-        if (rName.equals(aName))
-            return &(*itr);
-    }
-    return NULL;
+    DataType::iterator itr = std::find_if(
+        maData.begin(), maData.end(), MatchByName(rName));
+    return itr == maData.end() ? NULL : &(*itr);
 }
 
 const ScRangeData* ScRangeName::findByName(const OUString& rName) const
 {
-    DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
-    for (; itr != itrEnd; ++itr)
-    {
-        String aName;
-        itr->GetName(aName);
-        if (rName.equals(aName))
-            return &(*itr);
-    }
-    return NULL;
+    DataType::const_iterator itr = std::find_if(
+        maData.begin(), maData.end(), MatchByName(rName));
+    return itr == maData.end() ? NULL : &(*itr);
 }
 
 ScRangeData* ScRangeName::findByUpperName(const OUString& rName)
 {
-    DataType::iterator itr = maData.begin(), itrEnd = maData.end();
-    for (; itr != itrEnd; ++itr)
-    {
-        if (rName.equals(itr->GetUpperName()))
-            return &(*itr);
-    }
-    return NULL;
+    DataType::iterator itr = std::find_if(
+        maData.begin(), maData.end(), MatchByUpperName(rName));
+    return itr == maData.end() ? NULL : &(*itr);
 }
 
 const ScRangeData* ScRangeName::findByUpperName(const OUString& rName) const
 {
-    DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
-    for (; itr != itrEnd; ++itr)
-    {
-        if (rName.equals(itr->GetUpperName()))
-            return &(*itr);
-    }
-    return NULL;
+    DataType::const_iterator itr = std::find_if(
+        maData.begin(), maData.end(), MatchByUpperName(rName));
+    return itr == maData.end() ? NULL : &(*itr);
+}
+
+ScRangeData* ScRangeName::findByIndex(USHORT i)
+{
+    DataType::iterator itr = std::find_if(
+        maData.begin(), maData.end(), MatchByIndex(i));
+    return itr == maData.end() ? NULL : &(*itr);
 }
 
 void ScRangeName::UpdateReference(
@@ -754,15 +789,6 @@ void ScRangeName::UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY)
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
         itr->UpdateGrow(rArea, nGrowX, nGrowY);
-}
-
-ScRangeData* ScRangeName::findByIndex(USHORT i)
-{
-    DataType::iterator itr = maData.begin(), itrEnd = maData.end();
-    for (; itr != itrEnd; ++itr)
-        if (itr->GetIndex() == i)
-            return &(*itr);
-    return NULL;
 }
 
 sal_uInt16 ScRangeName::GetSharedMaxIndex()

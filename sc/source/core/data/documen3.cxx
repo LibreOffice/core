@@ -108,7 +108,7 @@ const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, String* p
     const ScRangeData* pData = NULL;
     if ( pRangeName )
     {
-        pData = pRangeName->GetRangeAtBlock( rBlock );
+        pData = pRangeName->findByRange( rBlock );
         if (pData && pName)
             *pName = pData->GetName();
     }
