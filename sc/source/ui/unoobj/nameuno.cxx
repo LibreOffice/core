@@ -143,58 +143,58 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* p
                                     const ScAddress* pNewPos, const sal_uInt16* pNewType,
                                     const formula::FormulaGrammar::Grammar eGrammar )
 {
-#if NEW_RANGE_NAME
-#else
-    if (pDocShell)
+    if (!pDocShell)
+        return;
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    ScRangeName* pNames = pDoc->GetRangeName();
+    if (!pNames)
+        return;
+
+    const ScRangeData* pOld = pNames->findByName(aName);
+    if (!pOld)
+        return;
+
+    ScRangeName* pNewRanges = new ScRangeName(*pNames);
+
+    String aInsName = pOld->GetName();
+    if (pNewName)
+        aInsName = *pNewName;
+
+    String aContent;                            // Content string based =>
+    pOld->GetSymbol( aContent, eGrammar);   // no problems with changed positions and such.
+    if (pNewContent)
+        aContent = *pNewContent;
+
+    ScAddress aPos = pOld->GetPos();
+    if (pNewPos)
+        aPos = *pNewPos;
+
+    sal_uInt16 nType = pOld->GetType();
+    if (pNewType)
+        nType = *pNewType;
+
+    ScRangeData* pNew = NULL;
+    if (pNewTokens)
+        pNew = new ScRangeData( pDoc, aInsName, *pNewTokens, aPos, nType );
+    else
+        pNew = new ScRangeData( pDoc, aInsName, aContent, aPos, nType, eGrammar );
+
+    pNew->SetIndex( pOld->GetIndex() );
+
+    pNewRanges->erase(*pOld);
+    if (pNewRanges->insert(pNew))
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScRangeName* pNames = pDoc->GetRangeName();
-        if (pNames)
-        {
-            sal_uInt16 nPos = 0;
-            if (pNames->SearchName( aName, nPos ))
-            {
-                ScRangeName* pNewRanges = new ScRangeName( *pNames );
-                ScRangeData* pOld = (*pNames)[nPos];
+        ScDocFunc aFunc(*pDocShell);
+        aFunc.SetNewRangeNames(pNewRanges, mpParent->IsModifyAndBroadcast());
 
-                String aInsName(pOld->GetName());
-                if (pNewName)
-                    aInsName = *pNewName;
-                String aContent;                            // Content string based =>
-                pOld->GetSymbol( aContent, eGrammar);   // no problems with changed positions and such.
-                if (pNewContent)
-                    aContent = *pNewContent;
-                ScAddress aPos(pOld->GetPos());
-                if (pNewPos)
-                    aPos = *pNewPos;
-                sal_uInt16 nType = pOld->GetType();
-                if (pNewType)
-                    nType = *pNewType;
-
-                ScRangeData* pNew = NULL;
-                if ( pNewTokens )
-                    pNew = new ScRangeData( pDoc, aInsName, *pNewTokens, aPos, nType );
-                else
-                    pNew = new ScRangeData( pDoc, aInsName, aContent, aPos, nType, eGrammar );
-                pNew->SetIndex( pOld->GetIndex() );
-
-                pNewRanges->AtFree( nPos );
-                if ( pNewRanges->Insert(pNew) )
-                {
-                    ScDocFunc aFunc(*pDocShell);
-                    aFunc.SetNewRangeNames( pNewRanges, mpParent->IsModifyAndBroadcast());
-
-                    aName = aInsName;   //! broadcast?
-                }
-                else
-                {
-                    delete pNew;        //! uno::Exception/Fehler oder so
-                    delete pNewRanges;
-                }
-            }
-        }
+        aName = aInsName;   //! broadcast?
     }
-#endif
+    else
+    {
+        delete pNew;        //! uno::Exception/Fehler oder so
+        delete pNewRanges;
+    }
 }
 
 
