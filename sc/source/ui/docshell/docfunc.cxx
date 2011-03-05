@@ -4581,7 +4581,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
             {
                 ScRangeData* pData = new ScRangeData( pDoc, aName, aContent,
                         ScAddress( nPosX, nPosY, nTab));
-                if (!rList.Insert(pData))
+                if (!rList.insert(pData))
                 {
                     OSL_FAIL("nanu?");
                     delete pData;

@@ -440,7 +440,7 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                     else
                         pSaveObj->Clear();
 
-                    if ( !aLocalRangeName.Insert( pNewEntry ) )
+                    if ( !aLocalRangeName.insert( pNewEntry ) )
                         delete pNewEntry;
 
                     UpdateNames();

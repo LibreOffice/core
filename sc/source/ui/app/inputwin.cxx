@@ -1678,7 +1678,7 @@ void ScPosWnd::DoEnter()
                         String aContent;
                         aSelection.Format( aContent, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
                         ScRangeData* pNew = new ScRangeData( pDoc, aText, aContent, aCursor );
-                        if ( aNewRanges.Insert(pNew) )
+                        if ( aNewRanges.insert(pNew) )
                         {
                             ScDocFunc aFunc(*pDocShell);
                             aFunc.ModifyRangeNames( aNewRanges );

@@ -2941,7 +2941,7 @@ BOOL ScViewFunc::InsertName( const String& rName, const String& rSymbol,
             pList->erase(*pData);
         }
 
-        if ( pList->Insert( pNewEntry ) )
+        if ( pList->insert( pNewEntry ) )
         {
             pNewEntry = NULL;   // nicht loeschen
             bOk = TRUE;

@@ -132,7 +132,7 @@ void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const String& rName, const
     ScTokenArray aTokArray;
     aTokArray.AddDoubleReference( aRefData );
     ScRangeData* pRangeData = new ScRangeData( pDoc, rName, aTokArray );
-    if( !pDoc->GetRangeName()->Insert( pRangeData ) )
+    if( !pDoc->GetRangeName()->insert( pRangeData ) )
         delete pRangeData;
 }
 

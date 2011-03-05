@@ -828,11 +828,6 @@ bool ScRangeName::insert(ScRangeData* p)
     return r.second;
 }
 
-bool ScRangeName::Insert(ScRangeData* p)
-{
-    return insert(p);
-}
-
 void ScRangeName::erase(const ScRangeData& r)
 {
     maData.erase(r);

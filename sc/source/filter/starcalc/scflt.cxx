@@ -1112,9 +1112,9 @@ void Sc10Import::ImportNameCollection()
     for (USHORT i = 0; i < pNameCollection->GetCount(); i++)
     {
         Sc10NameData*   pName = pNameCollection->At( i );
-        pRN->Insert( new ScRangeData(   pDoc,
-                                        SC10TOSTRING( pName->Name ),
-                                        SC10TOSTRING( pName->Reference ) ) );
+        pRN->insert(
+            new ScRangeData(
+                pDoc, SC10TOSTRING(pName->Name), SC10TOSTRING(pName->Reference)));
     }
 }
 

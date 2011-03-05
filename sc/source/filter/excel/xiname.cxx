@@ -222,7 +222,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         ScRangeData* pData = new ScRangeData( GetDocPtr(), maScName, *pTokArr, ScAddress(), nNameType );
         pData->GuessPosition();             // calculate base position for relative refs
         pData->SetIndex( nXclNameIdx );     // used as unique identifier in formulas
-        rRangeNames.Insert( pData );        // takes ownership of pData
+        rRangeNames.insert( pData );        // takes ownership of pData
         if( nXclTab != EXC_NAME_GLOBAL )
         {
             if (GetBiff() == EXC_BIFF8)

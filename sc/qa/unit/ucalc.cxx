@@ -417,7 +417,7 @@ void Test::testNamedRange()
     ScRangeData* pNew = new ScRangeData(m_pDoc,
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Divisor")),
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$Sheet1.$A$1:$A$1048576")), aA1, 0, formula::FormulaGrammar::GRAM_PODF_A1);
-    bool bSuccess = pNewRanges->Insert(pNew);
+    bool bSuccess = pNewRanges->insert(pNew);
     CPPUNIT_ASSERT_MESSAGE ("insertion failed", bSuccess);
 
     m_pDoc->SetRangeName(pNewRanges);

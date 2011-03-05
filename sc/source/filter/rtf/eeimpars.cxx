@@ -408,7 +408,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
                 {
                     ScRangeData* pData = new ScRangeData( mpDoc, *pE->pName,
                         ScAddress( nCol, nRow, nTab ) );
-                    pRangeNames->Insert( pData );
+                    pRangeNames->insert( pData );
                 }
             }
         }

@@ -1005,7 +1005,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                         pData->SetDocument(this);
                         if ( pRangeName->FindIndex( pData->GetIndex() ) )
                             pData->SetIndex(0);     // need new index, done in Insert
-                        if (!pRangeName->Insert(pData))
+                        if (!pRangeName->insert(pData))
                         {
                             OSL_FAIL("can't insert name");     // shouldn't happen
                             delete pData;

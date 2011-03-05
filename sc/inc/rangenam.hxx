@@ -84,7 +84,6 @@ private:
     SCROW           mnMaxRow;
     SCCOL           mnMaxCol;
 
-    friend class ScRangeName;
     ScRangeData( USHORT nIndex );
 public:
     typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
@@ -212,7 +211,6 @@ public:
     SC_DLLPUBLIC size_t size() const;
     bool empty() const;
     SC_DLLPUBLIC bool insert(ScRangeData* p);
-    SC_DLLPUBLIC bool Insert(ScRangeData* p);
     void erase(const ScRangeData& r);
     void erase(const iterator& itr);
     void clear();

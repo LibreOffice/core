@@ -569,7 +569,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
             // GRAM_PODF_A1 for API compatibility.
             ScRangeData* pNew = new ScRangeData( pDoc, aName, aContent,
                                                 aPos, nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
-            if ( pNewRanges->Insert(pNew) )
+            if ( pNewRanges->insert(pNew) )
             {
                 ScDocFunc aFunc(*pDocShell);
                 aFunc.SetNewRangeNames(pNewRanges, mbModifyAndBroadcast);
