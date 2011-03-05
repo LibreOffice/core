@@ -149,42 +149,25 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
     {
         if(pDoc->GetChangeTrack()!=NULL) aBtnCopyResult.Disable();
 
-        ScRangeName*    pRangeNames = pDoc->GetRangeName();
-#if NEW_RANGE_NAME
-#else
-        const USHORT    nCount      = pRangeNames ? pRangeNames->GetCount() : 0;
-
-        /*
-         * Aus den RangeNames des Dokumentes werden nun die
-         * gemerkt, bei denen es sich um Filter-Bereiche handelt
-         */
-
+        ScRangeName* pRangeNames = pDoc->GetRangeName();
         aLbFilterArea.Clear();
         aLbFilterArea.InsertEntry( aStrUndefined, 0 );
 
-        if ( nCount > 0 )
+        if (!pRangeNames->empty())
         {
-            String       aString;
-            ScRangeData* pData = NULL;
-            USHORT       nInsert = 0;
-
-            for ( USHORT i=0; i<nCount; i++ )
+            ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
+            USHORT nInsert = 0;
+            for (; itr != itrEnd; ++itr)
             {
-                pData = (ScRangeData*)(pRangeNames->At( i ));
-                if ( pData )
-                {
-                    if ( pData->HasType( RT_CRITERIA ) )
-                    {
-                        pData->GetName( aString );
-                        nInsert = aLbFilterArea.InsertEntry( aString );
-                        pData->GetSymbol( aString );
-                        aLbFilterArea.SetEntryData( nInsert,
-                                                    new String( aString ) );
-                    }
-                }
+                if (!itr->HasType(RT_CRITERIA))
+                    continue;
+
+                nInsert = aLbFilterArea.InsertEntry(itr->GetName());
+                rtl::OUString aSymbol;
+                itr->GetSymbol(aSymbol);
+                aLbFilterArea.SetEntryData(nInsert, new String(aSymbol));
             }
         }
-#endif
 
         //  is there a stored source range?
 
