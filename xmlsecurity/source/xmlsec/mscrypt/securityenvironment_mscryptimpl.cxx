@@ -55,12 +55,10 @@
 #include "xmlsec/keysmngr.h"
 #include "xmlsec/mscrypto/akmngr.h"
 
-//CP : added by CP
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
 #include <osl/process.h>
 
-//CP : end
 #include <rtl/memory.h>
 
 #include "../diagnose.hxx"
@@ -502,7 +500,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
             pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext );
             while (pCertContext)
             {
-                // Add By CP for checking whether the certificate is a personal certificate or not.
+                // for checking whether the certificate is a personal certificate or not.
                 if(!(CryptAcquireCertificatePrivateKey(pCertContext,
                         CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
                         NULL,
@@ -510,13 +508,12 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
                         &dwKeySpec,
                         NULL)))
                 {
-                    // Not Privatekey found. SKIP this one; By CP
+                    // Not Privatekey found. SKIP this one.
                     pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext );
                     continue;
                 }
                 // then TODO : Check the personal cert is valid or not.
 
-                // end CP
                 xcert = MswcryCertContextToXCert( pCertContext ) ;
                 if( xcert != NULL )
                     certsList.push_back( xcert ) ;
@@ -553,12 +550,11 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
     CRYPT_INTEGER_BLOB cryptSerialNumber ;
     CERT_INFO certInfo ;
 
-    // By CP , for correct encoding
+    // for correct encoding
     sal_uInt16 encoding ;
     rtl_Locale *pLocale = NULL ;
     osl_getProcessLocale( &pLocale ) ;
     encoding = osl_getTextEncodingFromLocale( pLocale ) ;
-    // CP end
 
     //Create cert info from issue and serial
     rtl::OString oissuer = rtl::OUStringToOString( issuerName , encoding ) ;

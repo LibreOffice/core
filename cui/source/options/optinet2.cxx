@@ -1532,7 +1532,6 @@ void SvxSecurityTabPage::Reset( const SfxItemSet& )
     }
 }
 
-//added by jmeng begin
 MozPluginTabPage::MozPluginTabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_INET_MOZPLUGIN ), rSet ),
     aMSWordGB       ( this, CUI_RES( GB_MOZPLUGIN       ) ),
@@ -1722,7 +1721,6 @@ BOOL MozPluginTabPage::uninstallPlugin()
         return false;
 #endif
 }
-//added by jmeng end
 
 /* -------------------------------------------------------------------------*/
 

@@ -67,7 +67,7 @@
 
 #include "secerror.hxx"
 
-// MM : added for password exception
+// added for password exception
 #include <com/sun/star/security/NoPasswordException.hpp>
 namespace csss = ::com::sun::star::security;
 using namespace xmlsecurity;

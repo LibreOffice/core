@@ -37,8 +37,6 @@
 /*                                                                      */
 /************************************************************************/
 
-// added by jmeng begin
-
 TabPage RID_SVXPAGE_INET_MOZPLUGIN
 {
     OutputSize = TRUE ;
@@ -60,8 +58,6 @@ TabPage RID_SVXPAGE_INET_MOZPLUGIN
         Text [ en-US ] = "~Display documents in browser" ;
     };
 };
-
-//added by jmeng end
 
 TabPage RID_SVXPAGE_INET_PROXY
 {

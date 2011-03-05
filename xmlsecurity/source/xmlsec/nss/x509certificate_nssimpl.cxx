@@ -36,13 +36,9 @@
 #include "nss.h"
 #include "secder.h"
 
-//MM : added by MM
 #include "hasht.h"
 #include "secoid.h"
 #include "pk11func.h"
-//MM : end
-
-
 
 #include <sal/config.h>
 #include <rtl/uuid.h>
@@ -331,7 +327,6 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
         return NULL ;
 }
 
-// MM : added by MM
 ::rtl::OUString getAlgorithmDescription(SECAlgorithmID *aid)
 {
     SECOidTag tag;
@@ -457,7 +452,5 @@ sal_Int32 SAL_CALL X509Certificate_NssImpl::getCertificateUsage(  )
 
     return usage;
 }
-
-// MM : end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
