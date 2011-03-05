@@ -164,7 +164,6 @@ bool HelpParser::CreateSDF(
     if(file.get() == NULL){
         printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_ASCII_US).GetBuffer());
         exit(-1);
-        //return false;
     }
     file->Extract();
     if( !file->CheckExportStatus() ){
@@ -183,8 +182,6 @@ bool HelpParser::CreateSDF(
     XMLHashMap*  aXMLStrHM   = file->GetStrings();
     LangHashMap* pElem;
     XMLElement*  pXMLElement  = NULL;
-
-    //Dump(aXMLStrHM);
 
     ByteString sTimeStamp( Export::GetTimeStamp() );
     OUString sOUTimeStamp( sTimeStamp.GetBuffer() , sTimeStamp.Len() , RTL_TEXTENCODING_ASCII_US );
@@ -243,16 +240,12 @@ bool HelpParser::CreateSDF(
                   sBuffer.append( GSI_SEQUENCE4 );      //"\t\t\t\t";
                 sBuffer.append( sOUTimeStamp );
                 ByteString sOut( sBuffer.makeStringAndClear().getStr() , RTL_TEXTENCODING_UTF8 );
-                //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( rPrj_in ) ) )
-                //{
                 if( data.getLength() > 0 ) aSDFStream.WriteLine( sOut );
-                //}
                 pXMLElement=NULL;
             }else fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreateSDF , Language %s\n",sCur.GetBuffer() );
         }
 
     }
-    //Dump(aXMLStrHM);
     aSDFStream.Close();
 
     if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
@@ -397,7 +390,6 @@ bool HelpParser::Merge(
     {
         printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_UTF8).GetBuffer());
         exit(-1);
-        //return false;
     }
 
 
@@ -489,7 +481,6 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
             return false;
         }
     }
-    //remove( sTargetFile.GetBuffer() );
 
     FileStat aFSTest( aTar );
     if( aFSTest.GetSize() < 1 )

@@ -761,7 +761,6 @@ BOOL SourceTreeLocalizer::Merge( const ByteString &rSourceFile , const ByteStrin
     BOOL bReturn = aSDF.IsOpen();
     if ( bReturn ) {
         bReturn = ExecuteMerge();
-//      aSDF.Close();
     }
     aSDF.Close();
     nMode = LOCALIZE_NONE;

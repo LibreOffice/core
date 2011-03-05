@@ -205,7 +205,6 @@ BOOL MergeData::operator==( ResData *pData )
 
 /*****************************************************************************/
 MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFile ,BOOL bErrLog,
-//                          CharSet aCharSet, BOOL bUTF8 , bool bCaseSensitive )
                             CharSet aCharSet, bool bCaseSensitive )
 
 /*****************************************************************************/
@@ -230,7 +229,6 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
 
     if( !aInputStream.IsOpen() ) {
         printf("Warning : Can't open %s\n", rFileName.GetBuffer());
-        //exit( -1 );
         return;
     }
     while ( !aInputStream.IsEof()) {
@@ -291,13 +289,6 @@ MergeDataFile::~MergeDataFile()
 /*****************************************************************************/
 {
 }
-
-/*****************************************************************************/
-//void MergeDataFile::WriteErrorLog( const ByteString &rFileName )
-/*****************************************************************************/
-//{
-// DEAD
-//}
 
 ByteString MergeDataFile::Dump(){
     ByteString sRet( "MergeDataFile\n" );
@@ -362,7 +353,6 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
         //printf("DBG: Found[%s]\n",sKey.GetBuffer());
         return aMap[ sKey ];
     }
-    //Dump();
     pResData->sGId = sOldG;
     pResData->sId = sOldL;
     //printf("DBG: Found[%s]\n",sKey.GetBuffer());

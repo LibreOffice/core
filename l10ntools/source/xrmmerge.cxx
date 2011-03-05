@@ -322,9 +322,6 @@ int XRMResParser::Execute( int nToken, char * pToken )
             sLID = "";
             sGID += ".";
             sGID += GetAttribute( rToken, "id" );
-            //sLocalized = "1";
-
-            //sLocalized = "X:";
             sLocalized = true;
         break;
 
@@ -336,11 +333,6 @@ int XRMResParser::Execute( int nToken, char * pToken )
             sLID = "";
             sGID += ".";
             sGID += GetAttribute( rToken, "id" );
-//          if ( GetAttribute( rToken, "localized" ) == "false" )
-//              sLocalized += "0";
-//                sLocalized = false;
-//          else
-//              sLocalized += "1";
                 sLocalized = true;
         break;
 
@@ -446,9 +438,7 @@ void XRMResParser::ConvertStringToDBFormat( ByteString &rString )
     do {
         sResult = rString;
         rString.EraseLeadingChars( _LF );
-    //  rString.EraseLeadingChars( ' ' );
         rString.EraseLeadingChars( '\t' );
-    //  rString.EraseTrailingChars( ' ' );
         rString.EraseTrailingChars( '\t' );
     } while ( sResult != rString );
 
@@ -563,9 +553,6 @@ void XRMResExport::EndOfText(
         char cSearch = 0x00;
         ByteString sSearch( cSearch );
 
-     // if ( !pResData->sText[ ByteString("en-US") ].Len() )
-    //        pResData->sText[ ByteString("en-US") ] = pResData->sText[ ByteString("de") ];
-
         Export::FillInFallbacks( pResData );
 
         ByteString sTimeStamp( Export::GetTimeStamp());
@@ -574,7 +561,6 @@ void XRMResExport::EndOfText(
             sCur = aLanguages[ n ];
 
             ByteString sAct = pResData->sText[ sCur ];
-                //Export::UnquotHTML( sAct );
                 sAct.EraseAllChars( 0x0A );
 
                 ByteString sOutput( sPrj ); sOutput += "\t";
@@ -594,7 +580,6 @@ void XRMResExport::EndOfText(
                 sOutput += sTimeStamp;
 
                 sOutput.SearchAndReplaceAll( sSearch, "_" );
-                //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
                 if( sAct.Len() > 1 )
                     pOutputStream->WriteLine( sOutput );
             }
@@ -647,7 +632,6 @@ void XRMResMerge::WorkOnText(
     if ( pMergeDataFile ) {
         if ( !pResData ) {
             ByteString sPlatform( "" );
-//          pResData = new ResData( sPlatform, GetGID() , sFilename );
             pResData = new ResData( sPlatform, GetLID() , sFilename );
             pResData->sId = GetLID();
 
@@ -702,8 +686,6 @@ void XRMResMerge::EndOfText(
                     ( sContent != "-" ) && ( sContent.Len()))
                 {
                     ByteString sText( sContent );
-                    //Export::QuotHTMLXRM( sText );
-
                     ByteString sAdditionalLine( "\t" );
                     sAdditionalLine += rOpenTag;
                     ByteString sSearch = "xml:lang=\"";

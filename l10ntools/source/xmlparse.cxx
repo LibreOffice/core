@@ -1341,8 +1341,6 @@ void XMLUtil::QuotHTML( String &rString )
                              case '>':  sReturn.append( GT );i++;break;
                              case '\\': sReturn.append( QUOT );i++;break;
                              case '\"': sReturn.append( APOS );i++;break;
-                             //case '\'': sReturn += "\'";i++;break;
-                             //case '&' : sRetrun += "&";i++;break;
                              default:   sReturn.append( SLASH );break;
 
                            }
@@ -1361,10 +1359,6 @@ void XMLUtil::QuotHTML( String &rString )
                     sReturn.append( QQUOT );
                     break;
 
-/*              case '\'':
-                    sReturn += "&apos;";
-                    break;
-*/
                 case '&':
                     if (
                           ( ( i + 4 ) < rString.Len()) &&

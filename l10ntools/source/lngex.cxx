@@ -102,14 +102,6 @@ BOOL ParseCommandLine( int argc, char* argv[])
             nState = STATE_UTF8;
             bUTF8 = TRUE;
         }
-/*      else if ( sSwitch == "-NOUTF8" ) {
-            nState = STATE_UTF8;
-            bUTF8 = FALSE;
-        }*/
-/*      else if ( sSwitch == "-ULF" ) {
-            nState = STATE_ULF;
-            bULF = TRUE;
-        }*/
         else if ( sSwitch == "-L" ) {
             nState = STATE_LANGUAGES;
         }
@@ -130,7 +122,6 @@ BOOL ParseCommandLine( int argc, char* argv[])
                 break;
                 case STATE_PRJ: {
                     sPrj = argv[ i ];
-//                  sPrj.ToLowerAscii(); // the project
                 }
                 break;
                 case STATE_ROOT: {
