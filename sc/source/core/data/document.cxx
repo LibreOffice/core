@@ -1864,7 +1864,7 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
         {
             ScRangeData* pData = new ScRangeData( *itr );
             pData->SetDocument(this);
-            if ( pRangeName->FindIndex( pData->GetIndex() ) )
+            if ( pRangeName->findByIndex( pData->GetIndex() ) )
                 pData->SetIndex(0);     // need new index, done in Insert
             if ( pRangeName->insert(pData) )
             {

@@ -666,7 +666,7 @@ ScRangeName::ScRangeName(ScDocument* pDoc) :
     mpDoc(pDoc) {}
 
 ScRangeName::ScRangeName(const ScRangeName& r) :
-    maData(r.maData), mpDoc(r.mpDoc) {}
+    maData(r.maData), mpDoc(r.mpDoc), mnSharedMaxIndex(r.mnSharedMaxIndex) {}
 
 const ScRangeData* ScRangeName::GetRangeAtBlock(const ScRange& rRange) const
 {
@@ -756,7 +756,7 @@ void ScRangeName::UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY)
         itr->UpdateGrow(rArea, nGrowX, nGrowY);
 }
 
-ScRangeData* ScRangeName::FindIndex(USHORT i)
+ScRangeData* ScRangeName::findByIndex(USHORT i)
 {
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
@@ -845,7 +845,7 @@ void ScRangeName::clear()
 
 bool ScRangeName::operator== (const ScRangeName& r) const
 {
-    return maData == r.maData;
+    return maData == r.maData && mpDoc == r.mpDoc && mnSharedMaxIndex == r.mnSharedMaxIndex;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -382,7 +382,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertName( USHORT nScNameIdx )
 {
     sal_uInt16 nNameIdx = FindNameIdx( maNameMap, nScNameIdx );
     if( nNameIdx == 0 )
-        if( const ScRangeData* pRangeData = GetNamedRanges().FindIndex( nScNameIdx ) )
+        if( const ScRangeData* pRangeData = GetNamedRanges().findByIndex( nScNameIdx ) )
             nNameIdx = CreateName( *pRangeData );
     return nNameIdx;
 }

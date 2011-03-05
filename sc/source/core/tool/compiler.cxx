@@ -3887,7 +3887,7 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula, const String& r
 
 BOOL ScCompiler::HandleRange()
 {
-    ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex( pToken->GetIndex() );
+    ScRangeData* pRangeData = pDoc->GetRangeName()->findByIndex( pToken->GetIndex() );
     if (pRangeData)
     {
         USHORT nErr = pRangeData->GetErrCode();
@@ -4012,7 +4012,7 @@ BOOL ScCompiler::HasModifiedRange()
         OpCode eOpCode = t->GetOpCode();
         if ( eOpCode == ocName )
         {
-             ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex(t->GetIndex());
+             ScRangeData* pRangeData = pDoc->GetRangeName()->findByIndex(t->GetIndex());
 
             if (pRangeData && pRangeData->IsModified())
                 return TRUE;
@@ -4135,7 +4135,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         {
             if( j->GetOpCode() == ocName )
             {
-                ScRangeData* pName = pDoc->GetRangeName()->FindIndex( j->GetIndex() );
+                ScRangeData* pName = pDoc->GetRangeName()->findByIndex( j->GetIndex() );
                 if (pName && pName->HasType(RT_SHARED))
                     pRangeData = pName;
             }
@@ -4188,7 +4188,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         {
             if( t->GetOpCode() == ocName )
             {
-                ScRangeData* pName = pDoc->GetRangeName()->FindIndex( t->GetIndex() );
+                ScRangeData* pName = pDoc->GetRangeName()->findByIndex( t->GetIndex() );
                 if (pName && pName->HasType(RT_SHAREDMOD))
                 {
                     pRangeData = pName;     // maybe need a replacement of shared with own code
@@ -4481,7 +4481,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
         {
             if (!bIsName)
             {
-                ScRangeData* pName = pDoc->GetRangeName()->FindIndex(t->GetIndex());
+                ScRangeData* pName = pDoc->GetRangeName()->findByIndex(t->GetIndex());
                 if (pName && pName->HasType(RT_SHAREDMOD))
                     pRangeData = pName;
             }
@@ -4592,7 +4592,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL /* bIsMove */, BOOL 
         {
             if (!bIsName)
             {
-                ScRangeData* pName = pDoc->GetRangeName()->FindIndex(t->GetIndex());
+                ScRangeData* pName = pDoc->GetRangeName()->findByIndex(t->GetIndex());
                 if (pName && pName->HasType(RT_SHAREDMOD))
                     pRangeData = pName;
             }
@@ -4802,7 +4802,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
         {
             if (!bIsName)
             {
-                ScRangeData* pName = pDoc->GetRangeName()->FindIndex(t->GetIndex());
+                ScRangeData* pName = pDoc->GetRangeName()->findByIndex(t->GetIndex());
                 if (pName && pName->HasType(RT_SHAREDMOD))
                     pRangeData = pName;
             }
@@ -5056,7 +5056,7 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
     {
         case ocName:
         {
-            ScRangeData* pData = pDoc->GetRangeName()->FindIndex(_pTokenP->GetIndex());
+            ScRangeData* pData = pDoc->GetRangeName()->findByIndex(_pTokenP->GetIndex());
             if (pData)
             {
                 if (pData->HasType(RT_SHARED))

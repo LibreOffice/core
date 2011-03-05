@@ -702,7 +702,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
         }
         else if (t->GetOpCode() == ocName)
         {
-            ScRangeData* pName = pDocument->GetRangeName()->FindIndex( t->GetIndex() );
+            ScRangeData* pName = pDocument->GetRangeName()->findByIndex( t->GetIndex() );
             if (pName && pName->IsReference(aRange))
             {
                 bRef = TRUE;

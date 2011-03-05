@@ -1361,7 +1361,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     {
         if( t->GetOpCode() == ocName )
         {
-            ScRangeData* pName = pDocument->GetRangeName()->FindIndex( t->GetIndex() );
+            ScRangeData* pName = pDocument->GetRangeName()->findByIndex( t->GetIndex() );
             if (pName)
             {
                 if (pName->IsModified())
@@ -1446,7 +1446,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
     {
         if( t->GetOpCode() == ocName )
         {
-            ScRangeData* pName = pDocument->GetRangeName()->FindIndex( t->GetIndex() );
+            ScRangeData* pName = pDocument->GetRangeName()->findByIndex( t->GetIndex() );
             if (pName)
             {
                 if (pName->IsModified())
@@ -1519,7 +1519,7 @@ BOOL lcl_IsRangeNameInUse(size_t nIndex, ScTokenArray* pCode, ScRangeName* pName
             else
             {
                 //  RangeData kann Null sein in bestimmten Excel-Dateien
-                ScRangeData* pSubName = pNames->FindIndex(p->GetIndex());
+                ScRangeData* pSubName = pNames->findByIndex(p->GetIndex());
                 if (pSubName && lcl_IsRangeNameInUse(nIndex,
                                     pSubName->GetCode(), pNames))
                     return TRUE;
@@ -1543,7 +1543,7 @@ void lcl_FindRangeNamesInUse(std::set<USHORT>& rIndexes, ScTokenArray* pCode, Sc
             USHORT nTokenIndex = p->GetIndex();
             rIndexes.insert( nTokenIndex );
 
-            ScRangeData* pSubName = pNames->FindIndex(p->GetIndex());
+            ScRangeData* pSubName = pNames->findByIndex(p->GetIndex());
             if (pSubName)
                 lcl_FindRangeNamesInUse(rIndexes, pSubName->GetCode(), pNames);
         }

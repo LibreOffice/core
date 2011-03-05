@@ -699,7 +699,7 @@ const ScTokenArray* XclTokenArrayHelper::GetSharedFormula( const XclRoot& rRoot,
     if( rScTokArr.GetLen() == 1 )
         if( const FormulaToken* pScToken = rScTokArr.GetArray()[ 0 ] )
             if( pScToken->GetOpCode() == ocName )
-                if( ScRangeData* pData = rRoot.GetNamedRanges().FindIndex( pScToken->GetIndex() ) )
+                if( ScRangeData* pData = rRoot.GetNamedRanges().findByIndex( pScToken->GetIndex() ) )
                     if( pData->HasType( RT_SHARED ) )
                         return pData->GetCode();
     return 0;
