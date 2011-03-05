@@ -326,7 +326,7 @@ BOOL ScDBDocFunc::RepeatDB( const String& rDBName, BOOL bRecord, BOOL bApi )
 
                 //  DB- und andere Bereiche
                 ScRangeName* pDocRange = pDoc->GetRangeName();
-                if (pDocRange->GetCount())
+                if (!pDocRange->empty())
                     pUndoRange = new ScRangeName( *pDocRange );
                 ScDBCollection* pDocDB = pDoc->GetDBCollection();
                 if (pDocDB->GetCount())
@@ -1078,7 +1078,7 @@ BOOL ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 
             //  DB- und andere Bereiche
             ScRangeName* pDocRange = pDoc->GetRangeName();
-            if (pDocRange->GetCount())
+            if (!pDocRange->empty())
                 pUndoRange = new ScRangeName( *pDocRange );
             ScDBCollection* pDocDB = pDoc->GetDBCollection();
             if (pDocDB->GetCount())

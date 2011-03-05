@@ -150,6 +150,8 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
         if(pDoc->GetChangeTrack()!=NULL) aBtnCopyResult.Disable();
 
         ScRangeName*    pRangeNames = pDoc->GetRangeName();
+#if NEW_RANGE_NAME
+#else
         const USHORT    nCount      = pRangeNames ? pRangeNames->GetCount() : 0;
 
         /*
@@ -182,6 +184,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
                 }
             }
         }
+#endif
 
         //  is there a stored source range?
 

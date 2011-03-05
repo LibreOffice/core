@@ -222,7 +222,7 @@ void ScConsolidateDlg::Init()
 
     ScRangeName*    pRangeNames  = pDoc->GetRangeName();
     ScDBCollection* pDbNames     = pDoc->GetDBCollection();
-    const USHORT    nRangeCount  = pRangeNames ? pRangeNames->GetCount() : 0;
+    const USHORT    nRangeCount  = pRangeNames ? pRangeNames->size() : 0;
     const USHORT    nDbCount     = pDbNames    ? pDbNames   ->GetCount() : 0;
 
     nAreaDataCount = nRangeCount+nDbCount;

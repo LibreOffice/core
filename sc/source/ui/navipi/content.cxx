@@ -666,6 +666,8 @@ void ScContentTree::GetAreaNames()
         return;
 
     ScRangeName* pRangeNames = pDoc->GetRangeName();
+#if NEW_RANGE_NAME
+#else
     USHORT nCount = pRangeNames->GetCount();
     if ( nCount > 0 )
     {
@@ -700,6 +702,7 @@ void ScContentTree::GetAreaNames()
             delete [] ppSortArray;
         }
     }
+#endif
 }
 
 void ScContentTree::GetDbNames()

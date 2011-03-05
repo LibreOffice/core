@@ -963,7 +963,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         if ( !bResultsOnly )
         {
             BOOL bNamesLost = FALSE;
-            USHORT nSrcRangeNames = pSrcDoc->pRangeName->GetCount();
+            size_t nSrcRangeNames = pSrcDoc->pRangeName->size();
             // array containing range names which might need update of indices
             ScRangeData** pSrcRangeNames = nSrcRangeNames ? new ScRangeData* [nSrcRangeNames] : NULL;
             // the index mapping thereof
@@ -974,7 +974,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             std::set<USHORT> aUsedNames;
             pSrcDoc->pTab[nSrcPos]->FindRangeNamesInUse( 0, 0, MAXCOL, MAXROW, aUsedNames );
 
-            for (USHORT i = 0; i < nSrcRangeNames; i++)     //! DB-Bereiche Pivot-Bereiche auch !!!
+            for (size_t i = 0; i < nSrcRangeNames; i++)     //! DB-Bereiche Pivot-Bereiche auch !!!
             {
                 ScRangeData* pSrcData = (*pSrcDoc->pRangeName)[i];
                 USHORT nOldIndex = pSrcData->GetIndex();
@@ -1129,7 +1129,9 @@ void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const USHORT nErr
 
 void ScDocument::EraseNonUsedSharedNames(USHORT nLevel)
 {
-    for (USHORT i = 0; i < pRangeName->GetCount(); i++)
+#if NEW_RANGE_NAME
+#else
+    for (size_t i = 0; i < pRangeName->size(); i++)
     {
         ScRangeData* pRangeData = (*pRangeName)[i];
         if (pRangeData && pRangeData->HasType(RT_SHARED))
@@ -1153,6 +1155,7 @@ void ScDocument::EraseNonUsedSharedNames(USHORT nLevel)
             }
         }
     }
+#endif
 }
 
 //  ----------------------------------------------------------------------------

@@ -1411,6 +1411,8 @@ void ScPosWnd::FillRangeNames()
         //  per Hand sortieren, weil Funktionen nicht sortiert werden:
 
         ScRangeName* pRangeNames = pDoc->GetRangeName();
+#if NEW_RANGE_NAME
+#else
         USHORT nCount = pRangeNames->GetCount();
         if ( nCount > 0 )
         {
@@ -1445,6 +1447,7 @@ void ScPosWnd::FillRangeNames()
                 delete [] ppSortArray;
             }
         }
+#endif
     }
     SetText(aPosStr);
 }

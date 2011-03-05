@@ -467,8 +467,9 @@ void ScPrintAreasDlg::Impl_FillLists()
     // Ranges holen und in ListBoxen merken
     //------------------------------------------------------
     ScRangeName*    pRangeNames = pDoc->GetRangeName();
-    const USHORT    nCount      = pRangeNames ? pRangeNames->GetCount() : 0;
-
+    size_t nCount = pRangeNames ? pRangeNames->size() : 0;
+#if NEW_RANGE_NAME
+#else
     if ( nCount > 0 )
     {
         String          aName;
@@ -516,6 +517,7 @@ void ScPrintAreasDlg::Impl_FillLists()
             }
         }
     }
+#endif
 }
 
 

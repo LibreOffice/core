@@ -782,14 +782,14 @@ void ScRangeName::SetSharedMaxIndex(sal_uInt16 nInd)
     mnSharedMaxIndex = nInd;
 }
 
-size_t ScRangeName::GetCount() const
+size_t ScRangeName::size() const
 {
     return maData.size();
 }
 
-size_t ScRangeName::size() const
+bool ScRangeName::empty() const
 {
-    return maData.size();
+    return maData.empty();
 }
 
 bool ScRangeName::Insert(ScRangeData* p)
@@ -799,14 +799,6 @@ bool ScRangeName::Insert(ScRangeData* p)
 
     pair<DataType::iterator, bool> r = maData.insert(p);
     return r.second;
-}
-
-void ScRangeName::AtFree(size_t i)
-{
-}
-
-void ScRangeName::FreeAll()
-{
 }
 
 void ScRangeName::erase(const ScRangeData& r)

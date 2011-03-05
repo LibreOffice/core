@@ -671,6 +671,8 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
 
 void XclExpNameManagerImpl::CreateUserNames()
 {
+#if NEW_RANGE_NAME
+#else
     const ScRangeName& rNamedRanges = GetNamedRanges();
     for( USHORT nNameIdx = 0, nNameCount = rNamedRanges.GetCount(); nNameIdx < nNameCount; ++nNameIdx )
     {
@@ -680,6 +682,7 @@ void XclExpNameManagerImpl::CreateUserNames()
         if( pRangeData && !pRangeData->HasType( RT_SHARED ) && !FindNameIdx( maNameMap, pRangeData->GetIndex() ) )
             CreateName( *pRangeData );
     }
+#endif
 }
 
 void XclExpNameManagerImpl::CreateDatabaseNames()

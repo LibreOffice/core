@@ -314,6 +314,8 @@ void ScNameDlg::UpdateChecks()
 
 void ScNameDlg::UpdateNames()
 {
+#if NEW_RANGE_NAME
+#else
     USHORT  nRangeCount = aLocalRangeName.GetCount();
 
     aEdName.SetUpdateMode( FALSE );
@@ -352,6 +354,7 @@ void ScNameDlg::UpdateNames()
     aEdName.SetUpdateMode( TRUE );
     aEdName.SetTopEntry(nNamePos);
     aEdName.Invalidate();
+#endif
 }
 
 

@@ -4690,15 +4690,18 @@ BOOL ScDocFunc::InsertNameList( const ScAddress& rStartPos, BOOL bApi )
     ScDocument* pUndoDoc = NULL;
 
     ScRangeName* pList = pDoc->GetRangeName();
-    USHORT nCount = pList->GetCount();
     USHORT nValidCount = 0;
     USHORT i;
+    USHORT nCount = pList->size();
+#if NEW_RANGE_NAME
+#else
     for (i=0; i<nCount; i++)
     {
         ScRangeData* pData = (*pList)[i];
         if ( !pData->HasType( RT_DATABASE ) && !pData->HasType( RT_SHARED ) )
             ++nValidCount;
     }
+#endif
 
     if (nValidCount)
     {

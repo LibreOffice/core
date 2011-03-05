@@ -60,6 +60,8 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, BOOL
     aNameList.SetSelectHdl( LINK( this,ScNamePasteDlg,ListSelHdl) );
     aNameList.SetDoubleClickHdl( LINK( this,ScNamePasteDlg,ListDblClickHdl) );
 
+#if NEW_RANGE_NAME
+#else
     USHORT  nCnt = pList->GetCount();
     String  aText;
 
@@ -77,6 +79,7 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, BOOL
             }
         }
     }
+#endif
 
     ListSelHdl( &aNameList );
 

@@ -1706,7 +1706,9 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
 
         //  Bereiche uebernehmen
 
-    pTransClip->pRangeName->FreeAll();
+    pTransClip->pRangeName->clear();
+#if NEW_RANGE_NAME
+#else
     for (USHORT i = 0; i < pRangeName->GetCount(); i++)     //! DB-Bereiche Pivot-Bereiche auch !!!
     {
         USHORT nIndex = ((ScRangeData*)((*pRangeName)[i]))->GetIndex();
@@ -1716,6 +1718,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
         else
             pData->SetIndex(nIndex);
     }
+#endif
 
     // The data
 
@@ -1763,6 +1766,8 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
 
 void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks, bool bAllTabs)
 {
+#if NEW_RANGE_NAME
+#else
     std::set<USHORT> aUsedNames;        // indexes of named ranges that are used in the copied cells
     for (SCTAB i = 0; i <= MAXTAB; ++i)
         if (pTab[i] && pClipDoc->pTab[i])
@@ -1785,10 +1790,13 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
                 pData->SetIndex(nIndex);
         }
     }
+#endif
 }
 
 void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, SCTAB nTab)
 {
+#if NEW_RANGE_NAME
+#else
     // Indexes of named ranges that are used in the copied cells
     std::set<USHORT> aUsedNames;
     if ( pTab[nTab] && pClipDoc->pTab[nTab] )
@@ -1810,6 +1818,7 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
                 pData->SetIndex(nIndex);
         }
     }
+#endif
 }
 
 ScDocument::NumFmtMergeHandler::NumFmtMergeHandler(ScDocument* pDoc, ScDocument* pSrcDoc) :

@@ -2161,6 +2161,8 @@ void ScCellShell::ExecuteDataPilotDialog()
         ScRangeName* pRangeName = pDoc->GetRangeName();
         if (pRangeName)
         {
+#if NEW_RANGE_NAME
+#else
             USHORT n = pRangeName->GetCount();
             for (USHORT i = 0; i < n; ++i)
             {
@@ -2171,6 +2173,7 @@ void ScCellShell::ExecuteDataPilotDialog()
 
                 pTypeDlg->AppendNamedRange(p->GetName());
             }
+#endif
         }
 
         DBG_ASSERT(pTypeDlg, "Dialog create fail!");

@@ -209,12 +209,10 @@ public:
     SC_DLLPUBLIC ScRangeData* FindIndex(size_t i);
     sal_uInt16 GetSharedMaxIndex();
     void SetSharedMaxIndex(sal_uInt16 nInd);
-    SC_DLLPUBLIC size_t GetCount() const;
     SC_DLLPUBLIC size_t size() const;
+    bool empty() const;
     SC_DLLPUBLIC bool Insert(ScRangeData* p);
-    void AtFree(size_t i);
     void erase(const ScRangeData& r);
-    void FreeAll();
     void clear();
     SC_DLLPUBLIC ScRangeData* At(size_t i);
     bool operator== (const ScRangeName& r) const;

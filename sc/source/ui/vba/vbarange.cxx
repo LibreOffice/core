@@ -6016,6 +6016,8 @@ uno::Any SAL_CALL ScVbaRange::AdvancedFilter( sal_Int32 Action, const uno::Any& 
     {
         // Get Excel BuiltIn Filter Criteria.
         ScRangeName* pRangeNames = pDoc->GetRangeName();
+#if NEW_RANGE_NAME
+#else
         const USHORT nCount = pRangeNames ? pRangeNames->GetCount() : 0;
         for ( USHORT index = 0; index < nCount; index++ )
         {
@@ -6026,6 +6028,7 @@ uno::Any SAL_CALL ScVbaRange::AdvancedFilter( sal_Int32 Action, const uno::Any& 
                 break;
             }
         }
+#endif
         aCriteriaRange = aBuiltInCriteria.Len() > 0 ? uno::makeAny( rtl::OUString( aBuiltInCriteria ) ) : aCriteriaRange;
     }
     if ( aCriteriaRange.hasValue() )

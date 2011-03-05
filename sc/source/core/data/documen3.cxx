@@ -1403,8 +1403,8 @@ BOOL ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
 
     if ( pRangeName )
     {
-        sal_uInt16 nRangeCount = pRangeName->GetCount();
-        for ( sal_uInt16 i = 0; i < nRangeCount; i++ )
+        size_t nRangeCount = pRangeName->size();
+        for ( size_t i = 0; i < nRangeCount; i++ )
         {
             ScRangeData* pData = (*pRangeName)[i];
             if (pData)

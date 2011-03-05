@@ -1049,6 +1049,8 @@ BOOL ScAreaNameIterator::Next( String& rName, ScRange& rRange )
 {
     for (;;)
     {
+#if NEW_RANGE_NAME
+#else
         if ( bFirstPass )                                   // erst Bereichsnamen
         {
             if ( pRangeName && nPos < pRangeName->GetCount() )
@@ -1066,6 +1068,7 @@ BOOL ScAreaNameIterator::Next( String& rName, ScRange& rRange )
                 nPos = 0;
             }
         }
+#endif
         if ( !bFirstPass )                                  // dann DB-Bereiche
         {
             if ( pDBCollection && nPos < pDBCollection->GetCount() )

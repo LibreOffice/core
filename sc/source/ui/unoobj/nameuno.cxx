@@ -526,6 +526,8 @@ ScNamedRangeObj* ScNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
         ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
         if (pNames)
         {
+#if NEW_RANGE_NAME
+#else
             sal_uInt16 nCount = pNames->GetCount();
             sal_uInt16 nPos = 0;
             for (sal_uInt16 i=0; i<nCount; i++)
@@ -538,6 +540,7 @@ ScNamedRangeObj* ScNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
                     ++nPos;
                 }
             }
+#endif
         }
     }
     return NULL;
@@ -677,10 +680,13 @@ sal_Int32 SAL_CALL ScNamedRangesObj::getCount() throw(uno::RuntimeException)
         ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
         if (pNames)
         {
+#if NEW_RANGE_NAME
+#else
             sal_uInt16 nCount = pNames->GetCount();
             for (sal_uInt16 i=0; i<nCount; i++)
                 if (lcl_UserVisibleName( (*pNames)[i] ))    // interne weglassen
                     ++nRet;
+#endif
         }
     }
     return nRet;
@@ -769,7 +775,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangesObj::getElementNames()
             long nVisCount = getCount();            // Namen mit lcl_UserVisibleName
             uno::Sequence<rtl::OUString> aSeq(nVisCount);
             rtl::OUString* pAry = aSeq.getArray();
-
+#if NEW_RANGE_NAME
+#else
             sal_uInt16 nCount = pNames->GetCount();
             sal_uInt16 nVisPos = 0;
             for (sal_uInt16 i=0; i<nCount; i++)
@@ -778,6 +785,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangesObj::getElementNames()
                 if ( lcl_UserVisibleName(pData) )
                     pAry[nVisPos++] = pData->GetName();
             }
+#endif
             return aSeq;
         }
     }

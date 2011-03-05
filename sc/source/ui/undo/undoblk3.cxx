@@ -694,6 +694,8 @@ void ScUndoAutoFill::Undo()
     aName += '_';
     ScRangeName* pRangeName = pDoc->GetRangeName();
     BOOL bHasFound = FALSE;
+#if NEW_RANGE_NAME
+#else
     for (USHORT i = 0; i < pRangeName->GetCount(); i++)
     {
         ScRangeData* pRangeData = (*pRangeName)[i];
@@ -708,6 +710,7 @@ void ScUndoAutoFill::Undo()
             }
         }
     }
+#endif
     if (bHasFound)
         pRangeName->SetSharedMaxIndex(pRangeName->GetSharedMaxIndex()-1);
 
