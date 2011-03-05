@@ -82,7 +82,7 @@ public:
                             when styles are missing.
     */
     SD_DLLPUBLIC void                CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck = sal_False );
-    List*               CreateLayoutSheetNames(const String& rLayoutName) const;
+    void                CreateLayoutSheetNames(const String& rLayoutName, std::vector<String> &aNameList) const;
     void                CreateLayoutSheetList(const String& rLayoutName, SdStyleSheetVector& rLayoutSheets);
     void                CopyLayoutSheets(const String& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets );
     void                CopyGraphicSheets(SdStyleSheetPool& rSourcePool);

@@ -654,30 +654,27 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
 
     String aOutlineTag(SdResId(STR_LAYOUT_OUTLINE));
 
-    List* pNameList = CreateLayoutSheetNames(rLayoutName);
+    std::vector<String> aNameList;
+    CreateLayoutSheetNames(rLayoutName,aNameList);
 
     String sEmpty;
-    String* pName = (String*)pNameList->First();
-    while (pName)
+    for (std::vector<String>::const_iterator it = aNameList.begin(); it != aNameList.end(); ++it)
     {
-        pSheet = Find(*pName, SD_STYLE_FAMILY_MASTERPAGE);
+        pSheet = Find(*it, SD_STYLE_FAMILY_MASTERPAGE);
         if (!pSheet)
         {
-            SfxStyleSheetBase* pSourceSheet = rSourcePool.Find(*pName, SD_STYLE_FAMILY_MASTERPAGE);
+            SfxStyleSheetBase* pSourceSheet = rSourcePool.Find(*it, SD_STYLE_FAMILY_MASTERPAGE);
             DBG_ASSERT(pSourceSheet, "CopyLayoutSheets: Quellvorlage nicht gefunden");
             if (pSourceSheet)
             {
                 // falls einer mit Methusalem-Doks. ankommt
-                SfxStyleSheetBase& rNewSheet = Make(*pName, SD_STYLE_FAMILY_MASTERPAGE);
+                SfxStyleSheetBase& rNewSheet = Make(*it, SD_STYLE_FAMILY_MASTERPAGE);
                 rNewSheet.SetHelpId( sEmpty, pSourceSheet->GetHelpId( sEmpty ) );
                 rNewSheet.GetItemSet().Put(pSourceSheet->GetItemSet());
                 rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( &rNewSheet ) ) );
             }
         }
-        delete pName;
-        pName = (String*)pNameList->Next();
     }
-    delete pNameList;
 
     // Sonderbehandlung fuer Gliederungsvorlagen: Parentbeziehungen aufbauen
     List* pOutlineSheets = CreateOutlineSheetList(rLayoutName);
@@ -701,47 +698,43 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
 |*
 \************************************************************************/
 
-List* SdStyleSheetPool::CreateLayoutSheetNames(const String& rLayoutName) const
+void SdStyleSheetPool::CreateLayoutSheetNames(const String& rLayoutName, std::vector<String> &aNameList) const
 {
     String aPrefix(rLayoutName);
     String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
     aPrefix.Insert(aSep);
 
-    List* pNameList = new List;
-
     String aName(SdResId(STR_LAYOUT_OUTLINE));
-    String* pName = NULL;
+    String aStr;
 
     for (USHORT nLevel = 1; nLevel < 10; nLevel++)
     {
-        pName = new String(aName);
-        pName->Append( sal_Unicode( ' ' ));
-        pName->Append( String::CreateFromInt32( sal_Int32( nLevel )));
-        pName->Insert(aPrefix, 0);
-        pNameList->Insert(pName, LIST_APPEND);
+        aStr = String( aPrefix );
+        aStr.Append(aName);
+        aStr.Append( sal_Unicode( ' ' ));
+        aStr.Append( String::CreateFromInt32( sal_Int32( nLevel )));
+        aNameList.push_back(aStr);
     }
 
-    pName = new String(SdResId(STR_LAYOUT_TITLE));
-    pName->Insert(aPrefix, 0);
-    pNameList->Insert(pName, LIST_APPEND);
+    aStr = String(SdResId(STR_LAYOUT_TITLE));
+    aStr.Insert(aPrefix, 0);
+    aNameList.push_back(aStr);
 
-    pName = new String(SdResId(STR_LAYOUT_SUBTITLE));
-    pName->Insert(aPrefix, 0);
-    pNameList->Insert(pName, LIST_APPEND);
+    aStr = String(SdResId(STR_LAYOUT_SUBTITLE));
+    aStr.Insert(aPrefix, 0);
+    aNameList.push_back(aStr);
 
-    pName = new String(SdResId(STR_LAYOUT_NOTES));
-    pName->Insert(aPrefix, 0);
-    pNameList->Insert(pName, LIST_APPEND);
+    aStr = String(SdResId(STR_LAYOUT_NOTES));
+    aStr.Insert(aPrefix, 0);
+    aNameList.push_back(aStr);
 
-    pName = new String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
-    pName->Insert(aPrefix, 0);
-    pNameList->Insert(pName, LIST_APPEND);
+    aStr = String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
+    aStr.Insert(aPrefix, 0);
+    aNameList.push_back(aStr);
 
-    pName = new String(SdResId(STR_LAYOUT_BACKGROUND));
-    pName->Insert(aPrefix, 0);
-    pNameList->Insert(pName, LIST_APPEND);
-
-    return pNameList;
+    aStr = String(SdResId(STR_LAYOUT_BACKGROUND));
+    aStr.Insert(aPrefix, 0);
+    aNameList.push_back(aStr);
 }
 
 /*************************************************************************
