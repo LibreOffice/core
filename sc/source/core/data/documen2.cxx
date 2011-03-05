@@ -1132,7 +1132,7 @@ void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const USHORT nErr
 
 namespace {
 
-bool eraseUnusedSharedName(ScRangeName* pRangeName, ScTable* pTab[])
+bool eraseUnusedSharedName(ScRangeName* pRangeName, ScTable* pTab[], USHORT nLevel)
 {
     ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
     for (; itr != itrEnd; ++itr)
@@ -1140,10 +1140,14 @@ bool eraseUnusedSharedName(ScRangeName* pRangeName, ScTable* pTab[])
         if (!itr->HasType(RT_SHARED))
             continue;
 
-        size_t nIndex;
-        if (!pRangeName->getIndex(*itr, nIndex))
-            // index not found.
+        String aName;
+        itr->GetName(aName);
+        aName.Erase(0, 6);                      // !!! vgl. Table4, FillFormula !!
+        USHORT nInd = static_cast<USHORT>(aName.ToInt32());
+        if (nInd > nLevel)
             continue;
+
+        USHORT nIndex = itr->GetIndex();
 
         bool bInUse = false;
         for (SCTAB j = 0; !bInUse && (j <= MAXTAB); ++j)
@@ -1162,9 +1166,9 @@ bool eraseUnusedSharedName(ScRangeName* pRangeName, ScTable* pTab[])
 
 }
 
-void ScDocument::EraseNonUsedSharedNames()
+void ScDocument::EraseNonUsedSharedNames(USHORT nLevel)
 {
-    while (eraseUnusedSharedName(pRangeName, pTab))
+    while (eraseUnusedSharedName(pRangeName, pTab, nLevel))
         ;
 }
 

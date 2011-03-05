@@ -629,7 +629,7 @@ ScUndoAutoFill::ScUndoAutoFill( ScDocShell* pNewDocShell,
 
 ScUndoAutoFill::~ScUndoAutoFill()
 {
-    pDocShell->GetDocument()->EraseNonUsedSharedNames();
+    pDocShell->GetDocument()->EraseNonUsedSharedNames(nMaxSharedIndex);
     delete pUndoDoc;
 }
 

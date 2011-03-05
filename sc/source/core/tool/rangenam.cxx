@@ -724,16 +724,6 @@ ScRangeData* ScRangeName::findByUpperName(const OUString& rName)
     return NULL;
 }
 
-bool ScRangeName::getIndex(const ScRangeData& rData, size_t& rIndex) const
-{
-    DataType::const_iterator itr = maData.find(rData);
-    if (itr == maData.end())
-        return false;
-
-    rIndex = std::distance(maData.begin(), itr);
-    return true;
-}
-
 const ScRangeData* ScRangeName::findByUpperName(const OUString& rName) const
 {
     DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
@@ -774,14 +764,13 @@ void ScRangeName::UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY)
         itr->UpdateGrow(rArea, nGrowX, nGrowY);
 }
 
-ScRangeData* ScRangeName::FindIndex(size_t i)
+ScRangeData* ScRangeName::FindIndex(USHORT i)
 {
-    if (i >= maData.size())
-        return NULL;
-
-    DataType::iterator itr = maData.begin();
-    ::std::advance(itr, i);
-    return &(*itr);
+    DataType::iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+        if (itr->GetIndex() == i)
+            return &(*itr);
+    return NULL;
 }
 
 sal_uInt16 ScRangeName::GetSharedMaxIndex()
@@ -828,6 +817,20 @@ bool ScRangeName::insert(ScRangeData* p)
 {
     if (!p)
         return false;
+
+    if (!p->GetIndex())
+    {
+        // Assign a new index.  An index must be unique.
+        USHORT nHigh = 0;
+        DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
+        for (; itr != itrEnd; ++itr)
+        {
+            USHORT n = itr->GetIndex();
+            if (n > nHigh)
+                nHigh = n;
+        }
+        p->SetIndex(nHigh + 1);
+    }
 
     pair<DataType::iterator, bool> r = maData.insert(p);
     return r.second;

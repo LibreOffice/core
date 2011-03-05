@@ -1479,7 +1479,7 @@ public:
     VirtualDevice*  GetVirtualDevice_100th_mm();
     SC_DLLPUBLIC OutputDevice*  GetRefDevice(); // WYSIWYG: Printer, otherwise VirtualDevice...
 
-    void            EraseNonUsedSharedNames();
+    void            EraseNonUsedSharedNames(USHORT nLevel);
     BOOL            GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,
                                         BOOL bInSel, const ScMarkData& rMark) const;
 

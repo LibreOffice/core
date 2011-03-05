@@ -1710,11 +1710,12 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
     ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
     for (; itr != itrEnd; ++itr)
     {
+        USHORT nIndex = itr->GetIndex();
         ScRangeData* pData = new ScRangeData(*itr);
         if (!pTransClip->pRangeName->insert(pData))
             delete pData;
         else
-            pData->SetIndex(0);
+            pData->SetIndex(nIndex);
     }
 
     // The data

@@ -203,13 +203,12 @@ public:
     SC_DLLPUBLIC const ScRangeData* findByName(const rtl::OUString& rName) const;
     ScRangeData* findByUpperName(const rtl::OUString& rName);
     const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
-    bool getIndex(const ScRangeData& rData, size_t& rIndex) const;
     void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
                          SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
     void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0);
     void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
     void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);
-    SC_DLLPUBLIC ScRangeData* FindIndex(size_t i);
+    SC_DLLPUBLIC ScRangeData* FindIndex(USHORT i);
     sal_uInt16 GetSharedMaxIndex();
     void SetSharedMaxIndex(sal_uInt16 nInd);
 
