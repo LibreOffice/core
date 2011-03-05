@@ -583,9 +583,6 @@ int CfgParser::Execute( int nToken, char * pToken )
 void CfgParser::Error( const ByteString &rError )
 /*****************************************************************************/
 {
-//    ByteString sError( rError );
-//    sError.Append("Error: In file ");
-//    sError.Append( sActFileName );
     yyerror(( char * ) rError.GetBuffer());
 }
 
@@ -662,10 +659,6 @@ void CfgExport::WorkOnRessourceEnd()
                     pStackData->sText[ ByteString("en-US") ].Len() )))
         {
             ByteString sFallback = pStackData->sText[ ByteString("en-US") ];
-
-            //if ( pStackData->sText[ ByteString("en-US") ].Len())
-            //    sFallback = pStackData->sText[ ByteString("en-US") ];
-
             ByteString sLocalId = pStackData->sIdentifier;
             ByteString sGroupId;
             if ( aStack.size() == 1 ) {

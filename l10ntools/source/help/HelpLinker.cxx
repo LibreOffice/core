@@ -396,7 +396,6 @@ void HelpLinker::link() throw( HelpProcessingException )
 
     if( bExtensionMode )
     {
-        //indexDirParentName = sourceRoot;
         indexDirParentName = extensionDestination;
     }
     else
@@ -732,16 +731,6 @@ void HelpLinker::link() throw( HelpProcessingException )
             fs::copy( fsAdditionalFileName, fsTargetName );
         }
     }
-
-/*
-    /////////////////////////////////////////////////////////////////////////
-    /// remove temprary directory for index creation
-    /////////////////////////////////////////////////////////////////////////
-#ifndef CMC_DEBUG
-    if( !bExtensionMode )
-        fs::remove_all( indexDirParentName );
-#endif
-*/
 }
 
 

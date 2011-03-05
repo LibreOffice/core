@@ -147,7 +147,6 @@ void Export::QuotHTMLXRM( ByteString &rString )
 /*****************************************************************************/
 {
     ByteString sReturn;
-    //BOOL bBreak = FALSE;
     for ( USHORT i = 0; i < rString.Len(); i++ ) {
         ByteString sTemp = rString.Copy( i );
         if ( sTemp.Search( "<Arg n=" ) == 0 ) {
