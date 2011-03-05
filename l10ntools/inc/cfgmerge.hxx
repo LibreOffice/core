@@ -193,7 +193,6 @@ private:
     std::vector<ByteString> aLanguages;
     ResData *pResData;
 
-    BOOL bGerman;
     ByteString sFilename;
     BOOL bEnglish;
 

@@ -700,7 +700,6 @@ void CfgExport::WorkOnRessourceEnd()
                     sOutput += sText; sOutput += "\t\t\t\t";
                     sOutput += sTimeStamp;
 
-                    //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
                     pOutputStream->WriteLine( sOutput );
             }
         }
@@ -730,7 +729,6 @@ CfgMerge::CfgMerge(
                 : CfgOutputParser( rOutputFile ),
                 pMergeDataFile( NULL ),
                 pResData( NULL ),
-                bGerman( FALSE ),
                 sFilename( rFilename ),
                 bEnglish( FALSE )
 {
@@ -781,8 +779,6 @@ void CfgMerge::WorkOnText(
             pResData->sResTyp = pStackData->sResTyp;
         }
 
-        //if ( nLangIndex.EqualsIgnoreCaseAscii("de") )
-        //    bGerman = TRUE;
         if (( nLangIndex.EqualsIgnoreCaseAscii("en-US") ))
             bEnglish = TRUE;
 
@@ -834,7 +830,6 @@ void CfgMerge::WorkOnRessourceEnd()
                 ByteString sContent;
                 pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , TRUE );
                 if (
-                    // (!sCur.EqualsIgnoreCaseAscii("de") )    &&
                     ( !sCur.EqualsIgnoreCaseAscii("en-US") ) &&
 
                     ( sContent != "-" ) && ( sContent.Len()))
@@ -874,7 +869,6 @@ void CfgMerge::WorkOnRessourceEnd()
     }
     delete pResData;
     pResData = NULL;
-    bGerman = FALSE;
     bEnglish = FALSE;
 }
 
