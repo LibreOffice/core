@@ -1764,8 +1764,6 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
 
 void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks, bool bAllTabs)
 {
-#if NEW_RANGE_NAME
-#else
     std::set<USHORT> aUsedNames;        // indexes of named ranges that are used in the copied cells
     for (SCTAB i = 0; i <= MAXTAB; ++i)
         if (pTab[i] && pClipDoc->pTab[i])
@@ -1774,49 +1772,49 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
                     rClipRange.aStart.Col(), rClipRange.aStart.Row(),
                     rClipRange.aEnd.Col(), rClipRange.aEnd.Row(), aUsedNames);
 
-    pClipDoc->pRangeName->FreeAll();
-    for (USHORT i = 0; i < pRangeName->GetCount(); i++)        //! DB-Bereiche Pivot-Bereiche auch !!!
+    pClipDoc->pRangeName->clear();
+    ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
+    for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch !!!
     {
-        USHORT nIndex = ((ScRangeData*)((*pRangeName)[i]))->GetIndex();
-        bool bInUse = ( aUsedNames.find(nIndex) != aUsedNames.end() );
+        USHORT nIndex = itr->GetIndex();
+        bool bInUse = (aUsedNames.count(nIndex) > 0);
         if (bInUse)
         {
-            ScRangeData* pData = new ScRangeData(*((*pRangeName)[i]));
-            if (!pClipDoc->pRangeName->Insert(pData))
+            ScRangeData* pData = new ScRangeData(*itr);
+            if (!pClipDoc->pRangeName->insert(pData))
                 delete pData;
             else
                 pData->SetIndex(nIndex);
         }
     }
-#endif
 }
 
 void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, SCTAB nTab)
 {
-#if NEW_RANGE_NAME
-#else
     // Indexes of named ranges that are used in the copied cells
     std::set<USHORT> aUsedNames;
     if ( pTab[nTab] && pClipDoc->pTab[nTab] )
     {
-        pTab[nTab]->FindRangeNamesInUse( rClipRange.aStart.Col(), rClipRange.aStart.Row(), rClipRange.aEnd.Col(), rClipRange.aEnd.Row(), aUsedNames );
+        pTab[nTab]->FindRangeNamesInUse(
+            rClipRange.aStart.Col(), rClipRange.aStart.Row(),
+            rClipRange.aEnd.Col(), rClipRange.aEnd.Row(), aUsedNames );
     }
 
-    pClipDoc->pRangeName->FreeAll();
-    for ( USHORT i = 0; i < pRangeName->GetCount(); i++ )
+    pClipDoc->pRangeName->clear();
+    ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
+    for (; itr != itrEnd; ++itr)
     {
-        USHORT nIndex = ((ScRangeData*)((*pRangeName)[i]))->GetIndex();
-        bool bInUse = ( aUsedNames.find(nIndex) != aUsedNames.end() );
-        if ( bInUse )
+        USHORT nIndex = itr->GetIndex();
+        bool bInUse = (aUsedNames.count(nIndex) > 0);
+        if (bInUse)
         {
-            ScRangeData* pData = new ScRangeData(*((*pRangeName)[i]));
-            if ( !pClipDoc->pRangeName->Insert(pData) )
+            ScRangeData* pData = new ScRangeData(*itr);
+            if (!pClipDoc->pRangeName->insert(pData))
                 delete pData;
             else
                 pData->SetIndex(nIndex);
         }
     }
-#endif
 }
 
 ScDocument::NumFmtMergeHandler::NumFmtMergeHandler(ScDocument* pDoc, ScDocument* pSrcDoc) :
