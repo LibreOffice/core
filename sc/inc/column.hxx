@@ -299,7 +299,7 @@ public:
     void        UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
     void        SetTabNo(SCTAB nNewTab);
-    bool        IsRangeNameInUse(SCROW nRow1, SCROW nRow2, size_t nIndex) const;
+    bool    IsRangeNameInUse(SCROW nRow1, SCROW nRow2, sal_uInt16 nIndex) const;
     void        FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<sal_uInt16>& rIndexes) const;
     void        ReplaceRangeNamesInUse( SCROW nRow1, SCROW nRow2, const ScRangeData::IndexMap& rMap );
 

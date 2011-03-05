@@ -1841,7 +1841,7 @@ void ScColumn::SetTabNo(SCTAB nNewTab)
 }
 
 
-bool ScColumn::IsRangeNameInUse(SCROW nRow1, SCROW nRow2, size_t nIndex) const
+bool ScColumn::IsRangeNameInUse(SCROW nRow1, SCROW nRow2, sal_uInt16 nIndex) const
 {
     bool bInUse = false;
     if (pItems)

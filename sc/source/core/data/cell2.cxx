@@ -1529,7 +1529,7 @@ BOOL lcl_IsRangeNameInUse(size_t nIndex, ScTokenArray* pCode, ScRangeName* pName
     return FALSE;
 }
 
-BOOL ScFormulaCell::IsRangeNameInUse(size_t nIndex) const
+BOOL ScFormulaCell::IsRangeNameInUse(USHORT nIndex) const
 {
     return lcl_IsRangeNameInUse( nIndex, pCode, pDocument->GetRangeName() );
 }
