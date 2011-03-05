@@ -619,51 +619,6 @@ do                                                  \
         DbgWarning( aWarning, __FILE__, __LINE__ ); \
 } while(0)
 
-#define DBG_ERROR1( aError, x1 )                    \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1 );                          \
-    }                                               \
-} while(0)
-#define DBG_ERROR2( aError, x1, x2 )                \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1, x2 );                      \
-    }                                               \
-} while(0)
-#define DBG_ERROR3( aError, x1, x2, x3 )            \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1, x2, x3 );                  \
-    }                                               \
-} while(0)
-#define DBG_ERROR4( aError, x1, x2, x3, x4 )        \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1, x2, x3, x4 );              \
-    }                                               \
-} while(0)
-#define DBG_ERROR5( aError, x1, x2, x3, x4, x5 )    \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1, x2, x3, x4, x5 );          \
-    }                                               \
-} while(0)
 #define DBG_ERRORFILE( aError )                     \
 do                                                  \
 {                                                   \
@@ -751,11 +706,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #define DBG_WARNING4( aWarning, x1, x2, x3, x4 ) ((void)0)
 #define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 ) ((void)0)
 #define DBG_WARNINGFILE( aWarning ) ((void)0)
-#define DBG_ERROR1( aError, x1 ) ((void)0)
-#define DBG_ERROR2( aError, x1, x2 ) ((void)0)
-#define DBG_ERROR3( aError, x1, x2, x3 ) ((void)0)
-#define DBG_ERROR4( aError, x1, x2, x3, x4 ) ((void)0)
-#define DBG_ERROR5( aError, x1, x2, x3, x4, x5 ) ((void)0)
 #define DBG_ERRORFILE( aError ) ((void)0)
 
 #define DBG_TESTSOLARMUTEX() ((void)0)
