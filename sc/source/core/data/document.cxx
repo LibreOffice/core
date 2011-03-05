@@ -1838,7 +1838,6 @@ void ScDocument::MergeNumberFormatter(ScDocument* pSrcDoc)
 
 void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameData& rRangeNames)
 {
-    sal_uInt16 nClipRangeNameCount = pClipDoc->pRangeName->GetCount();
     ScClipRangeNameData aClipRangeNames;
 
     ScRangeName::const_iterator itr = pClipDoc->pRangeName->begin();
@@ -1852,12 +1851,11 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
             A proper solution would ask the user how to proceed.
             The adjustment of the indices in the formulas is done later.
         */
-        ScRangeData* pClipRangeData = (*pClipDoc->pRangeName)[i];
-        USHORT k;
-        if ( pRangeName->SearchName( itr->GetName(), k ) )
+        const ScRangeData* pExistingData = pRangeName->findByName(itr->GetName());
+        if (pExistingData)
         {
             USHORT nOldIndex = itr->GetIndex();
-            USHORT nNewIndex = ((*pRangeName)[k])->GetIndex();
+            USHORT nNewIndex = pExistingData->GetIndex();
             aClipRangeNames.insert(nOldIndex, nNewIndex);
             if ( !aClipRangeNames.mbReplace )
                 aClipRangeNames.mbReplace = ( nOldIndex != nNewIndex );

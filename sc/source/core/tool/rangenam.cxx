@@ -167,7 +167,6 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 }
 
 ScRangeData::ScRangeData(const ScRangeData& rScRangeData) :
-    ScDataObject(),
     aName   (rScRangeData.aName),
     aUpperName  (rScRangeData.aUpperName),
     pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray()),        // echte Kopie erzeugen (nicht copy-ctor)
@@ -183,11 +182,6 @@ ScRangeData::ScRangeData(const ScRangeData& rScRangeData) :
 ScRangeData::~ScRangeData()
 {
     delete pCode;
-}
-
-ScDataObject* ScRangeData::Clone() const
-{
-    return new ScRangeData(*this);
 }
 
 void ScRangeData::GuessPosition()
@@ -663,8 +657,6 @@ ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
             (*(const ScRangeData**)p2)->GetName() );
 }
 
-#if NEW_RANGE_NAME
-
 bool operator<(const ScRangeData& left, const ScRangeData& right)
 {
     return left.GetName() < right.GetName();
@@ -860,135 +852,5 @@ bool ScRangeName::operator== (const ScRangeName& r) const
 {
     return maData == r.maData;
 }
-
-#else
-
-ScRangeName::ScRangeName(const ScRangeName& rScRangeName, ScDocument* pDocument) :
-                ScSortedCollection ( rScRangeName ),
-                pDoc ( pDocument ),
-                nSharedMaxIndex (rScRangeName.nSharedMaxIndex)
-{
-    for (USHORT i = 0; i < nCount; i++)
-    {
-        ((ScRangeData*)At(i))->SetDocument(pDocument);
-        ((ScRangeData*)At(i))->SetIndex(((ScRangeData*)rScRangeName.At(i))->GetIndex());
-    }
-}
-
-short ScRangeName::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
-{
-    USHORT i1 = ((ScRangeData*)pKey1)->GetIndex();
-    USHORT i2 = ((ScRangeData*)pKey2)->GetIndex();
-    return (short) i1 - (short) i2;
-}
-
-BOOL ScRangeName::SearchNameUpper( const String& rUpperName, USHORT& rIndex ) const
-{
-    // SearchNameUpper must be called with an upper-case search string
-
-    USHORT i = 0;
-    while (i < nCount)
-    {
-        if ( ((*this)[i])->GetUpperName() == rUpperName )
-        {
-            rIndex = i;
-            return TRUE;
-        }
-        i++;
-    }
-    return FALSE;
-}
-
-BOOL ScRangeName::SearchName( const String& rName, USHORT& rIndex ) const
-{
-    if ( nCount > 0 )
-        return SearchNameUpper( ScGlobal::pCharClass->upper( rName ), rIndex );
-    else
-        return FALSE;
-}
-
-void ScRangeName::UpdateReference(  UpdateRefMode eUpdateRefMode,
-                                    const ScRange& rRange,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
-{
-    for (USHORT i=0; i<nCount; i++)
-        ((ScRangeData*)pItems[i])->UpdateReference(eUpdateRefMode, rRange,
-                                                   nDx, nDy, nDz);
-}
-
-void ScRangeName::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest )
-{
-    for (USHORT i=0; i<nCount; i++)
-        ((ScRangeData*)pItems[i])->UpdateTranspose( rSource, rDest );
-}
-
-void ScRangeName::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
-{
-    for (USHORT i=0; i<nCount; i++)
-        ((ScRangeData*)pItems[i])->UpdateGrow( rArea, nGrowX, nGrowY );
-}
-
-BOOL ScRangeName::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
-{
-    return *(ScRangeData*)pKey1 == *(ScRangeData*)pKey2;
-}
-
-BOOL ScRangeName::Insert(ScDataObject* pScDataObject)
-{
-    if (!((ScRangeData*)pScDataObject)->GetIndex())     // schon gesetzt?
-    {
-        ((ScRangeData*)pScDataObject)->SetIndex( GetEntryIndex() );
-    }
-
-    return ScSortedCollection::Insert(pScDataObject);
-}
-
-// Suche nach einem freien Index
-
-USHORT ScRangeName::GetEntryIndex()
-{
-    USHORT nLast = 0;
-    for ( USHORT i = 0; i < nCount; i++ )
-    {
-        USHORT nIdx = ((ScRangeData*)pItems[i])->GetIndex();
-        if( nIdx > nLast )
-        {
-            nLast = nIdx;
-        }
-    }
-    return nLast + 1;
-}
-
-ScRangeData* ScRangeName::FindIndex( USHORT nIndex )
-{
-    ScRangeData aDataObj( nIndex );
-    USHORT n;
-    if( Search( &aDataObj, n ) )
-        return (*this)[ n ];
-    else
-        return NULL;
-}
-
-
-ScRangeData* ScRangeName::GetRangeAtBlock( const ScRange& rBlock ) const
-{
-    if ( pItems )
-    {
-        for ( USHORT i = 0; i < nCount; i++ )
-            if ( ((ScRangeData*)pItems[i])->IsRangeAtBlock( rBlock ) )
-                return (ScRangeData*)pItems[i];
-    }
-    return NULL;
-}
-
-void ScRangeName::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
-{
-    for (USHORT i=0; i<nCount; i++)
-        ((ScRangeData*)pItems[i])->UpdateTabRef(nOldTable, nFlag, nNewTable);
-}
-
-#endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
