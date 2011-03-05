@@ -396,7 +396,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
                         }
                         break;
                     default:
-                        DBG_ERROR2( "ScRange::Parse_XL_Header: unhandled ExternalLinkType %d for index %d",
+                        OSL_TRACE( "ScRange::Parse_XL_Header: unhandled ExternalLinkType %d for index %d",
                                 rInfo.Type, i);
                         return NULL;
                 }
