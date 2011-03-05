@@ -1838,15 +1838,12 @@ void ScDocument::MergeNumberFormatter(ScDocument* pSrcDoc)
 
 void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameData& rRangeNames)
 {
-#if NEW_RANGE_NAME
-#else
     sal_uInt16 nClipRangeNameCount = pClipDoc->pRangeName->GetCount();
     ScClipRangeNameData aClipRangeNames;
 
-    // array containing range names which might need update of indices
-    aClipRangeNames.mpRangeNames.resize(nClipRangeNameCount, NULL);
-
-    for (sal_uInt16 i = 0; i < nClipRangeNameCount; ++i)        //! DB-Bereiche Pivot-Bereiche auch
+    ScRangeName::const_iterator itr = pClipDoc->pRangeName->begin();
+    ScRangeName::const_iterator itrEnd = pClipDoc->pRangeName->end();
+    for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch
     {
         /*  Copy only if the name doesn't exist in this document.
             If it exists we use the already existing name instead,
@@ -1857,10 +1854,9 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
         */
         ScRangeData* pClipRangeData = (*pClipDoc->pRangeName)[i];
         USHORT k;
-        if ( pRangeName->SearchName( pClipRangeData->GetName(), k ) )
+        if ( pRangeName->SearchName( itr->GetName(), k ) )
         {
-            aClipRangeNames.mpRangeNames[i] = NULL;  // range name not inserted
-            USHORT nOldIndex = pClipRangeData->GetIndex();
+            USHORT nOldIndex = itr->GetIndex();
             USHORT nNewIndex = ((*pRangeName)[k])->GetIndex();
             aClipRangeNames.insert(nOldIndex, nNewIndex);
             if ( !aClipRangeNames.mbReplace )
@@ -1868,14 +1864,14 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
         }
         else
         {
-            ScRangeData* pData = new ScRangeData( *pClipRangeData );
+            ScRangeData* pData = new ScRangeData( *itr );
             pData->SetDocument(this);
             if ( pRangeName->FindIndex( pData->GetIndex() ) )
                 pData->SetIndex(0);     // need new index, done in Insert
-            if ( pRangeName->Insert( pData ) )
+            if ( pRangeName->insert(pData) )
             {
-                aClipRangeNames.mpRangeNames[i] = pData;
-                USHORT nOldIndex = pClipRangeData->GetIndex();
+                aClipRangeNames.mpRangeNames.push_back(pData);
+                USHORT nOldIndex = itr->GetIndex();
                 USHORT nNewIndex = pData->GetIndex();
                 aClipRangeNames.insert(nOldIndex, nNewIndex);
                 if ( !aClipRangeNames.mbReplace )
@@ -1884,14 +1880,12 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
             else
             {   // must be an overflow
                 delete pData;
-                aClipRangeNames.mpRangeNames[i] = NULL;
-                aClipRangeNames.insert(pClipRangeData->GetIndex(), 0);
+                aClipRangeNames.insert(itr->GetIndex(), 0);
                 aClipRangeNames.mbReplace = true;
             }
         }
     }
     rRangeNames = aClipRangeNames;
-#endif
 }
 
 void ScDocument::UpdateRangeNamesInFormulas(
@@ -1906,11 +1900,9 @@ void ScDocument::UpdateRangeNamesInFormulas(
 
     // first update all inserted named formulas if they contain other
     // range names and used indices changed
-    size_t nRangeNameCount = rRangeNames.mpRangeNames.size();
-    for (size_t i = 0; i < nRangeNameCount; ++i)        //! DB-Bereiche Pivot-Bereiche auch
+    for (size_t i = 0, n = rRangeNames.mpRangeNames.size(); i < n; ++i)        //! DB-Bereiche Pivot-Bereiche auch
     {
-        if ( rRangeNames.mpRangeNames[i] )
-            rRangeNames.mpRangeNames[i]->ReplaceRangeNamesInUse(rRangeNames.maRangeMap);
+        rRangeNames.mpRangeNames[i]->ReplaceRangeNamesInUse(rRangeNames.maRangeMap);
     }
     // then update the formulas, they might need just the updated range names
     for ( size_t nRange = 0, n = rDestRanges.size(); nRange < n; ++nRange )
