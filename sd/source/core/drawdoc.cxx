@@ -752,9 +752,10 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         String aName = pPage->GetLayoutName();
         aName.Erase( aName.SearchAscii( SD_LT_SEPARATOR ));
 
-        List* pOutlineList = pSPool->CreateOutlineSheetList(aName);
-        SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)
-                                        pSPool->GetTitleSheet(aName);
+        std::vector<SfxStyleSheetBase*> aOutlineList;
+        pSPool->CreateOutlineSheetList(aName,aOutlineList);
+
+        SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)pSPool->GetTitleSheet(aName);
 
         SdrObject* pObj = rPresentationShapes.getNextShape(0);
 
@@ -781,14 +782,16 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                     if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
                         pOPO->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
 
-                    for (USHORT nSheet = 0; nSheet < 10; nSheet++)
+                    std::vector<SfxStyleSheetBase*>::iterator iter;
+                    for (iter = aOutlineList.begin(); iter != aOutlineList.end(); ++iter)
                     {
-                        SfxStyleSheet* pSheet = (SfxStyleSheet*)pOutlineList->GetObject(nSheet);
+                        SfxStyleSheet* pSheet = reinterpret_cast<SfxStyleSheet*>(*iter);
+
                         if (pSheet)
                         {
                             pObj->StartListening(*pSheet);
 
-                            if( nSheet == 0)
+                            if( iter == aOutlineList.begin())
                                 // Textrahmen hoert auf StyleSheet der Ebene1
                                 pObj->NbcSetStyleSheet(pSheet, TRUE);
                         }
@@ -812,8 +815,6 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
             pObj = rPresentationShapes.getNextShape(pObj);
         }
-
-        delete pOutlineList;
     }
 }
 

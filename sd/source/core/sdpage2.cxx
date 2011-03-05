@@ -42,7 +42,6 @@
 #include <svl/urihelper.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <svx/svditer.hxx>
-#include <tools/list.hxx>
 
 #include "sdresid.hxx"
 #include "sdpage.hxx"
@@ -283,15 +282,17 @@ void SdPage::EndListenOutlineText()
         DBG_ASSERT(pSPool, "StyleSheetPool nicht gefunden");
         String aTrueLayoutName(maLayoutName);
         aTrueLayoutName.Erase( aTrueLayoutName.SearchAscii( SD_LT_SEPARATOR ));
-        List* pOutlineStyles = pSPool->CreateOutlineSheetList(aTrueLayoutName);
-        for (SfxStyleSheet* pSheet = (SfxStyleSheet*)pOutlineStyles->First();
-             pSheet;
-             pSheet = (SfxStyleSheet*)pOutlineStyles->Next())
-            {
-                pOutlineTextObj->EndListening(*pSheet);
-            }
 
-        delete pOutlineStyles;
+        SfxStyleSheet *pSheet = NULL;
+        std::vector<SfxStyleSheetBase*> aOutlineStyles;
+        pSPool->CreateOutlineSheetList(aTrueLayoutName,aOutlineStyles);
+
+        std::vector<SfxStyleSheetBase*>::iterator iter;
+        for (iter = aOutlineStyles.begin(); iter != aOutlineStyles.end(); ++iter)
+        {
+            pSheet = reinterpret_cast<SfxStyleSheet*>(*iter);
+            pOutlineTextObj->EndListening(*pSheet);
+        }
     }
 }
 

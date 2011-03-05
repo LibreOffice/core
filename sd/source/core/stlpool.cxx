@@ -149,21 +149,22 @@ SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const String& rLayoutName)
 |*
 \************************************************************************/
 
-List* SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName)
+void SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles)
 {
     String aName(rLayoutName);
     aName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
     aName += String(SdResId(STR_LAYOUT_OUTLINE));
-    List* pList = new List;
+
     for (USHORT nSheet = 1; nSheet < 10; nSheet++)
     {
         String aFullName(aName);
         aFullName.Append( sal_Unicode( ' ' ));
         aFullName.Append( String::CreateFromInt32( (sal_Int32)nSheet ));
         SfxStyleSheetBase* pSheet = Find(aFullName, SD_STYLE_FAMILY_MASTERPAGE);
-        pList->Insert(pSheet, LIST_APPEND);
+
+        if (pSheet)
+            rOutlineStyles.push_back(pSheet);
     }
-    return pList;
 }
 
 /*************************************************************************
@@ -677,18 +678,28 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
     }
 
     // Sonderbehandlung fuer Gliederungsvorlagen: Parentbeziehungen aufbauen
-    List* pOutlineSheets = CreateOutlineSheetList(rLayoutName);
-    SfxStyleSheetBase* pParent = (SfxStyleSheetBase*)pOutlineSheets->First();
-    pSheet = (SfxStyleSheetBase*)pOutlineSheets->Next();
-    while (pSheet)
+    std::vector<SfxStyleSheetBase*> aOutlineSheets;
+    CreateOutlineSheetList(rLayoutName,aOutlineSheets);
+
+    std::vector<SfxStyleSheetBase*>::iterator it = aOutlineSheets.begin();
+
+    SfxStyleSheetBase* pParent = *it;
+    ++it;
+
+    while (it != aOutlineSheets.end())
     {
-        // kein Parent?
+        pSheet = *it;
+
+        if (!pSheet)
+            break;
+
         if (pSheet->GetParent().Len() == 0)
             pSheet->SetParent(pParent->GetName());
+
         pParent = pSheet;
-        pSheet = (SfxStyleSheetBase*)pOutlineSheets->Next();
+
+        ++it;
     }
-    delete pOutlineSheets;
 }
 
 /*************************************************************************
