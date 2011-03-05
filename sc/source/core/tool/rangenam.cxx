@@ -769,7 +769,12 @@ void ScRangeName::UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY)
 
 ScRangeData* ScRangeName::FindIndex(size_t i)
 {
-    return NULL;
+    if (i >= maData.size())
+        return NULL;
+
+    DataType::iterator itr = maData.begin();
+    ::std::advance(itr, i);
+    return &(*itr);
 }
 
 sal_uInt16 ScRangeName::GetSharedMaxIndex()
@@ -780,6 +785,16 @@ sal_uInt16 ScRangeName::GetSharedMaxIndex()
 void ScRangeName::SetSharedMaxIndex(sal_uInt16 nInd)
 {
     mnSharedMaxIndex = nInd;
+}
+
+ScRangeName::const_iterator ScRangeName::begin() const
+{
+    return maData.begin();
+}
+
+ScRangeName::const_iterator ScRangeName::end() const
+{
+    return maData.end();
 }
 
 size_t ScRangeName::size() const
@@ -811,14 +826,9 @@ void ScRangeName::clear()
     maData.clear();
 }
 
-ScRangeData* ScRangeName::At(size_t i)
-{
-    return NULL;
-}
-
 bool ScRangeName::operator== (const ScRangeName& r) const
 {
-    return true;
+    return maData == r.maData;
 }
 
 #else

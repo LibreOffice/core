@@ -191,6 +191,8 @@ private:
     ScDocument* mpDoc;
     sal_uInt16  mnSharedMaxIndex;
 public:
+    typedef DataType::const_iterator const_iterator;
+
     ScRangeName(ScDocument* pDoc = NULL);
     ScRangeName(const ScRangeName& r);
 
@@ -209,12 +211,14 @@ public:
     SC_DLLPUBLIC ScRangeData* FindIndex(size_t i);
     sal_uInt16 GetSharedMaxIndex();
     void SetSharedMaxIndex(sal_uInt16 nInd);
+
+    const_iterator begin() const;
+    const_iterator end() const;
     SC_DLLPUBLIC size_t size() const;
     bool empty() const;
     SC_DLLPUBLIC bool Insert(ScRangeData* p);
     void erase(const ScRangeData& r);
     void clear();
-    SC_DLLPUBLIC ScRangeData* At(size_t i);
     bool operator== (const ScRangeName& r) const;
 };
 
