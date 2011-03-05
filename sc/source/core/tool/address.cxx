@@ -44,9 +44,10 @@
 #include <com/sun/star/sheet/ExternalLinkType.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
-using namespace ::com::sun::star;
 
-////////////////////////////////////////////////////////////////////////////
+using namespace ::com::sun::star;
+using ::rtl::OUString;
+
 const ScAddress::Details ScAddress::detailsOOOa1( formula::FormulaGrammar::CONV_OOO, 0, 0 );
 
 ScAddress::Details::Details ( const ScDocument* pDoc,
@@ -1872,6 +1873,14 @@ void ScRange::Format( String& r, USHORT nFlags, ScDocument* pDoc,
         }
     }
 #undef  absrel_differ
+}
+
+void ScRange::Format( OUString& r, USHORT nFlags, ScDocument* pDoc,
+                      const ScAddress::Details& rDetails ) const
+{
+    String aStr;
+    Format(aStr, nFlags, pDoc, rDetails);
+    r = aStr;
 }
 
 bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )

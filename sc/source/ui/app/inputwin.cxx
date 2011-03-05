@@ -1411,43 +1411,31 @@ void ScPosWnd::FillRangeNames()
         //  per Hand sortieren, weil Funktionen nicht sortiert werden:
 
         ScRangeName* pRangeNames = pDoc->GetRangeName();
-#if NEW_RANGE_NAME
-#else
-        USHORT nCount = pRangeNames->GetCount();
-        if ( nCount > 0 )
+        if (!pRangeNames->empty())
         {
-            USHORT nValidCount = 0;
             ScRange aDummy;
-            USHORT i;
-            for ( i=0; i<nCount; i++ )
+            std::vector<const ScRangeData*> aSortArray;
+            ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
+            for (; itr != itrEnd; ++itr)
             {
-                ScRangeData* pData = (*pRangeNames)[i];
-                if (pData->IsValidReference(aDummy))
-                    nValidCount++;
+                if (itr->IsValidReference(aDummy))
+                    aSortArray.push_back(&(*itr));
             }
-            if ( nValidCount )
+
+            if (!aSortArray.empty())
             {
-                ScRangeData** ppSortArray = new ScRangeData* [ nValidCount ];
-                USHORT j;
-                for ( i=0, j=0; i<nCount; i++ )
-                {
-                    ScRangeData* pData = (*pRangeNames)[i];
-                    if (pData->IsValidReference(aDummy))
-                        ppSortArray[j++] = pData;
-                }
 #ifndef ICC
-                qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
+                size_t n = aSortArray.size();
+                qsort( (void*)&aSortArray[0], n, sizeof(ScRangeData*),
                     &ScRangeData_QsortNameCompare );
 #else
-                qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
+                qsort( (void*)&aSortArray[0], n, sizeof(ScRangeData*),
                     ICCQsortNameCompare );
 #endif
-                for ( j=0; j<nValidCount; j++ )
-                    InsertEntry( ppSortArray[j]->GetName() );
-                delete [] ppSortArray;
+                for (size_t i = 0; i < n; ++i)
+                    InsertEntry(aSortArray[i]->GetName());
             }
         }
-#endif
     }
     SetText(aPosStr);
 }

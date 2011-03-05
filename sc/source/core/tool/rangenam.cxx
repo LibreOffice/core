@@ -235,6 +235,13 @@ void ScRangeData::GetSymbol( String& rSymbol, const FormulaGrammar::Grammar eGra
     aComp.CreateStringFromTokenArray( rSymbol );
 }
 
+void ScRangeData::GetSymbol( OUString& rSymbol, const FormulaGrammar::Grammar eGrammar ) const
+{
+    String aStr;
+    GetSymbol(aStr, eGrammar);
+    rSymbol = aStr;
+}
+
 void ScRangeData::UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress& rPos,
                                 const FormulaGrammar::Grammar eGrammar )
 {

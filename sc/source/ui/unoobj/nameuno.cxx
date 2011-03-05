@@ -90,23 +90,12 @@ SC_SIMPLE_SERVICE_INFO( ScLabelRangeObj, "ScLabelRangeObj", "com.sun.star.sheet.
 SC_SIMPLE_SERVICE_INFO( ScLabelRangesObj, "ScLabelRangesObj", "com.sun.star.sheet.LabelRanges" )
 SC_SIMPLE_SERVICE_INFO( ScNamedRangesObj, "ScNamedRangesObj", "com.sun.star.sheet.NamedRanges" )
 
-//------------------------------------------------------------------------
-
-sal_Bool lcl_UserVisibleName( const ScRangeData* pData )
-{
-    //! als Methode an ScRangeData
-
-    return ( pData && !pData->HasType( RT_DATABASE ) && !pData->HasType( RT_SHARED ) );
-}
-
-bool lcl_UserVisibleName( const ScRangeData& rData )
+bool lcl_UserVisibleName(const ScRangeData& rData)
 {
     //! als Methode an ScRangeData
 
     return !rData.HasType(RT_DATABASE) && !rData.HasType(RT_SHARED);
 }
-
-//------------------------------------------------------------------------
 
 ScNamedRangeObj::ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm) :
     mpParent(pParent),
@@ -636,7 +625,7 @@ void SAL_CALL ScNamedRangesObj::removeByName( const rtl::OUString& aName )
         if (pNames)
         {
             const ScRangeData* pData = pNames->findByName(aName);
-            if (pData && lcl_UserVisibleName(pData))
+            if (pData && lcl_UserVisibleName(*pData))
             {
                 ScRangeName* pNewRanges = new ScRangeName(*pNames);
                 pNewRanges->erase(*pData);
@@ -683,13 +672,9 @@ sal_Int32 SAL_CALL ScNamedRangesObj::getCount() throw(uno::RuntimeException)
         ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
         if (pNames)
         {
-#if NEW_RANGE_NAME
-#else
-            sal_uInt16 nCount = pNames->GetCount();
-            for (sal_uInt16 i=0; i<nCount; i++)
-                if (lcl_UserVisibleName( (*pNames)[i] ))    // interne weglassen
-                    ++nRet;
-#endif
+            ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
+            if (lcl_UserVisibleName(*itr))
+                ++nRet;
         }
     }
     return nRet;
@@ -778,17 +763,13 @@ uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangesObj::getElementNames()
             long nVisCount = getCount();            // Namen mit lcl_UserVisibleName
             uno::Sequence<rtl::OUString> aSeq(nVisCount);
             rtl::OUString* pAry = aSeq.getArray();
-#if NEW_RANGE_NAME
-#else
-            sal_uInt16 nCount = pNames->GetCount();
             sal_uInt16 nVisPos = 0;
-            for (sal_uInt16 i=0; i<nCount; i++)
+            ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
+            for (; itr != itrEnd; ++itr)
             {
-                ScRangeData* pData = (*pNames)[i];
-                if ( lcl_UserVisibleName(pData) )
-                    pAry[nVisPos++] = pData->GetName();
+                if (lcl_UserVisibleName(*itr))
+                    pAry[nVisPos++] = itr->GetName();
             }
-#endif
             return aSeq;
         }
     }
@@ -805,7 +786,7 @@ sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const rtl::OUString& aName )
         if (pNames)
         {
             const ScRangeData* pData = pNames->findByName(aName);
-            if (pData && lcl_UserVisibleName(pData))
+            if (pData && lcl_UserVisibleName(*pData))
                 return sal_True;
         }
     }

@@ -69,6 +69,8 @@ const USHORT SC_AREASDLG_RR_OFFSET  = 2;
 
 //============================================================================
 
+using ::rtl::OUString;
+
 #define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
 #define ERRORBOX(nId)       ErrorBox( this, WinBits(WB_OK|WB_DEF_OK), \
                             ScGlobal::GetRscString( nId ) ).Execute()
@@ -76,8 +78,14 @@ const USHORT SC_AREASDLG_RR_OFFSET  = 2;
 
 // globale Funktionen (->am Ende der Datei):
 
-bool    lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange );
-void    lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, String& rStr );
+bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange );
+void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, String& rStr );
+void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr )
+{
+    String aStr;
+    lcl_GetRepeatRangeString(pRange, pDoc, bIsRow, aStr);
+    rStr = aStr;
+}
 
 #if 0
 // this method is useful when debugging address flags.
@@ -466,58 +474,48 @@ void ScPrintAreasDlg::Impl_FillLists()
     //------------------------------------------------------
     // Ranges holen und in ListBoxen merken
     //------------------------------------------------------
-    ScRangeName*    pRangeNames = pDoc->GetRangeName();
-    size_t nCount = pRangeNames ? pRangeNames->size() : 0;
-#if NEW_RANGE_NAME
-#else
-    if ( nCount > 0 )
+    ScRangeName* pRangeNames = pDoc->GetRangeName();
+
+    if (!pRangeNames || pRangeNames->empty())
+        // No range names to process.
+        return;
+
+    ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
+    for (; itr != itrEnd; ++itr)
     {
-        String          aName;
-        String          aSymbol;
-        ScRangeData*    pData = NULL;
+        if (!itr->HasType(RT_ABSAREA) && !itr->HasType(RT_REFAREA) && !itr->HasType(RT_ABSPOS))
+            continue;
 
-        for ( USHORT i=0; i<nCount; i++ )
+        OUString aName = itr->GetName();
+        OUString aSymbol;
+        itr->GetSymbol(aSymbol);
+        if (aRange.ParseAny(aSymbol, pDoc, eConv) & SCA_VALID)
         {
-            pData = (ScRangeData*)(pRangeNames->At( i ));
-            if ( pData )
+            if (itr->HasType(RT_PRINTAREA))
             {
-                if (   pData->HasType( RT_ABSAREA )
-                    || pData->HasType( RT_REFAREA )
-                    || pData->HasType( RT_ABSPOS ) )
-                {
-                    pData->GetName( aName );
-                    pData->GetSymbol( aSymbol );
-                    if ( aRange.ParseAny( aSymbol, pDoc, eConv ) & SCA_VALID )
-                    {
-                        if ( pData->HasType( RT_PRINTAREA ) )
-                        {
-                            aRange.Format( aSymbol, SCR_ABS, pDoc, eConv );
-                            aLbPrintArea.SetEntryData(
-                                aLbPrintArea.InsertEntry( aName ),
-                                new String( aSymbol ) );
-                        }
+                aRange.Format(aSymbol, SCR_ABS, pDoc, eConv);
+                aLbPrintArea.SetEntryData(
+                    aLbPrintArea.InsertEntry(aName),
+                    new String(aSymbol) );
+            }
 
-                        if ( pData->HasType( RT_ROWHEADER ) )
-                        {
-                            lcl_GetRepeatRangeString(&aRange, pDoc, true, aSymbol);
-                            aLbRepeatRow.SetEntryData(
-                                aLbRepeatRow.InsertEntry( aName ),
-                                new String( aSymbol ) );
-                        }
+            if (itr->HasType(RT_ROWHEADER))
+            {
+                lcl_GetRepeatRangeString(&aRange, pDoc, true, aSymbol);
+                aLbRepeatRow.SetEntryData(
+                    aLbRepeatRow.InsertEntry(aName),
+                    new String(aSymbol) );
+            }
 
-                        if ( pData->HasType( RT_COLHEADER ) )
-                        {
-                            lcl_GetRepeatRangeString(&aRange, pDoc, false, aSymbol);
-                            aLbRepeatCol.SetEntryData(
-                                aLbRepeatCol.InsertEntry( aName ),
-                                new String( aSymbol ) );
-                        }
-                    }
-                }
+            if (itr->HasType(RT_COLHEADER))
+            {
+                lcl_GetRepeatRangeString(&aRange, pDoc, false, aSymbol);
+                aLbRepeatCol.SetEntryData(
+                    aLbRepeatCol.InsertEntry(aName),
+                    new String(aSymbol));
             }
         }
     }
-#endif
 }
 
 

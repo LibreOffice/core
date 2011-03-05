@@ -666,43 +666,31 @@ void ScContentTree::GetAreaNames()
         return;
 
     ScRangeName* pRangeNames = pDoc->GetRangeName();
-#if NEW_RANGE_NAME
-#else
-    USHORT nCount = pRangeNames->GetCount();
-    if ( nCount > 0 )
+    if (!pRangeNames->empty())
     {
-        USHORT nValidCount = 0;
         ScRange aDummy;
-        USHORT i;
-        for ( i=0; i<nCount; i++ )
+        ScRangeName::const_iterator itrBeg = pRangeNames->begin(), itrEnd = pRangeNames->end();
+        std::vector<const ScRangeData*> aSortArray;
+        for (ScRangeName::const_iterator itr = itrBeg; itr != itrEnd; ++itr)
         {
-            ScRangeData* pData = (*pRangeNames)[i];
-            if (pData->IsValidReference(aDummy))
-                nValidCount++;
+            if (itr->IsValidReference(aDummy))
+                aSortArray.push_back(&(*itr));
         }
-        if ( nValidCount )
+
+        if (!aSortArray.empty())
         {
-            ScRangeData** ppSortArray = new ScRangeData* [ nValidCount ];
-            USHORT j;
-            for ( i=0, j=0; i<nCount; i++ )
-            {
-                ScRangeData* pData = (*pRangeNames)[i];
-                if (pData->IsValidReference(aDummy))
-                    ppSortArray[j++] = pData;
-            }
 #ifndef ICC
-            qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
+            size_t n = aSortArray.size();
+            qsort( (void*)&aSortArray[0], n, sizeof(ScRangeData*),
                 &ScRangeData_QsortNameCompare );
 #else
-            qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
+            qsort( (void*)&aSortArray[0], n, sizeof(ScRangeData*),
                 ICCQsortNameCompare );
 #endif
-            for ( j=0; j<nValidCount; j++ )
-                InsertContent( SC_CONTENT_RANGENAME, ppSortArray[j]->GetName() );
-            delete [] ppSortArray;
+            for (size_t i = 0; i < n; ++i)
+                InsertContent(SC_CONTENT_RANGENAME, aSortArray[i]->GetName());
         }
     }
-#endif
 }
 
 void ScContentTree::GetDbNames()
