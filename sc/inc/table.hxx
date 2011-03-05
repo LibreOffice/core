@@ -479,7 +479,7 @@ public:
     void        UpdateCompile( BOOL bForceIfNameInUse = FALSE );
     void        SetTabNo(SCTAB nNewTab);
     BOOL        IsRangeNameInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                 USHORT nIndex) const;
+                                 size_t nIndex) const;
     void        FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                  std::set<USHORT>& rIndexes) const;
     void        ReplaceRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

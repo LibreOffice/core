@@ -459,7 +459,7 @@ public:
     void            UpdateRenameTab(SCTAB nTable, const String& rName);
     BOOL            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( BOOL bForceIfNameInUse = FALSE );
-    BOOL            IsRangeNameInUse(USHORT nIndex) const;
+    BOOL            IsRangeNameInUse(size_t nIndex) const;
     void            FindRangeNamesInUse(std::set<USHORT>& rIndexes) const;
     void            ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap );
     BOOL            IsSubTotal() const                      { return bSubTotal; }

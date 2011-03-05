@@ -672,6 +672,12 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
 void XclExpNameManagerImpl::CreateUserNames()
 {
 #if NEW_RANGE_NAME
+    const ScRangeName& rNamedRanges = GetNamedRanges();
+    ScRangeName::const_iterator itr = rNamedRanges.begin(), itrEnd = rNamedRanges.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        // TODO: re-implement maNameMap to map name to excel index.
+    }
 #else
     const ScRangeName& rNamedRanges = GetNamedRanges();
     for( USHORT nNameIdx = 0, nNameCount = rNamedRanges.GetCount(); nNameIdx < nNameCount; ++nNameIdx )

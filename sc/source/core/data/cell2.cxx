@@ -1508,13 +1508,13 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         StartListeningTo( pDocument );      // Listener wie vorher
 }
 
-BOOL lcl_IsRangeNameInUse(USHORT nIndex, ScTokenArray* pCode, ScRangeName* pNames)
+BOOL lcl_IsRangeNameInUse(size_t nIndex, ScTokenArray* pCode, ScRangeName* pNames)
 {
     for (FormulaToken* p = pCode->First(); p; p = pCode->Next())
     {
         if (p->GetOpCode() == ocName)
         {
-            if (p->GetIndex() == nIndex)
+            if (p->GetIndex() == static_cast<USHORT>(nIndex))
                 return TRUE;
             else
             {
@@ -1529,7 +1529,7 @@ BOOL lcl_IsRangeNameInUse(USHORT nIndex, ScTokenArray* pCode, ScRangeName* pName
     return FALSE;
 }
 
-BOOL ScFormulaCell::IsRangeNameInUse(USHORT nIndex) const
+BOOL ScFormulaCell::IsRangeNameInUse(size_t nIndex) const
 {
     return lcl_IsRangeNameInUse( nIndex, pCode, pDocument->GetRangeName() );
 }

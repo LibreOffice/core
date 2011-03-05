@@ -962,6 +962,8 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
         if ( !bResultsOnly )
         {
+#if NEW_RANGE_NAME
+#else
             BOOL bNamesLost = FALSE;
             size_t nSrcRangeNames = pSrcDoc->pRangeName->size();
             // array containing range names which might need update of indices
@@ -1058,6 +1060,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 // message: duplicate names
             }
             pTab[nDestPos]->CompileAll();
+#endif
         }
 
         SetNoListening( FALSE );
@@ -1127,35 +1130,42 @@ void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const USHORT nErr
             pTab[nTab]->SetError( nCol, nRow, nError );
 }
 
-void ScDocument::EraseNonUsedSharedNames(USHORT nLevel)
+namespace {
+
+bool eraseUnusedSharedName(ScRangeName* pRangeName, ScTable* pTab[])
 {
-#if NEW_RANGE_NAME
-#else
-    for (size_t i = 0; i < pRangeName->size(); i++)
+    ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
+    for (; itr != itrEnd; ++itr)
     {
-        ScRangeData* pRangeData = (*pRangeName)[i];
-        if (pRangeData && pRangeData->HasType(RT_SHARED))
+        if (!itr->HasType(RT_SHARED))
+            continue;
+
+        size_t nIndex;
+        if (!pRangeName->getIndex(*itr, nIndex))
+            // index not found.
+            continue;
+
+        bool bInUse = false;
+        for (SCTAB j = 0; !bInUse && (j <= MAXTAB); ++j)
         {
-            String aName;
-            pRangeData->GetName(aName);
-            aName.Erase(0, 6);                      // !!! vgl. Table4, FillFormula !!
-            USHORT nInd = (USHORT) aName.ToInt32();
-            if (nInd <= nLevel)
-            {
-                USHORT nIndex = pRangeData->GetIndex();
-                BOOL bInUse = FALSE;
-                for (SCTAB j = 0; !bInUse && (j <= MAXTAB); j++)
-                {
-                    if (pTab[j])
-                        bInUse = pTab[j]->IsRangeNameInUse(0, 0, MAXCOL-1, MAXROW-1,
-                                                           nIndex);
-                }
-                if (!bInUse)
-                    pRangeName->AtFree(i);
-            }
+            if (pTab[j])
+                bInUse = pTab[j]->IsRangeNameInUse(0, 0, MAXCOL-1, MAXROW-1, nIndex);
+        }
+        if (!bInUse)
+        {
+            pRangeName->erase(itr);
+            return true;
         }
     }
-#endif
+    return false;
+}
+
+}
+
+void ScDocument::EraseNonUsedSharedNames()
+{
+    while (eraseUnusedSharedName(pRangeName, pTab))
+        ;
 }
 
 //  ----------------------------------------------------------------------------

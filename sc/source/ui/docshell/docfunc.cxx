@@ -4691,17 +4691,13 @@ BOOL ScDocFunc::InsertNameList( const ScAddress& rStartPos, BOOL bApi )
 
     ScRangeName* pList = pDoc->GetRangeName();
     USHORT nValidCount = 0;
-    USHORT i;
-    USHORT nCount = pList->size();
-#if NEW_RANGE_NAME
-#else
-    for (i=0; i<nCount; i++)
+    ScRangeName::iterator itrBeg = pList->begin(), itrEnd = pList->end();
+    for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
     {
-        ScRangeData* pData = (*pList)[i];
-        if ( !pData->HasType( RT_DATABASE ) && !pData->HasType( RT_SHARED ) )
+        const ScRangeData& r = *itr;
+        if (r.HasType(RT_DATABASE && !r.HasType(RT_SHARED)))
             ++nValidCount;
     }
-#endif
 
     if (nValidCount)
     {
@@ -4725,11 +4721,11 @@ BOOL ScDocFunc::InsertNameList( const ScAddress& rStartPos, BOOL bApi )
 
             ScRangeData** ppSortArray = new ScRangeData* [ nValidCount ];
             USHORT j = 0;
-            for (i=0; i<nCount; i++)
+            for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
             {
-                ScRangeData* pData = (*pList)[i];
-                if ( !pData->HasType( RT_DATABASE ) && !pData->HasType( RT_SHARED ) )
-                    ppSortArray[j++] = pData;
+                ScRangeData& r = *itr;
+                if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED))
+                    ppSortArray[j++] = &r;
             }
 #ifndef ICC
             qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
@@ -4772,7 +4768,7 @@ BOOL ScDocFunc::InsertNameList( const ScAddress& rStartPos, BOOL bApi )
 
             if (!AdjustRowHeight(ScRange(0,nStartRow,nTab,MAXCOL,nEndRow,nTab)))
                 rDocShell.PostPaint( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab, PAINT_GRID );
-//!         rDocShell.UpdateOle(GetViewData());
+
             aModificator.SetDocumentModified();
             bDone = TRUE;
         }

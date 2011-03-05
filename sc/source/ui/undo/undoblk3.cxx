@@ -629,7 +629,7 @@ ScUndoAutoFill::ScUndoAutoFill( ScDocShell* pNewDocShell,
 
 ScUndoAutoFill::~ScUndoAutoFill()
 {
-    pDocShell->GetDocument()->EraseNonUsedSharedNames(nMaxSharedIndex);
+    pDocShell->GetDocument()->EraseNonUsedSharedNames();
     delete pUndoDoc;
 }
 
@@ -652,8 +652,25 @@ void ScUndoAutoFill::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
+namespace {
 
-//----------------------------------------------------------------------------
+bool eraseNameContaining(ScRangeName& rNames, const rtl::OUString& rCriteria)
+{
+    ScRangeName::iterator itr = rNames.begin(), itrEnd = rNames.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        rtl::OUString aRName = itr->GetName();
+        if (aRName.indexOf(rCriteria) >= 0)
+        {
+            // Criteria found.  Erase this.
+            rNames.erase(itr);
+            return true;
+        }
+    }
+    return false;
+}
+
+}
 
 void ScUndoAutoFill::Undo()
 {
@@ -693,24 +710,17 @@ void ScUndoAutoFill::Undo()
     aName += String::CreateFromInt32(nMaxSharedIndex);
     aName += '_';
     ScRangeName* pRangeName = pDoc->GetRangeName();
-    BOOL bHasFound = FALSE;
-#if NEW_RANGE_NAME
-#else
-    for (USHORT i = 0; i < pRangeName->GetCount(); i++)
+    bool bHasFound = false;
+    // Remove all range names that contain ___SC_...
+    while (true)
     {
-        ScRangeData* pRangeData = (*pRangeName)[i];
-        if (pRangeData)
-        {
-            String aRName;
-            pRangeData->GetName(aRName);
-            if (aRName.Search(aName) != STRING_NOTFOUND)
-            {
-                pRangeName->AtFree(i);
-                bHasFound = TRUE;
-            }
-        }
+        bool bErased = eraseNameContaining(*pRangeName, aName);
+        if (bErased)
+            bHasFound = true;
+        else
+            break;
     }
-#endif
+
     if (bHasFound)
         pRangeName->SetSharedMaxIndex(pRangeName->GetSharedMaxIndex()-1);
 

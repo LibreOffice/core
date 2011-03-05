@@ -314,47 +314,31 @@ void ScNameDlg::UpdateChecks()
 
 void ScNameDlg::UpdateNames()
 {
-#if NEW_RANGE_NAME
-#else
-    USHORT  nRangeCount = aLocalRangeName.GetCount();
-
     aEdName.SetUpdateMode( FALSE );
-    //-----------------------------------------------------------
     USHORT  nNamePos = aEdName.GetTopEntry();
     aEdName.Clear();
 
     aEdAssign.SetText( EMPTY_STRING );
 
-    if ( nRangeCount > 0 )
-    {
-        ScRangeData*    pRangeData = NULL;
-        String          aString;
-
-        for ( USHORT i=0; i<nRangeCount; i++ )
-        {
-            pRangeData = (ScRangeData*)(aLocalRangeName.At( i ));
-            if ( pRangeData )
-            {
-                if (   !pRangeData->HasType( RT_DATABASE )
-                    && !pRangeData->HasType( RT_SHARED ) )
-                {
-                    pRangeData->GetName( aString );
-                    aEdName.InsertEntry( aString );
-                }
-            }
-        }
-    }
-    else
+    if (aLocalRangeName.empty())
     {
         aBtnAdd.SetText( aStrAdd );
         aBtnAdd.Disable();
         aBtnRemove.Disable();
     }
-    //-----------------------------------------------------------
+    else
+    {
+        ScRangeName::const_iterator itr = aLocalRangeName.begin(), itrEnd = aLocalRangeName.end();
+        for (; itr != itrEnd; ++itr)
+        {
+            if (!itr->HasType(RT_DATABASE) && !itr->HasType(RT_SHARED))
+                aEdName.InsertEntry(itr->GetName());
+        }
+    }
+
     aEdName.SetUpdateMode( TRUE );
     aEdName.SetTopEntry(nNamePos);
     aEdName.Invalidate();
-#endif
 }
 
 

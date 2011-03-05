@@ -669,16 +669,6 @@ ScRangeName::ScRangeName(ScDocument* pDoc) :
 ScRangeName::ScRangeName(const ScRangeName& r) :
     maData(r.maData), mpDoc(r.mpDoc) {}
 
-ScRangeData* ScRangeName::operator[](sal_uInt16 nIndex)
-{
-    return NULL;
-}
-
-const ScRangeData* ScRangeName::operator[](sal_uInt16 nIndex) const
-{
-    return NULL;
-}
-
 const ScRangeData* ScRangeName::GetRangeAtBlock(const ScRange& rRange) const
 {
     DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
@@ -725,6 +715,16 @@ ScRangeData* ScRangeName::findByUpperName(const OUString& rName)
             return &(*itr);
     }
     return NULL;
+}
+
+bool ScRangeName::getIndex(const ScRangeData& rData, size_t& rIndex) const
+{
+    DataType::const_iterator itr = maData.find(rData);
+    if (itr == maData.end())
+        return false;
+
+    rIndex = std::distance(maData.begin(), itr);
+    return true;
 }
 
 const ScRangeData* ScRangeName::findByUpperName(const OUString& rName) const
@@ -797,6 +797,16 @@ ScRangeName::const_iterator ScRangeName::end() const
     return maData.end();
 }
 
+ScRangeName::iterator ScRangeName::begin()
+{
+    return maData.begin();
+}
+
+ScRangeName::iterator ScRangeName::end()
+{
+    return maData.end();
+}
+
 size_t ScRangeName::size() const
 {
     return maData.size();
@@ -807,7 +817,7 @@ bool ScRangeName::empty() const
     return maData.empty();
 }
 
-bool ScRangeName::Insert(ScRangeData* p)
+bool ScRangeName::insert(ScRangeData* p)
 {
     if (!p)
         return false;
@@ -816,9 +826,19 @@ bool ScRangeName::Insert(ScRangeData* p)
     return r.second;
 }
 
+bool ScRangeName::Insert(ScRangeData* p)
+{
+    return insert(p);
+}
+
 void ScRangeName::erase(const ScRangeData& r)
 {
     maData.erase(r);
+}
+
+void ScRangeName::erase(const iterator& itr)
+{
+    maData.erase(itr);
 }
 
 void ScRangeName::clear()

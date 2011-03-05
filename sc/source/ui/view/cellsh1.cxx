@@ -2161,19 +2161,9 @@ void ScCellShell::ExecuteDataPilotDialog()
         ScRangeName* pRangeName = pDoc->GetRangeName();
         if (pRangeName)
         {
-#if NEW_RANGE_NAME
-#else
-            USHORT n = pRangeName->GetCount();
-            for (USHORT i = 0; i < n; ++i)
-            {
-                ScRangeData* p = (*pRangeName)[i];
-                if (!p)
-                    // This shouldn't happen, but just in case....
-                    continue;
-
-                pTypeDlg->AppendNamedRange(p->GetName());
-            }
-#endif
+            ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
+            for (; itr != itrEnd; ++itr)
+                pTypeDlg->AppendNamedRange(itr->GetName());
         }
 
         DBG_ASSERT(pTypeDlg, "Dialog create fail!");

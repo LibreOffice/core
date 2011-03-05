@@ -1707,18 +1707,15 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
         //  Bereiche uebernehmen
 
     pTransClip->pRangeName->clear();
-#if NEW_RANGE_NAME
-#else
-    for (USHORT i = 0; i < pRangeName->GetCount(); i++)     //! DB-Bereiche Pivot-Bereiche auch !!!
+    ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
+    for (; itr != itrEnd; ++itr)
     {
-        USHORT nIndex = ((ScRangeData*)((*pRangeName)[i]))->GetIndex();
-        ScRangeData* pData = new ScRangeData(*((*pRangeName)[i]));
-        if (!pTransClip->pRangeName->Insert(pData))
+        ScRangeData* pData = new ScRangeData(*itr);
+        if (!pTransClip->pRangeName->insert(pData))
             delete pData;
         else
-            pData->SetIndex(nIndex);
+            pData->SetIndex(0);
     }
-#endif
 
     // The data
 

@@ -6002,7 +6002,6 @@ uno::Any SAL_CALL ScVbaRange::AdvancedFilter( sal_Int32 Action, const uno::Any& 
 
     // CriteriaRange
     String aBuiltInCriteria; // Excel Built-In Filter Criteria.
-    ScRangeData* pData = NULL;
     table::CellRangeAddress refParentAddr;
     uno::Any aCriteriaRange = CriteriaRange;
     formula::FormulaGrammar::AddressConvention aConv = formula::FormulaGrammar::CONV_XL_A1;
@@ -6016,19 +6015,18 @@ uno::Any SAL_CALL ScVbaRange::AdvancedFilter( sal_Int32 Action, const uno::Any& 
     {
         // Get Excel BuiltIn Filter Criteria.
         ScRangeName* pRangeNames = pDoc->GetRangeName();
-#if NEW_RANGE_NAME
-#else
-        const USHORT nCount = pRangeNames ? pRangeNames->GetCount() : 0;
-        for ( USHORT index = 0; index < nCount; index++ )
+        if (pRangeNames)
         {
-            pData = ( ScRangeData* )( pRangeNames->At( index ) );
-            if ( pData && pData->HasType( RT_CRITERIA ) )
+            ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
+            for (; itr != itrEnd; ++itr)
             {
-                pData->GetSymbol( aBuiltInCriteria, formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
-                break;
+                if (itr->HasType(RT_CRITERIA))
+                {
+                    itr->GetSymbol( aBuiltInCriteria, formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
+                    break;
+                }
             }
         }
-#endif
         aCriteriaRange = aBuiltInCriteria.Len() > 0 ? uno::makeAny( rtl::OUString( aBuiltInCriteria ) ) : aCriteriaRange;
     }
     if ( aCriteriaRange.hasValue() )

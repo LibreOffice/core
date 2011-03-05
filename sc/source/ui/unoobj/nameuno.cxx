@@ -99,6 +99,13 @@ sal_Bool lcl_UserVisibleName( const ScRangeData* pData )
     return ( pData && !pData->HasType( RT_DATABASE ) && !pData->HasType( RT_SHARED ) );
 }
 
+bool lcl_UserVisibleName( const ScRangeData& rData )
+{
+    //! als Methode an ScRangeData
+
+    return !rData.HasType(RT_DATABASE) && !rData.HasType(RT_SHARED);
+}
+
 //------------------------------------------------------------------------
 
 ScNamedRangeObj::ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm) :
@@ -521,27 +528,23 @@ bool ScNamedRangesObj::IsModifyAndBroadcast() const
 
 ScNamedRangeObj* ScNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 {
-    if (pDocShell)
+    if (!pDocShell)
+        return NULL;
+
+    ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
+    if (!pNames)
+        return NULL;
+
+    ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
+    sal_uInt16 nPos = 0;
+    for (; itr != itrEnd; ++itr)
     {
-        ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
-        if (pNames)
+        if (lcl_UserVisibleName(*itr))
         {
-#if NEW_RANGE_NAME
-#else
-            sal_uInt16 nCount = pNames->GetCount();
-            sal_uInt16 nPos = 0;
-            for (sal_uInt16 i=0; i<nCount; i++)
-            {
-                ScRangeData* pData = (*pNames)[i];
-                if (lcl_UserVisibleName(pData))         // interne weglassen
-                {
-                    if ( nPos == nIndex )
-                        return new ScNamedRangeObj(this, pDocShell, pData->GetName());
-                    ++nPos;
-                }
-            }
-#endif
+            if (nPos == nIndex)
+                return new ScNamedRangeObj(this, pDocShell, itr->GetName());
         }
+        ++nPos;
     }
     return NULL;
 }

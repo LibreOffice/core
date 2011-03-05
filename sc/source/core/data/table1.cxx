@@ -1446,7 +1446,7 @@ void ScTable::SetTabNo(SCTAB nNewTab)
 }
 
 BOOL ScTable::IsRangeNameInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                               USHORT nIndex) const
+                               size_t nIndex) const
 {
     BOOL bInUse = FALSE;
     for (SCCOL i = nCol1; !bInUse && (i <= nCol2) && (ValidCol(i)); i++)

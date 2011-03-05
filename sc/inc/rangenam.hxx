@@ -192,17 +192,17 @@ private:
     sal_uInt16  mnSharedMaxIndex;
 public:
     typedef DataType::const_iterator const_iterator;
+    typedef DataType::iterator iterator;
 
     ScRangeName(ScDocument* pDoc = NULL);
     ScRangeName(const ScRangeName& r);
 
-    SC_DLLPUBLIC ScRangeData* operator[](sal_uInt16 nIndex);
-    SC_DLLPUBLIC const ScRangeData* operator[](sal_uInt16 nIndex) const;
     SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock(const ScRange& rRange) const;
     SC_DLLPUBLIC ScRangeData* findByName(const rtl::OUString& rName);
     SC_DLLPUBLIC const ScRangeData* findByName(const rtl::OUString& rName) const;
     ScRangeData* findByUpperName(const rtl::OUString& rName);
     const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
+    bool getIndex(const ScRangeData& rData, size_t& rIndex) const;
     void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
                          SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
     void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0);
@@ -212,12 +212,16 @@ public:
     sal_uInt16 GetSharedMaxIndex();
     void SetSharedMaxIndex(sal_uInt16 nInd);
 
-    const_iterator begin() const;
-    const_iterator end() const;
+    SC_DLLPUBLIC const_iterator begin() const;
+    SC_DLLPUBLIC const_iterator end() const;
+    SC_DLLPUBLIC iterator begin();
+    SC_DLLPUBLIC iterator end();
     SC_DLLPUBLIC size_t size() const;
     bool empty() const;
+    SC_DLLPUBLIC bool insert(ScRangeData* p);
     SC_DLLPUBLIC bool Insert(ScRangeData* p);
     void erase(const ScRangeData& r);
+    void erase(const iterator& itr);
     void clear();
     bool operator== (const ScRangeName& r) const;
 };

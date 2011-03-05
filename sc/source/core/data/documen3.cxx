@@ -1403,16 +1403,12 @@ BOOL ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
 
     if ( pRangeName )
     {
-        size_t nRangeCount = pRangeName->size();
-        for ( size_t i = 0; i < nRangeCount; i++ )
+        ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
+        for (; itr != itrEnd; ++itr)
         {
-            ScRangeData* pData = (*pRangeName)[i];
-            if (pData)
-            {
-                TypedStrData* pNew = new TypedStrData( pData->GetName(), 0.0, SC_STRTYPE_NAMES );
-                if ( !rStrings.Insert(pNew) )
-                    delete pNew;
-            }
+            TypedStrData* pNew = new TypedStrData(itr->GetName(), 0.0, SC_STRTYPE_NAMES);
+            if (!rStrings.Insert(pNew))
+                delete pNew;
         }
     }
 
