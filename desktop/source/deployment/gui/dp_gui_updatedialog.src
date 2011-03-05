@@ -234,10 +234,10 @@ ModalDialog RID_DLG_UPDATE {
         Text[en-US] = "The extension cannot be updated because:";
     };
     String RID_DLG_UPDATE_NODEPENDENCY {
-        Text[en-US] = "Required OpenOffice.org version doesn't match:";
+        Text[en-US] = "Required %PRODUCTNAME version doesn't match:";
     };
     String RID_DLG_UPDATE_NODEPENDENCY_CUR_VER {
-        Text[en-US] = "You have OpenOffice.org %VERSION";
+        Text[en-US] = "You have %PRODUCTNAME %VERSION";
     };
     String RID_DLG_UPDATE_BROWSERBASED {
         Text[en-US] = "browser based update";

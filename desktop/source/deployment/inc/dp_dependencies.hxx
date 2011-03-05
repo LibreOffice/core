@@ -29,6 +29,7 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_DEPENDENCIES_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_DEPENDENCIES_HXX
 
+#include "unotools/configmgr.hxx"
 #include "sal/config.h"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
@@ -43,6 +44,14 @@ namespace dp_misc { class DescriptionInfoset; }
 namespace rtl { class OUString; }
 
 namespace dp_misc {
+
+struct BrandName : public ::rtl::StaticWithInit<const ::rtl::OUString, BrandName> {
+    const ::rtl::OUString operator () () {
+        return ::utl::ConfigManager::GetDirectConfigProperty(
+            ::utl::ConfigManager::PRODUCTNAME ).get< ::rtl::OUString >();
+    }
+};
+
 
 /**
    Dependency handling.

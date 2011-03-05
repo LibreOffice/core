@@ -137,6 +137,7 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
     ::rtl::OUString sReason;
     ::rtl::OUString sValue;
     ::rtl::OUString sVersion(RTL_CONSTASCII_USTRINGPARAM("%VERSION"));
+    ::rtl::OUString sProductName(RTL_CONSTASCII_USTRINGPARAM("%PRODUCTNAME"));
 
     if ( dependency->getNamespaceURI().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( xmlNamespace ) )
          && dependency->getTagName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OpenOffice.org-minimal-version" ) ) )
@@ -166,6 +167,9 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
     sal_Int32 nPos = sReason.indexOf( sVersion );
     if ( nPos >= 0 )
         sReason = sReason.replaceAt( nPos, sVersion.getLength(), sValue );
+    nPos = sReason.indexOf( sProductName );
+    if ( nPos >= 0 )
+        sReason = sReason.replaceAt( nPos, sProductName.getLength(), BrandName::get() );
     return sReason;
 }
 
