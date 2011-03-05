@@ -2764,6 +2764,12 @@ void ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString 
         rString.Erase();
 }
 
+void ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString )
+{
+    String aStr;
+    GetString(nCol, nRow, nTab, aStr);
+    rString = aStr;
+}
 
 void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString )
 {

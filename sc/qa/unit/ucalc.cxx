@@ -228,6 +228,7 @@ public:
     bool testLoad(const rtl::OUString &rFilter, const rtl::OUString &rURL);
 
     void testCollator();
+    void testInput();
     void testSUM();
     void testVolatileFunc();
     void testNamedRange();
@@ -251,6 +252,7 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
+    CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testSUM);
     CPPUNIT_TEST(testVolatileFunc);
     CPPUNIT_TEST(testNamedRange);
@@ -331,6 +333,28 @@ void Test::testCollator()
     CollatorWrapper* p = ScGlobal::GetCollator();
     sal_Int32 nRes = p->compareString(s1, s2);
     CPPUNIT_ASSERT_MESSAGE("these strings are supposed to be different!", nRes != 0);
+}
+
+void Test::testInput()
+{
+    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
+    OUString numstr(RTL_CONSTASCII_USTRINGPARAM("'10.5"));
+    OUString str(RTL_CONSTASCII_USTRINGPARAM("'apple'"));
+    OUString test;
+
+    m_pDoc->SetString(0, 0, 0, numstr);
+    m_pDoc->GetString(0, 0, 0, test);
+    bool bTest = test.equalsAscii("10.5");
+    CPPUNIT_ASSERT_MESSAGE("String number should have the first apostrophe stripped.", bTest);
+    m_pDoc->SetString(0, 0, 0, str);
+    m_pDoc->GetString(0, 0, 0, test);
+    bTest = test.equalsAscii("'apple'");
+    CPPUNIT_ASSERT_MESSAGE("Text content should have retained the first apostrophe.", bTest);
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testSUM()

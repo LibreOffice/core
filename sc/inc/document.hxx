@@ -750,6 +750,7 @@ public:
                                   SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
 
     SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
+    SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString );
     SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     SC_DLLPUBLIC double         GetValue( const ScAddress& );
     SC_DLLPUBLIC void           GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue );
