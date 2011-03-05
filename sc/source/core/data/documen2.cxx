@@ -962,12 +962,13 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
         if ( !bResultsOnly )
         {
-#if NEW_RANGE_NAME
-#else
             BOOL bNamesLost = FALSE;
-            size_t nSrcRangeNames = pSrcDoc->pRangeName->size();
-            // array containing range names which might need update of indices
-            ScRangeData** pSrcRangeNames = nSrcRangeNames ? new ScRangeData* [nSrcRangeNames] : NULL;
+            // array containing range names which might need update of indices.
+            // The instances inserted into this vector are managed by the
+            // range name container of this document, so no need to delete
+            // them afterward.
+            ::std::vector<ScRangeData*> aSrcRangeNames;
+
             // the index mapping thereof
             ScRangeData::IndexMap aSrcRangeMap;
             BOOL bRangeNameReplace = FALSE;
@@ -976,14 +977,14 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             std::set<USHORT> aUsedNames;
             pSrcDoc->pTab[nSrcPos]->FindRangeNamesInUse( 0, 0, MAXCOL, MAXROW, aUsedNames );
 
-            for (size_t i = 0; i < nSrcRangeNames; i++)     //! DB-Bereiche Pivot-Bereiche auch !!!
+            ScRangeName::const_iterator itr = pSrcDoc->pRangeName->begin(), itrEnd = pSrcDoc->pRangeName->end();
+            for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch !!!
             {
-                ScRangeData* pSrcData = (*pSrcDoc->pRangeName)[i];
-                USHORT nOldIndex = pSrcData->GetIndex();
+                USHORT nOldIndex = itr->GetIndex();
                 bool bInUse = ( aUsedNames.find(nOldIndex) != aUsedNames.end() );
                 if (bInUse)
                 {
-                    const ScRangeData* pExistingData = pRangeName->findByName(pSrcData->GetName());
+                    const ScRangeData* pExistingData = pRangeName->findByName(itr->GetName());
                     if (pExistingData)
                     {
                         // the name exists already in the destination document
@@ -992,7 +993,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
                         USHORT nExistingIndex = pExistingData->GetIndex();
 
-                        pSrcRangeNames[i] = NULL;       // don't modify the named range
+                        // don't modify the named range
                         aSrcRangeMap.insert(
                             ScRangeData::IndexMap::value_type(nOldIndex, nExistingIndex));
                         bRangeNameReplace = TRUE;
@@ -1000,7 +1001,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                     }
                     else
                     {
-                        ScRangeData* pData = new ScRangeData( *pSrcData );
+                        ScRangeData* pData = new ScRangeData( *itr );
                         pData->SetDocument(this);
                         if ( pRangeName->FindIndex( pData->GetIndex() ) )
                             pData->SetIndex(0);     // need new index, done in Insert
@@ -1012,7 +1013,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                         else
                         {
                             pData->TransferTabRef( nSrcPos, nDestPos );
-                            pSrcRangeNames[i] = pData;
+                            aSrcRangeNames.push_back(pData);
                             USHORT nNewIndex = pData->GetIndex();
                             aSrcRangeMap.insert(
                                 ScRangeData::IndexMap::value_type(nOldIndex, nNewIndex));
@@ -1021,25 +1022,17 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                         }
                     }
                 }
-                else
-                {
-                    pSrcRangeNames[i] = NULL;
-                }
             }
             if ( bRangeNameReplace )
             {
                 // first update all inserted named formulas if they contain other
                 // range names and used indices changed
-                for (USHORT i = 0; i < nSrcRangeNames; i++)     //! DB-Bereiche Pivot-Bereiche auch
-                {
-                    if ( pSrcRangeNames[i] )
-                        pSrcRangeNames[i]->ReplaceRangeNamesInUse( aSrcRangeMap );
-                }
+                for (size_t i = 0, n = aSrcRangeNames.size(); i < n; ++i)       //! DB-Bereiche Pivot-Bereiche auch
+                    aSrcRangeNames[i]->ReplaceRangeNamesInUse( aSrcRangeMap );
+
                 // then update the formulas, they might need the just updated range names
                 pTab[nDestPos]->ReplaceRangeNamesInUse( 0, 0, MAXCOL, MAXROW, aSrcRangeMap );
             }
-            if ( pSrcRangeNames )
-                delete [] pSrcRangeNames;
 
             SCsTAB nDz = ((SCsTAB)nDestPos) - (SCsTAB)nSrcPos;
             pTab[nDestPos]->UpdateReference(URM_COPY, 0, 0, nDestPos,
@@ -1060,7 +1053,6 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 // message: duplicate names
             }
             pTab[nDestPos]->CompileAll();
-#endif
         }
 
         SetNoListening( FALSE );
