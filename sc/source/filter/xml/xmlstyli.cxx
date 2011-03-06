@@ -66,7 +66,6 @@
 #define XML_LINE_TLBR 0
 #define XML_LINE_BLTR 1
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
