@@ -5313,7 +5313,7 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
 
 
     if(!initialized) {
-        AlphaMask aMask( SW_RES( BMP_PAGE_BOTTOM_RIGHT_SHADOW ) );
+        AlphaMask aMask( SW_RES( BMP_PAGE_BOTTOM_RIGHT_SHADOW_MASK ) );
         Bitmap aFilledSquare( Size( mnShadowPxWidth, mnShadowPxWidth ), 24 );
         aFilledSquare.Erase( aShadowColor );
 
@@ -5325,12 +5325,12 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
 
         aFilledSquare = Bitmap( Size( 1, mnShadowPxWidth ), 24 );
         aFilledSquare.Erase( aShadowColor );
-        aMask = Bitmap( SW_RES( BMP_PAGE_BOTTOM_SHADOW ) );
+        aMask = Bitmap( SW_RES( BMP_PAGE_BOTTOM_SHADOW_MASK ) );
         aPageBottomShadowBase = BitmapEx( aFilledSquare, aMask );
 
         aFilledSquare = Bitmap( Size( mnShadowPxWidth, 1 ), 24 );
         aFilledSquare.Erase( aShadowColor );
-        aMask = Bitmap( SW_RES( BMP_PAGE_RIGHT_SHADOW ) );
+        aMask = Bitmap( SW_RES( BMP_PAGE_RIGHT_SHADOW_MASK ) );
         aPageRightShadowBase = BitmapEx( aFilledSquare, aMask );
 
         initialized = true;
