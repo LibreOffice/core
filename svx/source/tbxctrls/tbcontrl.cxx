@@ -813,8 +813,8 @@ void SvxFontNameBox_Impl::Select()
 #define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
 #endif
 
-#define PALETTE_X 10
-#define PALETTE_Y 11
+#define PALETTE_X 8
+#define PALETTE_Y 13
 #define PALETTE_SIZE (PALETTE_X * PALETTE_Y)
 
 SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
