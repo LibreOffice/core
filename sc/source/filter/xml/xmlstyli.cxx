@@ -67,7 +67,6 @@
 #define XML_LINE_BLTR 1
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::frame;
@@ -78,6 +77,7 @@ using namespace ::formula;
 
 using rtl::OUString;
 using com::sun::star::uno::Reference;
+using com::sun::star::uno::UNO_QUERY;
 
 ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
