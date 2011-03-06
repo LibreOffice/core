@@ -219,7 +219,7 @@ public:
     static const size_t mnInvalidId = static_cast< size_t >( -1 );
 
     ToolPanelViewShell_Impl( ToolPanelViewShell& i_rPanelViewShell, ::Window& i_rPanelDeckParent );
-    ~ToolPanelViewShell_Impl();
+    virtual ~ToolPanelViewShell_Impl();
 
     ToolPanelViewShell& GetAntiImpl() { return m_rPanelViewShell; }
 
