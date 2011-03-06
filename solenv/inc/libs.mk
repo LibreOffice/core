@@ -26,6 +26,12 @@
 #*************************************************************************
 LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
+.INCLUDE .IGNORE : icuversion.mk
+.INCLUDE .IGNORE : i18npool/version.mk
+.INCLUDE .IGNORE : comphelper/version.mk
+.INCLUDE .IGNORE : ucbhelper/version.mk
+.INCLUDE .IGNORE : connectivity/version.mk
+
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
 # No ODMA on UNX
@@ -41,7 +47,6 @@ AWTLIB*=-ljawt
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 AVMEDIALIB=-lavmedia$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
-.INCLUDE .IGNORE : icuversion.mk
 ICUINLIB=-licuin$(ICU_MAJOR)$(ICU_MINOR)
 ICULELIB=-licule$(ICU_MAJOR)$(ICU_MINOR)
 ICUUCLIB=-licuuc$(ICU_MAJOR)$(ICU_MINOR)
@@ -53,7 +58,6 @@ ICUUCLIB=-licuuc
 ICUDATALIB=-licudata
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 I18NUTILLIB=-li18nutil$(COMID)
-.INCLUDE .IGNORE : i18npool/version.mk
 I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
 I18NPAPERLIB=-li18npaper$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
@@ -62,7 +66,6 @@ SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 XMLSCRIPTLIB =-lxcr$(DLLPOSTFIX)
-.INCLUDE .IGNORE : comphelper/version.mk
 COMPHELPERLIB=-lcomphelp$(COMPHLP_MAJOR)$(COMID)
 CONNECTIVITYLIB=-lconnectivity
 LDAPBERLIB=-lldapber
@@ -76,7 +79,6 @@ CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COMID)
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-.INCLUDE .IGNORE : ucbhelper/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
 .IF "$(SYSTEM_OPENSSL)" == "YES"
 OPENSSLLIB=$(OPENSSL_LIBS)
@@ -103,7 +105,6 @@ SALLIB=-lsal$(UDK_MAJOR)
 STORELIB=-lstore
 SALLIB=-luno_sal
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-.INCLUDE .IGNORE : connectivity/version.mk
 ODBCLIB=-lodbc$(DLLPOSTFIX)
 ODBCBASELIB=-lodbcbase$(DLLPOSTFIX)
 DBFILELIB=-lfile$(DLLPOSTFIX)
