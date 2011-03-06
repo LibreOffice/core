@@ -162,7 +162,7 @@ SvxColorTabPage::SvxColorTabPage
     // ValueSet
     aValSetColorTable.SetStyle( aValSetColorTable.GetStyle() | WB_VSCROLL | WB_ITEMBORDER );
     aValSetColorTable.SetColCount( 8 );
-    aValSetColorTable.SetLineCount( 10 );
+    aValSetColorTable.SetLineCount( 13 );
     aValSetColorTable.SetExtraSpacing( 0 );
     aValSetColorTable.Show();
 
@@ -1141,6 +1141,9 @@ void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
 {
     long nCount = pColorTab->Count();
     XColorEntry* pColorEntry;
+
+    if( nCount > 104 )
+        rVs.SetStyle( rVs.GetStyle() | WB_VSCROLL );
 
     for( long i = 0; i < nCount; i++ )
     {

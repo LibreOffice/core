@@ -1154,13 +1154,13 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
             aBackgroundColorSet.InsertItem( i + 1, pEntry->GetColor(), pEntry->GetName() );
         }
 
-        while ( i < 80 )
+        while ( i < 104 )
         {
             aBackgroundColorSet.InsertItem( i + 1, aColWhite, aStrWhite );
             i++;
         }
 
-        if ( nCount > 80 )
+        if ( nCount > 104 )
         {
             aBackgroundColorSet.SetStyle( nBits | WB_VSCROLL );
         }
@@ -1169,8 +1169,8 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     if ( bOwn )
         delete pColorTable;
 
-    aBackgroundColorSet.SetColCount( 10 );
-    aBackgroundColorSet.SetLineCount( 10 );
+    aBackgroundColorSet.SetColCount( 8 );
+    aBackgroundColorSet.SetLineCount( 13 );
     aBackgroundColorSet.CalcWindowSizePixel( aSize15x15 );
 
 }

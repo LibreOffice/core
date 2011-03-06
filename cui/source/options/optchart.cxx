@@ -69,9 +69,9 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage( Window* pParent, const SfxItemSe
     aValSetColorBox.SetSelectHdl( LINK( this, SvxDefaultColorOptPage, BoxClickedHdl ) );
 
     aValSetColorBox.SetStyle( aValSetColorBox.GetStyle()
-                                    | WB_VSCROLL | WB_ITEMBORDER | WB_NAMEFIELD );
+                                    | WB_ITEMBORDER | WB_NAMEFIELD );
     aValSetColorBox.SetColCount( 8 );
-    aValSetColorBox.SetLineCount( 12 );
+    aValSetColorBox.SetLineCount( 13 );
     aValSetColorBox.SetExtraSpacing( 0 );
     aValSetColorBox.Show();
 
@@ -142,6 +142,9 @@ void SvxDefaultColorOptPage::FillColorBox()
 
     long nCount = pColorTab->Count();
     XColorEntry* pColorEntry;
+
+    if( nCount > 104 )
+        aValSetColorBox.SetStyle( aValSetColorBox.GetStyle() | WB_VSCROLL );
 
     for( long i = 0; i < nCount; i++ )
     {
