@@ -1126,7 +1126,7 @@ namespace {
 
 bool eraseUnusedSharedName(ScRangeName* pRangeName, ScTable* pTab[], USHORT nLevel)
 {
-    ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
+    ScRangeName::iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
     for (; itr != itrEnd; ++itr)
     {
         if (!itr->HasType(RT_SHARED))
