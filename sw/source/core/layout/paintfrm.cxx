@@ -5303,7 +5303,38 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *_pViewShell->GetOut() );
     // <--
 
-    BitmapEx aPageBottomShadow( SW_RES( BMP_PAGE_BOTTOM_SHADOW ) );
+    static bool initialized = false;
+    static BitmapEx aPageTopRightShadow;
+    static BitmapEx aPageBottomRightShadow;
+    static BitmapEx aPageBottomLeftShadow;
+    static BitmapEx aPageBottomShadowBase;
+    static BitmapEx aPageRightShadowBase;
+    static Color aShadowColor( COL_BLACK );
+
+
+    if(!initialized) {
+        AlphaMask aMask( SW_RES( BMP_PAGE_BOTTOM_RIGHT_SHADOW ) );
+        Bitmap aFilledSquare( Size( mnShadowPxWidth, mnShadowPxWidth ), 24 );
+        aFilledSquare.Erase( aShadowColor );
+
+        aPageBottomRightShadow = BitmapEx( aFilledSquare, aMask );
+        aMask.Rotate( 900, 255 );
+        aPageTopRightShadow = BitmapEx( aFilledSquare, aMask );
+        aMask.Rotate( 1800, 255);
+        aPageBottomLeftShadow = BitmapEx( aFilledSquare, aMask );
+
+        aFilledSquare = Bitmap( Size( 1, mnShadowPxWidth ), 24 );
+        aFilledSquare.Erase( aShadowColor );
+        aMask = Bitmap( SW_RES( BMP_PAGE_BOTTOM_SHADOW ) );
+        aPageBottomShadowBase = BitmapEx( aFilledSquare, aMask );
+
+        aFilledSquare = Bitmap( Size( mnShadowPxWidth, 1 ), 24 );
+        aFilledSquare.Erase( aShadowColor );
+        aMask = Bitmap( SW_RES( BMP_PAGE_RIGHT_SHADOW ) );
+        aPageRightShadowBase = BitmapEx( aFilledSquare, aMask );
+
+        initialized = true;
+    }
 
     SwRect aPaintRect;
     OutputDevice *pOut = _pViewShell->GetOut();
@@ -5311,10 +5342,8 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
     // paint right shadow
     if ( bPaintRightShadow )
     {
-        BitmapEx aPageRightShadow( SW_RES( BMP_PAGE_RIGHT_SHADOW ) );
-        BitmapEx aPageTopRightShadow( SW_RES( BMP_PAGE_TOP_RIGHT_SHADOW ) );
-        BitmapEx aPageBottomRightShadow( SW_RES( BMP_PAGE_BOTTOM_RIGHT_SHADOW ) );
         SwPageFrm::GetRightShadowRect( _rPageRect, _pViewShell, aPaintRect, bRightSidebar );
+        BitmapEx aPageRightShadow = aPageRightShadowBase;
         aPageRightShadow.Scale( 1, aPaintRect.Height() );
         pOut->DrawBitmapEx( pOut->PixelToLogic( aPaintRect.Pos() ), aPageRightShadow );
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Left(), aPaintRect.Top() - mnShadowPxWidth ) ), aPageTopRightShadow );
@@ -5325,9 +5354,9 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
     SwPageFrm::GetBottomShadowRect( _rPageRect, _pViewShell, aPaintRect, bFullBottomShadow, bRightSidebar );
     if(!bFullBottomShadow)
     {
-        BitmapEx aPageBottomLeftShadow( SW_RES( BMP_PAGE_BOTTOM_LEFT_SHADOW ) );
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Left() - mnShadowPxWidth, aPaintRect.Top() ) ), aPageBottomLeftShadow );
     }
+    BitmapEx aPageBottomShadow = aPageBottomShadowBase;
     aPageBottomShadow.Scale( aPaintRect.Width(), 1 );
     pOut->DrawBitmapEx( pOut->PixelToLogic( aPaintRect.Pos() ), aPageBottomShadow);
 }
