@@ -149,11 +149,6 @@ SHL3VERSIONMAP = export.map
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-# include comphelper/version.mk for platform where it is not
-# included through libs.mk
-.IF ("$(GUI)"!="UNX" && "$(COM)"!="GCC") || "$(GUI)"=="OS2"
-.INCLUDE :  comphelper/version.mk
-.END
 
 .IF "$(OS)" == "WNT"
 my_file = file:///
