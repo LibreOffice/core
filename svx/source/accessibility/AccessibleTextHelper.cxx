@@ -524,7 +524,7 @@ namespace accessibility
             SetShapeFocus( bHaveFocus );
         }
 
-        DBG_TRACE2("AccessibleTextHelper_Impl::SetFocus: focus changed, Object %d, state: %s", this, bHaveFocus ? "focused" : "not focused");
+        OSL_TRACE("AccessibleTextHelper_Impl::SetFocus: focus changed, Object %d, state: %s", this, bHaveFocus ? "focused" : "not focused");
     }
 
     sal_Bool AccessibleTextHelper_Impl::HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException))

@@ -907,7 +907,7 @@ void ONDXPage::PrintPage()
 
         if (rKey.getValue().isNull())
         {
-            DBG_TRACE2("SDB: [%d,NULL,%d]",rKey.GetRecord(), rNode.GetChild().GetPagePos());
+            OSL_TRACE("SDB: [%d,NULL,%d]",rKey.GetRecord(), rNode.GetChild().GetPagePos());
         }
         else if (rIndex.getHeader().db_keytype)
         {
