@@ -628,7 +628,7 @@ namespace accessibility
                                                  aOldCursor );
                     }
 
-                    DBG_TRACE5("AccessibleTextHelper_Impl::UpdateSelection(): caret changed, Object: %d, New pos: %d, Old pos: %d, New para: %d, Old para: %d",
+                    OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): caret changed, Object: %d, New pos: %d, Old pos: %d, New para: %d, Old para: %d",
                                this, aSelection.nEndPos, maLastSelection.nEndPos, aSelection.nEndPara, maLastSelection.nEndPara);
 
                     // #108947# Sort new range before calling FireEvent

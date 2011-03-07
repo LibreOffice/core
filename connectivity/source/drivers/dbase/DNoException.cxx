@@ -498,7 +498,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& r
 void ONDXPage::PrintPage()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ONDXPage::PrintPage" );
-    DBG_TRACE4("\nSDB: -----------Page: %d  Parent: %d  Count: %d  Child: %d-----",
+    OSL_TRACE("\nSDB: -----------Page: %d  Parent: %d  Count: %d  Child: %d-----",
         nPagePos, HasParent() ? aParent->GetPagePos() : 0 ,nCount, aChild.GetPagePos());
 
     for (USHORT i = 0; i < nCount; i++)
