@@ -1482,7 +1482,7 @@
             </node>
             <node oor:name="vnd.sun.star.findbar:FocusToFindbar" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Find</value>
+                    <value xml:lang="en-US">~Find...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ExtendedHelp" oor:op="replace">
