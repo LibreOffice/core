@@ -729,7 +729,7 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
         }
         case SVX_ADJUST_BLOCK:
         {
-            // disabled for #i13507#
+            FormatBlock();
             break;
         }
         default : return;
