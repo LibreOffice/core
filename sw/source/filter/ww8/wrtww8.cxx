@@ -2166,8 +2166,8 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
         pTableTextNodeInfoInner->getTableBoxesOfRow();
     // number of cell written
     sal_uInt32 nBoxes = pTableBoxes->size();
-    if (nBoxes > 63)
-        nBoxes = 63;
+    if (nBoxes > ww8::MAXTABLECELLS)
+        nBoxes = ww8::MAXTABLECELLS;
 
     // sprm header
     m_rWW8Export.InsUInt16( NS_sprm::LN_TDefTable );
