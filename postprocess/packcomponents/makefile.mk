@@ -64,6 +64,7 @@ my_components = \
     component/framework/util/fwl \
     component/framework/util/fwm \
     component/linguistic/source/lng \
+    component/oox/oox \
 	component/reportdesign/util/rpt \
 	component/reportdesign/util/rptui \
 	component/reportdesign/util/rptxml \
@@ -132,7 +133,6 @@ my_components = \
     odbc \
     offacc \
     oooimprovecore \
-    oox \
     package2 \
     pcr \
     pdffilter \
