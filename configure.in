@@ -3482,9 +3482,10 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
          AC_MSG_RESULT(yes)
       fi
       if echo "$WITH_MINGWIN" | $EGREP -q "/"; then
-         if ! test -x "`echo $WITH_MINGWIN | $SED -e s/g++/strip/`"; then MINGSTRIP=false; else MINGWSTRIP=$(basename $(echo $WITH_MINGWIN | $SED -e s/g++/strip/)); fi
+         if ! test -x "`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`"; then MINGSTRIP=false; else MINGWSTRIP=$(basename $(echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/)); fi
       else
-         AC_CHECK_TOOL(MINGWSTRIP, `echo $WITH_MINGWIN | $SED -e s/g++/strip/`, false)
+         AC_CHECK_TOOL(MINGWSTRIP, `echo $WITH_MINGWIN | $SED -e s/g++/strip/ |
+$SED -e s/c++/strip/`, false)
       fi
       if test "$MINGWSTRIP" = "false"; then
          AC_MSG_ERROR(MinGW32 binutils needed. Install them.)
