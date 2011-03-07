@@ -578,14 +578,14 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
             case WINDOW_DOCKINGWINDOW:
                 {
 //                  case 1 .. 0xffff:
-    DBG_TRACE3( "TT_VCLMessage %u %u  %X",nEventID, pWin->GetType(), pWin );
+    OSL_TRACE( "TT_VCLMessage %u %u  %X",nEventID, pWin->GetType(), pWin );
 //                      BOOL bx = ((DockingWindow*)pWin)->IsFloatingMode();
 //                      break;
                 }
                 break;
             case WINDOW_FLOATINGWINDOW:
                 {
-    DBG_TRACE3( "TT_VCLMessage %u %u  %X",nEventID, pWin->GetType(), pWin );
+    OSL_TRACE( "TT_VCLMessage %u %u  %X",nEventID, pWin->GetType(), pWin );
 //                    FloatingWindow *pFW = ((FloatingWindow*)pWin);
                 }
                 break;
