@@ -1867,6 +1867,7 @@ IMPL_LINK_NOARG(SlideshowImpl, PostYieldListener)
                                    // yield is done.
     if (mbDisposed)
         return 0;
+    Application::Reschedule(true);
     return updateSlideShow();
 }
 
