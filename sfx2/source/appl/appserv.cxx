@@ -251,7 +251,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                    if this dialog is closed by the user ...
                    So we ignore this request now and wait for a new user decision.
                 */
-                DBG_TRACE1( "QueryExit => FALSE (DispatchLevel == %u)", Application::GetDispatchLevel() );
+                OSL_TRACE( "QueryExit => FALSE (DispatchLevel == %u)", Application::GetDispatchLevel() );
                 return;
             }
 

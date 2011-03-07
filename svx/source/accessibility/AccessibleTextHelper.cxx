@@ -451,13 +451,13 @@ namespace accessibility
             // we just received the focus, also send caret event then
             UpdateSelection();
 
-            DBG_TRACE1("AccessibleTextHelper_Impl::SetChildFocus(): Paragraph %d received focus", nChild );
+            OSL_TRACE("AccessibleTextHelper_Impl::SetChildFocus(): Paragraph %d received focus", nChild );
         }
         else
         {
             maParaManager.SetFocus( -1 );
 
-            DBG_TRACE1("AccessibleTextHelper_Impl::SetChildFocus(): Paragraph %d lost focus", nChild );
+            OSL_TRACE("AccessibleTextHelper_Impl::SetChildFocus(): Paragraph %d lost focus", nChild );
 
             if( mbGroupHasFocus )
                 SetShapeFocus( sal_True );
@@ -474,7 +474,7 @@ namespace accessibility
         mbGroupHasFocus = sal_True;
         maParaManager.SetFocus( nNewChild );
 
-        DBG_TRACE1("AccessibleTextHelper_Impl::ChangeChildFocus(): Paragraph %d received focus", nNewChild );
+        OSL_TRACE("AccessibleTextHelper_Impl::ChangeChildFocus(): Paragraph %d received focus", nNewChild );
     }
 
     void AccessibleTextHelper_Impl::SetShapeFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
