@@ -85,6 +85,7 @@
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
+-(AquaSalFrame*)getSalFrame;
 -(BOOL)acceptsFirstResponder;
 -(BOOL)acceptsFirstMouse: (NSEvent *)pEvent;
 -(BOOL)isOpaque;
