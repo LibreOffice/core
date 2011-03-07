@@ -576,7 +576,7 @@ void SwAttrIter::OutAttr( xub_StrLen nSwPos )
          characters.
         */
         if ( !m_rExport.HackIsWW8OrHigher() )
-            aFont.GetCharSet() = GetCharSet();
+            aFont.SetCharSet( GetCharSet() );
 
         if ( rParentFont != aFont )
             m_rExport.AttrOutput().OutputItem( aFont );

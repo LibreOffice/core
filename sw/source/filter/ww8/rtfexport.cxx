@@ -118,6 +118,11 @@ RtfSdrExport& RtfExport::SdrExporter() const
     return *m_pSdrExport;
 }
 
+bool RtfExport::HackIsWW8OrHigher() const
+{
+    return true;
+}
+
 bool RtfExport::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich )
 {
     // FIXME is this actually true for rtf? - this is copied from DOCX
@@ -480,6 +485,10 @@ void RtfExport::WritePageDescTable()
     }
     Strm() << '}' << sNewLine;
     bOutPageDescs = sal_False;
+
+    // reset table infos, otherwise the depth of the cells will be incorrect,
+    // in case the page style (header or footer) had tables
+    mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
 }
 
 void RtfExport::ExportDocument_Impl()
