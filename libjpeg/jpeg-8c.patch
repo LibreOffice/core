@@ -1,85 +1,5 @@
---- misc/jpeg-8c/makefile.mk	2011-03-06 23:04:22.985821034 +0100
-+++ misc/build/jpeg-8c/makefile.mk	2011-03-06 23:03:28.424821116 +0100
-@@ -1 +1,76 @@
--dummy
-+#*************************************************************************
-+#
-+#   Copyright according the GNU Public License.
-+#
-+#*************************************************************************
-+
-+PRJ=..$/..$/..$/..
-+
-+PRJNAME=jpeg8
-+TARGET=jpeg8
-+LIBTARGET=NO
-+EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
-+VISIBILITY_HIDDEN=TRUE
-+
-+# --- Settings -----------------------------------------------------------
-+
-+.INCLUDE :  settings.mk
-+
-+.IF "$(GUI)$(CPU)"=="WNTP"
-+CFLAGS=$(CFLAGS) -Od
-+.ENDIF
-+
-+# --- Files --------------------------------------------------------
-+
-+SLOFILES=	$(SLO)$/jaricom.obj		\
-+			$(SLO)$/jcapimin.obj	\
-+			$(SLO)$/jcapistd.obj	\
-+			$(SLO)$/jcarith.obj		\
-+			$(SLO)$/jccoefct.obj	\
-+			$(SLO)$/jccolor.obj		\
-+			$(SLO)$/jcdctmgr.obj	\
-+			$(SLO)$/jchuff.obj		\
-+			$(SLO)$/jcinit.obj		\
-+			$(SLO)$/jcmainct.obj	\
-+			$(SLO)$/jcmarker.obj	\
-+			$(SLO)$/jcmaster.obj	\
-+			$(SLO)$/jcomapi.obj		\
-+			$(SLO)$/jcparam.obj		\
-+			$(SLO)$/jcprepct.obj	\
-+			$(SLO)$/jcsample.obj	\
-+			$(SLO)$/jctrans.obj		\
-+			$(SLO)$/jdapimin.obj	\
-+			$(SLO)$/jdapistd.obj	\
-+			$(SLO)$/jdarith.obj		\
-+			$(SLO)$/jdatadst.obj	\
-+			$(SLO)$/jdatasrc.obj	\
-+			$(SLO)$/jdcoefct.obj	\
-+			$(SLO)$/jdcolor.obj		\
-+			$(SLO)$/jddctmgr.obj	\
-+			$(SLO)$/jdhuff.obj		\
-+			$(SLO)$/jdinput.obj		\
-+			$(SLO)$/jdmainct.obj	\
-+			$(SLO)$/jdmarker.obj	\
-+			$(SLO)$/jdmaster.obj	\
-+			$(SLO)$/jdmerge.obj		\
-+			$(SLO)$/jdpostct.obj	\
-+			$(SLO)$/jdsample.obj	\
-+			$(SLO)$/jdtrans.obj		\
-+			$(SLO)$/jerror.obj		\
-+			$(SLO)$/jfdctflt.obj	\
-+			$(SLO)$/jfdctfst.obj	\
-+			$(SLO)$/jfdctint.obj	\
-+			$(SLO)$/jidctflt.obj	\
-+			$(SLO)$/jidctfst.obj	\
-+			$(SLO)$/jidctint.obj	\
-+			$(SLO)$/jquant1.obj		\
-+			$(SLO)$/jquant2.obj		\
-+			$(SLO)$/jutils.obj		\
-+			$(SLO)$/jmemnobs.obj	\
-+			$(SLO)$/jutils.obj		
-+
-+LIB1TARGET=$(SLB)$/$(TARGET).lib
-+LIB1ARCHIV=$(LB)$/$(TARGET).a
-+LIB1OBJFILES=$(SLOFILES)
-+
-+.INCLUDE :  target.mk
---- misc/jpeg-8c/jconfig.h	2011-03-06 23:19:25.611821058 +0100
-+++ misc/build/jpeg-8c/jconfig.h	2011-03-06 23:10:22.070821059 +0100
+--- misc/jpeg-8c/jconfig.h	2011-03-07 13:16:09.000000000 +0100
++++ misc/build/jpeg-8c/jconfig.h	2011-03-07 13:15:03.000000000 +0100
 @@ -1 +1,58 @@
 -dummy
 +/* jconfig.h.  Generated from jconfig.cfg by configure.  */
@@ -140,3 +60,84 @@
 +/* #undef PROGRESS_REPORT */
 +
 +#endif /* JPEG_CJPEG_DJPEG */
+--- misc/jpeg-8c/makefile.mk	2011-03-07 13:16:09.000000000 +0100
++++ misc/build/jpeg-8c/makefile.mk	2011-03-07 13:15:39.000000000 +0100
+@@ -1 +1,77 @@
+-dummy
++#*************************************************************************
++#
++#   Copyright according the GNU Public License.
++#
++#*************************************************************************
++
++PRJ=..$/..$/..$/..
++
++PRJNAME=libjpeg
++TARGET=jpeg
++LIBTARGET=NO
++EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
++VISIBILITY_HIDDEN=TRUE
++
++# --- Settings -----------------------------------------------------------
++
++.INCLUDE :  settings.mk
++
++.IF "$(GUI)$(CPU)"=="WNTP"
++CFLAGS=$(CFLAGS) -Od
++.ENDIF
++
++# --- Files --------------------------------------------------------
++
++SLOFILES=	$(SLO)$/jaricom.obj		\
++			$(SLO)$/jcapimin.obj	\
++			$(SLO)$/jcapistd.obj	\
++			$(SLO)$/jcarith.obj		\
++			$(SLO)$/jccoefct.obj	\
++			$(SLO)$/jccolor.obj		\
++			$(SLO)$/jcdctmgr.obj	\
++			$(SLO)$/jchuff.obj		\
++			$(SLO)$/jcinit.obj		\
++			$(SLO)$/jcmainct.obj	\
++			$(SLO)$/jcmarker.obj	\
++			$(SLO)$/jcmaster.obj	\
++			$(SLO)$/jcomapi.obj		\
++			$(SLO)$/jcparam.obj		\
++			$(SLO)$/jcprepct.obj	\
++			$(SLO)$/jcsample.obj	\
++			$(SLO)$/jctrans.obj		\
++			$(SLO)$/jdapimin.obj	\
++			$(SLO)$/jdapistd.obj	\
++			$(SLO)$/jdarith.obj		\
++			$(SLO)$/jdatadst.obj	\
++			$(SLO)$/jdatasrc.obj	\
++			$(SLO)$/jdcoefct.obj	\
++			$(SLO)$/jdcolor.obj		\
++			$(SLO)$/jddctmgr.obj	\
++			$(SLO)$/jdhuff.obj		\
++			$(SLO)$/jdinput.obj		\
++			$(SLO)$/jdmainct.obj	\
++			$(SLO)$/jdmarker.obj	\
++			$(SLO)$/jdmaster.obj	\
++			$(SLO)$/jdmerge.obj		\
++			$(SLO)$/jdpostct.obj	\
++			$(SLO)$/jdsample.obj	\
++			$(SLO)$/jdtrans.obj		\
++			$(SLO)$/jerror.obj		\
++			$(SLO)$/jfdctflt.obj	\
++			$(SLO)$/jfdctfst.obj	\
++			$(SLO)$/jfdctint.obj	\
++			$(SLO)$/jidctflt.obj	\
++			$(SLO)$/jidctfst.obj	\
++			$(SLO)$/jidctint.obj	\
++			$(SLO)$/jquant1.obj		\
++			$(SLO)$/jquant2.obj		\
++			$(SLO)$/jutils.obj		\
++			$(SLO)$/jmemmgr.obj		\
++			$(SLO)$/jmemnobs.obj	\
++			$(SLO)$/jutils.obj		
++
++LIB1TARGET=$(SLB)$/$(TARGET).lib
++LIB1ARCHIV=$(LB)$/lib$(TARGET).a
++LIB1OBJFILES=$(SLOFILES)
++
++.INCLUDE :  target.mk
