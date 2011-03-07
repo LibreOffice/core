@@ -43,8 +43,10 @@ using ::rtl::OUString;
 // ============================================================================
 
 namespace {
-// include auto-generated Perfect_Hash
-#include "tokenhash.inc"
+
+// include auto-generated Perfect_Hash class
+#include <token/tokenhash.inc>
+
 } // namespace
 
 // ============================================================================
@@ -55,7 +57,7 @@ TokenMap::TokenMap() :
     static const sal_Char* sppcTokenNames[] =
     {
 // include auto-generated C array with token names as C strings
-#include "tokennames.inc"
+#include <token/tokennames.inc>
         ""
     };
 
@@ -68,14 +70,14 @@ TokenMap::TokenMap() :
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    // check that the perfect_hash is in sync with the token name list
+    // check that the Perfect_Hash is in sync with the token name list
     bool bOk = true;
     for( sal_Int32 nToken = 0; bOk && (nToken < XML_TOKEN_COUNT); ++nToken )
     {
         // check that the getIdentifier <-> getToken roundtrip works
         OString aUtf8Name = OUStringToOString( maTokenNames[ nToken ].maUniName, RTL_TEXTENCODING_UTF8 );
-        struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
-        bOk = pToken && (pToken->nToken == nToken);
+        const XMLTokenInfo* pTokenInfo = Perfect_Hash::getTokenInfo( aUtf8Name.getStr(), aUtf8Name.getLength() );
+        bOk = pTokenInfo && (pTokenInfo->mnToken == nToken);
         OSL_ENSURE( bOk, ::rtl::OStringBuffer( "TokenMap::TokenMap - token list broken, #" ).
             append( nToken ).append( ", '" ).append( aUtf8Name ).append( '\'' ).getStr() );
     }
@@ -96,8 +98,8 @@ OUString TokenMap::getUnicodeTokenName( sal_Int32 nToken ) const
 sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName ) const
 {
     OString aUtf8Name = OUStringToOString( rUnicodeName, RTL_TEXTENCODING_UTF8 );
-    struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
-    return pToken ? pToken->nToken : XML_TOKEN_INVALID;
+    const XMLTokenInfo* pTokenInfo = Perfect_Hash::getTokenInfo( aUtf8Name.getStr(), aUtf8Name.getLength() );
+    return pTokenInfo ? pTokenInfo->mnToken : XML_TOKEN_INVALID;
 }
 
 Sequence< sal_Int8 > TokenMap::getUtf8TokenName( sal_Int32 nToken ) const
@@ -109,9 +111,9 @@ Sequence< sal_Int8 > TokenMap::getUtf8TokenName( sal_Int32 nToken ) const
 
 sal_Int32 TokenMap::getTokenFromUtf8( const Sequence< sal_Int8 >& rUtf8Name ) const
 {
-    struct xmltoken* pToken = Perfect_Hash::in_word_set(
+    const XMLTokenInfo* pTokenInfo = Perfect_Hash::getTokenInfo(
         reinterpret_cast< const char* >( rUtf8Name.getConstArray() ), rUtf8Name.getLength() );
-    return pToken ? pToken->nToken : XML_TOKEN_INVALID;
+    return pTokenInfo ? pTokenInfo->mnToken : XML_TOKEN_INVALID;
 }
 
 // ============================================================================

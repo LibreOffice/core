@@ -36,8 +36,7 @@ PropertyNameVector::PropertyNameVector()
     static const sal_Char* sppcPropertyNames[] =
     {
         // include auto-generated C array with property names as C strings
-#include "propertynames.inc"
-        ""
+#include <token/propertynames.inc>
     };
 
     size_t nArraySize = (sizeof( sppcPropertyNames ) / sizeof( *sppcPropertyNames )) - 1;

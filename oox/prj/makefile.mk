@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,32 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=oox
-TARGET=vml
-AUTOSEG=true
+.INCLUDE : settings.mk
 
-ENABLE_EXCEPTIONS=TRUE
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-.INCLUDE: $(PRJ)$/util$/makefile.pmk
-
-# --- Files --------------------------------------------------------
-
-SLOFILES =	\
-        $(SLO)$/vmldrawing.obj            \
-        $(SLO)$/vmldrawingfragment.obj    \
-        $(SLO)$/vmlformatting.obj         \
-        $(SLO)$/vmlinputstream.obj        \
-        $(SLO)$/vmlshape.obj              \
-        $(SLO)$/vmlshapecontainer.obj     \
-        $(SLO)$/vmlshapecontext.obj       \
-        $(SLO)$/vmltextbox.obj            \
-        $(SLO)$/vmltextboxcontext.obj
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog
