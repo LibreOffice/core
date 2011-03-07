@@ -47,8 +47,9 @@ GLIBVERSION=2.28.1
 TARFILE_NAME=$(PRJNAME)-$(GLIBVERSION)
 TARFILE_MD5=9f6e85e1e38490c3956f4415bcd33e6e
 
-PATCH_FILES=glib-2.28.1.patch
 
+.IF "$(OS)"=="MACOSX"
+PATCH_FILES=glib-2.28.1.patch
 CONFIGURE_LDFLAGS="-L$(SOLARLIBDIR)"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
@@ -64,7 +65,6 @@ BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 
 
-.IF "$(OS)"=="MACOSX"
 EXTRPATH=LOADER
 OUT2LIB+=gio/.libs/libgio-2.0.0.dylib
 OUT2LIB+=glib/.libs/libglib-2.0.0.dylib
@@ -284,6 +284,15 @@ OUT2INC+=gobject/gtype.h
 OUT2INC+=gobject/gvaluearray.h
 
 .ELIF "$(OS)"=="WNT"
+PATCH_FILES=glib-2.28.1-win32.patch
+CONFIGURE_ACTION=
+ADDITIONAL_FILES= config.h \
+    gio/gvdb/makefile.msc \
+    gio/win32/makefile.msc \
+    glib/glibconfig.h \
+    gmodule/gmoduleconf.h
+
+BUILD_ACTION=nmake -f makefile.msc
 .ELSE
 .ENDIF
 
