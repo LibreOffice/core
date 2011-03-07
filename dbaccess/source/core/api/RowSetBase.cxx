@@ -560,7 +560,7 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
         // RowCount/IsRowCountFinal
         fireRowcount();
     }
-    DBG_TRACE3("DBACCESS ORowSetBase::moveRelativeToBookmark(Any,%i) = %i Clone = %i\n",rows,bRet,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::moveRelativeToBookmark(Any,%i) = %i Clone = %i\n",rows,bRet,m_bClone);
     return bRet;
 }
 
@@ -675,7 +675,7 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
-    DBG_TRACE3("DBACCESS ORowSetBase::next() = %i Clone = %i ID = %i\n",bRet,m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::next() = %i Clone = %i ID = %i\n",bRet,m_bClone,osl_getThreadIdentifier(NULL));
     return bRet;
 }
 
@@ -943,7 +943,7 @@ sal_Int32 ORowSetBase::impl_getRow()
         }
         nPos = m_pCache->getRow();
     }
-    DBG_TRACE3("DBACCESS ORowSetBase::impl_getRow() = %i Clone = %i ID = %i\n",nPos,m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::impl_getRow() = %i Clone = %i ID = %i\n",nPos,m_bClone,osl_getThreadIdentifier(NULL));
     return nPos;
 }
 
@@ -989,7 +989,7 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
-    DBG_TRACE3("DBACCESS ORowSetBase::absolute(%i) = %i Clone = %i\n",row,bRet,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::absolute(%i) = %i Clone = %i\n",row,bRet,m_bClone);
     return bRet;
 }
 
@@ -1045,7 +1045,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
-    DBG_TRACE3("DBACCESS ORowSetBase::relative(%i) = %i Clone = %i\n",rows,bRet,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::relative(%i) = %i Clone = %i\n",rows,bRet,m_bClone);
     return bRet;
 }
 
