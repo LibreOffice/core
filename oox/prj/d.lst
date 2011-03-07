@@ -26,6 +26,7 @@ mkdir: %_DEST%\inc%_EXT%\oox\xls
 ..\inc\oox\helper\binarystreambase.hxx %_DEST%\inc%_EXT%\oox\helper\binarystreambase.hxx
 ..\inc\oox\helper\helper.hxx %_DEST%\inc%_EXT%\oox\helper\helper.hxx
 ..\inc\oox\helper\containerhelper.hxx %_DEST%\inc%_EXT%\oox\helper\containerhelper.hxx
+..\inc\oox\helper\graphichelper.hxx %_DEST%\inc%_EXT%\oox\helper\graphichelper.hxx
 ..\inc\oox\helper\storagebase.hxx %_DEST%\inc%_EXT%\oox\helper\storagebase.hxx
 ..\inc\oox\helper\zipstorage.hxx %_DEST%\inc%_EXT%\oox\helper\zipstorage.hxx
 ..\inc\oox\core\filterbase.hxx %_DEST%\inc%_EXT%\oox\core\filterbase.hxx
