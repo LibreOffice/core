@@ -32,7 +32,6 @@
 #include "tabledatawindow.hxx"
 #include "tablecontrol_impl.hxx"
 #include "tablegeometry.hxx"
-#include "cellvalueconversion.hxx"
 
 #include <vcl/help.hxx>
 
@@ -140,7 +139,7 @@ namespace svt { namespace table
                         aCellToolTip.clear();
                 }
 
-                sHelpText = CellValueConversion::convertToString( aCellToolTip );
+                pTableModel->getRenderer()->GetFormattedCellString( aCellToolTip, hitCol, hitRow, sHelpText );
 
                 if ( sHelpText.indexOf( '\n' ) >= 0 )
                     nHelpStyle = QUICKHELP_TIP_STYLE_BALLOON;
