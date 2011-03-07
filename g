@@ -105,10 +105,16 @@ while shift ; do
             FILES[$FILESNUM]="$1"
             FILESNUM=$(($FILESNUM+1))
         else
-            [ "$COMMAND" = "commit" -a "$PARAM" = "--allow-empty" ] && ALLOW_EMPTY=1
-
-            FILES[$FILESNUM]="$PARAM"
-            FILESNUM=$(($FILESNUM+1))
+            if [ "$COMMAND" = "commit" -a "$PARAM" = "-F" ]
+            then
+                shift
+                # this still needs some magic to handle relative paths
+                EXTRA="${EXTRA} -F ${1}"
+            else
+                [ "$COMMAND" = "commit" -a "$PARAM" = "--allow-empty" ] && ALLOW_EMPTY=1
+                FILES[$FILESNUM]="$PARAM"
+                FILESNUM=$(($FILESNUM+1))
+            fi
         fi
     else
         if [ "$COMMAND" = "apply" ] ; then
@@ -225,6 +231,7 @@ for REPO in $DIRS ; do
             # do it!
 	    if [ "$COMMAND" != "clone" -o ! -d $DIR ] ; then
                 [ "$REPORT_REPOS" = "1" ] && echo "===== $NAME ====="
+                echo git $PAGER "$COMMAND" $EXTRA "${FILES[@]}"
                 git $PAGER "$COMMAND" $EXTRA "${FILES[@]}"
                 RETURN=$?
 	    fi
