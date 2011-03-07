@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2000, 2011 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -193,6 +193,14 @@ ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nC
 {
     if (pDBCollection)
         return pDBCollection->GetDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2);
+    else
+        return NULL;
+}
+
+ScDBData* ScDocument::GetFilterDBAtTable(SCTAB nTab) const
+{
+    if (pDBCollection)
+        return pDBCollection->GetFilterDBAtTable(nTab);
     else
         return NULL;
 }
@@ -1359,6 +1367,20 @@ sal_Bool ScDocument::GetFilterEntries(
             SCCOL nEndCol;
             SCROW nEndRow;
             pDBData->GetArea( nAreaTab, nStartCol, nStartRow, nEndCol, nEndRow );
+
+        //Add for i85305
+            SCCOL nTmpStartCol = nCol;
+            SCROW nTmpStartRow = nRow;
+            SCCOL nTmpEndCol = nCol;
+            SCROW nTmpEndRow = nRow;
+            GetDataArea( nTab, nTmpStartCol, nTmpStartRow, nTmpEndCol, nTmpEndRow, sal_False, false);
+            if (nTmpEndRow > nEndRow)
+            {
+                nEndRow = nTmpEndRow;
+                pDBData->SetArea(nAreaTab, nStartCol,nStartRow, nEndCol,nEndRow);
+            }
+        //End of i85305
+
             if (pDBData->HasHeader())
                 ++nStartRow;
 

@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2000, 2011 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -78,6 +78,7 @@
 #include "rangenam.hxx"
 #include "docpool.hxx"
 #include "progress.hxx"
+#include "segmenttree.hxx"
 
 #include <math.h>
 
@@ -198,7 +199,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     rMinDigits = 0;
     rListData = NULL;
     rCmd = FILL_SIMPLE;
-    if ( nScFillModeMouseModifier & KEY_MOD1 )
+    if (( nScFillModeMouseModifier & KEY_MOD1 )||IsDataFiltered())  //i89232
         return ;        // Ctrl-Taste: Copy
 
     SCCOL nAddX;
@@ -567,11 +568,13 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     sal_uLong nIMin = nIStart;
     sal_uLong nIMax = nIEnd;
     PutInOrder(nIMin,nIMax);
-    if (bVertical)
-        DeleteArea(nCol1, static_cast<SCROW>(nIMin), nCol2, static_cast<SCROW>(nIMax), IDF_AUTOFILL);
-    else
-        DeleteArea(static_cast<SCCOL>(nIMin), nRow1, static_cast<SCCOL>(nIMax), nRow2, IDF_AUTOFILL);
-
+    if (!IsDataFiltered())  //modify for i89232
+    {
+        if (bVertical)
+            DeleteArea(nCol1, static_cast<SCROW>(nIMin), nCol2, static_cast<SCROW>(nIMax), IDF_AUTOFILL);
+        else
+            DeleteArea(static_cast<SCCOL>(nIMin), nRow1, static_cast<SCCOL>(nIMax), nRow2, IDF_AUTOFILL);
+    }
     sal_uLong nProgress = rProgress.GetState();
 
     //
@@ -733,7 +736,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             sal_uLong nSource = nISrcStart;
             double nDelta;
-            if ( nScFillModeMouseModifier & KEY_MOD1 )
+            if (( nScFillModeMouseModifier & KEY_MOD1 )||IsDataFiltered()) //i89232
                 nDelta = 0.0;
             else if ( bPositive )
                 nDelta = 1.0;
@@ -750,6 +753,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             ScBaseCell* pSrcCell = NULL;
             CellType eCellType = CELLTYPE_NONE;
             sal_Bool bIsOrdinalSuffix = sal_False;
+            sal_Bool bRowFiltered = sal_False; //i89232
 
             rInner = nIStart;
             while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
@@ -775,7 +779,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                     ((ScStringCell*)pSrcCell)->GetString( aValue );
                                 else
                                     ((ScEditCell*)pSrcCell)->GetString( aValue );
-                                if ( !(nScFillModeMouseModifier & KEY_MOD1) )
+                                if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered())   //i89232
                                 {
                                     nCellDigits = 0;    // look at each source cell individually
                                     nHeadNoneTail = lcl_DecompValueString(
@@ -794,6 +798,16 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     else
                         eCellType = CELLTYPE_NONE;
                 }
+
+                //Modify for i89232
+                bRowFiltered = mpFilteredRows->getValue(nRow);
+
+                if (!bRowFiltered)
+                {
+                    if (IsDataFiltered())
+                        DeleteArea(nCol, nRow, nCol, nRow, IDF_AUTOFILL);
+                //End of i89232
+
                 switch (eCellType)
                 {
                     case CELLTYPE_VALUE:
@@ -861,7 +875,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         nSource = nISrcStart;
                         bGetCell = sal_True;
                     }
-                    if ( !(nScFillModeMouseModifier & KEY_MOD1) )
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered() ) //i89232
                     {
                         if ( bPositive )
                             nDelta += 1.0;
@@ -880,6 +894,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     --nSource;
                     bGetCell = sal_True;
+                    }
                 }
 
                 //  Progress in der inneren Schleife nur bei teuren Zellen,
@@ -978,6 +993,35 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
         }
         else if ( eFillCmd == FILL_SIMPLE )         // Auffuellen mit Muster
         {
+            //Add for i89232
+            if ((eFillDir == FILL_TO_BOTTOM)||(eFillDir == FILL_TO_TOP))
+            {
+                long nfilteredrow = 0;
+                long nBegin = 0;
+                long nEnd = 0;
+                if (nEndY > nRow1)
+                {
+                    nBegin = nRow2+1;
+                    nEnd = nEndY;
+                }
+                else
+                {
+                    nBegin = nEndY;
+                    nEnd = nRow1 -1;
+                }
+                for (long nRowIndex = nBegin; nRowIndex <= nEnd; nRowIndex++)
+                {
+                    sal_uInt8 nFlags = pRowFlags->GetValue(nRowIndex);
+                    if (nFlags & CR_FILTERED)
+                        nfilteredrow++;
+                }
+                if (nIndex >0)
+                    nIndex = nIndex - nfilteredrow;
+                else
+                    nIndex = nIndex + nfilteredrow;
+            }
+            //End of i89232
+
             long nPosIndex = nIndex;
             while ( nPosIndex < 0 )
                 nPosIndex += nSrcCount;
@@ -1008,7 +1052,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                             ((ScStringCell*)pCell)->GetString( aValue );
                         else
                             ((ScEditCell*)pCell)->GetString( aValue );
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) )
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered() )  //i89232
                         {
                             sal_Int32 nVal;
                             sal_uInt16 nCellDigits = 0; // look at each source cell individually
@@ -1029,7 +1073,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     {
                         //  dabei kann's keinen Ueberlauf geben...
                         double nVal = ((ScValueCell*)pCell)->GetValue();
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) )
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered() )  //i89232
                             nVal += (double) nDelta;
 
                         Color* pColor;

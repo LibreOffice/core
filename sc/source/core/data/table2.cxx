@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2000, 2011 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -59,6 +59,7 @@
 #include "sheetevents.hxx"
 #include "globstr.hrc"
 #include "segmenttree.hxx"
+#include "dbcolect.hxx"
 
 #include <math.h>
 
@@ -2772,6 +2773,19 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
     DecRecalcLevel();
 }
 
+sal_Bool ScTable::IsDataFiltered() const
+{
+    sal_Bool bAnyQuery = sal_False;
+    ScDBData* pDBData = pDocument->GetFilterDBAtTable(nTab);
+    if ( pDBData )
+    {
+        ScQueryParam aParam;
+        pDBData->GetQueryParam( aParam );
+        if ( aParam.GetEntry(0).bDoQuery )
+            bAnyQuery = sal_True;
+    }
+    return bAnyQuery;
+}
 
 void ScTable::SetColFlags( SCCOL nCol, sal_uInt8 nNewFlags )
 {
