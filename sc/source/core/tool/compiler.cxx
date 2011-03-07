@@ -4100,9 +4100,9 @@ void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddr
 ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                  const ScAddress& rOldPos, const ScRange& r,
                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                 BOOL& rChanged, BOOL& rRefSizeChanged )
+                                 bool& rChanged, bool& rRefSizeChanged )
 {
-    rChanged = rRefSizeChanged = FALSE;
+    rChanged = rRefSizeChanged = false;
     if ( eUpdateRefMode == URM_COPY )
     {   // Normally nothing has to be done here since RelRefs are used, also
         // SharedFormulas don't need any special handling, except if they
@@ -4124,7 +4124,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                         SingleDoubleRefModifier( rRef ).Ref() )
                         != UR_NOTHING
                     )
-                    rChanged = TRUE;
+                    rChanged = true;
             }
         }
         // Check for SharedFormulas.
@@ -4164,7 +4164,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     if (!bValid)
                     {
                         pRangeData = pName;
-                        rChanged = TRUE;
+                        rChanged = true;
                     }
                 }
             }
@@ -4193,7 +4193,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                 {
                     pRangeData = pName;     // maybe need a replacement of shared with own code
 #if ! SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
-                    rChanged = TRUE;
+                    rChanged = true;
 #endif
                 }
             }
@@ -4218,7 +4218,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                         SingleDoubleRefModifier(
                                             t->GetSingleRef()).Ref())
                                     != UR_NOTHING)
-                                rChanged = TRUE;
+                                rChanged = true;
                         }
                         break;
                     default:
@@ -4231,11 +4231,11 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                         aPos, r, nDx, nDy, nDz,
                                         t->GetDoubleRef()) != UR_NOTHING)
                             {
-                                rChanged = TRUE;
+                                rChanged = true;
                                 if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
                                         rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
                                         rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
-                                    rRefSizeChanged = TRUE;
+                                    rRefSizeChanged = true;
                             }
                         }
                 }
@@ -4269,7 +4269,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     if ( rRef.IsRelName() )
                     {
                         ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, aMod.Ref() );
-                        rChanged = TRUE;
+                        rChanged = true;
                     }
                     else
                     {
@@ -4278,7 +4278,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                     r, nDx, nDy, nDz, aMod.Ref() )
                                 != UR_NOTHING
                             )
-                            rChanged = TRUE;
+                            rChanged = true;
                     }
 #if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
                     if ( bEasyShared )
@@ -4299,7 +4299,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     if ( rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName() )
                     {
                         ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, rRef );
-                        rChanged = TRUE;
+                        rChanged = true;
                     }
                     else
                     {
@@ -4308,12 +4308,12 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                 != UR_NOTHING
                             )
                         {
-                            rChanged = TRUE;
+                            rChanged = true;
                             if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
                                     rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
                                     rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
                             {
-                                rRefSizeChanged = TRUE;
+                                rRefSizeChanged = true;
 #if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
                                 bEasyShared = FALSE;
 #endif
@@ -4339,7 +4339,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             if ( bEasyShared )
                 pRangeData = 0;
             else
-                rChanged = TRUE;
+                rChanged = true;
         }
 #endif
 #undef SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE

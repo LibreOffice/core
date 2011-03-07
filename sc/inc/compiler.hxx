@@ -433,7 +433,7 @@ public:
     ScRangeData* UpdateReference( UpdateRefMode eUpdateRefMode,
                                   const ScAddress& rOldPos, const ScRange&,
                                   SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                  BOOL& rChanged, BOOL& rRefSizeChanged );
+                                  bool& rChanged, bool& rRefSizeChanged );
 
     /// Only once for converted shared formulas,
     /// token array has to be compiled afterwards.

@@ -912,10 +912,10 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     if( bHasRefs || bOnRefMove )
     {
         ScTokenArray* pOld = pUndoDoc ? pCode->Clone() : NULL;
-        BOOL bValChanged;
+        bool bValChanged = false;
         ScRangeData* pRangeData;
-        BOOL bRangeModified;            // any range, not only shared formula
-        BOOL bRefSizeChanged;
+        bool bRangeModified = false;    // any range, not only shared formula
+        bool bRefSizeChanged = false;
         if ( bHasRefs )
         {
             ScCompiler aComp(pDocument, aPos, *pCode);
