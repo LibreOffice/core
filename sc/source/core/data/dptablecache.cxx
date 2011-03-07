@@ -280,10 +280,10 @@ sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
 #if OSL_DEBUG_LEVEL > 1
 void    ScDPItemData::dump() const
 {
-    DBG_TRACE1( "Numberformat= %o",  nNumFormat );
+    OSL_TRACE( "Numberformat= %o",  nNumFormat );
     DBG_TRACESTR(aString );
-    DBG_TRACE1( "fValue= %f", fValue );
-    DBG_TRACE1( "mbFlag= %d", mbFlag);
+    OSL_TRACE( "fValue= %f", fValue );
+    OSL_TRACE( "mbFlag= %d", mbFlag);
 }
 #endif
 
