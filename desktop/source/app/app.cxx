@@ -1215,7 +1215,7 @@ void Desktop::retrieveCrashReporterState()
 {
     static const ::rtl::OUString CFG_PACKAGE_RECOVERY   = ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery/");
     static const ::rtl::OUString CFG_PATH_CRASHREPORTER = ::rtl::OUString::createFromAscii("CrashReporter"                  );
-    static const ::rtl::OUString CFG_ENTRY_ENABLED      = ::rtl::OUString::createFromAscii("Enabled"                                   );
+    static const ::rtl::OUString CFG_ENTRY_ENABLED      = ::rtl::OUString::createFromAscii("Enabled"                        );
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
@@ -1627,7 +1627,8 @@ void Desktop::Main()
         // there is no other instance using our data files from a remote host
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
         m_pLockfile = new Lockfile;
-        if ( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning )) {
+        if ( !pCmdLineArgs->IsHeadless() && !pCmdLineArgs->IsInvisible() &&
+             !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning )) {
             // Lockfile exists, and user clicked 'no'
             return;
         }
@@ -1802,7 +1803,7 @@ void Desktop::Main()
 
         if ( !pExecGlobals->bRestartRequested )
         {
-            if ((!pCmdLineArgs->WantsToLoadDocument()                                  ) &&
+            if ((!pCmdLineArgs->WantsToLoadDocument() && !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsHeadless() ) &&
                 (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
                 (!bExistsRecoveryData                                                  ) &&
                 (!bExistsSessionData                                                   ) &&
@@ -3203,6 +3204,7 @@ void Desktop::OpenSplashScreen()
     sal_Bool bVisible = sal_False;
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
     if ( !pCmdLine->IsInvisible() &&
+         !pCmdLine->IsHeadless() &&
          !pCmdLine->IsQuickstart() &&
          !pCmdLine->IsMinimized() &&
          !pCmdLine->IsNoLogo() &&
