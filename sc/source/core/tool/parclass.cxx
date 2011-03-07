@@ -226,7 +226,7 @@ void ScParameterClassification::Init()
         else
         {
             RunData* pRun = &pData[ pRaw->eOp ];
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             if ( pRun->aData.nParam[0] != Unknown )
             {
                 OSL_TRACE( "already assigned: %d", pRaw->eOp);

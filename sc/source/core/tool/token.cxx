@@ -347,7 +347,7 @@ ScRawToken* ScRawToken::Clone() const
 
 FormulaToken* ScRawToken::CreateToken() const
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #define IF_NOT_OPCODE_ERROR(o,c) if (eOp!=o) OSL_TRACE( #c "::ctor: OpCode %d lost, converted to " #o "; maybe inherit from FormulaToken instead!", int(eOp))
 #else
 #define IF_NOT_OPCODE_ERROR(o,c)
