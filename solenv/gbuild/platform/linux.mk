@@ -30,7 +30,7 @@ COM := GCC
 
 gb_MKTEMP := mktemp -t gbuild.XXXXXX
 
-gb_CC := cc
+gb_CC := gcc
 gb_CXX := g++
 gb_GCCP := gcc
 gb_AR := ar
