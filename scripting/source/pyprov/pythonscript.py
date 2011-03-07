@@ -361,7 +361,7 @@ class ProviderContext:
             elif node.__class__.__name__ == 'Assign':
                 for assignee in node.nodes:
                     if assignee.name == 'g_exportedScripts':
-                        for item in node.expr:
+                        for item in node.expr.nodes:
                             if item.__class__.__name__ == 'Name':
                                 g_exportedScripts.append(item.name)
                         return g_exportedScripts
