@@ -805,7 +805,8 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if (!bRowFiltered)
                 {
                     if (IsDataFiltered())
-                        DeleteArea(nCol, nRow, nCol, nRow, IDF_AUTOFILL);
+                        DeleteArea(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
+                                   static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), IDF_AUTOFILL);
                 //End of i89232
 
                 switch (eCellType)
