@@ -256,7 +256,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
         // unfortunately this resets the whole edit engine
         // thus we need to save at least the text
         String aTxt( pEditEngine->GetText( LINEEND_LF ) );
-        pEditEngine->Clear();   //#77957 incorrect font size
+        pEditEngine->Clear();   //incorrect font size
         pEditEngine->SetText( aTxt );
     }
 
@@ -360,7 +360,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         Point aPoint = rCEvt.GetMousePosPixel();
         PopupMenu* pPopupMenu = new PopupMenu(SmResId(RID_COMMANDMENU));
 
-        // added for replaceability of context menus #96085, #93782
+        // added for replaceability of context menus
         Menu* pMenu = NULL;
         ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );

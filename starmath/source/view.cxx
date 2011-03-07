@@ -551,7 +551,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                     aPos = rCEvt.GetMousePosPixel();
                 OSL_ENSURE( pViewShell, "view shell missing" );
 
-                // added for replaceability of context menus #96085, #93782
+                // added for replaceability of context menus
                 pViewShell->GetViewFrame()->GetBindings().GetDispatcher()
                         ->ExecutePopup( aResId, this, &aPos );
 
