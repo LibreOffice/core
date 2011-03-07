@@ -225,18 +225,39 @@ USHORT MSWordStyles::GetWWId( const SwFmt& rFmt ) const
         switch( nPoolId )
         {
         case RES_POOLCOLL_FOOTNOTE:         nRet = 29;  break;
+        case RES_POOLCOLL_MARGINAL:         nRet = 30;  break;
         case RES_POOLCOLL_HEADER:           nRet = 31;  break;
         case RES_POOLCOLL_FOOTER:           nRet = 32;  break;
         case RES_POOLCOLL_TOX_IDXH:         nRet = 33;  break;
+        case RES_POOLCOLL_LABEL:            nRet = 34;  break;
+        case RES_POOLCOLL_LABEL_DRAWING:    nRet = 35;  break;
         case RES_POOLCOLL_JAKETADRESS:      nRet = 36;  break;
         case RES_POOLCOLL_SENDADRESS:       nRet = 37;  break;
         case RES_POOLCOLL_ENDNOTE:          nRet = 43;  break;
+        case RES_POOLCOLL_TOX_AUTHORITIESH: nRet = 44;  break;
+        case RES_POOLCOLL_TOX_CNTNTH:       nRet = 46;  break;
+        case RES_POOLCOLL_BUL_LEVEL1:       nRet = 48;  break;
         case RES_POOLCOLL_LISTS_BEGIN:      nRet = 47;  break;
+        case RES_POOLCOLL_NUM_LEVEL1:       nRet = 49;  break;
+        case RES_POOLCOLL_BUL_LEVEL2:       nRet = 54;  break;
+        case RES_POOLCOLL_BUL_LEVEL3:       nRet = 55;  break;
+        case RES_POOLCOLL_BUL_LEVEL4:       nRet = 56;  break;
+        case RES_POOLCOLL_BUL_LEVEL5:       nRet = 57;  break;
+        case RES_POOLCOLL_NUM_LEVEL2:       nRet = 58;  break;
+        case RES_POOLCOLL_NUM_LEVEL3:       nRet = 59;  break;
+        case RES_POOLCOLL_NUM_LEVEL4:       nRet = 60;  break;
+        case RES_POOLCOLL_NUM_LEVEL5:       nRet = 61;  break;
         case RES_POOLCOLL_DOC_TITEL:        nRet = 62;  break;
         case RES_POOLCOLL_SIGNATURE:        nRet = 64;  break;
         case RES_POOLCOLL_TEXT:             nRet = 66;  break;
         case RES_POOLCOLL_TEXT_MOVE:        nRet = 67;  break;
+        case RES_POOLCOLL_BUL_NONUM1:       nRet = 68;  break;
+        case RES_POOLCOLL_BUL_NONUM2:       nRet = 69;  break;
+        case RES_POOLCOLL_BUL_NONUM3:       nRet = 70;  break;
+        case RES_POOLCOLL_BUL_NONUM4:       nRet = 71;  break;
+        case RES_POOLCOLL_BUL_NONUM5:       nRet = 72;  break;
         case RES_POOLCOLL_DOC_SUBTITEL:     nRet = 74;  break;
+        case RES_POOLCOLL_GREETING:         nRet = 75;  break;
         case RES_POOLCOLL_TEXT_IDENT:       nRet = 77;  break;
 
         case RES_POOLCHR_FOOTNOTE_ANCHOR:   nRet = 38;  break;
