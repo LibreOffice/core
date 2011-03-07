@@ -673,8 +673,9 @@ sal_Int32 SAL_CALL ScNamedRangesObj::getCount() throw(uno::RuntimeException)
         if (pNames)
         {
             ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
-            if (lcl_UserVisibleName(*itr))
-                ++nRet;
+            for (; itr != itrEnd; ++itr)
+                if (lcl_UserVisibleName(*itr))
+                    ++nRet;
         }
     }
     return nRet;
