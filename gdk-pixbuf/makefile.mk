@@ -55,15 +55,18 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                 BASE_DEPENDENCIES_LIBS=" " \
                  .$/configure \
                  --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
-                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/libpng" \
+                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/libpng -I$(SOLARINCDIR)$/external$/libjpeg" \
                  LDFLAGS="-L$(SOLARLIBDIR) -lgobject-2.0 -lgio-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0 -lintl" \
                  --disable-glibtest \
-                 --without-libtiff \
-                 --without-libjpeg
+                 --without-libtiff
                  
-## FIXME: libtiff, libjpeg
-                 
-CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
+## FIXME: libtiff
+
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS=CPPFLAGS="$(EXTRA_CDEFS)  -I$(SOLARINCDIR)$/external$/libjpeg"
+.ELSE
+CONFIGURE_FLAGS=CPPFLAGS="-I$(SOLARINCDIR)$/external$/libjpeg"
+.ENDIF
                 
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
              $(GNUMAKE)
