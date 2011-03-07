@@ -126,7 +126,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
 
     GetOKButton().SetText(String(SW_RES(STR_BTN_NEW_DOC)));
     GetOKButton().SetHelpId(HID_LABEL_INSERT);
-    GetOKButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
+    GetOKButton().SetHelpText(aEmptyStr);   // in order for generated help text to get used
 
     AddTabPage(TP_LAB_LAB, m_bLabel ? sFormat : sMedium ,SwLabPage   ::Create, 0, sal_False, 0);
     AddTabPage(TP_VISITING_CARDS, SwVisitingCardPage::Create, 0);
@@ -197,7 +197,7 @@ void SwLabDlg::GetLabItem(SwLabItem &rItem)
 
     if (rActItem != rOldItem)
     {
-        // Wurde schon mal mit (hoffentlich) korrektem Inhalt "geputtet"
+        // Was already "put" with (hopefully) correct content
         rItem = rActItem;
     }
     else

@@ -30,7 +30,7 @@
 
 #include "envelp.hrc"
 
-// Lokale Resourcen *********************************************************
+// local resources *********************************************************
 
 #define TXT_WRITING   1
 #define BOX_ADDR      2
@@ -110,11 +110,11 @@
 //#define FT_MOBILE             72
 #define FT_FAX                  73
 
-// Globale Resourcen ********************************************************
+// global resources ********************************************************
 #define STR_DOC_TITLE           (RC_LABEL_BEGIN)
 #define STR_CUSTOM              (RC_LABEL_BEGIN + 1)
 
-// Ueberlaufpruefung ********************************************************
+// overflow check ********************************************************
 
 #define LABEL_ACT_END  STR_CUSTOM
 

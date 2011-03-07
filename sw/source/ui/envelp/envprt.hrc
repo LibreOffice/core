@@ -30,7 +30,7 @@
 
 #include "envelp.hrc"
 
-// Lokale Resourcen *********************************************************
+// local resources *********************************************************
 
 #define BOX_ALIGN      1
 #define BTN_TOP        7
@@ -44,7 +44,7 @@
 #define BTN_PRTSETUP  15
 #define FL_PRINTER    16
 
-// Globale Resourcen ********************************************************
+// global resources ********************************************************
 
 #define BMP_HOR_LEFT_LOWER  (RC_ENVPRT_BEGIN     )
 #define BMP_HOR_LEFT_UPPER  (RC_ENVPRT_BEGIN +  1)
@@ -67,7 +67,7 @@
 #define ITM_VER_CNTR        (RC_ENVPRT_BEGIN + 16)
 #define ITM_VER_RGHT        (RC_ENVPRT_BEGIN + 17)
 
-// Ueberlaufpruefung ********************************************************
+// overflow check ********************************************************
 
 #define ENVPRT_ACT_END  ITM_VER_RGHT
 

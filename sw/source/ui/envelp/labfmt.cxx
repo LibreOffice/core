@@ -128,7 +128,7 @@ void SwLabPreview::Paint(const Rectangle &)
     aPaintFont.SetTransparent(FALSE);
     SetFont(aPaintFont);
 
-    // Groesse des darzustellenden Bereichs
+    // size of region to be displayed
     long lDispW = ROUND(aItem.lLeft  + aItem.lHDist);
     long lDispH = ROUND(aItem.lUpper + aItem.lVDist);
     if (aItem.nCols == 1)
@@ -140,12 +140,12 @@ void SwLabPreview::Paint(const Rectangle &)
     else
         lDispH += ROUND(aItem.lVDist / 10);
 
-    // Scale factor Skalierungsfaktor
+    // Scale factor
     float fx = (float) lOutWPix23 / Max(1L, lDispW),
           fy = (float) lOutHPix23 / Max(1L, lDispH),
           f  = fx < fy ? fx : fy;
 
-    // Nullpunkt
+    // zero point
     long lOutlineW = ROUND(f * lDispW);
     long lOutlineH = ROUND(f * lDispH);
 
@@ -158,17 +158,17 @@ void SwLabPreview::Paint(const Rectangle &)
     long lX3 = ROUND(lX0 + f * (aItem.lLeft  + aItem.lHDist ));
     long lY3 = ROUND(lY0 + f * (aItem.lUpper + aItem.lVDist ));
 
-    // Umriss zeichnen (Flaeche)
+    // draw outline (area)
     DrawRect(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
 
-    // Umriss zeichnen (Umrandung)
+    // draw outline (border)
     SetLineColor(rFieldTextColor);
-    DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Oben
-    DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Links
+    DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Up
+    DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Left
     if (aItem.nCols == 1)
-        DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Rechts
+        DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Right
     if (aItem.nRows == 1)
-        DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Unten
+        DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Down
 
     // Labels
     SetClipRegion (Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
@@ -182,7 +182,7 @@ void SwLabPreview::Paint(const Rectangle &)
                     ROUND(f * aItem.lHeight))));
     SetClipRegion();
 
-    // Beschritung: Rand links
+    // annotation: left border
     if (aItem.lLeft)
     {
         long lX = (lX0 + lX1) / 2;
@@ -191,14 +191,14 @@ void SwLabPreview::Paint(const Rectangle &)
         DrawText(Point(lX1 - lLeftWidth, lY0 - 10 - lXHeight), aLeftStr);
     }
 
-    // Beschriftung: Rand oben
+    // annotation: upper border
     if (aItem.lUpper)
     {
         DrawArrow(Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), FALSE);
         DrawText(Point(lX0 - 10 - lUpperWidth, ROUND(lY0 + f * aItem.lUpper / 2 - lXHeight / 2)), aUpperStr);
     }
 
-    // Beschriftung: Breite und Hoehe
+    // annotation: width and height
     {
         long lX = lX2 - lXWidth / 2 - lHeightWidth / 2;
         long lY = lY1 + lXHeight;
@@ -210,7 +210,7 @@ void SwLabPreview::Paint(const Rectangle &)
         DrawText(Point(lX - lHeightWidth / 2, lY2 - lXHeight - lXHeight / 2), aHeightStr);
     }
 
-    // Beschriftung: Horz. Abstand
+    // annotation: horizontal gap
     if (aItem.nCols > 1)
     {
         long lX = (lX1 + lX3) / 2;
@@ -219,21 +219,21 @@ void SwLabPreview::Paint(const Rectangle &)
         DrawText(Point(lX - lHDistWidth / 2, lY0 - 10 - lXHeight), aHDistStr);
     }
 
-    // Beschriftung: Vertikaler Abstand
+    // annotation: vertical gap
     if (aItem.nRows > 1)
     {
         DrawArrow(Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), FALSE);
         DrawText(Point(lX0 - 10 - lVDistWidth, ROUND(lY1 + f * aItem.lVDist / 2 - lXHeight / 2)), aVDistStr);
     }
 
-    // Beschriftung: Spalten
+    // annotation: columns
     {
         long lY = lY0 + lOutlineH + 4;
         DrawArrow(Point(lX0, lY), Point(lX0 + lOutlineW - 1, lY), TRUE);
         DrawText(Point((lX0 + lX0 + lOutlineW - 1) / 2 - lColsWidth / 2, lY + 5), aColsStr);
     }
 
-    // Beschriftung: Zeilen
+    // annotation: lines
     {
         long lX = lX0 + lOutlineW + 4;
         DrawArrow(Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), TRUE);
@@ -404,7 +404,7 @@ void SwLabFmtPage::ChangeMinMax()
 {
     long lMax = 31748; // 56 cm
 
-    // Min und Max
+    // Min and Max
 
     long lLeft  = static_cast< long >(GETFLDVAL(aLeftField )),
          lUpper = static_cast< long >(GETFLDVAL(aUpperField)),
@@ -431,7 +431,7 @@ void SwLabFmtPage::ChangeMinMax()
     aColsField  .SetMax((lMax - lLeft ) / Max(1L, lHDist));
     aRowsField  .SetMax((lMax - lUpper) / Max(1L, lVDist));
 
-    // First und Last
+    // First and Last
 
     aHDistField .SetFirst(aHDistField .GetMin());
     aVDistField .SetFirst(aVDistField .GetMin());

@@ -30,7 +30,7 @@
 
 #include "envelp.hrc"
 
-// Lokale Resourcen *********************************************************
+// local resources *********************************************************
 
 #define WIN_PREVIEW   1
 #define TXT_HDIST     2
@@ -64,7 +64,7 @@
 #define PB_HELP         8
 #define MB_QUERY        9
 
-// Globale Resourcen ********************************************************
+// global resources ********************************************************
 
 #define STR_HDIST   (RC_LABFMT_BEGIN + 1)
 #define STR_VDIST   (RC_LABFMT_BEGIN + 2)
@@ -75,7 +75,7 @@
 #define STR_COLS    (RC_LABFMT_BEGIN + 7)
 #define STR_ROWS    (RC_LABFMT_BEGIN + 8)
 
-// Ueberlaufpruefung ********************************************************
+// overflow check ********************************************************
 
 #define LABFMT_ACT_END  STR_ROWS
 
