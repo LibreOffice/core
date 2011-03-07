@@ -349,7 +349,12 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
 
         if( bCopyJobSetup && mpViewShell )
         {
-            SfxPrinter* pDocPrt = mpViewShell->GetPrinter(sal_False);
+            // #i114306#
+            // Note: this possibly creates a printer that gets immediately replaced
+            // by a new one. The reason for this is that otherwise we would not get
+            // the printer's SfxItemSet here to copy. Awkward, but at the moment there is no
+            // other way here to get the item set.
+            SfxPrinter* pDocPrt = mpViewShell->GetPrinter(sal_True);
             if( pDocPrt )
             {
                 if( pDocPrt->GetName() == getPrinter()->GetName() )
