@@ -120,7 +120,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
     SetMetric(aSizeWidthField,  aMetric);
     SetMetric(aSizeHeightField, aMetric);
 
-    // Menues einhaengen
+    // Hook in Menues
     ::pMenu = new PopupMenu(SW_RES(MNU_EDIT));
     aAddrEditButton.SetPopupMenu(::pMenu);
     aSendEditButton.SetPopupMenu(::pMenu);
@@ -206,7 +206,7 @@ IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
             if (aIDs[i] == (USHORT)ePaper)
                 aSizeFormatBox.SelectEntryPos(i);
 
-        // Benutzergroesse merken
+        // remember user size
         if (aIDs[aSizeFormatBox.GetSelectEntryPos()] == (USHORT)PAPER_USER)
         {
             lUserW = lWidth ;
@@ -230,7 +230,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
     SwWrtShell* pSh = GetParent()->pSh;
     OSL_ENSURE(pSh, "Shell missing");
 
-    // Collection-Ptr ermitteln
+    // determine collection-ptr
     BOOL bSender = pButton != &aAddrEditButton;
 
     SwTxtFmtColl* pColl = pSh->GetTxtCollFromPool( static_cast< USHORT >(
@@ -243,11 +243,11 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         {
             SfxItemSet *pCollSet = GetCollItemSet(pColl, bSender);
 
-            // Damit die Hintergrundfarbe nicht uebergebuegelt wird:
+            // In order for the background color not to get ironed over:
             SfxAllItemSet aTmpSet(*pCollSet);
 
-            // Das CHRATR_BACKGROUND-Attribut wird fuer den Dialog in
-            // ein RES_BACKGROUND verwandelt und wieder zurueck ...
+            // The CHRATR_BACKGROUND attribute gets transformed into a
+            // RES_BACKGROUND for the dialog and back again ...
             const SfxPoolItem *pTmpBrush;
 
             if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_CHRATR_BACKGROUND,
@@ -287,10 +287,10 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         {
             SfxItemSet *pCollSet = GetCollItemSet(pColl, bSender);
 
-            // Damit die Tabulatoren nicht uebergebuegelt werden:
+            // In order for the tabulators not to get ironed over:
             SfxAllItemSet aTmpSet(*pCollSet);
 
-            // Insert tabs, default tabs ito ItemSet
+            // Insert tabs, default tabs into ItemSet
             const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
                 pSh->GetView().GetCurShell()->GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
 
@@ -302,20 +302,20 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             SfxUInt16Item aTabPos( SID_ATTR_TABSTOP_POS, 0 );
             aTmpSet.Put( aTabPos );
 
-            // linker Rand als Offset
+            // left border as offset
             const long nOff = ((SvxLRSpaceItem&)aTmpSet.Get( RES_LR_SPACE )).
                                                                 GetTxtLeft();
             SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
             aTmpSet.Put( aOff );
 
-            // BoxInfo setzen
+            // set BoxInfo
             ::PrepareBoxInfo( aTmpSet, *pSh );
 
             SwParaDlg *pDlg = new SwParaDlg(GetParent(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &pColl->GetName());
 
             if ( pDlg->Execute() == RET_OK )
             {
-                // Defaults evtl umsetzen
+                // maybe relocate defaults
                 const SfxPoolItem* pItem = 0;
                 SfxItemSet* pOutputSet = (SfxItemSet*)pDlg->GetOutputItemSet();
                 USHORT nNewDist;
@@ -342,7 +342,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
 }
 
 /*------------------------------------------------------------------------
-  Beschreibung: Ein temporaeres Itemset, das bei Abbruch verworfen wird
+  Description: A temporary Itemset that gets discarded at abort
 ------------------------------------------------------------------------*/
 
 SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender)
@@ -351,7 +351,7 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender)
 
     if (!pAddrSet)
     {
-        // Range ermitteln (Ranges beider Itemsets mergen)
+        // determine range (merge both Itemsets' ranges)
         const USHORT *pRanges = pColl->GetAttrSet().GetRanges();
 
         static USHORT const aRanges[] =
@@ -367,7 +367,7 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender)
             0, 0
         };
 
-        // BruteForce-Merge, weil MergeRange in SvTools buggy ist:
+        // BruteForce merge because MergeRange in SvTools is buggy:
         USHORT i = 0;
         SvLongsSort aMergedRanges( 0, 10 );
 
@@ -387,7 +387,7 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender)
             i += 2;
         }
 
-        // Ranges kompaktieren
+        // compact ranges
         std::vector<USHORT> aCompactedRanges;
 
         aCompactedRanges.push_back(aMergedRanges[0]);
@@ -407,7 +407,7 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender)
             }
         }
 
-        // Neue Ranges erzeugen
+        // create new ranges
         USHORT *pNewRanges = new USHORT[aCompactedRanges.size() + 1];
         for (i = 0; i < aCompactedRanges.size(); ++i)
             pNewRanges[i] = aCompactedRanges[i];
@@ -474,7 +474,7 @@ void SwEnvFmtPage::SetMinMax()
     long lWidth  = Max(lWVal, lHVal),
          lHeight = Min(lWVal, lHVal);
 
-    // Min und Max
+    // Min and Max
     aAddrLeftField.SetMin((long) 100 * (GetFldVal(aSendLeftField) + 566), FUNIT_TWIP);
     aAddrLeftField.SetMax((long) 100 * (lWidth  - 2 * 566), FUNIT_TWIP);
     aAddrTopField .SetMin((long) 100 * (GetFldVal(aSendTopField ) + 2 * 566), FUNIT_TWIP);

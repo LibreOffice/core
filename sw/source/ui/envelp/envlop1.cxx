@@ -105,7 +105,7 @@ void SwEnvPreview::Paint(const Rectangle &)
 
     SetLineColor( aFront );
 
-    // Umschlag
+    // Envelope
     long   nW = (USHORT) (f * nPageW),
            nH = (USHORT) (f * nPageH),
            nX = (GetOutputSizePixel().Width () - nW) / 2,
@@ -159,7 +159,7 @@ SwEnvDlg::SwEnvDlg(Window* pParent, const SfxItemSet& rSet,
 
     GetOKButton().SetText(String(SW_RES(STR_BTN_NEWDOC)));
     GetOKButton().SetHelpId(HID_ENVELOP_PRINT);
-    GetOKButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
+    GetOKButton().SetHelpText(aEmptyStr);   // in order for generated help text to get used
     if (GetUserButton())
     {
         GetUserButton()->SetText(bInsert ? sInsert : sChange);
