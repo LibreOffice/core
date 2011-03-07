@@ -599,7 +599,7 @@ namespace accessibility
 
                             ChangeChildFocus( aSelection.nEndPara );
 
-                            DBG_TRACE3("AccessibleTextHelper_Impl::UpdateSelection(): focus changed, Object: %d, Paragraph: %d, Last paragraph: %d",
+                            OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): focus changed, Object: %d, Paragraph: %d, Last paragraph: %d",
                                        this, aSelection.nEndPara, maLastSelection.nEndPara);
                         }
                     }
