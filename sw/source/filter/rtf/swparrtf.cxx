@@ -432,7 +432,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
         maSegments.InsertSegments(IsNewDoc());
         UpdatePageDescs(*pDoc, nPageDescOffset);
         //$flr folloing garbe collecting code has been moved from the previous procedure
-        //     UpdatePageDescs to here in order to fix bug #117882#
+        //     UpdatePageDescs to here in order to fix a bug
         rtfSections::myrDummyIter aDEnd = maSegments.maDummyPageNos.rend();
         for (rtfSections::myrDummyIter aI = maSegments.maDummyPageNos.rbegin(); aI != aDEnd; ++aI)
             pDoc->DelPageDesc(*aI);
@@ -1688,7 +1688,7 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_PAGE:
-        if (pTableNode==NULL) { //#117410#: A \page command within a table is ignored by Word.
+        if (pTableNode==NULL) { //A \page command within a table is ignored by Word.
             if (lcl_UsedPara(*pPam))
                 InsertPara();
             CheckInsNewTblLine();
@@ -2944,8 +2944,8 @@ void SwRTFParser::ReadSectControls( int nToken )
                     _pKeepHeader = &aNewSection.mpPageHdFt->GetMaster().GetHeader();
                 }
                 bKeepFooter = false;
-                if (!bNewSectionHeader) { //see #117914# topic 2). If a header is redefined in a section
-                    bNewSectionHeader=true;                    //  a new header must be created.
+                if (!bNewSectionHeader) { // If a header is redefined in a section
+                    bNewSectionHeader=true;           //  a new header must be created.
                     aNewSection.mpPageHdFt=NULL;
                 }
                 if (!aNewSection.mpPageHdFt)
@@ -4020,7 +4020,7 @@ void SwRTFParser::DelLastNode()
     {
         ULONG nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
         SwCntntNode* pCNd = pDoc->GetNodes()[ nNodeIdx ]->GetCntntNode();
-        // paragraphs with page break information are not empty! see #117914# topic 1)
+        // paragraphs with page break information are not empty!)
         if(const SfxPoolItem* pItem=&(pCNd->GetAttr( RES_PAGEDESC, FALSE)))
         {
             SwFmtPageDesc* pPageDescItem = ((SwFmtPageDesc*)pItem);
@@ -4073,7 +4073,7 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
                 NewTblLine();           // evt. Line copieren
             else
             {
-                static int _do=0; //$flr See #117881# for explanation.
+                static int _do=0; //$flr
                 // Crsr nicht mehr in der Tabelle ?
                 if( !pPam->GetNode()->FindTableNode() && _do )
                 {

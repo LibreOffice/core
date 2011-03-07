@@ -357,7 +357,7 @@ void SwRTFParser::ReadTable( int nToken )
             break;
 
         case RTF_TRGAPH:
-                //$flr bug #117887#: RTF: wrong internal table cell margin imported (A13)
+                //$flr bug: RTF: wrong internal table cell margin imported (A13)
                 aRow.mnBrdDist = (nTokenValue>0?(USHORT)nTokenValue:0); // filter out negative values of \trgaph
             break;
 
@@ -762,7 +762,7 @@ void SwRTFParser::ReadTable( int nToken )
 
     //It might be that there was content at this point which is not already in
     //a table, but which is being followed by properties to place it into the
-    //table. e.g. #109199#. If this is the case then move the para/char
+    //table. If this is the case then move the para/char
     //properties inside the table, and move any content of that paragraph into
     //the table
     bool bInTable = aRg.GetPoint()->nNode.GetNode().FindTableNode();
