@@ -946,14 +946,12 @@ void Test::testStreamValid()
     pCell = m_pDoc->GetCell(ScAddress(0, 2, 0));
     CPPUNIT_ASSERT_MESSAGE("Cell A3 should be empty.", pCell == NULL);
 
-#if 0 // This currently fails.
     // After the move, Sheet1, Sheet2, and Sheet4 should have their stream
     // invalidated, whereas Sheet3's stream should still be valid.
     CPPUNIT_ASSERT_MESSAGE("Stream should have been invalidated.", !m_pDoc->IsStreamValid(0));
     CPPUNIT_ASSERT_MESSAGE("Stream should have been invalidated.", !m_pDoc->IsStreamValid(1));
     CPPUNIT_ASSERT_MESSAGE("Stream should have been invalidated.", !m_pDoc->IsStreamValid(3));
     CPPUNIT_ASSERT_MESSAGE("Stream should still be valid.", m_pDoc->IsStreamValid(2));
-#endif
 
     m_pDoc->DeleteTab(3);
     m_pDoc->DeleteTab(2);

@@ -1280,6 +1280,7 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                      ScDocument* pUndoDoc, BOOL bIncludeDraw, bool bUpdateNoteCaptionPos )
 {
+    bool bUpdated = false;
     SCCOL i;
     SCCOL iMax;
     if ( eUpdateRefMode == URM_COPY )
@@ -1293,8 +1294,8 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
         iMax = MAXCOL;
     }
     for ( ; i<=iMax; i++)
-        aCol[i].UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
-                                    nDx, nDy, nDz, pUndoDoc );
+        bUpdated |= aCol[i].UpdateReference(
+            eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, pUndoDoc );
 
     if ( bIncludeDraw )
         UpdateDrawRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, bUpdateNoteCaptionPos );
@@ -1379,6 +1380,9 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
                                     PAINT_GRID ) );
         }
     }
+
+    if (bUpdated && IsStreamValid())
+        SetStreamValid(false);
 }
 
 void ScTable::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,

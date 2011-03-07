@@ -1617,10 +1617,11 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 }
 
 
-void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+bool ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
              SCCOL nCol2, SCROW nRow2, SCTAB nTab2, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
              ScDocument* pUndoDoc )
 {
+    bool bUpdated = false;
     if (pItems)
     {
         ScRange aRange( ScAddress( nCol1, nRow1, nTab1 ),
@@ -1632,7 +1633,8 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
             {
                 ScFormulaCell* pCell = (ScFormulaCell*) pItems[nIndex].pCell;
                 if( pCell->GetCellType() == CELLTYPE_FORMULA)
-                    pCell->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
+                    bUpdated |= pCell->UpdateReference(
+                        eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
             }
         }
         else
@@ -1653,7 +1655,8 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
                     ScBaseCell* pCell = pItems[i].pCell;
                     if( pCell->GetCellType() == CELLTYPE_FORMULA)
                     {
-                        ((ScFormulaCell*)pCell)->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
+                        bUpdated |= ((ScFormulaCell*)pCell)->UpdateReference(
+                            eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
                         if ( nRow != pItems[i].nRow )
                             Search( nRow, i );  // Listener removed/inserted?
                     }
@@ -1671,7 +1674,8 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
                         // When deleting rows on several sheets, the formula's position may be updated with the first call,
                         // so the undo position must be passed from here.
                         ScAddress aUndoPos( nCol, nRow, nTab );
-                        ((ScFormulaCell*)pCell)->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc, &aUndoPos );
+                        bUpdated |= ((ScFormulaCell*)pCell)->UpdateReference(
+                            eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc, &aUndoPos );
                         if ( nRow != pItems[i].nRow )
                             Search( nRow, i );  // Listener removed/inserted?
                     }
@@ -1679,6 +1683,7 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
             }
         }
     }
+    return bUpdated;
 }
 
 
