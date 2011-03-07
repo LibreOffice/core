@@ -58,6 +58,7 @@ PRJ=..$/..$/..
 
 PRJNAME=lotuswordpro
 TARGET=xfilter
+ENABLE_EXCEPTIONS=true
 
 # --- Settings -----------------------------------------------------
 
