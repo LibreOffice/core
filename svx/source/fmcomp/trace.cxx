@@ -58,7 +58,7 @@ Tracer::Tracer(const char* _pBlockDescription)
     sMessage += sIndent;
     sMessage += m_sBlockDescription;
     sMessage += " {";
-    DBG_TRACE(sMessage.GetBuffer());
+    OSL_TRACE(sMessage.GetBuffer());
 }
 
 //------------------------------------------------------------------------------
@@ -78,7 +78,7 @@ Tracer::~Tracer()
     sMessage += sIndent;
     sMessage += "} // ";
     sMessage += m_sBlockDescription;
-    DBG_TRACE(sMessage.GetBuffer());
+    OSL_TRACE(sMessage.GetBuffer());
 }
 
 //------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ void Tracer::TraceString(const char* _pMessage)
     sMessage += m_sBlockDescription;
     sMessage += ": ";
     sMessage += _pMessage;
-    DBG_TRACE(sMessage.GetBuffer());
+    OSL_TRACE(sMessage.GetBuffer());
 }
 
 //------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ void Tracer::TraceString1StringParam(const char* _pMessage, const char* _pParam)
     sMessage += m_sBlockDescription;
     sMessage += ": ";
     sMessage += _pMessage;
-    DBG_TRACE1(sMessage.GetBuffer(), _pParam);
+    OSL_TRACE(sMessage.GetBuffer(), _pParam);
 }
 #endif
 
