@@ -1,0 +1,142 @@
+--- misc/jpeg-8c/makefile.mk	2011-03-06 23:04:22.985821034 +0100
++++ misc/build/jpeg-8c/makefile.mk	2011-03-06 23:03:28.424821116 +0100
+@@ -1 +1,76 @@
+-dummy
++#*************************************************************************
++#
++#   Copyright according the GNU Public License.
++#
++#*************************************************************************
++
++PRJ=..$/..$/..$/..
++
++PRJNAME=jpeg8
++TARGET=jpeg8
++LIBTARGET=NO
++EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
++VISIBILITY_HIDDEN=TRUE
++
++# --- Settings -----------------------------------------------------------
++
++.INCLUDE :  settings.mk
++
++.IF "$(GUI)$(CPU)"=="WNTP"
++CFLAGS=$(CFLAGS) -Od
++.ENDIF
++
++# --- Files --------------------------------------------------------
++
++SLOFILES=	$(SLO)$/jaricom.obj		\
++			$(SLO)$/jcapimin.obj	\
++			$(SLO)$/jcapistd.obj	\
++			$(SLO)$/jcarith.obj		\
++			$(SLO)$/jccoefct.obj	\
++			$(SLO)$/jccolor.obj		\
++			$(SLO)$/jcdctmgr.obj	\
++			$(SLO)$/jchuff.obj		\
++			$(SLO)$/jcinit.obj		\
++			$(SLO)$/jcmainct.obj	\
++			$(SLO)$/jcmarker.obj	\
++			$(SLO)$/jcmaster.obj	\
++			$(SLO)$/jcomapi.obj		\
++			$(SLO)$/jcparam.obj		\
++			$(SLO)$/jcprepct.obj	\
++			$(SLO)$/jcsample.obj	\
++			$(SLO)$/jctrans.obj		\
++			$(SLO)$/jdapimin.obj	\
++			$(SLO)$/jdapistd.obj	\
++			$(SLO)$/jdarith.obj		\
++			$(SLO)$/jdatadst.obj	\
++			$(SLO)$/jdatasrc.obj	\
++			$(SLO)$/jdcoefct.obj	\
++			$(SLO)$/jdcolor.obj		\
++			$(SLO)$/jddctmgr.obj	\
++			$(SLO)$/jdhuff.obj		\
++			$(SLO)$/jdinput.obj		\
++			$(SLO)$/jdmainct.obj	\
++			$(SLO)$/jdmarker.obj	\
++			$(SLO)$/jdmaster.obj	\
++			$(SLO)$/jdmerge.obj		\
++			$(SLO)$/jdpostct.obj	\
++			$(SLO)$/jdsample.obj	\
++			$(SLO)$/jdtrans.obj		\
++			$(SLO)$/jerror.obj		\
++			$(SLO)$/jfdctflt.obj	\
++			$(SLO)$/jfdctfst.obj	\
++			$(SLO)$/jfdctint.obj	\
++			$(SLO)$/jidctflt.obj	\
++			$(SLO)$/jidctfst.obj	\
++			$(SLO)$/jidctint.obj	\
++			$(SLO)$/jquant1.obj		\
++			$(SLO)$/jquant2.obj		\
++			$(SLO)$/jutils.obj		\
++			$(SLO)$/jmemnobs.obj	\
++			$(SLO)$/jutils.obj		
++
++LIB1TARGET=$(SLB)$/$(TARGET).lib
++LIB1ARCHIV=$(LB)$/$(TARGET).a
++LIB1OBJFILES=$(SLOFILES)
++
++.INCLUDE :  target.mk
+--- misc/jpeg-8c/jconfig.h	2011-03-06 23:19:25.611821058 +0100
++++ misc/build/jpeg-8c/jconfig.h	2011-03-06 23:10:22.070821059 +0100
+@@ -1 +1,58 @@
+-dummy
++/* jconfig.h.  Generated from jconfig.cfg by configure.  */
++/* jconfig.cfg --- source file edited by configure script */
++/* see jconfig.txt for explanations */
++
++#define HAVE_PROTOTYPES 1
++#define HAVE_UNSIGNED_CHAR 1
++#define HAVE_UNSIGNED_SHORT 1
++/* #undef void */
++/* #undef const */
++/* #undef CHAR_IS_UNSIGNED */
++#define HAVE_STDDEF_H 1
++#define HAVE_STDLIB_H 1
++#define HAVE_LOCALE_H 1
++/* #undef NEED_BSD_STRINGS */
++/* #undef NEED_SYS_TYPES_H */
++/* #undef NEED_FAR_POINTERS */
++/* #undef NEED_SHORT_EXTERNAL_NAMES */
++/* Define this if you get warnings about undefined structures. */
++/* #undef INCOMPLETE_TYPES_BROKEN */
++
++/* Define "boolean" as unsigned char, not int, on Windows systems. */
++#ifdef WNT 
++#ifndef __RPCNDR_H__		/* don't conflict if rpcndr.h already read */
++typedef unsigned char boolean;
++#endif
++#define HAVE_BOOLEAN		/* prevent jmorecfg.h from redefining it */
++#endif
++
++#ifdef JPEG_INTERNALS
++
++/* #undef RIGHT_SHIFT_IS_UNSIGNED */
++#ifdef WNT
++#define INLINE __inline
++#else
++#define INLINE inline
++#endif
++/* These are for configuring the JPEG memory manager. */
++/* #undef DEFAULT_MAX_MEM */
++/* #undef NO_MKTEMP */
++
++#endif /* JPEG_INTERNALS */
++
++#ifdef JPEG_CJPEG_DJPEG
++
++#define BMP_SUPPORTED		/* BMP image file format */
++#define GIF_SUPPORTED		/* GIF image file format */
++#define PPM_SUPPORTED		/* PBMPLUS PPM/PGM image file format */
++/* #undef RLE_SUPPORTED */
++#define TARGA_SUPPORTED		/* Targa image file format */
++
++/* #undef TWO_FILE_COMMANDLINE */
++/* #undef NEED_SIGNAL_CATCHER */
++/* #undef DONT_USE_B_MODE */
++
++/* Define this if you want percent-done progress reports from cjpeg/djpeg. */
++/* #undef PROGRESS_REPORT */
++
++#endif /* JPEG_CJPEG_DJPEG */
