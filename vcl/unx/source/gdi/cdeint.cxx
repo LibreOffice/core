@@ -125,7 +125,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
                         ;
                     int nNumber = aLine.Copy( ++nPos ).ToInt32();
 
-                    DBG_TRACE2( "found palette %d in resource \"%s\"", nNumber, aLine.GetBuffer() );
+                    OSL_TRACE( "found palette %d in resource \"%s\"", nNumber, aLine.GetBuffer() );
 
                     // found no documentation what this number actually means;
                     // might be the screen number. 0 seems to be the right one
