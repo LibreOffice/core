@@ -927,10 +927,10 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
         }
         else
         {
-            bValChanged = FALSE;
+            bValChanged = false;
             pRangeData = NULL;
-            bRangeModified = FALSE;
-            bRefSizeChanged = FALSE;
+            bRangeModified = false;
+            bRefSizeChanged = false;
         }
         if ( bOnRefMove )
             bOnRefMove = (bValChanged || (aPos != aOldPos));
@@ -1043,16 +1043,16 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                 FALSE;
         }
 
-        BOOL bNeedDirty;
+        bool bNeedDirty = false;
         // NeedDirty bei Aenderungen ausser Copy und Move/Insert ohne RelNames
         if ( bRangeModified || pRangeData || bColRowNameCompile ||
                 (bValChanged && eUpdateRefMode != URM_COPY &&
                  (eUpdateRefMode != URM_MOVE || bHasRelName) &&
                  (!bIsInsert || bHasRelName || bInDeleteUndo ||
                   bRefSizeChanged)) || bOnRefMove)
-            bNeedDirty = TRUE;
+            bNeedDirty = true;
         else
-            bNeedDirty = FALSE;
+            bNeedDirty = false;
         if (pUndoDoc && (bValChanged || pRangeData || bOnRefMove))
         {
             //  Copy the cell to aUndoPos, which is its current position in the document,
@@ -1070,7 +1070,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                 pUndoDoc->PutCell( aUndoPos, pFCell );
             }
         }
-        bValChanged = FALSE;
+        bValChanged = false;
         if ( pRangeData )
         {   // Replace shared formula with own formula
             pDocument->RemoveFromFormulaTree( this );   // update formula count
@@ -1082,13 +1082,13 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             aComp2.SetGrammar(pDocument->GetGrammar());
             aComp2.UpdateSharedFormulaReference( eUpdateRefMode, aOldPos, r,
                 nDx, nDy, nDz );
-            bValChanged = TRUE;
-            bNeedDirty = TRUE;
+            bValChanged = true;
+            bNeedDirty = true;
         }
         if ( ( bCompile = (bCompile || bValChanged || bRangeModified || bColRowNameCompile) ) != 0 )
         {
             CompileTokenArray( bNewListening ); // kein Listening
-            bNeedDirty = TRUE;
+            bNeedDirty = true;
         }
         if ( !bInDeleteUndo )
         {   // In ChangeTrack Delete-Reject listeners are established in
