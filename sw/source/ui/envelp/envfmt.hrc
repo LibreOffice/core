@@ -73,7 +73,7 @@
 #define ENVFMT_ACT_END  MNU_EDIT
 
 #if ENVFMT_ACT_END > RC_ENVFMT_END
-#error Resource-Ueberlauf in #file, #line
+#error resource overflow in #file, #line
 #endif
 
 #endif
