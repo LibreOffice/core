@@ -2117,9 +2117,9 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
         // unfortunately this broke the QUARTZ behavior which is to always run
         // in quickstart mode since Mac applications do not usually quit
         // when the last document closes
-        //#ifndef QUARTZ
+        #ifndef QUARTZ
         if ( bQuickstart )
-        //#endif
+        #endif
         {
             Reference < XComponent > xQuickstart( rSMgr->createInstanceWithArguments(
                                                 DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
