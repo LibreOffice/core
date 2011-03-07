@@ -162,7 +162,7 @@ void CmdBaseStream::Read (comm_USHORT &nNr)
     comm_USHORT nId;
     *pCommStream >> nId;
     if (pCommStream->IsEof()) return;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if (nId != BinUSHORT) OSL_TRACE( "Falscher Typ im Stream: Erwartet USHORT, gefunden :%hu", nId );
 #endif
     *pCommStream >> nNr;
@@ -173,7 +173,7 @@ void CmdBaseStream::Read (comm_ULONG &nNr)
     comm_USHORT nId;
     *pCommStream >> nId;
     if (pCommStream->IsEof()) return;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if (nId != BinULONG) OSL_TRACE( "Falscher Typ im Stream: Erwartet ULONG, gefunden :%hu", nId );
 #endif
     *pCommStream >> nNr;
@@ -183,7 +183,7 @@ void CmdBaseStream::Read (comm_UniChar* &aString, comm_USHORT &nLenInChars )
 {
     comm_USHORT nId;
     *pCommStream >> nId;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if (nId != BinString) OSL_TRACE( "Falscher Typ im Stream: Erwartet String, gefunden :%hu", nId );
 #endif
 
@@ -203,7 +203,7 @@ void CmdBaseStream::Read (comm_BOOL &bBool)
 {
     comm_USHORT nId;
     *pCommStream >> nId;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if (nId != BinBool) OSL_TRACE( "Falscher Typ im Stream: Erwartet BOOL, gefunden :%hu", nId );
 #endif
     *pCommStream >> bBool;
