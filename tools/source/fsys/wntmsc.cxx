@@ -887,7 +887,7 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL bForceAccess )
 
             // MI: dann gehen Umlaute auf Novell-Servern nicht / wozu ueberhaupt
             // CharUpperBuff( (char*) aFilePath.GetStr(), aFilePath.Len() );
-            DBG_TRACE1( "FileStat: %s", aFilePath.GetBuffer() );
+            OSL_TRACE( "FileStat: %s", aFilePath.GetBuffer() );
             h = aFilePath.Len() < 230
                     // die Win32-API ist hier sehr schwammig
                     ? FindFirstFile( (char *) aFilePath.GetBuffer(), &aEntry )//TPF: 2i

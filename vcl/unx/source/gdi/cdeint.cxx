@@ -133,7 +133,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
                     if( nNumber )
                         continue;
 
-                    DBG_TRACE1( "Palette file is \"%s\".\n", aPaletteFile.GetBuffer() );
+                    OSL_TRACE( "Palette file is \"%s\".\n", aPaletteFile.GetBuffer() );
 
                     String aPath( aHomeDir );
                     aPath.AppendAscii( "/.dt/palettes/" );
@@ -155,7 +155,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
                         aStream.ReadLine( aBuffer );
                         // format is "#RRRRGGGGBBBB"
 
-                        DBG_TRACE1( "\t\"%s\".\n", aBuffer.GetBuffer() );
+                        OSL_TRACE( "\t\"%s\".\n", aBuffer.GetBuffer() );
 
                         if( aBuffer.Len() )
                         {
@@ -169,7 +169,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
                                 | ( getHexDigit( pArr[8] ) << 4 )
                                 );
 
-                            DBG_TRACE1( "\t\t%lx\n", aColors[nIndex].GetColor() );
+                            OSL_TRACE( "\t\t%lx\n", aColors[nIndex].GetColor() );
                         }
                     }
 

@@ -139,7 +139,7 @@ VirtualDevice::VirtualDevice( USHORT nBitCount )
 :   mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    DBG_TRACE1( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount );
 }
@@ -150,7 +150,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, USHORT nBitCount )
     : mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    DBG_TRACE1( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
 }
@@ -161,7 +161,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, USHORT nBitCount, US
     : mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    DBG_TRACE1( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
 
@@ -175,7 +175,7 @@ VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, USHORT nBitCount 
 :   mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    DBG_TRACE1( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount, pData );
 }

@@ -1976,7 +1976,7 @@ void OutputDevice::IntersectClipRegion( const Region& rRegion )
 
 void OutputDevice::SetDrawMode( ULONG nDrawMode )
 {
-    DBG_TRACE1( "OutputDevice::SetDrawMode( %lx )", nDrawMode );
+    OSL_TRACE( "OutputDevice::SetDrawMode( %lx )", nDrawMode );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     mnDrawMode = nDrawMode;
@@ -1989,7 +1989,7 @@ void OutputDevice::SetDrawMode( ULONG nDrawMode )
 
 void OutputDevice::SetRasterOp( RasterOp eRasterOp )
 {
-    DBG_TRACE1( "OutputDevice::SetRasterOp( %d )", (int)eRasterOp );
+    OSL_TRACE( "OutputDevice::SetRasterOp( %d )", (int)eRasterOp );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -2033,7 +2033,7 @@ void OutputDevice::SetLineColor()
 
 void OutputDevice::SetLineColor( const Color& rColor )
 {
-    DBG_TRACE1( "OutputDevice::SetLineColor( %lx )", rColor.GetColor() );
+    OSL_TRACE( "OutputDevice::SetLineColor( %lx )", rColor.GetColor() );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Color aColor( rColor );
@@ -2122,7 +2122,7 @@ void OutputDevice::SetFillColor()
 
 void OutputDevice::SetFillColor( const Color& rColor )
 {
-    DBG_TRACE1( "OutputDevice::SetFillColor( %lx )", rColor.GetColor() );
+    OSL_TRACE( "OutputDevice::SetFillColor( %lx )", rColor.GetColor() );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Color aColor( rColor );

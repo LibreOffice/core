@@ -76,7 +76,7 @@ namespace
 
 void BrowseBox::ConstructImpl( BrowserMode nMode )
 {
-    DBG_TRACE1( "BrowseBox: %p->ConstructImpl", this );
+    OSL_TRACE( "BrowseBox: %p->ConstructImpl", this );
     bMultiSelection = FALSE;
     pColSel = 0;
     pDataWin = 0;
@@ -155,7 +155,7 @@ BrowseBox::BrowseBox( Window* pParent, const ResId& rId, BrowserMode nMode )
 BrowseBox::~BrowseBox()
 {
     DBG_DTOR(BrowseBox,BrowseBoxCheckInvariants);
-    DBG_TRACE1( "BrowseBox: %p~", this );
+    OSL_TRACE( "BrowseBox: %p~", this );
 
     if ( m_pImpl->m_pAccessible )
     {
@@ -386,7 +386,7 @@ void BrowseBox::SetToggledSelectedColumn(USHORT _nSelectedColumnId)
     {
         pColSel->Select( GetColumnPos( _nSelectedColumnId ) );
         ToggleSelection();
-        DBG_TRACE1( "BrowseBox: %p->SetToggledSelectedColumn", this );
+        OSL_TRACE( "BrowseBox: %p->SetToggledSelectedColumn", this );
         DoShowCursor( "SetToggledSelectedColumn" );
     }
 }
@@ -1427,7 +1427,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, BOOL bDoPaint )
     if ( bDoPaint )
     {
         // hide cursor and selection
-        DBG_TRACE1( "BrowseBox: %p->HideCursor", this );
+        OSL_TRACE( "BrowseBox: %p->HideCursor", this );
         ToggleSelection();
         DoHideCursor( "RowRemoved" );
     }
@@ -1506,7 +1506,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, BOOL bDoPaint )
     {
         // reshow cursor and selection
         ToggleSelection();
-        DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
+        OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
         DoShowCursor( "RowRemoved" );
 
         // adjust the vertical scrollbar
@@ -1778,7 +1778,7 @@ void BrowseBox::SetNoSelection()
         // nothing to do
         return;
 
-    DBG_TRACE1( "BrowseBox: %p->HideCursor", this );
+    OSL_TRACE( "BrowseBox: %p->HideCursor", this );
     ToggleSelection();
 
     // unselect all
@@ -1794,7 +1794,7 @@ void BrowseBox::SetNoSelection()
         bSelect = TRUE;
 
     // restore screen
-    DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
+    OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
 
     if ( isAccessibleAlive() )
     {
@@ -1814,7 +1814,7 @@ void BrowseBox::SetSelection( const MultiSelection &rSel )
     DBG_ASSERT( bMultiSelection, "SetSelection only allowed with Multi-Selection-Mode" );
 
     // prepare inverted areas
-    DBG_TRACE1( "BrowseBox: %p->HideCursor", this );
+    OSL_TRACE( "BrowseBox: %p->HideCursor", this );
     ToggleSelection();
 
     // assign Selection
@@ -1831,7 +1831,7 @@ void BrowseBox::SetSelection( const MultiSelection &rSel )
 
     // restore screen
     ToggleSelection();
-    DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
+    OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
 
     if ( isAccessibleAlive() )
     {
@@ -1852,7 +1852,7 @@ void BrowseBox::SelectAll()
     if ( !bMultiSelection )
         return;
 
-    DBG_TRACE1( "BrowseBox: %p->HideCursor", this );
+    OSL_TRACE( "BrowseBox: %p->HideCursor", this );
     ToggleSelection();
 
     // select all rows
@@ -1885,7 +1885,7 @@ void BrowseBox::SelectAll()
         bSelect = TRUE;
 
     // restore screen
-    DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
+    OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
 
     if ( isAccessibleAlive() )
     {
@@ -1924,7 +1924,7 @@ void BrowseBox::SelectRow( long nRow, BOOL _bSelect, BOOL bExpand )
         return;
     }
 
-    DBG_TRACE1( "BrowseBox: %p->HideCursor", this );
+    OSL_TRACE( "BrowseBox: %p->HideCursor", this );
 
     // remove old selection?
     if ( !bExpand || !bMultiSelection )
@@ -1966,7 +1966,7 @@ void BrowseBox::SelectRow( long nRow, BOOL _bSelect, BOOL bExpand )
         bSelect = TRUE;
 
     // restore screen
-    DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
+    OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
 
     if ( isAccessibleAlive() )
     {
@@ -2015,7 +2015,7 @@ void BrowseBox::SelectColumnPos( USHORT nNewColPos, BOOL _bSelect, BOOL bMakeVis
             return;
     }
 
-    DBG_TRACE1( "BrowseBox: %p->HideCursor", this );
+    OSL_TRACE( "BrowseBox: %p->HideCursor", this );
     ToggleSelection();
     if ( bMultiSelection )
         uRow.pSel->SelectAll(FALSE);
@@ -2057,7 +2057,7 @@ void BrowseBox::SelectColumnPos( USHORT nNewColPos, BOOL _bSelect, BOOL bMakeVis
     }
 
     // restore screen
-    DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
+    OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
 }
 
 //-------------------------------------------------------------------
@@ -2688,11 +2688,11 @@ void BrowseBox::CursorMoved()
 void BrowseBox::LoseFocus()
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-    DBG_TRACE1( "BrowseBox: %p->LoseFocus", this );
+    OSL_TRACE( "BrowseBox: %p->LoseFocus", this );
 
     if ( bHasFocus )
     {
-        DBG_TRACE1( "BrowseBox: %p->HideCursor", this );
+        OSL_TRACE( "BrowseBox: %p->HideCursor", this );
         DoHideCursor( "LoseFocus" );
 
         if ( !bKeepHighlight )
@@ -2711,7 +2711,7 @@ void BrowseBox::LoseFocus()
 void BrowseBox::GetFocus()
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-    DBG_TRACE1( "BrowseBox: %p->GetFocus", this );
+    OSL_TRACE( "BrowseBox: %p->GetFocus", this );
 
     if ( !bHasFocus )
     {

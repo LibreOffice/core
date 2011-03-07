@@ -234,7 +234,7 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool,
 void SfxItemSet::InitRanges_Impl(const USHORT *pWhichPairTable)
 {
     DBG_CHKTHIS(SfxItemSet, 0);
-    DBG_TRACE1("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
+    OSL_TRACE("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
 
     USHORT nCnt = 0;
     const USHORT* pPtr = pWhichPairTable;
@@ -314,7 +314,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
             *ppDst = &_pPool->Put( **ppSrc );
 
     // dann noch die Which Ranges kopieren
-    DBG_TRACE1("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
+    OSL_TRACE("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
     std::ptrdiff_t cnt = pPtr - rASet._pWhichRanges+1;
     _pWhichRanges = new USHORT[ cnt ];
     memcpy( _pWhichRanges, rASet._pWhichRanges, sizeof( USHORT ) * cnt);
