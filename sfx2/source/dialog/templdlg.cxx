@@ -100,6 +100,13 @@ static USHORT nLastItemId = USHRT_MAX;
 // filter box has maximum 12 entries visible
 #define MAX_FILTER_ENTRIES          12
 
+// Special constant to save hierarchical mode
+// We've to use this hack since this is not the
+// index in the filter listbox that is saved but the
+// index in the filters list and hierarchical is not
+// in it
+#define HIERARCHICAL_FILTER_INDEX   0xfffe  // 0xffff is reserved
+
 //=========================================================================
 
 TYPEINIT0(SfxCommonTemplateDialog_Impl);
@@ -1781,7 +1788,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
             SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
             SfxObjectShell *pDocShell = pViewFrame->GetObjectShell();
             if (pDocShell)
-                SaveFactoryStyleFilter( pDocShell, -2 );
+                SaveFactoryStyleFilter( pDocShell, HIERARCHICAL_FILTER_INDEX );
             FillTreeBox();
             SelectStyle(aSelectEntry);
             pTreeBox->Show();
@@ -2290,9 +2297,9 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     aFont.SetWeight( WEIGHT_NORMAL );
     aFilterLb.SetFont( aFont );
     m_aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
-    if( nSavedFilter == 0xfffe  )
+    if( nSavedFilter == HIERARCHICAL_FILTER_INDEX )
     {
-        bHierarchical = FALSE;
+        bHierarchical = FALSE; // Force content refresh
         aFilterLb.SelectEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)));
         FilterSelectHdl(&aFilterLb);
     }
