@@ -43,7 +43,7 @@ include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
 COMP_NAME=FlatXmlTypeDetection
-COMP_IMPL_NAME=$(COMP_NAME).uno.$(SHAREDLIB_EXT) 
+COMP_IMPL_NAME=$(COMP_NAME).uno.$(SHAREDLIB_EXT)
 OUT_COMP_INC = $(OUT_INC)/$(COMP_NAME)
 OUT_COMP_GEN = $(OUT_MISC)/$(COMP_NAME)
 OUT_COMP_SLO=$(OUT_SLO)/$(COMP_NAME)
@@ -52,7 +52,8 @@ COMP_RDB = $(OUT_COMP_GEN)/$(COMP_RDB_NAME)
 COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
 COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
 COMP_UNOPKG_MANIFEST = $(OUT_COMP_GEN)/$(COMP_NAME)/META-INF/manifest.xml
-COMP_MAPFILE = $(OUT_COMP_GEN)/$(COMP_NAME).uno.map
+COMP_COMPONENTS = $(OUT_COMP_GEN)/$(COMP_NAME).components
+#COMP_MAPFILE = $(OUT_COMP_GEN)/$(COMP_NAME).uno.map
 
 REGISTERFLAG = $(OUT_MISC)/devguide_$(COMP_NAME)_register_component.flag
 
@@ -72,12 +73,12 @@ $(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(COMP_MAPFILE) : $(SLOFILES)
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cat $(PRJ)/settings/component.uno.map > $(COMP_MAPFILE) 
-ifeq "$(OS)" "MACOSX"
-	nm -gx $(SLOFILES) | $(ADDSYMBOLS) >> $(COMP_MAPFILE)
-endif
+#$(COMP_MAPFILE) : $(SLOFILES)
+#	-$(MKDIR) $(subst /,$(PS),$(@D))
+#	cat $(PRJ)/settings/component.uno.map > $(COMP_MAPFILE) 
+#ifeq "$(OS)" "MACOSX"
+#	nm -gx $(SLOFILES) | $(ADDSYMBOLS) >> $(COMP_MAPFILE)
+#endif
 
 ifeq "$(OS)" "WIN"
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
@@ -88,7 +89,7 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) msvcrt.lib kernel32.lib
 	$(LINK_MANIFEST)
 else
-$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(COMP_MAPFILE)
+$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $(SLOFILES) \
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALDYLIB)
@@ -105,17 +106,29 @@ $(OUT_COMP_GEN)/%/manifest.xml :
 	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)FlatXmlTypeDetection.xcu$(QM)"/$(CSEP) >> $@
-	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=native;platform=$(UNOPKG_PLATFORM)$(QM)" >> $@
-	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_GEN)/,,$(UNOPKG_PLATFORM)/$(@D))).uno.$(SHAREDLIB_EXT)$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-components;platform=$(UNOPKG_PLATFORM)$(QM)">> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(COMP_NAME).components$(QM)"/$(CSEP)>> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
+$(COMP_COMPONENTS) :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)components xmlns="$(QM)http://openoffice.org/2010/uno-components$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)component loader="$(QM)com.sun.star.loader.SharedLibrary$(QM)" uri="$(QM)$(UNOPKG_PLATFORM)/$(COMP_IMPL_NAME)$(QM)"$(CSEP) >> $@
+	@echo $(SQM)    $(SQM)$(OSEP)implementation name="$(QM)devguide.officedev.samples.filter.FlatXmlDetect$(QM)"$(CSEP) >> $@
+	@echo $(SQM)      $(SQM)$(OSEP)service name="$(QM)com.sun.star.document.ExtendedTypeDetection$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)    $(SQM)$(OSEP)/implementation$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)/component$(CSEP) >> $@
+	@echo $(OSEP)/components$(CSEP) >> $@
+
 # rule for component package file
-$(COMP_PACKAGE) : $(SHAREDLIB_OUT)/$(COMP_IMPL_NAME) FlatXmlTypeDetection.xcu $(COMP_UNOPKG_MANIFEST)
+$(COMP_PACKAGE) : $(SHAREDLIB_OUT)/$(COMP_IMPL_NAME) FlatXmlTypeDetection.xcu $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN)/$(UNOPKG_PLATFORM))	 
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_GEN)/$(UNOPKG_PLATFORM))
 	$(SDK_ZIP) $@ FlatXmlTypeDetection.xcu
+	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_NAME).components
 	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && $(SDK_ZIP) -u ../../bin/$(@F) $(UNOPKG_PLATFORM)/$(<F)
 	cd $(subst /,$(PS),$(OUT_COMP_GEN)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
@@ -146,5 +159,6 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_COMPONENTS))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMP_NAME).*))

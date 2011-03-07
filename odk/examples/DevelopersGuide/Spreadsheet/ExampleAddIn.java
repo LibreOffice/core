@@ -116,7 +116,7 @@ public class ExampleAddIn
     {
         static private final String aExampleService = "org.openoffice.sheet.addin.ExampleAddIn";
         static private final String aAddInService = "com.sun.star.sheet.AddIn";
-        static private final String aImplName = "ExampleAddIn";
+        static private final String aImplName = _ExampleAddIn.class.getName();
 
         private static final short FUNCTION_INVALID   = -1;
         private static final short FUNCTION_INCREMENT = 0;
@@ -301,14 +301,18 @@ public class ExampleAddIn
         return xSingleServiceFactory;
     }
 
-    public static boolean __writeRegistryServiceInfo(
-        com.sun.star.registry.XRegistryKey regKey)
-    {
-        //  register for both the base AddIn and the own service
-        return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
-                    _ExampleAddIn.aImplName, _ExampleAddIn.aExampleService, regKey)
-            && com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
-                    _ExampleAddIn.aImplName, _ExampleAddIn.aAddInService, regKey);
-    }
+    // This method not longer necessary since OOo 3.4 where the component registration
+    // was changed to passive component registration. For more details see
+    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
+
+//     public static boolean __writeRegistryServiceInfo(
+//         com.sun.star.registry.XRegistryKey regKey)
+//     {
+//         //  register for both the base AddIn and the own service
+//         return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
+//                     _ExampleAddIn.aImplName, _ExampleAddIn.aExampleService, regKey)
+//             && com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
+//                     _ExampleAddIn.aImplName, _ExampleAddIn.aAddInService, regKey);
+//     }
 }
 

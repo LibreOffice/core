@@ -26,7 +26,7 @@
 #*************************************************************************
 
 # used for sdk common files
-PRODUCT_RELEASE=3.3
+PRODUCT_RELEASE=3.4
 OFFICENAME=OpenOffice.org
 SDKDIRNAME=openoffice.org$(PRODUCT_RELEASE)_sdk
 OFFICEPRODUCTNAME=$(OFFICENAME) $(PRODUCT_RELEASE)

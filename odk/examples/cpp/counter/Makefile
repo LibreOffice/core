@@ -43,15 +43,18 @@ include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
 COMP_NAME=counter
-COMP_IMPL_NAME=$(COMP_NAME).uno.$(SHAREDLIB_EXT) 
+COMP_IMPL_NAME=$(COMP_NAME).uno.$(SHAREDLIB_EXT)
 COMP_IMPL=$(SHAREDLIB_OUT)/$(COMP_IMPL_NAME)
 COMP_RDB_NAME = $(COMP_NAME).uno.rdb
 COMP_RDB = $(OUT_BIN)/$(COMP_RDB_NAME)
-COMP_MAPFILE = $(OUT_COMP_GEN)/$(COMP_NAME).uno.map
 OUT_COMP_INC = $(OUT_INC)/$(COMP_NAME)
 OUT_COMP_GEN = $(OUT_MISC)/$(COMP_NAME)
 OUT_COMP_OBJ = $(OUT_OBJ)/$(COMP_NAME)
 OUT_COMP_SLO = $(OUT_SLO)/$(COMP_NAME)
+COMP_SERVICES=$(SHAREDLIB_OUT)/counterservices.rdb 
+
+ENV_EXAMPLE_TYPES=-env:URE_MORE_TYPES=$(URLPREFIX)$(COMP_RDB)
+ENV_COMP_SERVICES=-env:URE_MORE_SERVICES=$(URLPREFIX)$(COMP_SERVICES)
 
 COMP_TYPEFLAG = $(OUT_MISC)/cpp_$(COMP_NAME)_types.flag
 
@@ -84,12 +87,12 @@ $(OUT_BIN)/%.rdb : $(GENURDFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	$(REGMERGE) $@ /UCR $(GENURDFILES)
-	$(REGMERGE) $@ / $(URE_TYPES) 
+#	$(REGMERGE) $@ / $(URE_TYPES) 
 
 $(COMP_TYPEFLAG) : $(COMP_RDB) $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_TYPEFLAG)))
-	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMP_RDB)
+	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMP_RDB) -X $(URE_TYPES)
 	echo flagged > $@
 
 $(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMP_TYPEFLAG)
@@ -102,13 +105,6 @@ $(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMP_TYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(COMP_MAPFILE) : $(SLOFILES)
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cat $(PRJ)/settings/component.uno.map > $(COMP_MAPFILE) 
-ifeq "$(OS)" "MACOSX"
-	nm -gx $(SLOFILES) | $(ADDSYMBOLS) >> $(COMP_MAPFILE)
-endif
-
 ifeq "$(OS)" "WIN"
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
@@ -118,7 +114,7 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) msvcrt.lib kernel32.lib
 	$(LINK_MANIFEST)
 else
-$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(COMP_MAPFILE)
+$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $(SLOFILES) \
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALDYLIB)
@@ -138,16 +134,33 @@ else
 	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
 endif
 
+$(COMP_SERVICES) :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)components xmlns="$(QM)http://openoffice.org/2010/uno-components$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)component loader="$(QM)com.sun.star.loader.SharedLibrary$(QM)" uri="$(QM)$(COMP_IMPL_NAME)$(QM)"$(CSEP) >> $@
+	@echo $(SQM)    $(SQM)$(OSEP)implementation name="$(QM)com.sun.star.comp.example.cpp.Counter$(QM)"$(CSEP) >> $@
+	@echo $(SQM)      $(SQM)$(OSEP)service name="$(QM)foo.Counter$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)    $(SQM)$(OSEP)/implementation$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)/component$(CSEP) >> $@
+	@echo $(OSEP)/components$(CSEP) >> $@
 
-CppCounterExample : $(OUT_BIN)/countermain$(EXE_EXT) $(COMP_IMPL)
+
+CppCounterExample : $(OUT_BIN)/countermain$(EXE_EXT) $(COMP_IMPL) $(COMP_SERVICES)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
 	@echo $(MAKE) countermain.run
+	@echo -
+	@echo NOTE: The example makes use of the URE and use the defaultBootstrap_InitialComponentContext method.
+	@echo $(SQM)      $(SQM)The additional example IDL types are provided via the UNO environment variable -env:URE_MORE_TYPES=...
+	@echo $(SQM)      $(SQM)and the example component is made available via -env:URE_MORE_SERVICES=...
+	@echo $(SQM)      $(SQM)Please check the generated $(QM)$(COMP_SERVICES)$(QM) to see how you can specify your own components in such an environment
+	@echo $(SQM)      $(SQM)and how to use the passive UNO registration.  
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/countermain$(EXE_EXT) $(COMP_IMPL)
-	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@)
+	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@) $(ENV_EXAMPLE_TYPES) $(ENV_COMP_SERVICES)
 
 .PHONY: clean
 clean :
@@ -159,3 +172,4 @@ clean :
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_RDB)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMP_NAME).*))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/countermain*))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_SERVICES)))
