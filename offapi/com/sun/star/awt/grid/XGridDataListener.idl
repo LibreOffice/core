@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module awt { module grid {
     <p>Usually you must not implement this interface yourself, but you must notify it correctly if
     you implement the <type>XGridDataModel</type> yourself</p>.
 
-    @since OOo 3.3.0
+    @since OOo 3.3
  */
 interface XGridDataListener: com::sun::star::lang::XEventListener
 {

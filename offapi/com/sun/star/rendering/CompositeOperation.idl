@@ -44,7 +44,7 @@ module com { module sun { module star { module rendering {
     different composite modes (wherein Aa and Ab denote source and
     destination alpha, respectively).<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 constants CompositeOperation
 {

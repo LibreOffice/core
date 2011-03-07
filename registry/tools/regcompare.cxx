@@ -140,7 +140,7 @@ void Options_Impl::printUsage_Impl() const
             "    -h|-?     = print this help message and exit.\n"
             );
     fprintf(stderr,
-            "\nSun Microsystems (R) %s Version 1.0\n\n", rProgName.c_str()
+            "\n%s Version 1.0\n\n", rProgName.c_str()
             );
 }
 

@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module awt {
 
 /** specifies a service to load a dialog model and allows to access the control models inside
 
-    @since OOo 3.3.0
+    @since OOo 3.3
  */
 service UnoControlDialogModelProvider : com::sun::star::container::XNameContainer
 {

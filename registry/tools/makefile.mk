@@ -75,6 +75,14 @@ APP4STDLIBS=\
             $(SALHELPERLIB) \
             $(REGLIB)
 
-OBJFILES = $(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS)
+APP5TARGET= rdbedit
+APP5OBJS=   $(OBJ)$/rdbedit.obj
+
+APP5STDLIBS=\
+            $(SALLIB) \
+            $(SALHELPERLIB) \
+            $(REGLIB)
+
+OBJFILES = $(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS)
 
 .INCLUDE :  target.mk

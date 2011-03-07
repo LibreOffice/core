@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module ui {
 
 /** Determins the type of an item.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 constants ItemType
 {

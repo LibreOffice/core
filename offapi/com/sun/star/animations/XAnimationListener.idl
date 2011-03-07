@@ -43,7 +43,7 @@
 /** makes it possible to register listeners, which are called whenever
     an animation event occurs.
 
-    @since #i71351#
+    @since OOo 3.0
  */
 interface XAnimationListener : ::com::sun::star::lang::XEventListener
 {

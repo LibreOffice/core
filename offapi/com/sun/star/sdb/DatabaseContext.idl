@@ -96,7 +96,7 @@ published service DatabaseContext
         are maintained, so if possible at all, you should use this interface, instead of modifying or
         querying the configuration data directly.</p>
 
-        @since OpenOffice.org 3.3
+        @since OOo 3.3
     */
     [optional] interface XDatabaseRegistrations;
 };

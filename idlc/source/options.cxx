@@ -40,6 +40,12 @@
 using rtl::OString;
 using rtl::OStringBuffer;
 
+#ifdef SAL_UNX
+#define SEPARATOR '/'
+#else
+#define SEPARATOR '\\'
+#endif
+
 Options::Options(char const * progname)
   : m_program(progname), m_stdin(false), m_verbose(false), m_quiet(false)
 {
@@ -351,7 +357,7 @@ OString Options::prepareHelp()
     help += "                  requirements.\n";
     help += "    -w          = display warning messages.\n";
     help += "    -we         = treat warnings as errors.\n";
-    help += "    -h|-?       = print this help message and exit.\n";
+    help += "    -h|-?       = print this help message and exit.\n\n";
     help += prepareVersion();
 
     return help;
@@ -359,8 +365,8 @@ OString Options::prepareHelp()
 
 OString Options::prepareVersion()
 {
-    OString version("\nSun Microsystems (R) ");
-    version += m_program + " Version 1.1\n\n";
+    OString version(m_program);
+    version += " Version 1.1\n\n";
     return version;
 }
 

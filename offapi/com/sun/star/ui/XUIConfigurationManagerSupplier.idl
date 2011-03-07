@@ -37,7 +37,7 @@ module com { module sun { module star { module ui {
 /** allows to retrieve the user interface configuration manager related to
     an object.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 interface XUIConfigurationManagerSupplier : ::com::sun::star::uno::XInterface

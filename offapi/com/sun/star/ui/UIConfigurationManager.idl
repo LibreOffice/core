@@ -52,7 +52,7 @@ module com { module sun { module star { module ui {
 /** specifies a user interface configuration manager which controls
     all customizeable user interface elements of an object.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 service UIConfigurationManager

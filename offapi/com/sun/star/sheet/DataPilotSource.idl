@@ -100,7 +100,7 @@ published service DataPilotSource
 
     /** specifies the number of row fields.
 
-        @since OOo 3.0.0
+        @since OOo 3.0
      */
     [readonly, property, optional] long RowFieldCount;
 
@@ -108,7 +108,7 @@ published service DataPilotSource
 
     /** specifies the number of column fields.
 
-        @since OOo 3.0.0
+        @since OOo 3.0
      */
     [readonly, property, optional] long ColumnFieldCount;
 
@@ -116,7 +116,7 @@ published service DataPilotSource
 
     /** specifies the number of data fields.
 
-        @since OOo 3.0.0
+        @since OOo 3.0
      */
     [readonly, property, optional] long DataFieldCount;
 };
