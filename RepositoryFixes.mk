@@ -87,6 +87,8 @@ gb_Library_FILENAMES := $(patsubst svt:isvt%,svt:svtool%,$(gb_Library_FILENAMES)
 gb_Library_FILENAMES := $(patsubst tl:itl%,tl:itools%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst vbahelper:ivbahelper%,vbahelper:vbahelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst vos3:ivos3%,vos3:ivos%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst crypto:icrypto%,crypto:crypto%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst ssl:issl%,ssl:ssl%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst xml2:ixml2%,xml2:libxml2$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst xslt:ixslt%,xslt:libxslt$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst rdf:irdf%,rdf:librdf.dll$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
@@ -181,6 +183,13 @@ endif # ifeq ($(OS),WNT)
 
 ifeq ($(USE_SYSTEM_STL),YES)
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
+endif
+
+ifeq ($(SYSTEM_OPENSSL),YES)
+gb_StaticLibrary_TARGETS := $(filter-out crypto,$(gb_StaticLibrary_TARGETS))
+gb_StaticLibrary_TARGETS := $(filter-out ssl,$(gb_StaticLibrary_TARGETS))
+gb_Library_TARGETS := $(filter-out crypto,$(gb_Library_TARGETS))
+gb_Library_TARGETS := $(filter-out ssl,$(gb_Library_TARGETS))
 endif
 
 # vim: set noet sw=4 ts=4:

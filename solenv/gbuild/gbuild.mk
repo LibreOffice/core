@@ -255,5 +255,8 @@ endif
 
 export gb_AWK
 export gb_XSLTPROC
+export GBUILDDIR
+# FIXME exporting SRCDIR seems kind of a hack
+export SRCDIR
 
 # vim: set noet sw=4 ts=4:

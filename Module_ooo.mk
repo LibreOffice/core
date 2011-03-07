@@ -37,6 +37,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     framework \
     idl \
 	linguistic \
+    oox \
     padmin \
 	regexp \
 	reportdesign \
