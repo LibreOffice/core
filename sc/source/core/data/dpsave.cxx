@@ -1379,7 +1379,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
         { //check sortinfo
             if ( pSortInfo->Mode == DataPilotFieldSortMode::DATA )
             {
-                DBG_TRACE( "\n DataPilotFieldSortMode::DATA \n" );
+                OSL_TRACE( "\n DataPilotFieldSortMode::DATA \n" );
                 const ::rtl::OUString& sFieldDimName = pSortInfo->Field;
                 std::list<rtl::OUString>::const_iterator iter = std::find( deletedDims.begin(), deletedDims.end(), sFieldDimName );
                 if ( iter != deletedDims.end() && pCache->GetDimensionIndex( sFieldDimName ) == -1 )
