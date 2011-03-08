@@ -181,16 +181,16 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     }
     SetSelectionSel(LISTBOX_ENTRY_NOTFOUND);
     SetTypeSel(LISTBOX_ENTRY_NOTFOUND);
-    Init(); // Allgemeine initialisierung
+    Init(); // general initialisation
 
-    // TypeListBox initialisieren
+    // initialise TypeListBox
     aTypeLB.SetUpdateMode(FALSE);
     aTypeLB.Clear();
 
-    // Typ-Listbox fuellen
+    // fill Type-Listbox
 
     USHORT nPos;
-    // Referenz setzen / einfuegen
+    // set/insert reference
     const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
     for (short i = rRg.nStart; i < rRg.nEnd; ++i)
@@ -212,7 +212,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     aTypeLB.SetEntryData(nPos, (void*)REFFLDFLAG_NUMITEM);
     // <--
 
-    // mit den Sequence-Typen auffuellen
+    // fill up with the sequence types
     SwWrtShell *pSh = GetWrtShell();
     if(!pSh)
         pSh = ::GetActiveWrtShell();
@@ -230,25 +230,25 @@ void SwFldRefPage::Reset(const SfxItemSet& )
         }
     }
 
-    // Textmarken - jetzt immer (wegen Globaldokumenten)
+    // text marks - now always (because of globaldocuments)
     nPos = aTypeLB.InsertEntry(sBookmarkTxt);
     aTypeLB.SetEntryData(nPos, (void*)REFFLDFLAG_BOOKMARK);
 
-    // Fussnoten:
+    // footnotes:
     if( pSh->HasFtns() )
     {
         nPos = aTypeLB.InsertEntry(sFootnoteTxt);
         aTypeLB.SetEntryData(nPos, (void*)REFFLDFLAG_FOOTNOTE);
     }
 
-    // Endnoten:
+    // endnotes:
     if ( pSh->HasFtns(true) )
     {
         nPos = aTypeLB.InsertEntry(sEndnoteTxt);
         aTypeLB.SetEntryData(nPos, (void*)REFFLDFLAG_ENDNOTE);
     }
 
-    // alte Pos selektieren
+    // select old Pos
     if (!IsFldEdit())
         RestorePos(&aTypeLB);
 
@@ -289,17 +289,17 @@ void SwFldRefPage::Reset(const SfxItemSet& )
 
 IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
 {
-    // Alte ListBoxPos sichern
+    // save old ListBoxPos
     const USHORT nOld = GetTypeSel();
 
-    // Aktuelle ListBoxPos
+    // current ListBoxPos
     SetTypeSel(aTypeLB.GetSelectEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
     {
         if (IsFldEdit())
         {
-            // Positionen selektieren
+            // select positions
             String sName;
             USHORT nFlag = 0;
 
@@ -351,7 +351,7 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
                     break;
             }
 
-            if (aTypeLB.GetEntryPos(sName) == LISTBOX_ENTRY_NOTFOUND)   // Referenz zu gel?schter Marke
+            if (aTypeLB.GetEntryPos(sName) == LISTBOX_ENTRY_NOTFOUND)   // reference to deleted mark
             {
                 USHORT nPos = aTypeLB.InsertEntry(sName);
                 aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nFlag));
@@ -371,7 +371,7 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
     {
         USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
 
-        // Auswahl-Listbox fuellen
+        // fill selection-ListBox
         UpdateSubType();
 
         BOOL bName = FALSE;     nFldDlgFmtSel = 0;
@@ -387,7 +387,7 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
         {
             case TYP_GETREFFLD:
                 if (REFFLDFLAG & (USHORT)(ULONG)aTypeLB.GetEntryData(nOld))
-                    // dann bleibt die alte bestehen
+                    // the the old one stays
                     nFldDlgFmtSel = aFormatLB.GetSelectEntryPos();
                 bName = TRUE;
                 break;
@@ -398,13 +398,13 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
 
             case REFFLDFLAG_BOOKMARK:
                 bName = TRUE;
-                // kein break!!!
+                // no break!!!
             default:
                 if( REFFLDFLAG & nTypeId )
                 {
                     USHORT nOldId = (USHORT)(ULONG)aTypeLB.GetEntryData(nOld);
                     if( nOldId & REFFLDFLAG || nOldId == TYP_GETREFFLD )
-                        // dann bleibt die alte bestehen
+                        // then the old one stays
                         nFldDlgFmtSel = aFormatLB.GetSelectEntryPos();
                 }
                 break;
@@ -413,7 +413,7 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
         aNameED.Enable(bName);
         aNameFT.Enable(bName);
 
-        // Format-Listbox fuellen
+        // fill Format-Listbox
         USHORT nSize = FillFormatLB(nTypeId);
         BOOL bFormat = nSize != 0;
         aFormatLB.Enable(bFormat);
@@ -475,7 +475,7 @@ IMPL_LINK( SwFldRefPage, SubTypeHdl, ListBox *, EMPTYARG )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Typen in SelectionLB erneuern
+     Description: renew types in SelectionLB
  --------------------------------------------------------------------*/
 
 void SwFldRefPage::UpdateSubType()
@@ -510,10 +510,10 @@ void SwFldRefPage::UpdateSubType()
 
     if( REFFLDFLAG & nTypeId )
     {
-        if (nTypeId == REFFLDFLAG_BOOKMARK)     // TextMarken!
+        if (nTypeId == REFFLDFLAG_BOOKMARK)     // text marks!
         {
             aSelectionLB.SetStyle(aSelectionLB.GetStyle()|WB_SORT);
-            // alle Textmarken besorgen
+            // get all text marks
             IDocumentMarkAccess* const pMarkAccess = pSh->getIDocumentMarkAccess();
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
                 ppMark != pMarkAccess->getBookmarksEnd();
@@ -617,7 +617,7 @@ void SwFldRefPage::UpdateSubType()
         else
         {
             aSelectionLB.SetStyle(aSelectionLB.GetStyle()|WB_SORT);
-            // zum Seq-FeldTyp die Felder besorgen:
+            // get the fields to Seq-FieldType:
 
             SwSetExpFieldType* pType = (SwSetExpFieldType*)pSh->GetFldType(
                                 nTypeId & ~REFFLDFLAG, RES_SETEXPFLD );
@@ -678,7 +678,7 @@ void SwFldRefPage::UpdateSubType()
     {
         aSelectionLB.SetUpdateMode(TRUE);
 
-        // Enable oder Disable
+        // enable or disable
         BOOL bEnable = aSelectionLB.GetEntryCount() != 0;
         aSelectionLB.Enable( bEnable );
         aSelectionFT.Enable( bEnable );
@@ -690,7 +690,7 @@ void SwFldRefPage::UpdateSubType()
                 aSelectionLB.SelectEntryPos(0);
         }
 
-        if (IsFldEdit() && !aSelectionLB.GetSelectEntryCount()) // Falls die Referenz schon geloescht wurde...
+        if (IsFldEdit() && !aSelectionLB.GetSelectEntryCount()) // in case the reference was already deleted...
             aNameED.SetText(sOldSel);
     }
     // <--
@@ -704,10 +704,10 @@ USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
     if (nFormatSel != LISTBOX_ENTRY_NOTFOUND)
         sOldSel = aFormatLB.GetEntry(nFormatSel);
 
-    // Format-Listbox fuellen
+    // fill Format-Listbox
     aFormatLB.Clear();
 
-    // Referenz hat weniger als die Beschriftung
+    // refernce has less that the annotation
     USHORT nSize( 0 );
     bool bAddCrossRefFormats( false );
     switch (nTypeId)
@@ -784,7 +784,7 @@ USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Modify
+    Description: Modify
  --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldRefPage, ModifyHdl, Edit *, EMPTYARG )
@@ -835,7 +835,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
         {
             SwFieldType* pType = GetFldMgr().GetFldType(RES_SETEXPFLD, aName);
 
-            if(!pType)  // Nur einfuegen, wenn es den Namen noch nicht gibt
+            if(!pType)  // Only insert when the name doesn't exist yet
             {
                 aSelectionLB.InsertEntry(aName);
                 aSelectionLB.Enable();
@@ -854,13 +854,13 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
         {
             pSh = ::GetActiveWrtShell();
         }
-        if (nTypeId == REFFLDFLAG_BOOKMARK)     // TextMarken!
+        if (nTypeId == REFFLDFLAG_BOOKMARK)     // text marks!
         {
             aName = aNameED.GetText();
             nTypeId = TYP_GETREFFLD;
             nSubType = REF_BOOKMARK;
         }
-        else if (REFFLDFLAG_FOOTNOTE == nTypeId)        // Fussnoten
+        else if (REFFLDFLAG_FOOTNOTE == nTypeId)        // footnotes
         {
             SwSeqFldList aArr;
             _SeqFldLstElem aElem( aSelectionLB.GetSelectEntry(), 0 );
@@ -876,12 +876,12 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
                 aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
 
                 if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
-                    bModified = TRUE; // Kann bei Feldern passieren, deren Referenz geloescht wurde
+                    bModified = TRUE; // can happen with fields of which the references were deleted
             }
             else if (IsFldEdit())
                 aVal = String::CreateFromInt32( pRefFld->GetSeqNo() );
         }
-        else if (REFFLDFLAG_ENDNOTE == nTypeId)         // Endnoten
+        else if (REFFLDFLAG_ENDNOTE == nTypeId)         // endnotes
         {
             SwSeqFldList aArr;
             _SeqFldLstElem aElem( aSelectionLB.GetSelectEntry(), 0 );
@@ -897,7 +897,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
                 aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
 
                 if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
-                    bModified = TRUE; // Kann bei Feldern passieren, deren Referenz geloescht wurde
+                    bModified = TRUE; // can happen with fields of which the reference was deleted
             }
             else if (IsFldEdit())
                 aVal = String::CreateFromInt32( pRefFld->GetSeqNo() );
@@ -944,9 +944,9 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
             }
         }
         // <--
-        else                                // SeqenceFelder
+        else                                // SeqenceFields
         {
-            // zum Seq-FeldTyp die Felder besorgen:
+            // get fields for Seq-FeldType:
             SwSetExpFieldType* pType = (SwSetExpFieldType*)pSh->GetFldType(
                                     nTypeId & ~REFFLDFLAG, RES_SETEXPFLD );
             if( pType )
@@ -965,7 +965,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
                     aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
 
                     if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
-                        bModified = TRUE; // Kann bei Feldern passieren, deren Referenz geloescht wurde
+                        bModified = TRUE; // can happen with fields of which the reference was deleted
                 }
                 else if (IsFldEdit())
                     aVal = String::CreateFromInt32( pRefFld->GetSeqNo() );
@@ -989,7 +989,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
         InsertFld( nTypeId, nSubType, aName, aVal, nFormat );
     }
 
-    ModifyHdl();    // Insert ggf enablen/disablen
+    ModifyHdl();    // enable/disable insert if applicable
 
     return FALSE;
 }

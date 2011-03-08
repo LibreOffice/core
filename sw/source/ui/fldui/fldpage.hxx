@@ -73,7 +73,7 @@ protected:
     void                EnableInsert(BOOL bEnable = TRUE);
     inline BOOL         IsFldEdit() const   { return m_bFldEdit; }
 
-    // Feld einfuegen
+    // insert field
     BOOL                InsertFld(  USHORT nTypeId,
                                     USHORT nSubType,
                                     const String& rPar1,

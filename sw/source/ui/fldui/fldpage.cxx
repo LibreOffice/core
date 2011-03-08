@@ -79,7 +79,7 @@ SwFldPage::~SwFldPage()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: TabPage initialisieren
+    Description: initialise TabPage
  --------------------------------------------------------------------*/
 
 void SwFldPage::Init()
@@ -89,15 +89,15 @@ void SwFldPage::Init()
 
     m_bFldEdit = 0 == GetTabDialog();
 
-    // FieldManager neu initialisieren wichtig fuer
-    // Dok-Wechsel (fldtdlg:ReInitTabPage)
+    // newly initialise FieldManager. important for
+    // Dok-Switch (fldtdlg:ReInitTabPage)
     m_pCurFld = m_aMgr.GetCurFld();
 
     if( bNewMode != m_bFldDlgHtmlMode )
     {
         m_bFldDlgHtmlMode = bNewMode;
 
-        // Bereichslistbox initialisieren
+        // initialise Rangelistbox
         if( m_bFldDlgHtmlMode && m_bFirstHTMLInit )
         {
             m_bFirstHTMLInit = FALSE;
@@ -117,7 +117,7 @@ void SwFldPage::Init()
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Seite neu initialisieren
+     Description: newly initialise page
  --------------------------------------------------------------------*/
 
 void SwFldPage::ActivatePage()
@@ -126,7 +126,7 @@ void SwFldPage::ActivatePage()
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Kompletter Reset; neues Feld editieren
+     Description: complete reset; edit new field
  --------------------------------------------------------------------*/
 
 void SwFldPage::EditNewField( BOOL bOnlyActivate )
@@ -142,7 +142,7 @@ void SwFldPage::EditNewField( BOOL bOnlyActivate )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Feld einfuegen
+     Description: insert field
  --------------------------------------------------------------------*/
 
 BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
@@ -153,7 +153,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
     SwView* pView = GetActiveView();
     SwWrtShell *pSh = m_pWrtShell ? m_pWrtShell : pView->GetWrtShellPtr();
 
-    if (!IsFldEdit())   // Neues Feld einfuegen
+    if (!IsFldEdit())   // insert new field
     {
         SwInsertFld_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator, bIsAutomaticLanguage );
         //#i26566# provide parent for SwWrtShell::StartInputFldDlg
@@ -197,7 +197,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
         }
 
     }
-    else    // Feld aendern
+    else    // change field
     {
         SwField *const pTmpFld = m_pCurFld->CopyField();
 
@@ -247,7 +247,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                 {
                     if( pFmtFld->GetFld() == m_pCurFld)
                     {
-                        pTyp->Add(pFmtFld); // Feld auf neuen Typ umhaengen
+                        pTyp->Add(pFmtFld); // put field on new type
                         pTmpFld->ChgTyp(pTyp);
                         break;
                     }
@@ -267,7 +267,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
 
         case TYP_INPUTFLD:
             {
-                // User- oder SetField ?
+                // User- or SetField ?
                 if (m_aMgr.GetFldType(RES_USERFLD, sPar1) == 0 &&
                 !(pTmpFld->GetSubType() & INP_TXT)) // SETEXPFLD
                 {
@@ -338,7 +338,7 @@ void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Einfuegen von neuen Feldern
+     Description: Insert new fields
  --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
@@ -350,7 +350,7 @@ IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
         pDlg->InsertHdl();
 
         if (pBtn)
-            pBtn->GrabFocus();  // Wegen InputField-Dlg
+            pBtn->GrabFocus();  // because of InputField-Dlg
     }
     else
     {
@@ -362,7 +362,7 @@ IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: "Einfuegen"-Button Enablen/Disablen
+     Description: enable/disable "Insert"-Button
  --------------------------------------------------------------------*/
 
 void SwFldPage::EnableInsert(BOOL bEnable)

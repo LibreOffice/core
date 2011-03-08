@@ -67,7 +67,7 @@
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Der Traeger des Dialoges
+    Description:    carrier of the dialog
  --------------------------------------------------------------------*/
 
 
@@ -84,11 +84,11 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
 
     GetOKButton().SetText(String(SW_RES(STR_FLD_INSERT)));
     GetOKButton().SetHelpId(HID_FIELD_INSERT);
-    GetOKButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
+    GetOKButton().SetHelpText(aEmptyStr);   // so that generated help text is used
 
     GetCancelButton().SetText(String(SW_RES(STR_FLD_CLOSE)));
     GetCancelButton().SetHelpId(HID_FIELD_CLOSE);
-    GetCancelButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
+    GetCancelButton().SetHelpText(aEmptyStr);   // so that generated help text is used
 
     FreeResource();
 
@@ -152,16 +152,16 @@ void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
         if ( GetStyle() & WB_SIZEABLE )
             SetSizePixel( pInfo->aSize );
 
-        // Initiale Gr"o\se aus pInfo merken
+        // remember initial size from pInfo
         aSize = GetSizePixel();
 
-        // Soll das FloatingWindow eingezoomt werden ?
+        // should the FloatingWindow get zoomed?
         if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
             RollUp();
     }
     else
     {
-        // Initiale Gr"o\se aus Resource oder ctor merken
+        // remember initial size from resource or ctor
         aSize = GetSizePixel();
 
         Size aParentSize = GetParent()->GetOutputSizePixel();
@@ -209,7 +209,7 @@ SfxItemSet* SwFldDlg::CreateInputItemSet( USHORT nID  )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Einfuegen von neuen Feldern anstossen
+     Description: kick off inserting of new fields
  --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldDlg, OKHdl, Button *, EMPTYARG )
@@ -219,14 +219,14 @@ IMPL_LINK( SwFldDlg, OKHdl, Button *, EMPTYARG )
         SfxTabPage* pPage = GetTabPage(GetCurPageId());
         pPage->FillItemSet(*(SfxItemSet*)0);
 
-        GetOKButton().GrabFocus();  // Wegen InputField-Dlg
+        GetOKButton().GrabFocus();  // because of InputField-Dlg
     }
 
     return 0;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
+    Description: newly initialise dialog after Doc-Switch
  --------------------------------------------------------------------*/
 
 void SwFldDlg::ReInitDlg()
@@ -263,7 +263,7 @@ void SwFldDlg::ReInitDlg()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Nach Dok-Wechsel TabPage neu initialisieren
+    Description: newly initialise TabPage after Doc-Switch
  --------------------------------------------------------------------*/
 
 void SwFldDlg::ReInitTabPage( USHORT nPageId, BOOL bOnlyActivate )
@@ -271,11 +271,11 @@ void SwFldDlg::ReInitTabPage( USHORT nPageId, BOOL bOnlyActivate )
     SwFldPage* pPage = (SwFldPage* )GetTabPage(nPageId);
 
     if ( pPage )
-        pPage->EditNewField( bOnlyActivate );   // TabPage neu initialisieren
+        pPage->EditNewField( bOnlyActivate );   // newly initialise TabPage
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Nach Aktivierung einige TabPages neu initialisieren
+    Description: newly initialise after activation of a few TabPages
  --------------------------------------------------------------------*/
 
 void SwFldDlg::Activate()
