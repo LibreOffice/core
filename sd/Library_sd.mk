@@ -361,7 +361,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/slidesorter/controller/SlsSelectionManager \
     sd/source/ui/slidesorter/controller/SlsSelectionObserver \
     sd/source/ui/slidesorter/controller/SlsSlotManager \
-    sd/source/ui/slidesorter/controller/SlsTransferable \
+    sd/source/ui/slidesorter/controller/SlsTransferableData \
     sd/source/ui/slidesorter/controller/SlsVisibleAreaManager \
     sd/source/ui/slidesorter/model/SlideSorterModel \
     sd/source/ui/slidesorter/model/SlsPageDescriptor \

@@ -31,7 +31,8 @@
 
 #include "model/SlsSharedPageDescriptor.hxx"
 #include "view/SlsILayerPainter.hxx"
-#include "controller/SlsTransferable.hxx"
+#include "controller/SlsTransferableData.hxx"
+#include "sdxfer.hxx"
 
 #include <tools/gen.hxx>
 #include <vcl/bitmapex.hxx>
@@ -66,7 +67,7 @@ public:
 
     virtual void SetLayerInvalidator (const SharedILayerInvalidator& rpInvalidator);
 
-    void Create (const controller::Transferable* pTransferable);
+    void Create (const SdTransferable* pTransferable);
 
     /** Given a position in model coordinates this method calculates the
         insertion marker both as an index in the document and as a location
@@ -102,7 +103,7 @@ private:
         OutputDevice& rContent,
         const Size aPreviewSize,
         const sal_Int32 nOffset,
-        const ::std::vector<controller::Transferable::Representative>& rPages) const;
+        const ::std::vector<controller::TransferableData::Representative>& rPages) const;
     void PaintPageCount (
         OutputDevice& rDevice,
         const sal_Int32 nSelectionCount,
@@ -112,7 +113,7 @@ private:
         scaled down previews of some of the selected pages.
     */
     void Create (
-        const ::std::vector<controller::Transferable::Representative>& rPages,
+        const ::std::vector<controller::TransferableData::Representative>& rPages,
         const sal_Int32 nSelectionCount);
 };
 

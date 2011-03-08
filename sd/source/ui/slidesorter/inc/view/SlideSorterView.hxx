@@ -242,6 +242,8 @@ public:
 
     ToolTip& GetToolTip (void) const;
 
+    virtual void DragFinished (sal_Int8 nDropAction);
+
 protected:
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
 

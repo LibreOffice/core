@@ -44,12 +44,13 @@
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsFocusManager.hxx"
 #include "controller/SlsSelectionManager.hxx"
-#include "controller/SlsTransferable.hxx"
+#include "controller/SlsTransferableData.hxx"
 #include "controller/SlsSelectionObserver.hxx"
 #include "controller/SlsVisibleAreaManager.hxx"
 #include "cache/SlsPageCache.hxx"
 
 #include "ViewShellBase.hxx"
+#include "View.hxx"
 #include "DrawViewShell.hxx"
 #include "Window.hxx"
 #include "fupoor.hxx"
@@ -68,6 +69,7 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "sdpage.hxx"
+#include "sdtreelb.hxx"
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <sfx2/request.hxx>
@@ -81,6 +83,8 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <boost/bind.hpp>
+
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -113,7 +117,6 @@ private:
     const bool mbIsCurrentSlideTrackingActive;
 };
 } // end of anonymous namespace
-
 
 class Clipboard::UndoContext
 {
@@ -439,7 +442,7 @@ void Clipboard::CreateSlideTransferable (
     // previews are included into the transferable so that an insertion
     // indicator can be rendered.
     aSelectedPages.Rewind();
-    ::std::vector<Transferable::Representative> aRepresentatives;
+    ::std::vector<TransferableData::Representative> aRepresentatives;
     aRepresentatives.reserve(3);
     ::boost::shared_ptr<cache::PageCache> pPreviewCache (
         mrSlideSorter.GetView().GetPreviewCache());
@@ -449,7 +452,7 @@ void Clipboard::CreateSlideTransferable (
         if ( ! pDescriptor || pDescriptor->GetPage()==NULL)
             continue;
         Bitmap aPreview (pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage(), false));
-        aRepresentatives.push_back(Transferable::Representative(
+        aRepresentatives.push_back(TransferableData::Representative(
             aPreview,
             pDescriptor->HasState(model::PageDescriptor::ST_Excluded)));
         if (aRepresentatives.size() >= 3)
@@ -460,7 +463,7 @@ void Clipboard::CreateSlideTransferable (
     {
         mrSlideSorter.GetView().BrkAction();
         SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
-        SdTransferable* pTransferable = new Transferable (
+        SdTransferable* pTransferable = TransferableData::CreateTransferable (
             pDocument,
             NULL,
             sal_False,
@@ -519,6 +522,95 @@ void Clipboard::CreateSlideTransferable (
 
 
 
+::boost::shared_ptr<SdTransferable::UserData> Clipboard::CreateTransferableUserData (SdTransferable* pTransferable)
+{
+    do
+    {
+        SdPageObjsTLB::SdPageObjsTransferable* pTreeListBoxTransferable
+            = dynamic_cast<SdPageObjsTLB::SdPageObjsTransferable*>(pTransferable);
+        if (pTreeListBoxTransferable == NULL)
+            break;
+
+        // Find view shell for the document of the transferable.
+        ::sd::ViewShell* pViewShell
+              = SdPageObjsTLB::GetViewShellForDocShell(pTreeListBoxTransferable->GetDocShell());
+        if (pViewShell == NULL)
+            break;
+
+        // Find slide sorter for the document of the transferable.
+        SlideSorterViewShell* pSlideSorterViewShell
+            = SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
+        if (pSlideSorterViewShell == NULL)
+            break;
+        SlideSorter& rSlideSorter (pSlideSorterViewShell->GetSlideSorter());
+
+        // Get bookmark from transferable.
+        TransferableDataHelper  aDataHelper (pTransferable);
+        INetBookmark aINetBookmark;
+        if ( ! aDataHelper.GetINetBookmark(SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark))
+            break;
+        const rtl::OUString sURL (aINetBookmark.GetURL());
+        const sal_Int32 nIndex (sURL.indexOf((sal_Unicode)'#'));
+        if (nIndex == -1)
+            break;
+        String sBookmark (sURL.copy(nIndex+1));
+
+        // Make sure that the bookmark points to a page.
+        SdDrawDocument* pTransferableDocument = rSlideSorter.GetModel().GetDocument();
+        if (pTransferableDocument == NULL)
+            break;
+        BOOL bIsMasterPage;
+        const USHORT nPageIndex (pTransferableDocument->GetPageByName(sBookmark, bIsMasterPage));
+        if (nPageIndex == SDRPAGE_NOTFOUND)
+            break;
+
+        // Create preview.
+        ::std::vector<TransferableData::Representative> aRepresentatives;
+        aRepresentatives.reserve(1);
+        ::boost::shared_ptr<cache::PageCache> pPreviewCache (
+            rSlideSorter.GetView().GetPreviewCache());
+        model::SharedPageDescriptor pDescriptor (rSlideSorter.GetModel().GetPageDescriptor((nPageIndex-1)/2));
+        if ( ! pDescriptor || pDescriptor->GetPage()==NULL)
+            break;
+        Bitmap aPreview (pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage(), false));
+        aRepresentatives.push_back(TransferableData::Representative(
+                aPreview,
+                pDescriptor->HasState(model::PageDescriptor::ST_Excluded)));
+
+        // Remember the page in maPagesToRemove so that it can be removed
+        // when drag and drop action is "move".
+        Clipboard& rOtherClipboard (pSlideSorterViewShell->GetSlideSorter().GetController().GetClipboard());
+        rOtherClipboard.maPagesToRemove.clear();
+        rOtherClipboard.maPagesToRemove.push_back(pDescriptor->GetPage());
+
+        // Create the new transferable.
+        ::boost::shared_ptr<SdTransferable::UserData> pNewTransferable (
+            new TransferableData(
+                pSlideSorterViewShell,
+                aRepresentatives));
+        pTransferable->SetWorkDocument( dynamic_cast<SdDrawDocument*>(
+                pTreeListBoxTransferable->GetSourceDoc()->AllocModel()));
+        //        pTransferable->SetView(&mrSlideSorter.GetView());
+
+        // Set page bookmark list.
+        std::vector<rtl::OUString> aPageBookmarks;
+        aPageBookmarks.push_back(sBookmark);
+        pTransferable->SetPageBookmarks(aPageBookmarks, false);
+
+        // Replace the view referenced by the transferable with the
+        // corresponding slide sorter view.
+        pTransferable->SetView(&pSlideSorterViewShell->GetSlideSorter().GetView());
+
+        return pNewTransferable;
+    }
+    while (false);
+
+    return ::boost::shared_ptr<SdTransferable::UserData>();
+}
+
+
+
+
 void Clipboard::StartDrag (
     const Point& rPosition,
     ::Window* pWindow)
@@ -539,8 +631,6 @@ void Clipboard::StartDrag (
 void Clipboard::DragFinished (sal_Int8 nDropAction)
 {
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
-    if (pDragTransferable != NULL)
-        pDragTransferable->SetView (NULL);
 
     if (mnDragFinishedUserEventId == 0)
     {
@@ -602,11 +692,12 @@ sal_Int8 Clipboard::AcceptDrop (
 {
     sal_Int8 nAction (DND_ACTION_NONE);
 
-    const Clipboard::DropType eDropType (IsDropAccepted());
+    const Clipboard::DropType eDropType (IsDropAccepted(rTargetHelper));
 
     switch (eDropType)
     {
         case DT_PAGE:
+        case DT_PAGE_FROM_NAVIGATOR:
         {
             // Accept a drop.
             nAction = rEvent.mnAction;
@@ -614,7 +705,7 @@ sal_Int8 Clipboard::AcceptDrop (
             // Use the copy action when the drop action is the default, i.e. not
             // explicitly set to move or link, and when the source and
             // target models are not the same.
-            const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+            SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
             if (pDragTransferable != NULL
                 && pDragTransferable->IsPageTransferable()
                 && ((rEvent.maDragEvent.DropAction
@@ -624,7 +715,7 @@ sal_Int8 Clipboard::AcceptDrop (
             {
                 nAction = DND_ACTION_COPY;
             }
-            else if (mrController.GetInsertionIndicatorHandler()->IsInsertionTrivial(nAction))
+            else if (IsInsertionTrivial(pDragTransferable, nAction))
             {
                 nAction = DND_ACTION_NONE;
             }
@@ -652,6 +743,7 @@ sal_Int8 Clipboard::AcceptDrop (
             break;
 
         default:
+        case DT_NONE:
             nAction = DND_ACTION_NONE;
             break;
     }
@@ -671,12 +763,14 @@ sal_Int8 Clipboard::ExecuteDrop (
 {
     sal_Int8 nResult = DND_ACTION_NONE;
     mpUndoContext.reset();
+    const Clipboard::DropType eDropType (IsDropAccepted(rTargetHelper));
 
-    switch (IsDropAccepted())
+    switch (eDropType)
     {
         case DT_PAGE:
+        case DT_PAGE_FROM_NAVIGATOR:
         {
-            const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+            SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
             const Point aEventModelPosition (
                 pTargetWindow->PixelToLogic (rEvent.maPosPixel));
             const sal_Int32 nXOffset (labs (pDragTransferable->GetStartPos().X()
@@ -695,7 +789,7 @@ sal_Int8 Clipboard::ExecuteDrop (
 
             // Do not process the insertion when it is trivial,
             // i.e. would insert pages at their original place.
-            if (pInsertionIndicatorHandler->IsInsertionTrivial(rEvent.mnAction))
+            if (IsInsertionTrivial(pDragTransferable, rEvent.mnAction))
                 bContinue = false;
 
             // Tell the insertion indicator handler to hide before the model
@@ -723,6 +817,19 @@ sal_Int8 Clipboard::ExecuteDrop (
                 // well as the ones above.
             }
 
+            // When the pages originated in another slide sorter then
+            // only that is notified automatically about the drag
+            // operation being finished.  Because the target slide sorter
+            // has be notified, too, add a callback for that.
+            ::boost::shared_ptr<TransferableData> pSlideSorterTransferable (
+                TransferableData::GetFromTransferable(pDragTransferable));
+            BOOST_ASSERT(pSlideSorterTransferable);
+            if (pSlideSorterTransferable
+                && pSlideSorterTransferable->GetSourceViewShell() != mrSlideSorter.GetViewShell())
+            {
+                DragFinished(nResult);
+            }
+
             // Notify the receiving selection function that drag-and-drop is
             // finished and the substitution handler can be released.
             ::rtl::Reference<SelectionFunction> pFunction (
@@ -742,11 +849,28 @@ sal_Int8 Clipboard::ExecuteDrop (
                 nPage,
                 nLayer);
             break;
+
         default:
+        case DT_NONE:
             break;
     }
 
     return nResult;
+}
+
+
+
+
+bool Clipboard::IsInsertionTrivial (
+    SdTransferable* pTransferable,
+    const sal_Int8 nDndAction) const
+{
+    ::boost::shared_ptr<TransferableData> pSlideSorterTransferable (
+        TransferableData::GetFromTransferable(pTransferable));
+    if (pSlideSorterTransferable
+        && pSlideSorterTransferable->GetSourceViewShell() != mrSlideSorter.GetViewShell())
+        return false;
+    return mrController.GetInsertionIndicatorHandler()->IsInsertionTrivial(nDndAction);
 }
 
 
@@ -807,25 +931,26 @@ sal_uInt16 Clipboard::InsertSlides (
 
 
 
-Clipboard::DropType Clipboard::IsDropAccepted (void) const
+Clipboard::DropType Clipboard::IsDropAccepted (DropTargetHelper& rTargetHelper) const
 {
-    DropType eResult (DT_NONE);
-
     const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
-    if (pDragTransferable != NULL)
+    if (pDragTransferable == NULL)
+        return DT_NONE;
+
+    if (pDragTransferable->IsPageTransferable())
     {
-        if (pDragTransferable->IsPageTransferable())
-        {
-            if (mrSlideSorter.GetModel().GetEditMode() != EM_MASTERPAGE)
-                eResult = DT_PAGE;
-        }
+        if (mrSlideSorter.GetModel().GetEditMode() != EM_MASTERPAGE)
+            return DT_PAGE;
         else
-        {
-            eResult = DT_SHAPE;
-        }
+            return DT_NONE;
     }
 
-    return eResult;
+    const SdPageObjsTLB::SdPageObjsTransferable* pPageObjsTransferable
+        = dynamic_cast<const SdPageObjsTLB::SdPageObjsTransferable*>(pDragTransferable);
+    if (pPageObjsTransferable != NULL)
+        return DT_PAGE_FROM_NAVIGATOR;
+
+    return DT_SHAPE;
 }
 
 

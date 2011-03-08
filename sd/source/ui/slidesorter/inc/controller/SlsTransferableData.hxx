@@ -26,10 +26,12 @@
  *
  ************************************************************************/
 
-#ifndef SD_SLIDESORTER_TRANSFERABLE_HXX
-#define SD_SLIDESORTER_TRANSFERABLE_HXX
+#ifndef SD_SLIDESORTER_TRANSFERABLE_DATA_HXX
+#define SD_SLIDESORTER_TRANSFERABLE_DATA_HXX
 
 #include "sdxfer.hxx"
+#include <boost/function.hpp>
+#include <vector>
 
 class SdDrawDocument;
 namespace sd { namespace slidesorter {
@@ -38,12 +40,12 @@ class SlideSorterViewShell;
 
 namespace sd { namespace slidesorter { namespace controller {
 
-
-/** This class exists to have DragFinished call the correct object: the
-    SlideSorterViewShell instead of the old SlideView.
+/** Represent previews and other information so that they can be
+    attached to an existing transferable.
 */
-class Transferable
-    : public SdTransferable
+class TransferableData
+    : public SdTransferable::UserData,
+      public SfxListener
 {
 public:
     class Representative
@@ -62,23 +64,32 @@ public:
         bool mbIsExcluded;
     };
 
-
-    Transferable (
+    static SdTransferable* CreateTransferable (
         SdDrawDocument* pSrcDoc,
         ::sd::View* pWorkView,
         sal_Bool bInitOnGetData,
         SlideSorterViewShell* pViewShell,
-        const ::std::vector<Representative>& rRepresentatives);
+        const ::std::vector<TransferableData::Representative>& rRepresentatives);
 
-    virtual ~Transferable (void);
+    static ::boost::shared_ptr<TransferableData> GetFromTransferable (const SdTransferable* pTransferable);
+
+    TransferableData (
+        SlideSorterViewShell* pViewShell,
+        const ::std::vector<TransferableData::Representative>& rRepresentatives);
+    ~TransferableData (void);
 
     virtual void DragFinished (sal_Int8 nDropAction);
 
     const ::std::vector<Representative>& GetRepresentatives (void) const;
 
+    /** Return the view shell for which the transferable was created.
+    */
+    SlideSorterViewShell* GetSourceViewShell (void) const;
+
 private:
     SlideSorterViewShell* mpViewShell;
     const ::std::vector<Representative> maRepresentatives;
+    typedef ::std::vector<boost::function<void(sal_uInt8)> > CallbackContainer;
 
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
 };

@@ -103,11 +103,15 @@ InsertionIndicatorOverlay::~InsertionIndicatorOverlay (void)
 
 
 
-void InsertionIndicatorOverlay::Create (const controller::Transferable* pTransferable)
+void InsertionIndicatorOverlay::Create (const SdTransferable* pTransferable)
 {
     if (pTransferable == NULL)
         return;
 
+    ::boost::shared_ptr<controller::TransferableData> pData (
+        controller::TransferableData::GetFromTransferable(pTransferable));
+    if ( ! pData)
+        return;
     sal_Int32 nSelectionCount (0);
     if (pTransferable->HasPageBookmarks())
         nSelectionCount = pTransferable->GetPageBookmarks().size();
@@ -121,14 +125,14 @@ void InsertionIndicatorOverlay::Create (const controller::Transferable* pTransfe
                 nSelectionCount = pDataDocument->GetSdPageCount(PK_STANDARD);
         }
     }
-    Create(pTransferable->GetRepresentatives(), nSelectionCount);
+    Create(pData->GetRepresentatives(), nSelectionCount);
 }
 
 
 
 
 void InsertionIndicatorOverlay::Create (
-    const ::std::vector<controller::Transferable::Representative>& rRepresentatives,
+    const ::std::vector<controller::TransferableData::Representative>& rRepresentatives,
     const sal_Int32 nSelectionCount)
 {
     view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
@@ -180,7 +184,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
     OutputDevice& rContent,
     const Size aPreviewSize,
     const sal_Int32 nOffset,
-    const ::std::vector<controller::Transferable::Representative>& rRepresentatives) const
+    const ::std::vector<controller::TransferableData::Representative>& rRepresentatives) const
 {
     const Point aOffset (0,rRepresentatives.size()==1 ? -nOffset : 0);
 

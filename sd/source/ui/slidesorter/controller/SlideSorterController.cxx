@@ -42,7 +42,7 @@
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsSelectionManager.hxx"
 #include "controller/SlsSlotManager.hxx"
-#include "controller/SlsTransferable.hxx"
+#include "controller/SlsTransferableData.hxx"
 #include "controller/SlsVisibleAreaManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
@@ -424,8 +424,7 @@ bool SlideSorterController::Command (
                 // indicator so that the user knows where a page insertion
                 // would take place.
                 mpInsertionIndicatorHandler->Start(false);
-                mpInsertionIndicatorHandler->UpdateIndicatorIcon(
-                    dynamic_cast<Transferable*>(SD_MOD()->pTransferClip));
+                mpInsertionIndicatorHandler->UpdateIndicatorIcon(SD_MOD()->pTransferClip);
                 mpInsertionIndicatorHandler->UpdatePosition(
                     pWindow->PixelToLogic(rEvent.GetMousePosPixel()),
                     InsertionIndicatorHandler::MoveMode);

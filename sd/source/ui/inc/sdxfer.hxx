@@ -90,12 +90,41 @@ public:
     // SfxListener
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
+    virtual void                    DragFinished( sal_Int8 nDropAction );
+    SdDrawDocument*                 GetSourceDoc (void) const;
+
+    /** User data objects can be used to store information temporarily
+        at the transferable.  The slide sorter uses this to store
+        previews of the slides that are referenced by the
+        transferable.
+    */
+    class UserData {public:virtual~UserData(){}};
+
+    /** Add a user data object.  When it was added before (and not
+        removed) then this call is ignored.
+    */
+    void AddUserData (const ::boost::shared_ptr<UserData>& rpData);
+
+    /** Remove a previously added user data object.  When the object
+        was never added or removed before then this call is ignored.
+    */
+    void RemoveUserData (const ::boost::shared_ptr<UserData>& rpData);
+
+    /** Return the number of user data objects.
+    */
+    sal_Int32 GetUserDataCount (void) const;
+
+    /** Return the specified user data object.  When the index is not
+        valid, ie not in the range [0,count) then an empty pointer is
+        returned.
+    */
+    ::boost::shared_ptr<UserData> GetUserData (const sal_Int32 nIndex) const;
+
 protected:
 
     virtual void                    AddSupportedFormats();
     virtual sal_Bool                GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     virtual sal_Bool                WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual void                    DragFinished( sal_Int8 nDropAction );
     virtual void                    ObjectReleased();
 
     virtual sal_Int64 SAL_CALL      getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
@@ -125,6 +154,7 @@ private:
     sal_Bool                            mbPageTransferable           : 1;
     sal_Bool                            mbPageTransferablePersistent : 1;
     bool                            mbIsUnoObj                  : 1;
+    ::std::vector<boost::shared_ptr<UserData> > maUserData;
 
                                     // not available
                                     SdTransferable();

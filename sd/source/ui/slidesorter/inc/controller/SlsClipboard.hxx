@@ -31,6 +31,8 @@
 
 #include "ViewClipboard.hxx"
 #include "controller/SlsSelectionObserver.hxx"
+#include "sdxfer.hxx"
+
 #include <sal/types.h>
 #include <tools/solar.h>
 #include <svx/svdpage.hxx>
@@ -55,6 +57,12 @@ namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
 
+namespace sd { namespace slidesorter { namespace model {
+class PageDescriptor;
+} } }
+
+namespace { class NavigatorDropEvent; }
+
 namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
@@ -65,6 +73,12 @@ class Clipboard
 public:
     Clipboard (SlideSorter& rSlideSorter);
     ~Clipboard (void);
+
+    /** Create a slide sorter transferable from the given sd
+        transferable.  The returned transferable is set up with all
+        information necessary so that it can be dropped on a slide sorter.
+    */
+    ::boost::shared_ptr<SdTransferable::UserData> CreateTransferableUserData (SdTransferable* pTransferable);
 
     void HandleSlotCall (SfxRequest& rRequest);
 
@@ -181,8 +195,8 @@ private:
         transferable is not accepted.  The reason is the missing
         implementation of proper handling master pages copy-and-paste.
     */
-    enum DropType { DT_PAGE, DT_SHAPE, DT_NONE };
-    DropType IsDropAccepted (void) const;
+    enum DropType { DT_PAGE, DT_PAGE_FROM_NAVIGATOR, DT_SHAPE, DT_NONE };
+    DropType IsDropAccepted (DropTargetHelper& rTargetHelper) const;
 
     /** This method contains the code for AcceptDrop() and ExecuteDrop() shapes.
         There are only minor differences for the two cases at this level.
@@ -213,10 +227,19 @@ private:
         sal_uInt16 nPage,
         sal_uInt16 nLayer);
 
+    /** Return whether the insertion defined by the transferable is
+        trivial, ie would not change either source nor target document.
+    */
+    bool IsInsertionTrivial (
+        SdTransferable* pTransferable,
+        const sal_Int8 nDndAction) const;
+
     /** Asynchronous part of DragFinished.  The argument is the sal_Int8
         nDropAction, disguised as void*.
     */
     DECL_LINK(ProcessDragFinished, void*);
+
+    DECL_LINK(ExecuteNavigatorDrop, NavigatorDropEvent*);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

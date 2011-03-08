@@ -51,13 +51,18 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "customshowlist.hxx"
+#include "ViewShell.hxx"
+#include "DrawController.hxx"
+#include "ViewShellBase.hxx"
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <svtools/embedtransfer.hxx>
 #include "svtools/treelistentry.hxx"
-#include <tools/diagnose_ex.h>
 #include <comphelper/servicehelper.hxx>
-#include <ViewShell.hxx>
+#include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace com::sun::star;
 
@@ -145,6 +150,7 @@ sal_Bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const ::com::sun::star:
 void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 {
     mrParent.OnDragFinished( nDropAction );
+    SdTransferable::DragFinished(nDropAction);
 }
 
 // -----------------------------------------------------------------------------
@@ -215,6 +221,9 @@ sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId (void)
         "application/x-openoffice-treelistbox-moveonly;windows_formatname=\"SV_LBOX_DD_FORMAT_MOVE\""));
     return mnListBoxDropFormatId;
 }
+
+
+
 
 /*************************************************************************
 |*
@@ -976,6 +985,11 @@ void SdPageObjsTLB::DoDrag()
 
         if( eDragType == NAVIGATOR_DRAGTYPE_LINK )
             nDNDActions = DND_ACTION_LINK;  // Either COPY *or* LINK, never both!
+        else if (mpDoc->GetSdPageCount(PK_STANDARD) == 1)
+        {
+            // Can not move away the last slide in a document.
+            nDNDActions = DND_ACTION_COPY;
+        }
 
         SvTreeListBox::ReleaseMouse();
 
@@ -993,16 +1007,15 @@ void SdPageObjsTLB::DoDrag()
         // object is destroyed by internal reference mechanism
         SdTransferable* pTransferable = new SdPageObjsTLB::SdPageObjsTransferable(
             *this, aBookmark, *pDocShell, eDragType, aTreeListBoxData);
-        OSL_TRACE("created new SdPageObjsTransferable at %x", pTransferable);
 
         // Get the view.
-        sd::View* pView = NULL;
-        if (pDocShell != NULL)
+        ::sd::ViewShell* pViewShell = GetViewShellForDocShell(*pDocShell);
+        if (pViewShell == NULL)
         {
-            ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
-            if (pViewShell != NULL)
-                pView = pViewShell->GetView();
+            OSL_ASSERT(pViewShell!=NULL);
+            return;
         }
+        sd::View* pView = pViewShell->GetView();
         if (pView == NULL)
         {
             OSL_ASSERT(pView!=NULL);
@@ -1013,26 +1026,31 @@ void SdPageObjsTLB::DoDrag()
         void* pUserData = GetCurEntry()->GetUserData();
         if (pUserData != NULL && pUserData != (void*)1)
             pObject = reinterpret_cast<SdrObject*>(pUserData);
-        if (pObject == NULL)
-            return;
-
-        // For shapes without a user supplied name (the automatically
-        // created name does not count), a different drag and drop technique
-        // is used.
-        if (GetObjectName(pObject, false).Len() == 0)
+        if (pObject != NULL)
         {
-            AddShapeToTransferable(*pTransferable, *pObject);
+            // For shapes without a user supplied name (the automatically
+            // created name does not count), a different drag and drop technique
+            // is used.
+            if (GetObjectName(pObject, false).Len() == 0)
+            {
+                AddShapeToTransferable(*pTransferable, *pObject);
+                pTransferable->SetView(pView);
+                SD_MOD()->pTransferDrag = pTransferable;
+            }
+
+            // Unnamed shapes have to be selected to be recognized by the
+            // current drop implementation.  In order to have a consistent
+            // behaviour for all shapes, every shape that is to be dragged is
+            // selected first.
+            SdrPageView* pPageView = pView->GetSdrPageView();
+            pView->UnmarkAllObj(pPageView);
+            pView->MarkObj(pObject, pPageView);
+        }
+        else
+        {
             pTransferable->SetView(pView);
             SD_MOD()->pTransferDrag = pTransferable;
         }
-
-        // Unnamed shapes have to be selected to be recognized by the
-        // current drop implementation.  In order to have a consistent
-        // behaviour for all shapes, every shape that is to be dragged is
-        // selected first.
-        SdrPageView* pPageView = pView->GetSdrPageView();
-        pView->UnmarkAllObj(pPageView);
-        pView->MarkObj(pObject, pPageView);
 
         pTransferable->StartDrag( this, nDNDActions );
     }
@@ -1263,8 +1281,6 @@ SvTreeListEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
     if (pEntry == NULL)
         return NULL;
 
-        OSL_TRACE("entry is %s",
-            ::rtl::OUStringToOString(GetEntryText(pEntry), RTL_TEXTENCODING_UTF8).getStr());
     if (GetParent(pEntry) == NULL)
     {
         // Use page entry as insertion position.
@@ -1287,8 +1303,6 @@ SvTreeListEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
             else
                 break;
         }
-        OSL_TRACE("returning %s",
-            ::rtl::OUStringToOString(GetEntryText(pEntry), RTL_TEXTENCODING_UTF8).getStr());
     }
 
     return pEntry;
@@ -1362,6 +1376,66 @@ void SdPageObjsTLB::AddShapeToTransferable (
 
     rTransferable.SetStartPos(aDragPos);
     rTransferable.SetObjectDescriptor( aObjectDescriptor );
+}
+
+
+
+
+::sd::ViewShell* SdPageObjsTLB::GetViewShellForDocShell (::sd::DrawDocShell& rDocShell)
+{
+    {
+        ::sd::ViewShell* pViewShell = rDocShell.GetViewShell();
+        if (pViewShell != NULL)
+            return pViewShell;
+    }
+
+    try
+    {
+        // Get a component enumeration from the desktop and search it for documents.
+        uno::Reference<lang::XMultiServiceFactory> xFactory (
+            ::comphelper::getProcessServiceFactory ());
+        if ( ! xFactory.is())
+            return NULL;
+
+        uno::Reference<frame::XDesktop> xDesktop (xFactory->createInstance (
+                ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), uno::UNO_QUERY);
+        if ( ! xDesktop.is())
+            return NULL;
+
+        uno::Reference<frame::XFramesSupplier> xFrameSupplier (xDesktop, uno::UNO_QUERY);
+        if ( ! xFrameSupplier.is())
+            return NULL;
+
+        uno::Reference<container::XIndexAccess> xFrameAccess (xFrameSupplier->getFrames(), uno::UNO_QUERY);
+        if ( ! xFrameAccess.is())
+            return NULL;
+
+        for (sal_Int32 nIndex=0,nCount=xFrameAccess->getCount(); nIndex<nCount; ++nIndex)
+        {
+            uno::Reference<frame::XFrame> xFrame;
+            if ( ! (xFrameAccess->getByIndex(nIndex) >>= xFrame))
+                continue;
+
+            ::sd::DrawController* pController = dynamic_cast<sd::DrawController*>(xFrame->getController().get());
+            if (pController == NULL)
+                continue;
+            ::sd::ViewShellBase* pBase = pController->GetViewShellBase();
+            if (pBase == NULL)
+                continue;
+            if (pBase->GetDocShell() != &rDocShell)
+                continue;
+
+            const ::boost::shared_ptr<sd::ViewShell> pViewShell (pBase->GetMainViewShell());
+            if (pViewShell)
+                return pViewShell.get();
+        }
+    }
+    catch (uno::Exception e)
+    {
+        // When there is an exception then simply use the default value of
+        // bIsEnabled and disable the controls.
+    }
+    return NULL;
 }
 
 

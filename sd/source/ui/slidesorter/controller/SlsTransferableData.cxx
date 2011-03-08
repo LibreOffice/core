@@ -27,21 +27,48 @@
  ************************************************************************/
 
 
-#include "controller/SlsTransferable.hxx"
+#include "controller/SlsTransferableData.hxx"
 
 #include "SlideSorterViewShell.hxx"
 #include "View.hxx"
 
 namespace sd { namespace slidesorter { namespace controller {
 
-Transferable::Transferable (
+SdTransferable* TransferableData::CreateTransferable (
     SdDrawDocument* pSrcDoc,
     ::sd::View* pWorkView,
     sal_Bool bInitOnGetData,
     SlideSorterViewShell* pViewShell,
     const ::std::vector<Representative>& rRepresentatives)
-    : SdTransferable (pSrcDoc, pWorkView, bInitOnGetData),
-      mpViewShell(pViewShell),
+{
+    SdTransferable* pTransferable = new SdTransferable (pSrcDoc, pWorkView, bInitOnGetData);
+    ::boost::shared_ptr<TransferableData> pData (new TransferableData(pViewShell, rRepresentatives));
+    pTransferable->AddUserData(pData);
+    return pTransferable;
+}
+
+
+
+
+::boost::shared_ptr<TransferableData> TransferableData::GetFromTransferable (const SdTransferable* pTransferable)
+{
+    ::boost::shared_ptr<TransferableData> pData;
+    for (sal_Int32 nIndex=0,nCount=pTransferable->GetUserDataCount(); nIndex<nCount; ++nIndex)
+    {
+        pData = ::boost::dynamic_pointer_cast<TransferableData>(pTransferable->GetUserData(nIndex));
+        if (pData)
+            return pData;
+    }
+    return ::boost::shared_ptr<TransferableData>();
+}
+
+
+
+
+TransferableData::TransferableData (
+    SlideSorterViewShell* pViewShell,
+    const ::std::vector<Representative>& rRepresentatives)
+    : mpViewShell(pViewShell),
       maRepresentatives(rRepresentatives)
 {
     if (mpViewShell != NULL)
@@ -51,7 +78,7 @@ Transferable::Transferable (
 
 
 
-Transferable::~Transferable (void)
+TransferableData::~TransferableData (void)
 {
     if (mpViewShell != NULL)
         EndListening(*mpViewShell);
@@ -60,16 +87,28 @@ Transferable::~Transferable (void)
 
 
 
-void Transferable::DragFinished (sal_Int8 nDropAction)
+void TransferableData::DragFinished (sal_Int8 nDropAction)
 {
     if (mpViewShell != NULL)
         mpViewShell->DragFinished(nDropAction);
+    /*
+    for (CallbackContainer::const_iterator
+             iCallback(maDragFinishCallbacks.begin()),
+             iEnd(maDragFinishCallbacks.end());
+         iCallback!=iEnd;
+         ++iCallback)
+    {
+        if (*iCallback)
+            (*iCallback)(nDropAction);
+    }
+    maDragFinishCallbacks.clear();
+    */
 }
 
 
 
 
-void Transferable::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
+void TransferableData::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
 {
     if (rHint.ISA(SfxSimpleHint) && mpViewShell!=NULL)
     {
@@ -84,18 +123,23 @@ void Transferable::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
             mpViewShell = NULL;
         }
     }
-
-    SdTransferable::Notify(rBroadcaster, rHint);
 }
 
 
 
 
-const ::std::vector<Transferable::Representative>& Transferable::GetRepresentatives (void) const
+const ::std::vector<TransferableData::Representative>& TransferableData::GetRepresentatives (void) const
 {
     return maRepresentatives;
 }
 
+
+
+
+SlideSorterViewShell* TransferableData::GetSourceViewShell (void) const
+{
+    return mpViewShell;
+}
 
 } } } // end of namespace ::sd::slidesorter::controller
 

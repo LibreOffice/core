@@ -39,10 +39,12 @@
 #include "controller/SlsProperties.hxx"
 #include "controller/SlsSelectionFunction.hxx"
 #include "controller/SlsSelectionManager.hxx"
-#include "controller/SlsTransferable.hxx"
+#include "controller/SlsClipboard.hxx"
+#include "controller/SlsTransferableData.hxx"
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
 #include "app.hrc"
+#include "sdtreelb.hxx"
 #include <sfx2/bindings.hxx>
 #include <boost/bind.hpp>
 
@@ -58,8 +60,19 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
     if (rSlideSorter.GetModel().GetEditMode() != EM_PAGE)
         return;
 
-    rSlideSorter.GetController().GetInsertionIndicatorHandler()->UpdateIndicatorIcon(
-        dynamic_cast<Transferable*>(SD_MOD()->pTransferDrag));
+    // For poperly handling transferables created by the navigator we
+    // need additional information.  For this a user data object is
+    // created that contains the necessary information.
+    SdTransferable* pTransferable = SD_MOD()->pTransferDrag;
+    SdPageObjsTLB::SdPageObjsTransferable* pTreeListBoxTransferable
+        = dynamic_cast<SdPageObjsTLB::SdPageObjsTransferable*>(pTransferable);
+    if (pTreeListBoxTransferable!=NULL && !TransferableData::GetFromTransferable(pTransferable))
+    {
+        pTransferable->AddUserData(
+            rSlideSorter.GetController().GetClipboard().CreateTransferableUserData(pTransferable));
+    }
+
+    rSlideSorter.GetController().GetInsertionIndicatorHandler()->UpdateIndicatorIcon(pTransferable);
 }
 
 
