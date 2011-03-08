@@ -29,8 +29,6 @@
 #ifndef _SVDFPPT_HXX
 #define _SVDFPPT_HXX
 
-#ifndef SVX_LIGHT
-
 #include <tools/solar.h>
 #include <svl/svarray.hxx>
 #include <tools/string.hxx>
@@ -1410,8 +1408,6 @@ class PPTConvertOCXControls : public SvxMSConvertOCXControls
 #define PPT_PLACEHOLDER_CLIPART                 22  // 23 Clip Art
 #define PPT_PLACEHOLDER_ORGANISZATIONCHART      23  // 24 Organization Chart
 #define PPT_PLACEHOLDER_MEDIACLIP               24  // 25 Media Clip
-
-#endif // SVX_LIGHT
 
 #endif //_SVDFPPT_HXX
 

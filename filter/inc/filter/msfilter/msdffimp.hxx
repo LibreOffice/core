@@ -515,13 +515,11 @@ protected :
                                   sal_Int64 nAspect ) const;
     SdrObject* GetAutoForm( MSO_SPT eTyp ) const;
     static const GDIMetaFile* lcl_GetMetaFileFromGrf_Impl( const Graphic& rGrf, GDIMetaFile& rMtf );
-#ifndef SVX_LIGHT
     static com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > CheckForConvertToSOObj(
                 UINT32 nConvertFlags, SotStorage& rSrcStg,
                 const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg,
                 const Graphic& rGrf,
                 const Rectangle& rVisArea );
-#endif
 
 /*
         folgende Methoden sind zum Excel-Import zu ueberschreiben:
