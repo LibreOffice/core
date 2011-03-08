@@ -93,12 +93,6 @@
 #define DP_PROP_FILTER              "Filter"
 #define DP_PROP_POSITION            "Position"
 
-#define DBG_TRACESTR( x )  \
-    {\
-        ByteString aTemp( x , RTL_TEXTENCODING_UTF8 ); \
-        DBG_TRACE( aTemp.GetBuffer() );\
-    }
-
 class TypedStrData;
 class ScDPObject;
 class ScDPInfoWnd;
