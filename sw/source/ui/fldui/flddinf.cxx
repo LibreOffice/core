@@ -82,8 +82,8 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     aTypeTLB.SetHelpId(HID_FIELD_DINF_TYPE);
     aTypeTLB.SetSelectionMode(SINGLE_SELECTION);
     aTypeTLB.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
-    // Font nicht setzen, damit der Font des Controls uebernommen wird!
-    // Sonst bei falschem Font Bug an OV.
+    // Don't set font, so that the control's font is adobted!
+    // Otherwise at wrong font bug to OV.
     aTypeTLB.SetSpaceBetweenEntries(0);
 
     aTypeTLB.SetNodeDefaultImages();
@@ -101,14 +101,14 @@ SwFldDokInfPage::~SwFldDokInfPage()
 
 void SwFldDokInfPage::Reset(const SfxItemSet& )
 {
-    Init(); // Allgemeine initialisierung
+    Init(); // general initialisation
 
-    // TypeListBox initialisieren
+    // initialise TypeListBox
     aTypeTLB.SetUpdateMode(FALSE);
     aTypeTLB.Clear();
     pSelEntry = 0;
 
-    // SubTypes in der TypeLB anzeigen
+    // display SubTypes in TypeLB
     USHORT nTypeId = TYP_DOCINFOFLD;
     SvLBoxEntry* pEntry = 0;
 
@@ -186,7 +186,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
         }
     }
 
-    // alte Pos selektieren
+    // select old Pos
     if (pSelEntry != 0)
     {
         aTypeTLB.Select(pSelEntry);
@@ -219,10 +219,10 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
 
 IMPL_LINK( SwFldDokInfPage, TypeHdl, ListBox *, EMPTYARG )
 {
-    // Alte ListBoxPos sichern
+    // save old ListBoxPos
     SvLBoxEntry* pOldEntry = pSelEntry;
 
-    // Aktuelle ListBoxPos
+    // current ListBoxPos
     pSelEntry = aTypeTLB.FirstSelected();
 
     if(!pSelEntry)
@@ -377,7 +377,7 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
 
 USHORT SwFldDokInfPage::FillSelectionLB(USHORT nSubType)
 {
-    // Format-Listbox fuellen
+    // fill Format-Listbox
     USHORT nTypeId = TYP_DOCINFOFLD;
 
     EnableInsert(nSubType != USHRT_MAX);
@@ -399,7 +399,7 @@ USHORT SwFldDokInfPage::FillSelectionLB(USHORT nSubType)
 
     if (nSubType < DI_CREATE || nSubType == DI_DOCNO || nSubType == DI_EDIT|| nSubType == DI_CUSTOM )
     {
-        // Format Box ist fuer Title und Time leer
+        // Format Box is empty for Title and Time
     }
     else
     {

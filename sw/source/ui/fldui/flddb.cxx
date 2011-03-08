@@ -86,7 +86,7 @@ SwFldDBPage::~SwFldDBPage()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: TabPage initialisieren
+    Description: initialise TabPage
  --------------------------------------------------------------------*/
 void SwFldDBPage::Reset(const SfxItemSet&)
 {
@@ -102,7 +102,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
 
     if (!IsFldEdit())
     {
-        // TypeListBox initialisieren
+        // initialise TypeListBox
         const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
         for(i = rRg.nStart; i < rRg.nEnd; ++i)
@@ -119,7 +119,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
         aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
     }
 
-    // alte Pos selektieren
+    // select old Pos
     if (GetTypeSel() != LISTBOX_ENTRY_NOTFOUND)
         aTypeLB.SelectEntryPos(GetTypeSel());
 
@@ -206,7 +206,7 @@ BOOL SwFldDBPage::FillItemSet(SfxItemSet& )
     if (!aData.sDataSource.getLength())
         aData = pSh->GetDBData();
 
-    if(aData.sDataSource.getLength())       // Ohne Datenbank kein neuer Feldbefehl
+    if(aData.sDataSource.getLength())       // without database no new field command
     {
         USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
         String aVal(aValueED.GetText());
@@ -273,10 +273,10 @@ USHORT SwFldDBPage::GetGroup()
 
 IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 {
-    // Alte ListBoxPos sichern
+    // save old ListBoxPos
     const USHORT nOld = GetTypeSel();
 
-    // Aktuelle ListBoxPos
+    // current ListBoxPos
     SetTypeSel(aTypeLB.GetSelectEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
@@ -319,7 +319,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
                 aNumFormatLB.Show();
                 aFormatLB.Hide();
 
-                if (pBox)   // Typ wurde vom User geaendert
+                if (pBox)   // type was changed by user
                     aDBFormatRB.Check();
 
                 if (IsFldEdit())
@@ -336,7 +336,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 
             case TYP_DBNUMSETFLD:
                 bSetNo = TRUE;
-                // kein break!
+                // no break!
             case TYP_DBNEXTSETFLD:
                 bCond = TRUE;
                 if (IsFldEdit())
@@ -486,7 +486,7 @@ IMPL_LINK( SwFldDBPage, AddDBHdl, PushButton *, EMPTYARG )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Modify
+    Description: Modify
  --------------------------------------------------------------------*/
 IMPL_LINK( SwFldDBPage, ModifyHdl, Edit *, EMPTYARG )
 {

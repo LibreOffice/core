@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Feldeinfuegen bearbeiten
+    Description: edit insert-field
  --------------------------------------------------------------------*/
 sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
                               SwField* pField, BOOL bNextButton ) :

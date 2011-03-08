@@ -93,9 +93,9 @@ SwFldDokPage::~SwFldDokPage()
 void SwFldDokPage::Reset(const SfxItemSet& )
 {
     SavePos(&aTypeLB);
-    Init(); // Allgemeine initialisierung
+    Init(); // general initialisation
 
-    // TypeListBox initialisieren
+    // initialise TypeListBox
     const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
     aTypeLB.SetUpdateMode(FALSE);
@@ -106,7 +106,7 @@ void SwFldDokPage::Reset(const SfxItemSet& )
 
     if (!IsFldEdit())
     {
-        // Typ-Listbox fuellen
+        // fill Type-Listbox
         for(short i = rRg.nStart; i < rRg.nEnd; ++i)
         {
             nTypeId = GetFldMgr().GetTypeId(i);
@@ -153,7 +153,7 @@ void SwFldDokPage::Reset(const SfxItemSet& )
         }
     }
 
-    // alte Pos selektieren
+    // select old Pos
     RestorePos(&aTypeLB);
 
     aTypeLB.SetUpdateMode(TRUE);
@@ -194,10 +194,10 @@ void SwFldDokPage::Reset(const SfxItemSet& )
 
 IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 {
-    // Alte ListBoxPos sichern
+    // save old ListBoxPos
     const USHORT nOld = GetTypeSel();
 
-    // Aktuelle ListBoxPos
+    // current ListBoxPos
     SetTypeSel(aTypeLB.GetSelectEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
@@ -212,7 +212,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
     {
         USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
 
-        // Auswahl-Listbox fuellen
+        // fill Selection-Listbox
         aSelectionLB.Clear();
 
         if (nTypeId != USHRT_MAX)
@@ -304,7 +304,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
         aSelectionLB.Enable( bEnable );
         aSelectionFT.Enable( bEnable );
 
-        // Format-Listbox fuellen
+        // fill Format-Listbox
         USHORT nSize = FillFormatLB(nTypeId);
 
         BOOL bValue = FALSE, bLevel = FALSE, bNumFmt = FALSE, bOffset = FALSE;
@@ -320,7 +320,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
                 nFmtType = NUMBERFORMAT_DATE;
                 aValueFT.SetText(sDateOffset);
-                aDateOffsetED.SetFirst(-31);    // Ein Monat
+                aDateOffsetED.SetFirst(-31);    // one month
                 aDateOffsetED.SetLast(31);
 
                 if (IsFldEdit())
@@ -332,7 +332,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
                 nFmtType = NUMBERFORMAT_TIME;
                 aValueFT.SetText(sTimeOffset);
-                aDateOffsetED.SetFirst(-1440);  // Ein Tag
+                aDateOffsetED.SetFirst(-1440);  // one day
                 aDateOffsetED.SetLast(1440);
 
                 if (IsFldEdit())
@@ -397,11 +397,11 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
                 if (aNumFormatLB.GetFormatType() == (NUMBERFORMAT_DATE|NUMBERFORMAT_TIME))
                 {
-                    // Format-Typ immer einstellen, da sonst bei kombinierten Datum/Zeitformaten
-                    // beide Formate gleichzeitig angezeigt werden wuerden
+                    // always set Format-Type because otherwise when date/time formats are combined,
+                    // both formats would be displayed at the same time
                     aNumFormatLB.SetFormatType(0);
                     aNumFormatLB.SetFormatType(nFmtType);
-                    // Nochmal richtiges Format einstellen
+                    // set correct format once again
                     aNumFormatLB.SetDefFormat(GetCurField()->GetFormat());
                 }
             }
@@ -488,7 +488,7 @@ IMPL_LINK( SwFldDokPage, SubTypeHdl, ListBox *, EMPTYARG )
 
 USHORT SwFldDokPage::FillFormatLB(USHORT nTypeId)
 {
-    // Format-Listbox fuellen
+    // fill Format-Listbox
     aFormatLB.Clear();
 
     if (nTypeId == TYP_AUTHORFLD)
@@ -536,7 +536,7 @@ IMPL_LINK( SwFldDokPage, FormatHdl, ListBox *, EMPTYARG )
 
     if (nTypeId == TYP_NEXTPAGEFLD || nTypeId == TYP_PREVPAGEFLD)
     {
-        // Prev/Next - PageNumFelder Sonderbehandlung:
+        // Prev/Next - PageNumFields special treatment:
         USHORT nTmp = (USHORT)(ULONG)aFormatLB.GetEntryData(
                                         aFormatLB.GetSelectEntryPos() );
         String sOldTxt( aValueFT.GetText() );
@@ -588,7 +588,7 @@ BOOL SwFldDokPage::FillItemSet(SfxItemSet& )
         case TYP_AUTHORFLD:
             nFormat = nSubType;
             nSubType = 0;
-            // kein break!
+            // no break!
         case TYP_EXTUSERFLD:
             nFormat |= aFixedCB.IsChecked() ? AF_FIXED : 0;
             break;

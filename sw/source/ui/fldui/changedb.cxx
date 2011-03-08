@@ -68,7 +68,7 @@ using namespace ::com::sun::star::lang;
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Feldeinfuegen bearbeiten
+    Description: edit insert-field
  --------------------------------------------------------------------*/
 SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     SvxStandardDialog(&rVw.GetViewFrame()->GetWindow(), SW_RES(DLG_CHANGE_DB)),
@@ -113,7 +113,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbank-Listboxen initialisieren
+    Description: initialise database listboxes
  --------------------------------------------------------------------*/
 void SwChangeDBDlg::FillDBPopup()
 {
@@ -203,7 +203,7 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Dialog zerstoeren
+    Description: destroy dialog
  --------------------------------------------------------------------*/
 SwChangeDBDlg::~SwChangeDBDlg()
 {
@@ -211,7 +211,7 @@ SwChangeDBDlg::~SwChangeDBDlg()
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Schliessen
+     Description:   close
  --------------------------------------------------------------------*/
 void SwChangeDBDlg::Apply()
 {
@@ -282,7 +282,7 @@ IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, EMPTYARG )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankname fuer Anzeige wandeln
+    Description: convert database name for display
  --------------------------------------------------------------------*/
 void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 {

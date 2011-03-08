@@ -28,7 +28,7 @@
 #ifndef _CHANGEDB_HRC
 #define _CHANGEDB_HRC
 
-// Elemente -----------------------------------------------------------------
+// elements -----------------------------------------------------------------
 
 #define FT_DESC         1
 #define FT_DOCDBTEXT    2
@@ -46,7 +46,7 @@
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Bitmaps
+    Description: Bitmaps
  --------------------------------------------------------------------*/
 
 #define IMG_COLLAPSE        18002  /*RID_SVXIMG_COLLAPSEDNODE*/
