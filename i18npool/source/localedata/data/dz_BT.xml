@@ -37,75 +37,74 @@
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$Nu-851]">
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>[NatNum1]YY-MM-DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
       <FormatCode>[NatNum1]NN YY-MMM DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="34">
       <FormatCode>[NatNum1]YY-MM</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
       <FormatCode>[NatNum1]MMM-DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
       <FormatCode>MMMM</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="37">
       <FormatCode>[NatNum1]QQ YY</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
       <FormatCode>[NatNum1]YYYY-MM-DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
       <FormatCode>[NatNum1]YY-MM-DD</FormatCode>
-      <DefaultName/>
-    </FormatElement>
-    <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
+      <DefaultName></DefaultName>
+      </FormatElement><FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
       <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
       <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
       <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
       <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
       <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
       <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
       <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
       <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
       <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
       <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="32">
       <FormatCode>YY-MM-DD</FormatCode>
@@ -117,175 +116,168 @@
     </FormatElement>
     <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
       <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <!-- Time format was originally "ཆུ་ཚོད་" HH "སྐར་མ་" MM "སྐར་ཆ་་" SS -->
     <!-- Replaced with HH:MM:SS until more information is available -->
     <FormatElement msgid="TimeFormatskey1" default="false" type="short" usage="TIME"  formatindex="39">
       <FormatCode>HH:MM</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey2" default="false" type="medium" usage="TIME"  formatindex="40">
       <FormatCode>HH:MM:SS</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey3" default="true" type="short" usage="TIME"  formatindex="41">
       <FormatCode>[NatNum1]HH:MM AM/PM</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey4" default="true" type="medium" usage="TIME"  formatindex="42">
       <FormatCode>[NatNum1]HH:MM:SS AM/PM</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME"  formatindex="43">
       <FormatCode>[HH]:MM:SS</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey6" default="false" type="short" usage="TIME"  formatindex="44">
       <FormatCode>[NatNum1]HH:MM:SS.00</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME"  formatindex="45">
       <FormatCode>[HH]:MM:SS.00</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME"  formatindex="46">
       <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD HH:MM AM/PM</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
       <FormatCode>[NatNum1]DD-MM-YYYY HH:MM:SS</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
       <FormatCode>General</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey2" default="true" type="short" usage="FIXED_NUMBER"  formatindex="1">
       <FormatCode>[NatNum1]0</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey3" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="2">
       <FormatCode>[NatNum1]0.00</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey4" default="false" type="short" usage="FIXED_NUMBER"  formatindex="3">
       <FormatCode>[NatNum1]#,##0</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey5" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="4">
       <FormatCode>[NatNum1]#,##0.00</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="5">
       <FormatCode>[NatNum1]#,###.00</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
 <FormatElement msgid="FixedFormatskey7" default="false" type="short" usage="FIXED_NUMBER"  formatindex="59">
       <FormatCode>0</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="60">
       <FormatCode>0.00</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey9" default="false" type="short" usage="FIXED_NUMBER"  formatindex="61">
       <FormatCode>#,##0</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey10" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="62">
       <FormatCode>#,##0.00</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey11" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="63">
       <FormatCode>#,###.00</FormatCode>
-      <DefaultName/>
-    </FormatElement>
-    <FormatElement msgid="FixedFormatskey12" default="false" type="short" usage="FIXED_NUMBER" formatindex="64">
-      <FormatCode>#,##0_);(#,##0)</FormatCode>
-      <DefaultName/>
-    </FormatElement>
-    <FormatElement msgid="FixedFormatskey13" default="false" type="medium" usage="FIXED_NUMBER" formatindex="65">
-      <FormatCode>#,##0.00_);(#,##0.00)</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
       <FormatCode>[NatNum1][CURRENCY]#,##0;[NatNum1]-[CURRENCY]#,##0</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
       <FormatCode>[NatNum1][CURRENCY]#,##0.00;[NatNum1]-[CURRENCY]#,##0.00</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
       <FormatCode>[NatNum1][CURRENCY]#,##0;[NatNum1][RED]-[CURRENCY]#,##0</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
       <FormatCode>[NatNum1][CURRENCY]#,##0.00;[NatNum1][RED]-[CURRENCY]#,##0.00</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
       <FormatCode>[NatNum1]#,##0.00 CCC</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
       <FormatCode>[NatNum1][CURRENCY]#,##0.--;[NatNum1][RED]-[CURRENCY]#,##0.--</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
  <FormatElement msgid="CurrencyFormatskey7" default="false" type="short" usage="CURRENCY"  formatindex="50">
       <FormatCode>[CURRENCY]#,##0;-[CURRENCY]#,##0</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey8" default="false" type="medium" usage="CURRENCY"  formatindex="51">
       <FormatCode>[CURRENCY]#,##0.00;-[CURRENCY]#,##0.00</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey9" default="false" type="medium" usage="CURRENCY"  formatindex="52">
       <FormatCode>[CURRENCY]#,##0;[RED]-[CURRENCY]#,##0</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey10" default="false" type="medium" usage="CURRENCY"  formatindex="53">
       <FormatCode>[CURRENCY]#,##0.00;[RED]-[CURRENCY]#,##0.00</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey11" default="false" type="medium" usage="CURRENCY"  formatindex="54">
       <FormatCode>#,##0.00 CCC</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey12" default="false" type="medium" usage="CURRENCY"  formatindex="55">
       <FormatCode>[CURRENCY]#,##0.--;[RED]-[CURRENCY]#,##0.--</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
       <!-- Percentage formats other than % sign are not possible in 2.0  0 "བརྒྱ་ཆ་་" is replaced by % -->
       <FormatCode>[NatNum1]0%</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER"  formatindex="9">
       <FormatCode>[NatNum1]0.00%</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
 <FormatElement msgid="PercentFormatskey3" default="false" type="short" usage="PERCENT_NUMBER"  formatindex="56">
      <FormatCode>0%</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey4" default="false" type="long" usage="PERCENT_NUMBER"  formatindex="57">
       <FormatCode>0.00%</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="6">
       <FormatCode>0.00E+000</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="ScientificFormatskey2" default="false" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="7">
       <FormatCode>0.00E+00</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
    <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="58">
       <FormatCode>[NatNum1]0.00E+00</FormatCode>
-      <DefaultName/>
+      <DefaultName></DefaultName>
     </FormatElement>
+
   </LC_FORMAT>
   <LC_COLLATION>
     <Collator unoid="charset" default="true"/>

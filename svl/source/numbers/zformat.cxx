@@ -4114,23 +4114,6 @@ BOOL SvNumberformat::IsNegativeWithoutSign() const
     return FALSE;
 }
 
-BOOL SvNumberformat::IsNegativeInBracket() const
-{
-    USHORT nAnz = NumFor[1].GetCount();
-    if (!nAnz)
-        return FALSE;
-
-    String *tmpStr = NumFor[1].Info().sStrArray;
-    return (tmpStr[0] == '(' && tmpStr[nAnz-1] == ')' );
-}
-
-BOOL SvNumberformat::HasPositiveBracketPlaceholder() const
-{
-    USHORT nAnz = NumFor[0].GetCount();
-    String *tmpStr = NumFor[0].Info().sStrArray;
-    return (tmpStr[nAnz-1].EqualsAscii( "_)" ));
-}
-
 DateFormat SvNumberformat::GetDateOrder() const
 {
     if ( (eType & NUMBERFORMAT_DATE) == NUMBERFORMAT_DATE )

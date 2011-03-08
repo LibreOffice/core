@@ -334,10 +334,6 @@ public:
     // Whether the negative format is without a sign or not
     BOOL IsNegativeWithoutSign() const;
 
-    BOOL IsNegativeInBracket() const;
-
-    BOOL HasPositiveBracketPlaceholder() const;
-
     // Whether a new SYMBOLTYPE_CURRENCY is contained in the format
     BOOL HasNewCurrency() const;
 
