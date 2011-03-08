@@ -3611,9 +3611,37 @@ void X11SalFrame::RestackChildren()
     }
 }
 
+static Bool size_event_predicate( Display*, XEvent* event, XPointer arg )
+{
+    if( event->type != ConfigureNotify )
+        return False;
+    X11SalFrame* frame = reinterpret_cast< X11SalFrame* >( arg );
+    XConfigureEvent* pEvent = &event->xconfigure;
+    if( pEvent->window != frame->GetShellWindow()
+        && pEvent->window != frame->GetWindow()
+        && pEvent->window != frame->GetForeignParent()
+        && pEvent->window != frame->GetStackingWindow())
+    { // ignored at top of HandleSizeEvent()
+        return False;
+    }
+    if( pEvent->window == frame->GetStackingWindow())
+        return False; // filtered later in HandleSizeEvent()
+    // at this point we know that there is another similar event in the queue
+    frame->setPendingSizeEvent();
+    return False; // but do not process the new event out of order
+}
+
+void X11SalFrame::setPendingSizeEvent()
+{
+    mPendingSizeEvent = true;
+}
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
 {
+    // NOTE: if you add more tests in this function, make sure to update size_event_predicate()
+    // so that it finds exactly the same events
+
     if (   pEvent->window != GetShellWindow()
            && pEvent->window != GetWindow()
            && pEvent->window != GetForeignParent()
@@ -3660,6 +3688,16 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     // check size hints in first time SalFrame::Show
     if( SHOWSTATE_UNKNOWN == nShowState_ && bMapped_ )
         nShowState_ = SHOWSTATE_NORMAL;
+
+    // Avoid a race condition where resizing this window to one size and shortly after that
+    // to another size generates first size event with the old size and only after that
+    // with the new size, temporarily making us think the old size is valid (bnc#674806).
+    // So if there is another size event for this window pending, ignore this one.
+    mPendingSizeEvent = false;
+    XEvent dummy;
+    XCheckIfEvent( GetXDisplay(), &dummy, size_event_predicate, reinterpret_cast< XPointer >( this ));
+    if( mPendingSizeEvent )
+        return 1;
 
     nWidth_     = pEvent->width;
     nHeight_    = pEvent->height;

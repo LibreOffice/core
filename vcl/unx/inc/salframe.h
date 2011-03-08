@@ -140,6 +140,7 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     int             m_nCurClipRect;
     int             m_nMaxClipRect;
 
+    bool mPendingSizeEvent;
 
     void            GetPosSize( Rectangle &rPosSize );
     void            SetSize   ( const Size      &rSize );
@@ -279,6 +280,9 @@ public:
 
     static void SaveYourselfDone( SalFrame* );
     static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pX11SalFrame );
+
+    /// @internal
+    void setPendingSizeEvent();
 };
 
 #ifdef _SV_SALDISP_HXX
