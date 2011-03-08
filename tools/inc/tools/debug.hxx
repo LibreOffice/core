@@ -503,64 +503,6 @@ do                                              \
 #define DBG_BF_ASSERT( sCon, aError ) ((void)0)
 #endif
 
-#define DBG_TRACE( aTrace )                         \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-        DbgTrace( aTrace );                         \
-} while(0)
-#define DBG_TRACE1( aTrace, x1 )                    \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1 );                          \
-    }                                               \
-} while(0)
-#define DBG_TRACE2( aTrace, x1, x2 )                \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1, x2 );                      \
-    }                                               \
-} while(0)
-#define DBG_TRACE3( aTrace, x1, x2, x3 )            \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1, x2, x3 );                  \
-    }                                               \
-} while(0)
-#define DBG_TRACE4( aTrace, x1, x2, x3, x4 )        \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1, x2, x3, x4 );              \
-    }                                               \
-} while(0)
-#define DBG_TRACE5( aTrace, x1, x2, x3, x4, x5 )    \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1, x2, x3, x4, x5 );          \
-    }                                               \
-} while(0)
-#define DBG_TRACEFILE( aTrace )                     \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-        DbgTrace( aTrace, __FILE__, __LINE__ );     \
-} while(0)
-
 #define DBG_WARNING( aWarning )                     \
 do                                                  \
 {                                                   \
@@ -692,13 +634,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #define DBG_ASSERTWARNING( sCon, aWarning ) ((void)0)
 #define DBG_ASSERT( sCon, aError ) ((void)0)
 #define DBG_BF_ASSERT( sCon, aError ) ((void)0)
-#define DBG_TRACE( aTrace ) ((void)0)
-#define DBG_TRACE1( aTrace, x1 ) ((void)0)
-#define DBG_TRACE2( aTrace, x1, x2 ) ((void)0)
-#define DBG_TRACE3( aTrace, x1, x2, x3 ) ((void)0)
-#define DBG_TRACE4( aTrace, x1, x2, x3, x4 ) ((void)0)
-#define DBG_TRACE5( aTrace, x1, x2, x3, x4, x5 ) ((void)0)
-#define DBG_TRACEFILE( aTrace ) ((void)0)
 #define DBG_WARNING( aWarning ) ((void)0)
 #define DBG_WARNING1( aWarning, x1 ) ((void)0)
 #define DBG_WARNING2( aWarning, x1, x2 ) ((void)0)
