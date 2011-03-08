@@ -1,4 +1,4 @@
-dt      desktop :    l10n sfx2 stoc BERKELEYDB:berkeleydb sysui SO:sysui_so BOOST:boost svx xmlhelp sal unoil officecfg offuh filter LIBXSLT:libxslt NULL
+dt      desktop :    L10N:l10n sfx2 stoc BERKELEYDB:berkeleydb sysui SO:sysui_so BOOST:boost svx xmlhelp sal unoil officecfg offuh filter LIBXSLT:libxslt NULL
 dt	desktop									usr1	-	all	dt_mkout NULL
 dt	desktop\inc								nmake	-	all	dt_inc NULL
 dt	desktop\prj								get		-	all	dt_prj NULL

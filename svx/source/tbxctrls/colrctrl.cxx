@@ -113,6 +113,7 @@ SvxColorValueSet::SvxColorValueSet( Window* _pParent, WinBits nWinStyle ) :
     DragSourceHelper( this ),
     bLeft (sal_True)
 {
+    SetAccessibleName(String( SVX_RES( STR_COLORTABLE ) ) );
 }
 
 /*************************************************************************
@@ -126,6 +127,7 @@ SvxColorValueSet::SvxColorValueSet( Window* _pParent, const ResId& rResId ) :
     DragSourceHelper( this ),
     bLeft (sal_True)
 {
+    SetAccessibleName(String( SVX_RES( STR_COLORTABLE )  ));
 }
 
 /*************************************************************************
