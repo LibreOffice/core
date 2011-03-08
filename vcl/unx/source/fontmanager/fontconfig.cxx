@@ -993,9 +993,15 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
     const FcChar8* pTargetNameUtf8 = (FcChar8*)aTargetName.getStr();
     rWrapper.FcPatternAddString( pPattern, FC_FAMILY, pTargetNameUtf8 );
 
-    const FcChar8* pLangAttribUtf8 = (FcChar8*)rLangAttrib.getStr();
     if( rLangAttrib.getLength() )
+    {
+        const FcChar8* pLangAttribUtf8;
+        if (rLangAttrib.equalsIgnoreAsciiCase(OString(RTL_CONSTASCII_STRINGPARAM("pa-in"))))
+            pLangAttribUtf8 = (FcChar8*)"pa";
+        else
+            pLangAttribUtf8 = (FcChar8*)rLangAttrib.getStr();
         rWrapper.FcPatternAddString( pPattern, FC_LANG, pLangAttribUtf8 );
+    }
 
     // Add required Unicode characters, if any
     if ( rMissingCodes.getLength() )
