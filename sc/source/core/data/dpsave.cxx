@@ -1272,7 +1272,7 @@ void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xS
                     deletedDims.push_back( aName );
                     iter = aDimList.erase(iter);
                     OSL_TRACE( "\n Remove dim: \t" );
-                    DBG_TRACESTR( String( aName ) );
+                    OSL_TRACE( aName.getStr() );
                 }
 
             }
