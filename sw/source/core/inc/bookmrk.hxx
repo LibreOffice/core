@@ -77,7 +77,7 @@ namespace sw { namespace mark
             virtual SwPosition& GetMarkEnd() const
             {
                 if( !IsExpanded() ) return GetMarkPos();
-                if ( GetMarkPos( ) > GetOtherMarkPos( ) )
+                if ( GetMarkPos( ) >= GetOtherMarkPos( ) )
                     return GetMarkPos( );
                 else
                     return GetOtherMarkPos( );
