@@ -94,9 +94,9 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
 
     GetOKButton()->SetClickHdl(LINK(this, SwFldEditDlg, OKHdl));
 
-    // Buttons selbst positionieren, da sie sonst bei unterschiedlichen
-    // Fontgroessen im Wald stehen, und da PB im SingleTabDlg feste Pixelgroessen
-    // fuer seine Buttons und die Dialogbreite verwendet.
+    // position buttons ourselves because otherwise when font sizes are
+    // varying, they are in the woods, and because PB uses fixed pixel sizes
+    // for its buttons and dialog width in SingleTabDlg.
     aPrevBT.SetPosPixel(Point(GetOKButton()->GetPosPixel().X(), aPrevBT.GetPosPixel().Y()));
     USHORT nWidth = static_cast< USHORT >(GetOKButton()->GetOutputSize().Width() / 2 - 3);
     Size aNewSize(LogicToPixel(Size(nWidth, GetOKButton()->GetOutputSize().Height())));
@@ -121,7 +121,7 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Controlls initialisieren
+    Description: initialise controls
  --------------------------------------------------------------------*/
 void SwFldEditDlg::Init()
 {
@@ -136,7 +136,7 @@ void SwFldEditDlg::Init()
         if(!pCurFld)
             return;
 
-        // Traveling nur bei mehr als einem Feld
+        // Traveling only when more than one field
         pSh->StartAction();
         pSh->CreateCrsr();
 
@@ -162,7 +162,7 @@ void SwFldEditDlg::Init()
 
 SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
 {
-    // TabPage erzeugen
+    // create TabPage
     SfxTabPage* pTabPage = 0;
     USHORT nHelpId = 0;
 
@@ -240,7 +240,7 @@ void SwFldEditDlg::InsertHdl()
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Aendern des Feldes anstossen
+     Description: kick off changing of the field
  --------------------------------------------------------------------*/
 IMPL_LINK( SwFldEditDlg, OKHdl, Button *, EMPTYARG )
 {
@@ -260,12 +260,12 @@ IMPL_LINK( SwFldEditDlg, OKHdl, Button *, EMPTYARG )
 
 short SwFldEditDlg::Execute()
 {
-    // Ohne TabPage kein Dialog
+    // without TabPage no dialog
     return GetTabPage() ? Dialog::Execute() : RET_CANCEL;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Traveling zwishen Feldern gleichen Typs
+    Description: Traveling between fields of the same type
  --------------------------------------------------------------------*/
 IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 {

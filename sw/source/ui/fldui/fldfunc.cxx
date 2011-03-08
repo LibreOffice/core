@@ -107,7 +107,7 @@ SwFldFuncPage::~SwFldFuncPage()
 void SwFldFuncPage::Reset(const SfxItemSet& )
 {
     SavePos(&aTypeLB);
-    Init(); // Allgemeine initialisierung
+    Init(); // general initialisation
 
     aTypeLB.SetUpdateMode(FALSE);
     aTypeLB.Clear();
@@ -116,10 +116,10 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
 
     if (!IsFldEdit())
     {
-        // TypeListBox initialisieren
+        // initialise TypeListBox
         const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
-        // Typ-Listbox fuellen
+        // fill Typ-Listbox
         for(short i = rRg.nStart; i < rRg.nEnd; ++i)
         {
             nTypeId = GetFldMgr().GetTypeId(i);
@@ -140,7 +140,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
         }
     }
 
-    // alte Pos selektieren
+    // select old Pos
     RestorePos(&aTypeLB);
 
     aTypeLB.SetDoubleClickHdl       (LINK(this, SwFldFuncPage, InsertHdl));
@@ -193,10 +193,10 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
 
 IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
 {
-    // Alte ListBoxPos sichern
+    // save old ListBoxPos
     const USHORT nOld = GetTypeSel();
 
-    // Aktuelle ListBoxPos
+    // current ListBoxPos
     SetTypeSel(aTypeLB.GetSelectEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
@@ -209,10 +209,10 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
     {
         USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
 
-        // Auswahl-Listbox fuellen
+        // fill Selection-Listbox
         UpdateSubType();
 
-        // Format-Listbox fuellen
+        // fill Format-Listbox
         aFormatLB.Clear();
 
         USHORT nSize = GetFldMgr().GetFormatCount(nTypeId, FALSE, IsFldDlgHtmlMode());
@@ -236,7 +236,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
         BOOL bShowSelection = FALSE;
         BOOL bFormat = nSize != 0;
 
-        // fuer Conditional Text zwei Controls
+        // two controls for conditional text
         BOOL bDropDown = TYP_DROPDOWN == nTypeId;
         BOOL bCondTxtFld = TYP_CONDTXTFLD == nTypeId;
 
@@ -478,13 +478,13 @@ IMPL_LINK( SwFldFuncPage, ListEnableHdl, void*, EMPTYARG)
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Typen in der SelectionBox erneuern
+     Description: renew types in SelectionBox
  --------------------------------------------------------------------*/
 void SwFldFuncPage::UpdateSubType()
 {
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
 
-    // Auswahl-Listbox fuellen
+    // fill Selction-Listbox
     aSelectionLB.SetUpdateMode(FALSE);
     aSelectionLB.Clear();
 
@@ -525,7 +525,7 @@ void SwFldFuncPage::UpdateSubType()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: MacroBrowser aufrufen, Listbox mit Macros fuellen
+    Description: call MacroBrowser, fill Listbox with Macros
  --------------------------------------------------------------------*/
 IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
 {
@@ -606,7 +606,7 @@ BOOL SwFldFuncPage::FillItemSet(SfxItemSet& )
         InsertFld( nTypeId, nSubType, aName, aVal, nFormat );
     }
 
-    ModifyHdl();    // Insert ggf enablen/disablen
+    ModifyHdl();    // enable/disable Insert if applicable
 
     return FALSE;
 }
@@ -615,7 +615,7 @@ String SwFldFuncPage::TurnMacroString(const String &rMacro)
 {
     if (rMacro.Len())
     {
-        // Inhalt von aName umdrehen
+        // reverse content of aName
         String sTmp, sBuf;
         USHORT nPos = 0;
 

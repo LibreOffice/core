@@ -82,7 +82,7 @@ class SwFldFuncPage : public SwFldPage
     DECL_LINK( ListModifyHdl, Control*);
     DECL_LINK( ListEnableHdl, void*);
 
-    // Macro ausw„hlen
+    // select Macro
     DECL_LINK( MacroHdl, Button * );
 
     void                UpdateSubType();
