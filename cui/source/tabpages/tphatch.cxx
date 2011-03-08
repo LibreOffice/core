@@ -54,6 +54,7 @@
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
+#include "paragrph.hrc"
 #include <svx/dialogs.hrc>
 
 #define DLGWIN this->GetParent()->GetParent()
@@ -153,6 +154,15 @@ SvxHatchTabPage::SvxHatchTabPage
     aBtnSave.SetClickHdl( LINK( this, SvxHatchTabPage, ClickSaveHdl_Impl ) );
 
     aCtlPreview.SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+
+    aCtlPreview.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
+    aLbHatchings.SetAccessibleName( String(CUI_RES(STR_LB_HATCHINGSTYLE)) );
+    aCtlAngle.SetAccessibleRelationMemberOf( &aFlProp );
+    aLbHatchings.SetAccessibleRelationMemberOf( &aFlProp );
+    aBtnAdd.SetAccessibleRelationMemberOf( &aFlProp );
+    aBtnModify.SetAccessibleRelationMemberOf( &aFlProp );
+    aBtnDelete.SetAccessibleRelationMemberOf( &aFlProp );
+    aLbHatchings.SetAccessibleRelationLabeledBy(&aLbHatchings);
 }
 
 // -----------------------------------------------------------------------

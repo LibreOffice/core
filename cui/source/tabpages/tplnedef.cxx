@@ -113,6 +113,13 @@ SvxLineDefTabPage::SvxLineDefTabPage
     aBtnLoad.SetModeImage( Image( CUI_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
     aBtnSave.SetModeImage( Image( CUI_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
 
+    aLbType1.SetAccessibleName(String(CUI_RES( STR_START_TYPE ) ) );
+    aLbType2.SetAccessibleName(String(CUI_RES( STR_END_TYPE ) ) );
+    aNumFldNumber1.SetAccessibleName(String(CUI_RES( STR_START_NUM ) ) );
+    aNumFldNumber2.SetAccessibleName(String(CUI_RES( STR_END_NUM ) ) );
+    aMtrLength1.SetAccessibleName(String(CUI_RES( STR_START_LENGTH ) ) );
+    aMtrLength2.SetAccessibleName(String(CUI_RES( STR_END_LENGTH ) ) );
+
     FreeResource();
 
     // diese Page braucht ExchangeSupport
@@ -175,6 +182,12 @@ SvxLineDefTabPage::SvxLineDefTabPage
     aMtrDistance.SetModifyHdl( aLink );
 
     pDashList = NULL;
+
+    aBtnAdd.SetAccessibleRelationMemberOf( &aFlDefinition );
+    aBtnModify.SetAccessibleRelationMemberOf( &aFlDefinition );
+    aBtnDelete.SetAccessibleRelationMemberOf( &aFlDefinition );
+    aBtnLoad.SetAccessibleRelationMemberOf( &aFlDefinition );
+    aBtnSave.SetAccessibleRelationMemberOf( &aFlDefinition );
 }
 
 

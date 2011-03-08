@@ -68,7 +68,6 @@ namespace frm
     {
         TextListenerMultiplexer     m_aTextListeners;
 
-        ::comphelper::ComponentContext                                                          m_aContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               m_xField;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >            m_xFormatter;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >                 m_xConnection;

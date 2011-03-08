@@ -57,7 +57,7 @@
 #include "svx/dlgutil.hxx"
 #include <svl/intitem.hxx> //add CHINA001
 #include <sfx2/request.hxx>//add CHINA001
-
+#include "paragrph.hrc"
 #define DLGWIN this->GetParent()->GetParent()
 
 // static ----------------------------------------------------------------
@@ -287,6 +287,11 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(Window* pParent, const SfxItemSet
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
     FreeResource();
+
+    String accName = String(CUI_RES(STR_EXAMPLE));
+    aCtlBitmapPreview.SetAccessibleName(accName);
+    aCtlXRectPreview.SetAccessibleName(accName);
+    aMtrTransparent.SetAccessibleRelationLabeledBy( &aRbtTransLinear );
 
     // main selection
     aRbtTransOff.SetClickHdl(LINK(this, SvxTransparenceTabPage, ClickTransOffHdl_Impl));
@@ -670,6 +675,10 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 {
     FreeResource();
 
+    String accName = String(CUI_RES(STR_EXAMPLE));
+    aCtlXRectPreview.SetAccessibleName(accName);
+    aCtlBitmapPreview.SetAccessibleName(accName);
+
     // Gruppen, die sich ueberlagern
     aLbBitmap.Hide();
     aCtlBitmapPreview.Hide();
@@ -766,6 +775,15 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
     // #i76307# always paint the preview in LTR, because this is what the document does
     aCtlXRectPreview.EnableRTL(sal_False);
+
+    aNumFldStepCount.SetAccessibleRelationLabeledBy( &aTsbStepCount );
+    aCtlPosition.SetAccessibleRelationMemberOf( &aFlPosition );
+    aLbHatchBckgrdColor.SetAccessibleRelationLabeledBy( &aCbxHatchBckgrd );
+    aLbHatchBckgrdColor.SetAccessibleName(aCbxHatchBckgrd.GetText());
+
+    aLbColor.SetAccessibleRelationMemberOf( &aFlProp );
+    aMtrFldOffset.SetAccessibleRelationLabeledBy(&aFlOffset);
+    aMtrFldOffset.SetAccessibleName(aFlOffset.GetText());
 }
 
 // -----------------------------------------------------------------------

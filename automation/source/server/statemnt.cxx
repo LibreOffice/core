@@ -82,6 +82,7 @@
 #include <svtools/valueset.hxx>
 #include <svtools/roadmap.hxx>
 #include <svtools/table/tablecontrol.hxx>
+#include <svtools/table/tablecontrolinterface.hxx>
 #include <svl/poolitem.hxx>
 #include <svtools/extensionlistbox.hxx>
 // Hat keinen Includeschutz
@@ -6111,7 +6112,8 @@ protected:
                                                          ValueOK( aUId, MethodString( nMethodId ), nNr2, pTC->GetRowCount() ))
                                                     {
                                                         ::svt::table::PTableModel pModel = pTC->GetModel();
-                                                        Any aCell = pModel->getCellContent()[nNr2-1][nNr1-1];
+                                                        Any aCell;
+                                                        pModel->getCellContent( nNr1-1, nNr2-1, aCell );
                                                         pRet->GenReturn ( RET_Value, aUId, String( aCell.getValueTypeName() ));
                                                     }
                                                 }
@@ -6122,7 +6124,8 @@ protected:
                                                          ValueOK( aUId, MethodString( nMethodId ), nNr2, pTC->GetRowCount() ))
                                                     {
                                                         ::svt::table::PTableModel pModel = pTC->GetModel();
-                                                        Any aCell = pModel->getCellContent()[nNr2-1][nNr1-1];
+                                                        Any aCell;
+                                                        pModel->getCellContent( nNr1-1, nNr2-1, aCell );
                                                         /* doesn't work ATM since it gets casted to SbxDATE in VCLTestTool unfortunately
                                                         SbxVariableRef xRes = new SbxVariable( SbxVARIANT );
                                                         unoToSbxValue( xRes, aCell );
@@ -6206,7 +6209,7 @@ protected:
                                                             Point aPos( aSize.Width() / 2, aSize.Height() / 2 );
                                                             long nStep = aSize.Height() / 4;
                                                             ::svt::table::RowPos nLastPos;
-                                                            while ( ( nLastPos = pTC->GetCurrentRow( aPos ) ) != nNr1-1 && nStep > 0 )
+                                                            while ( ( nLastPos = pTC->getTableControlInterface().hitTest( aPos ).nRow ) != nNr1-1 && nStep > 0 )
                                                             {
                                                                 if ( nLastPos > nNr1-1 || nLastPos == ROW_INVALID )
                                                                     aPos.Y() -= nStep;
@@ -6214,7 +6217,7 @@ protected:
                                                                     aPos.Y() += nStep;
                                                                 nStep /= 2;
                                                             }
-                                                            if ( pTC->GetCurrentRow( aPos ) == nNr1-1 )
+                                                            if ( pTC->getTableControlInterface().hitTest( aPos ).nRow == nNr1-1 )
                                                             {
                                                                 MouseEvent aMEvnt(aPos,1,MOUSE_SIMPLECLICK|MOUSE_SELECT,MOUSE_LEFT,KEY_MOD1);
                                                                 pTC->getSelEngine()->SelMouseButtonDown( aMEvnt );
@@ -6231,13 +6234,13 @@ protected:
                                                 }
                                                 break;
                                             case M_GetSelCount :
-                                                pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRows().size() ));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRowCount() ));
                                                 break;
                                             case M_GetSelIndex :
                                                 if ( ! (nParams & PARAM_USHORT_1) )
                                                     nNr1 = 1;
-                                                if ( ValueOK( aUId, CUniString("GetSelIndex"), nNr1, pTC->GetSelectedRows().size() ) )
-                                                    pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRows()[nNr1-1] +1 ) );
+                                                if ( ValueOK( aUId, CUniString("GetSelIndex"), nNr1, pTC->GetSelectedRowCount() ) )
+                                                    pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRowIndex( nNr1-1 ) +1 ) );
                                                 break;
 /*                                          case M_GetSelText :
                                                 if ( ! (nParams & PARAM_USHORT_1) )

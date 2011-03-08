@@ -207,40 +207,9 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Text [ en-US ] = "Righ~t/Bottom" ;
     };
+    String ST_FILLCHAR_OTHER
+    {
+        Text [ en-US ] = "Character" ;
+    };
 };
- // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

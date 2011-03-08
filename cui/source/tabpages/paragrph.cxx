@@ -637,6 +637,7 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,
 
     SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_STD_PARAGRAPH ), rAttr ),
 
+    aIndentFrm              ( this, CUI_RES( FL_INDENT ) ),
     aLeftLabel              ( this, CUI_RES( FT_LEFTINDENT ) ),
     aLeftIndent             ( this, CUI_RES( ED_LEFTINDENT ) ),
     aRightLabel             ( this, CUI_RES( FT_RIGHTINDENT ) ),
@@ -645,21 +646,21 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,
     aFLineLabel             ( this, CUI_RES( FT_FLINEINDENT ) ),
     aFLineIndent            ( this, CUI_RES( ED_FLINEINDENT ) ),
     aAutoCB                 ( this, CUI_RES( CB_AUTO ) ),
-    aIndentFrm              ( this, CUI_RES( FL_INDENT ) ),
+    aDistFrm                ( this, CUI_RES( FL_DIST ) ),
     aTopLabel               ( this, CUI_RES( FT_TOPDIST ) ),
     aTopDist                ( this, CUI_RES( ED_TOPDIST ) ),
     aBottomLabel            ( this, CUI_RES( FT_BOTTOMDIST ) ),
     aBottomDist             ( this, CUI_RES( ED_BOTTOMDIST ) ),
-    aDistFrm                ( this, CUI_RES( FL_DIST ) ),
+
+    aLineDistFrm            ( this, CUI_RES( FL_LINEDIST ) ),
     aLineDist               ( this, CUI_RES( LB_LINEDIST ) ),
     aLineDistAtLabel        ( this, CUI_RES( FT_LINEDIST ) ),
     aLineDistAtPercentBox   ( this, CUI_RES( ED_LINEDISTPERCENT ) ),
     aLineDistAtMetricBox    ( this, CUI_RES( ED_LINEDISTMETRIC ) ),
-    aLineDistFrm            ( this, CUI_RES( FL_LINEDIST ) ),
     sAbsDist                ( CUI_RES(ST_LINEDIST_ABS) ),
     aExampleWin             ( this, CUI_RES( WN_EXAMPLE ) ),
-    aRegisterCB             ( this, CUI_RES( CB_REGISTER ) ),
     aRegisterFL             ( this, CUI_RES( FL_REGISTER ) ),
+    aRegisterCB             ( this, CUI_RES( CB_REGISTER ) ),
     pActLineDistFld ( &aLineDistAtPercentBox ),
     nAbst           ( MAX_DURCH ),
     nWidth          ( 11905 /*567 * 50*/ ),
@@ -676,6 +677,9 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,
     FreeResource();
     Init_Impl();
     aFLineIndent.SetMin(-9999);    // wird default auf 0 gesetzt
+
+    aExampleWin.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
+
 }
 
 
@@ -1093,6 +1097,9 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
             aTextDirectionLB.Show();
         }
     }
+
+    aExampleWin.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
+
 }
 
 /*-----------------16.01.97 19.33-------------------
@@ -1933,6 +1940,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
 
     SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_EXT_PARAGRAPH ), rAttr ),
 
+    aExtFL              ( this, CUI_RES( FL_HYPHEN ) ),
     aHyphenBox          ( this, CUI_RES( BTN_HYPHEN ) ),
     aBeforeText         ( this, CUI_RES( FT_HYPHENBEFORE ) ),
     aExtHyphenBeforeBox ( this, CUI_RES( ED_HYPHENBEFORE ) ),
@@ -1940,7 +1948,6 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     aExtHyphenAfterBox  ( this, CUI_RES( ED_HYPHENAFTER ) ),
     aMaxHyphenLabel     ( this, CUI_RES( FT_MAXHYPH ) ),
     aMaxHyphenEdit      ( this, CUI_RES( ED_MAXHYPH ) ),
-    aExtFL              ( this, CUI_RES( FL_HYPHEN ) ),
     aBreaksFL           ( this, CUI_RES( FL_BREAKS ) ),
     aPageBreakBox       ( this, CUI_RES( BTN_PAGEBREAK ) ),
     aBreakTypeFT        ( this, CUI_RES( FT_BREAKTYPE     )),
@@ -1969,6 +1976,11 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     nStdPos     ( 0 )
 {
     FreeResource();
+
+    aApplyCollBox.SetAccessibleRelationLabeledBy(&aApplyCollBtn);
+    aApplyCollBox.SetAccessibleName(String(CUI_RES(STR_PAGE_STYLE)));
+    aOrphanRowNo.SetAccessibleRelationLabeledBy(&aOrphanBox);
+    aWidowRowNo.SetAccessibleRelationLabeledBy(&aWidowBox);
 
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();

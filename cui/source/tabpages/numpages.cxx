@@ -989,6 +989,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
         pExamplesVS->Format();
     }
 
+    pExamplesVS->SetAccessibleRelationMemberOf( &aValuesFL );
 }
 
 /*-----------------12.02.97 07.46-------------------
@@ -1365,6 +1366,8 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
 
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
+    aBitmapMB.SetAccessibleRelationLabeledBy( &aBitmapFT );
+
     FreeResource();
 
     //get advanced numbering types from the component
@@ -1421,6 +1424,10 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
             aFmtLB.RemoveEntry( nPos);
         }
     }
+
+    aBulletPB.SetAccessibleRelationMemberOf(&aFormatFL);
+    aBulletPB.SetAccessibleRelationLabeledBy(&aStartFT);
+    aBulletPB.SetAccessibleName(aStartFT.GetText());
 }
 
 /*-----------------01.12.97 16:30-------------------
@@ -3096,6 +3103,8 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
     pDebugFixedText->SetPosSizePixel(aPos, aSize);
     pDebugFixedText->SetText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Das ist ein Debug-Text" ) ) );
 #endif
+
+    aStandardPB.SetAccessibleRelationMemberOf(&aPositionFL);
 }
 /*-----------------03.12.97 10:02-------------------
 
