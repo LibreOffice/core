@@ -2885,7 +2885,7 @@ void ScDPResultDimension::LateInitFrom( LateInitParams& rParams/* const vector<S
 #ifdef DBG_UTIL
     DBG_TRACESTR( aDimensionName )
     if ( pMembers->IsHasHideDetailsMembers() )
-        DBG_TRACE ( "HasHideDetailsMembers" );
+        OSL_TRACE( "HasHideDetailsMembers" );
 #endif
      pMembers->SetHasHideDetailsMembers( FALSE );
     }

@@ -1073,7 +1073,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         // reset all orientations
         //! "forgetSettings" or similar at source ?????
         //! reset all duplicated dimensions, or reuse them below !!!
-        DBG_TRACE( "ScDPSaveData::WriteToSource" );
+        OSL_TRACE( "ScDPSaveData::WriteToSource" );
 
         lcl_ResetOrient( xSource );
 
@@ -1271,7 +1271,7 @@ void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xS
                 {
                     deletedDims.push_back( aName );
                     iter = aDimList.erase(iter);
-                    DBG_TRACE( "\n Remove dim: \t" );
+                    OSL_TRACE( "\n Remove dim: \t" );
                     DBG_TRACESTR( String( aName ) );
                 }
 
@@ -1328,16 +1328,16 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
             switch( pReferenceValue->ReferenceType)
             {
             case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE: //both
-                DBG_TRACE( "\n sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE \n" );
+                OSL_TRACE( "\n sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE \n" );
                 break;
             case sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE: //both
-                DBG_TRACE( "\n sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE \n" );
+                OSL_TRACE( "\n sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE \n" );
                 break;
             case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE: //both
-                DBG_TRACE( "\n sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE \n" );
+                OSL_TRACE( "\n sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE \n" );
                 break;
             case sheet::DataPilotFieldReferenceType::RUNNING_TOTAL:
-                DBG_TRACE( "\n sheet::DataPilotFieldReferenceType::RUNNING_TOTAL \n" ); //enable name
+                OSL_TRACE( "\n sheet::DataPilotFieldReferenceType::RUNNING_TOTAL \n" ); //enable name
                 break;
             }
 #endif
