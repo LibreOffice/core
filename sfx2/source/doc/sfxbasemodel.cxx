@@ -2858,7 +2858,7 @@ void SfxBaseModel::postEvent_Impl( ::rtl::OUString aName )
 #ifdef DBG_UTIL
         ByteString aTmp( "SfxEvent: ");
         aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
-        DBG_TRACE( aTmp.GetBuffer() );
+        OSL_TRACE( aTmp.GetBuffer() );
 #endif
         document::EventObject aEvent( (frame::XModel *)this, aName );
         ::cppu::OInterfaceContainerHelper aIC( m_aMutex );

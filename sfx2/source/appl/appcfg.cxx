@@ -155,7 +155,7 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
     {
         ByteString aTmp( "SfxEvent: ");
         aTmp += ByteString( String( aHint.GetEventName() ), RTL_TEXTENCODING_UTF8 );
-        DBG_TRACE( aTmp.GetBuffer() );
+        OSL_TRACE( aTmp.GetBuffer() );
     }
 #endif
     SFX_APP()->Broadcast( aHint );
@@ -1007,7 +1007,7 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron
         {
             ByteString aTmp( "SfxEvent: ");
             aTmp += ByteString( String( rEventHint.GetEventName() ), RTL_TEXTENCODING_UTF8 );
-            DBG_TRACE( aTmp.GetBuffer() );
+            OSL_TRACE( aTmp.GetBuffer() );
         }
 #endif
         Broadcast(rEventHint);
