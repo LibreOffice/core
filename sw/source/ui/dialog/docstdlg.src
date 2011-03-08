@@ -87,7 +87,7 @@ TabPage TP_DOC_STAT
     {
         Pos = MAP_APPFONT ( 6 , 96 ) ;
         Size = MAP_APPFONT ( 138 , 8 ) ;
-        Text [ en-US ] = "Number of non blank Characters:" ;
+        Text [ en-US ] = "Number of Characters excluding spaces:" ;
         Left = TRUE ;
     };
     FixedText FT_LINE
