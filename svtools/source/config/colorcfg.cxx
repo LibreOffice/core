@@ -137,6 +137,7 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
         { RTL_CONSTASCII_USTRINGPARAM("/Anchor")          ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/Spell")     ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/SmartTags")     ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/Shadow")        , sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterTextGrid")  ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterFieldShadings"),sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterIdxShadings")     ,sal_True },
@@ -428,6 +429,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         0, // ANCHOR
         0xff0000, // SPELL
         COL_LIGHTMAGENTA,// SMARTTAGS
+        COL_GRAY, // SHADOWCOLOR
         0xc0c0c0, // WRITERTEXTGRID
         0xc0c0c0, // WRITERFIELDSHADIN
         0xc0c0c0, // WRITERIDXSHADINGS
