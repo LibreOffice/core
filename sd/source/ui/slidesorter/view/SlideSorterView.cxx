@@ -43,6 +43,7 @@
 #include "view/SlsToolTip.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsProperties.hxx"
+#include "controller/SlsClipboard.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlsPageDescriptor.hxx"
@@ -176,7 +177,6 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
 {
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
-
 
     // Register the background painter on level 1 to avoid the creation of a
     // background buffer.
@@ -896,6 +896,16 @@ ToolTip& SlideSorterView::GetToolTip (void) const
 {
     OSL_ASSERT(mpToolTip);
     return *mpToolTip;
+}
+
+
+
+
+void SlideSorterView::DragFinished (sal_Int8 nDropAction)
+{
+    mrSlideSorter.GetController().GetClipboard().DragFinished(nDropAction);
+
+    View::DragFinished(nDropAction);
 }
 
 

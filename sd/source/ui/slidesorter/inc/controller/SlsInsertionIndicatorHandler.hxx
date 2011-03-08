@@ -31,6 +31,8 @@
 #include "view/SlsInsertAnimator.hxx"
 
 #include "view/SlsLayouter.hxx"
+#include "sdxfer.hxx"
+
 
 namespace sd { namespace slidesorter { class SlideSorter; } }
 namespace sd { namespace slidesorter { namespace model {
@@ -83,7 +85,7 @@ public:
     /** Update the indicator icon from the current transferable (from the
         clipboard or an active drag and drop operation.)
     */
-    void UpdateIndicatorIcon (const Transferable* pTransferable);
+    void UpdateIndicatorIcon (const SdTransferable* pTransferable);
 
     /** Set the position of the insertion marker to the given coordinates.
     */

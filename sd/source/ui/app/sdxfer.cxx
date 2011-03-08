@@ -123,6 +123,7 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, 
 ,   mbPageTransferable( FALSE )
 ,   mbPageTransferablePersistent( FALSE )
 ,   mbIsUnoObj( false )
+,   maUserData()
 {
     if( mpSourceDoc )
         StartListening( *mpSourceDoc );
@@ -797,6 +798,52 @@ sal_Int64 SAL_CALL SdTransferable::getSomething( const ::com::sun::star::uno::Se
 
     return nRet;
 }
+
+
+
+
+SdDrawDocument* SdTransferable::GetSourceDoc (void) const
+{
+    return mpSourceDoc;
+}
+
+
+
+
+void SdTransferable::AddUserData (const ::boost::shared_ptr<UserData>& rpData)
+{
+    maUserData.push_back(rpData);
+}
+
+
+
+
+void SdTransferable::RemoveUserData (const ::boost::shared_ptr<UserData>& rpData)
+{
+    maUserData.erase(::std::find(maUserData.begin(), maUserData.end(), rpData));
+}
+
+
+
+
+sal_Int32 SdTransferable::GetUserDataCount (void) const
+{
+    return maUserData.size();
+}
+
+
+
+
+::boost::shared_ptr<SdTransferable::UserData> SdTransferable::GetUserData (const sal_Int32 nIndex) const
+{
+    if (nIndex>=0 && nIndex<maUserData.size())
+        return maUserData[nIndex];
+    else
+        return ::boost::shared_ptr<UserData>();
+}
+
+
+
 
 // -----------------------------------------------------------------------------
 

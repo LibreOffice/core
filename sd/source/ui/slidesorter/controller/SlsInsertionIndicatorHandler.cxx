@@ -120,7 +120,7 @@ void InsertionIndicatorHandler::ForceEnd (void)
 
 
 
-void InsertionIndicatorHandler::UpdateIndicatorIcon (const Transferable* pTransferable)
+void InsertionIndicatorHandler::UpdateIndicatorIcon (const SdTransferable* pTransferable)
 {
     mpInsertionIndicatorOverlay->Create(pTransferable);
     maIconSize = mpInsertionIndicatorOverlay->GetSize();

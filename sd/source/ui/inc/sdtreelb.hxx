@@ -40,6 +40,8 @@
 #include <svl/urlbmk.hxx>
 #include <tools/ref.hxx>
 #include "sdxfer.hxx"
+#include <boost/scoped_ptr.hpp>
+#include <boost/function.hpp>
 
 class SdDrawDocument;
 class SfxMedium;
@@ -51,6 +53,8 @@ class SdPage;
 class SvLBoxEntry;
 
 namespace sd {
+class ViewShell;
+
 class DrawDocShell;
 #ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED
 #define SV_DECL_DRAW_DOC_SHELL_DEFINED
@@ -104,7 +108,6 @@ public:
         ::sd::DrawDocShell&     mrDocShell;
         NavigatorDragType   meDragType;
         const ::com::sun::star::uno::Any maTreeListBoxData;
-
         SD_DLLPRIVATE virtual               ~SdPageObjsTransferable();
 
         SD_DLLPRIVATE virtual void      AddSupportedFormats();
@@ -219,6 +222,17 @@ public:
     using SvLBox::ExecuteDrop;
 
     using SvTreeListBox::SelectEntry;
+
+    /** Return the view shell that is linked to the given doc shell.
+        Call this method when the there is a chance that the doc shell
+        has been disconnected from the view shell (but not the other
+        way round.)
+        @return
+            May return <NULL/> when the link between view shell and
+            doc shell has been severed.
+    */
+    static ::sd::ViewShell* GetViewShellForDocShell (::sd::DrawDocShell &rDocShell);
+
 private:
     /** This flag controls whether all shapes are shown as children of pages
         and group shapes or only the named shapes.
