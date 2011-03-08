@@ -633,7 +633,7 @@ namespace frm
                 #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OString sTrace( "ORichTextPeer::implCreateDispatcher: creating *parametrized* dispatcher for " );
                     sTrace += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    DBG_TRACE( sTrace.getStr() );
+                    OSL_TRACE( sTrace.getStr() );
                 #endif
                     pAttributeDispatcher = new OParametrizedAttributeDispatcher( pRichTextControl->getView(), _nSlotId, _rURL, pRichTextControl );
                 }
@@ -642,7 +642,7 @@ namespace frm
                 #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OString sTrace( "ORichTextPeer::implCreateDispatcher: creating *normal* dispatcher for " );
                     sTrace += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    DBG_TRACE( sTrace.getStr() );
+                    OSL_TRACE( sTrace.getStr() );
                 #endif
                     pAttributeDispatcher = new OAttributeDispatcher( pRichTextControl->getView(), _nSlotId, _rURL, pRichTextControl );
                 }
@@ -652,7 +652,7 @@ namespace frm
             {
                 ::rtl::OString sTrace( "ORichTextPeer::implCreateDispatcher: not creating dispatcher (unsupported slot) for " );
                 sTrace += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
-                DBG_TRACE( sTrace.getStr() );
+                OSL_TRACE( sTrace.getStr() );
             }
         #endif
         }
